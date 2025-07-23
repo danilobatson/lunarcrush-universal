@@ -1,4 +1,5 @@
 import { ApolloServer } from '@apollo/server';
+import { renderPlaygroundPage } from 'graphql-playground-html';
 import { typeDefs } from './schema/types';
 import { createResolvers } from './resolvers';
 import { LunarCrushConfig } from '../services/lunarcrush';
@@ -10,8 +11,12 @@ export const createGraphQLServer = async (lunarCrushConfig: LunarCrushConfig) =>
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    introspection: true, // Enable GraphQL Playground in development
-    // plugins: [], // Add plugins here as needed
+    introspection: true, // ✅ EXPLICITLY ENABLED for auto-generated docs
+    plugins: [],
+    formatResponse: (response: any) => {
+      // Ensure the response format is exactly what GraphQL Playground expects
+      return response;
+    },
   });
 
   await server.start();
@@ -25,115 +30,156 @@ export const handleGraphQLRequest = async (
 ): Promise<Response> => {
   const url = new URL(request.url);
   
-  // Handle GraphQL Playground (GET requests)
+  // Handle GraphQL operations via GET (for introspection queries)
   if (request.method === 'GET') {
-    return new Response(
-      `<!DOCTYPE html>
-<html>
-<head>
-  <title>LunarCrush GraphQL API</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 40px; }
-    .container { max-width: 800px; margin: 0 auto; }
-    .endpoint { background: #f5f5f5; padding: 10px; border-radius: 5px; font-family: monospace; }
-    .example { background: #e8f4f8; padding: 15px; border-radius: 5px; margin: 10px 0; }
-    pre { background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 5px; overflow-x: auto; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>🚀 LunarCrush Universal Backend - GraphQL API</h1>
-    <p>Welcome to the LunarCrush GraphQL API! This endpoint provides access to cryptocurrency and social data.</p>
+    const query = url.searchParams.get('query');
+    const variables = url.searchParams.get('variables');
+    const operationName = url.searchParams.get('operationName');
     
-    <h2>GraphQL Endpoint</h2>
-    <div class="endpoint">POST ${url.origin}${url.pathname}</div>
+    // If there's a query parameter, execute the GraphQL operation
+    if (query) {
+      try {
+        const result = await server.executeOperation({
+          query,
+          variables: variables ? JSON.parse(variables) : undefined,
+          operationName: operationName || undefined,
+        });
+
+        // Return the response in the exact format GraphQL Playground expects
+        const responseBody = {
+          data: result.body.kind === 'single' ? result.body.singleResult.data : null,
+          errors: result.body.kind === 'single' ? result.body.singleResult.errors : undefined,
+        };
+
+        // Clean up undefined values
+        if (!responseBody.errors) {
+          delete responseBody.errors;
+        }
+
+        return new Response(JSON.stringify(responseBody), {
+          status: 200,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+          },
+        });
+      } catch (error) {
+        return new Response(JSON.stringify({
+          errors: [{ message: error.message }]
+        }), {
+          status: 500,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+    }
     
-    <h2>Example Queries</h2>
-    
-    <div class="example">
-      <h3>Get Bitcoin Data</h3>
-      <pre>query {
+    // Otherwise, return GraphQL Playground HTML
+    const playgroundHtml = renderPlaygroundPage({
+      endpoint: `${url.origin}${url.pathname}`,
+      settings: {
+        'general.betaUpdates': false,
+        'editor.theme': 'dark',
+        'editor.cursorShape': 'line',
+        'editor.reuseHeaders': true,
+        'tracing.hideTracingResponse': true,
+        'queryPlan.hideQueryPlanResponse': true,
+        'editor.fontSize': 14,
+        'editor.fontFamily': "'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace",
+        'request.credentials': 'omit',
+      },
+      tabs: [
+        {
+          endpoint: `${url.origin}${url.pathname}`,
+          query: `# 🚀 LunarCrush Universal Backend - GraphQL API
+# ✅ Introspection ENABLED - Full auto-generated documentation!
+
+# Example: Get Bitcoin data
+query GetBitcoin {
   coin(symbol: "BTC") {
     symbol
     name
     price
+    close
     percent_change_24h
     market_cap
     galaxy_score
+    alt_rank
     sentiment
   }
-}</pre>
-    </div>
+}
 
-    <div class="example">
-      <h3>Get Multiple Coins</h3>
-      <pre>query {
-  coins(symbols: ["BTC", "ETH", "SOL"], limit: 5) {
-    symbol
-    name
-    price
-    percent_change_24h
-    volume_24h
-  }
-}</pre>
-    </div>
+# Health check
+query HealthCheck {
+  health
+}`,
+        },
+      ],
+    });
 
-    <div class="example">
-      <h3>Get Price History</h3>
-      <pre>query {
-  coinTimeSeries(symbol: "BTC", interval: ONE_WEEK) {
-    time
-    price
-    volume
-    market_cap
-  }
-}</pre>
-    </div>
-
-    <div class="example">
-      <h3>Get Social Posts</h3>
-      <pre>query {
-  socialPosts(topic: "bitcoin", limit: 10) {
-    platform
-    content
-    author
-    interactions
-    sentiment
-    created_at
-  }
-}</pre>
-    </div>
-
-    <h2>Health Check</h2>
-    <div class="example">
-      <pre>query { health }</pre>
-    </div>
-
-    <p><strong>Note:</strong> Use POST requests with Content-Type: application/json for GraphQL queries.</p>
-    <p><strong>Documentation:</strong> <a href="https://github.com/your-repo/lunarcrush-universal">GitHub Repository</a></p>
-  </div>
-</body>
-</html>`,
-      {
-        status: 200,
-        headers: { 'Content-Type': 'text/html' },
-      }
-    );
+    return new Response(playgroundHtml, {
+      status: 200,
+      headers: { 
+        'Content-Type': 'text/html; charset=utf-8',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+    });
   }
 
   // Handle GraphQL queries (POST requests)
   if (request.method === 'POST') {
-    const body = await request.json();
-    const result = await server.executeOperation({
-      query: body.query,
-      variables: body.variables,
-      operationName: body.operationName,
-    });
+    try {
+      const body = await request.json();
+      const result = await server.executeOperation({
+        query: body.query,
+        variables: body.variables,
+        operationName: body.operationName,
+      });
 
-    return new Response(JSON.stringify(result), {
-      status: 200,
+      // Return in the format GraphQL clients expect
+      const responseBody = {
+        data: result.body.kind === 'single' ? result.body.singleResult.data : null,
+        errors: result.body.kind === 'single' ? result.body.singleResult.errors : undefined,
+      };
+
+      // Clean up undefined values
+      if (!responseBody.errors) {
+        delete responseBody.errors;
+      }
+
+      return new Response(JSON.stringify(responseBody), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+      });
+    } catch (error) {
+      return new Response(JSON.stringify({
+        errors: [{ message: error.message }]
+      }), {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+    }
+  }
+
+  // Handle OPTIONS requests (CORS preflight)
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
       headers: {
-        'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type, Authorization',

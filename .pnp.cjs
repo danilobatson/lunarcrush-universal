@@ -1324,6 +1324,7 @@ const RAW_RUNTIME_STATE =
           ["@hono/node-server", "virtual:f89ae15f6312100ebe95cc397f550a860737a4ac27d0bdc46daf45eb441a20ce730da9f40da57cba753bd9a06a865ffe52561b20c96bbd9ab338d109dc58c7e1#npm:1.17.1"],\
           ["@types/node", "npm:24.1.0"],\
           ["graphql", "npm:16.11.0"],\
+          ["graphql-playground-html", "npm:1.6.30"],\
           ["graphql-tag", "virtual:f89ae15f6312100ebe95cc397f550a860737a4ac27d0bdc46daf45eb441a20ce730da9f40da57cba753bd9a06a865ffe52561b20c96bbd9ab338d109dc58c7e1#npm:2.12.6"],\
           ["hono", "npm:4.8.5"],\
           ["typescript", "patch:typescript@npm%3A5.8.3#optional!builtin<compat/typescript>::version=5.8.3&hash=29ae49"],\
@@ -1917,6 +1918,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["commander", [\
+      ["npm:2.20.3", {\
+        "packageLocation": "../../../.yarn/berry/cache/commander-npm-2.20.3-d8dcbaa39b-10c0.zip/node_modules/commander/",\
+        "packageDependencies": [\
+          ["commander", "npm:2.20.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["content-type", [\
       ["npm:1.0.5", {\
         "packageLocation": "../../../.yarn/berry/cache/content-type-npm-1.0.5-3e037bf9ab-10c0.zip/node_modules/content-type/",\
@@ -1964,6 +1974,15 @@ const RAW_RUNTIME_STATE =
           ["path-key", "npm:3.1.1"],\
           ["shebang-command", "npm:2.0.0"],\
           ["which", "npm:2.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["cssfilter", [\
+      ["npm:0.0.10", {\
+        "packageLocation": "../../../.yarn/berry/cache/cssfilter-npm-0.0.10-28e06ce546-10c0.zip/node_modules/cssfilter/",\
+        "packageDependencies": [\
+          ["cssfilter", "npm:0.0.10"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -2545,6 +2564,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../../.yarn/berry/cache/graphql-npm-16.11.0-836e6ade28-10c0.zip/node_modules/graphql/",\
         "packageDependencies": [\
           ["graphql", "npm:16.11.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["graphql-playground-html", [\
+      ["npm:1.6.30", {\
+        "packageLocation": "../../../.yarn/berry/cache/graphql-playground-html-npm-1.6.30-3af25d650b-10c0.zip/node_modules/graphql-playground-html/",\
+        "packageDependencies": [\
+          ["graphql-playground-html", "npm:1.6.30"],\
+          ["xss", "npm:1.0.15"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4357,6 +4386,17 @@ const RAW_RUNTIME_STATE =
           "@types/utf-8-validate",\
           "bufferutil",\
           "utf-8-validate"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["xss", [\
+      ["npm:1.0.15", {\
+        "packageLocation": "../../../.yarn/berry/cache/xss-npm-1.0.15-a70a62f810-10c0.zip/node_modules/xss/",\
+        "packageDependencies": [\
+          ["xss", "npm:1.0.15"],\
+          ["commander", "npm:2.20.3"],\
+          ["cssfilter", "npm:0.0.10"]\
         ],\
         "linkType": "HARD"\
       }]\
