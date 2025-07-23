@@ -6,7 +6,7 @@ import { createGraphQLServer, handleGraphQLRequest } from './graphql/server';
 // Define types for Cloudflare Workers environment
 export interface Env {
   DB: D1Database;
-  LUNARCRUSH_API_KEY: string;
+  LUNARCRUSH_API_KEY: any; // Secrets Store binding
 }
 
 const app = new Hono<{ Bindings: Env }>();
@@ -35,7 +35,8 @@ app.get('/health', (c) => {
 // GraphQL endpoint
 app.all('/graphql', async (c) => {
   try {
-    const apiKey = c.env.LUNARCRUSH_API_KEY;
+    // CORRECT: Use .get() method for Secrets Store
+    const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
     if (!apiKey) {
       return c.json({ error: 'LunarCrush API key not configured' }, 500);
     }
@@ -56,10 +57,11 @@ app.all('/graphql', async (c) => {
   }
 });
 
-// Test endpoints (keeping existing functionality)
+// Test endpoints
 app.get('/test/secret', async (c) => {
   try {
-    const apiKey = c.env.LUNARCRUSH_API_KEY;
+    // CORRECT: Use .get() method for Secrets Store
+    const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
     return c.json({
       success: true,
       hasApiKey: !!apiKey,
@@ -93,12 +95,13 @@ app.get('/test/database', async (c) => {
 
 app.get('/test/lunarcrush', async (c) => {
   try {
-    const apiKey = c.env.LUNARCRUSH_API_KEY;
+    // CORRECT: Use .get() method for Secrets Store
+    const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
     if (!apiKey) {
       return c.json({ error: 'API key not found' }, 500);
     }
 
-    const response = await fetch('https://lunarcrush.com/api4/coins/btc/v1', {
+    const response = await fetch('https://lunarcrush.com/api4/public/coins/BTC/v1', {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json'
@@ -113,12 +116,15 @@ app.get('/test/lunarcrush', async (c) => {
     return c.json({
       success: true,
       lunarcrush: 'connected',
-      btc_price: data.price || data.close,
+      btc_price: data.data.price || data.data.close,
       data_sample: {
-        symbol: data.symbol,
-        name: data.name,
-        price: data.price || data.close,
-        change_24h: data.percent_change_24h
+        symbol: data.data.symbol,
+        name: data.data.name,
+        price: data.data.price || data.data.close,
+        change_24h: data.data.percent_change_24h,
+        market_cap: data.data.market_cap,
+        galaxy_score: data.data.galaxy_score,
+        alt_rank: data.data.alt_rank
       }
     });
   } catch (error) {

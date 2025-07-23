@@ -9,6 +9,7 @@ export interface CoinData {
   symbol: string;
   name: string;
   price: number;
+  close: number;
   percent_change_24h: number;
   percent_change_7d: number;
   market_cap: number;
@@ -25,6 +26,7 @@ export interface CoinData {
 export interface TimeSeriesData {
   time: string;
   price: number;
+  close: number;
   volume: number;
   market_cap: number;
   sentiment?: number;
@@ -53,34 +55,58 @@ export interface GlobalMetrics {
   volume_change_24h?: number;
 }
 
-// Transform functions
-const transformCoinData = (raw: any): CoinData => ({
-  id: raw.id || raw.symbol,
-  symbol: raw.symbol?.toUpperCase() || '',
-  name: raw.name || '',
-  price: parseFloat(raw.price || raw.close || 0),
-  percent_change_24h: parseFloat(raw.percent_change_24h || 0),
-  percent_change_7d: parseFloat(raw.percent_change_7d || 0),
-  market_cap: parseFloat(raw.market_cap || 0),
-  volume_24h: parseFloat(raw.volume_24h || raw.volume || 0),
-  galaxy_score: raw.galaxy_score ? parseFloat(raw.galaxy_score) : undefined,
-  alt_rank: raw.alt_rank ? parseInt(raw.alt_rank) : undefined,
-  sentiment: raw.sentiment ? parseFloat(raw.sentiment) : undefined,
-  social_dominance: raw.social_dominance ? parseFloat(raw.social_dominance) : undefined,
-  posts_24h: raw.posts_24h ? parseInt(raw.posts_24h) : undefined,
-  contributors_24h: raw.contributors_24h ? parseInt(raw.contributors_24h) : undefined,
-  interactions_24h: raw.interactions_24h ? parseInt(raw.interactions_24h) : undefined,
-});
+// Custom error class to preserve HTTP status codes
+export class LunarCrushError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+    public statusText: string
+  ) {
+    super(message);
+    this.name = 'LunarCrushError';
+  }
+}
 
-const transformTimeSeriesData = (raw: any): TimeSeriesData => ({
-  time: raw.time || raw.date,
-  price: parseFloat(raw.price || raw.close || 0),
-  volume: parseFloat(raw.volume || 0),
-  market_cap: parseFloat(raw.market_cap || 0),
-  sentiment: raw.sentiment ? parseFloat(raw.sentiment) : undefined,
-  social_dominance: raw.social_dominance ? parseFloat(raw.social_dominance) : undefined,
-  interactions: raw.interactions ? parseInt(raw.interactions) : undefined,
-});
+// Transform functions with both price and close fields
+const transformCoinData = (raw: any): CoinData => {
+  const priceValue = parseFloat(raw.price || raw.close || 0);
+  const closeValue = parseFloat(raw.close || raw.price || 0);
+  
+  return {
+    id: String(raw.id || raw.symbol),
+    symbol: raw.symbol?.toUpperCase() || '',
+    name: raw.name || '',
+    price: priceValue,
+    close: closeValue,
+    percent_change_24h: parseFloat(raw.percent_change_24h || 0),
+    percent_change_7d: parseFloat(raw.percent_change_7d || 0),
+    market_cap: parseFloat(raw.market_cap || 0),
+    volume_24h: parseFloat(raw.volume_24h || raw.volume || 0),
+    galaxy_score: raw.galaxy_score ? parseFloat(raw.galaxy_score) : undefined,
+    alt_rank: raw.alt_rank ? parseInt(raw.alt_rank) : undefined,
+    sentiment: raw.sentiment ? parseFloat(raw.sentiment) : undefined,
+    social_dominance: raw.social_dominance ? parseFloat(raw.social_dominance) : undefined,
+    posts_24h: raw.posts_24h ? parseInt(raw.posts_24h) : undefined,
+    contributors_24h: raw.contributors_24h ? parseInt(raw.contributors_24h) : undefined,
+    interactions_24h: raw.interactions_24h ? parseInt(raw.interactions_24h) : undefined,
+  };
+};
+
+const transformTimeSeriesData = (raw: any): TimeSeriesData => {
+  const priceValue = parseFloat(raw.price || raw.close || 0);
+  const closeValue = parseFloat(raw.close || raw.price || 0);
+  
+  return {
+    time: raw.time || raw.date,
+    price: priceValue,
+    close: closeValue,
+    volume: parseFloat(raw.volume || 0),
+    market_cap: parseFloat(raw.market_cap || 0),
+    sentiment: raw.sentiment ? parseFloat(raw.sentiment) : undefined,
+    social_dominance: raw.social_dominance ? parseFloat(raw.social_dominance) : undefined,
+    interactions: raw.interactions ? parseInt(raw.interactions) : undefined,
+  };
+};
 
 const transformSocialPost = (raw: any): SocialPost => ({
   id: raw.id || String(Math.random()),
@@ -103,13 +129,14 @@ const transformGlobalMetrics = (raw: any): GlobalMetrics => ({
   volume_change_24h: raw.volume_change_24h ? parseFloat(raw.volume_change_24h) : undefined,
 });
 
-// Core API request function
+// Core API request function with proper error handling
 const makeRequest = async <T>(
   config: LunarCrushConfig,
   endpoint: string,
   params?: Record<string, any>
 ): Promise<T> => {
-  const baseUrl = config.baseUrl || 'https://lunarcrush.com/api4';
+  // Correct base URL from LunarCrush API documentation
+  const baseUrl = config.baseUrl || 'https://lunarcrush.com/api4/public';
   const url = new URL(`${baseUrl}${endpoint}`);
   
   if (params) {
@@ -127,16 +154,30 @@ const makeRequest = async <T>(
   });
 
   if (!response.ok) {
-    throw new Error(`LunarCrush API error: ${response.status} ${response.statusText}`);
+    // Preserve the original HTTP status code
+    throw new LunarCrushError(
+      `LunarCrush API error: ${response.status} ${response.statusText}`,
+      response.status,
+      response.statusText
+    );
   }
 
   return response.json();
 };
 
-// API functions
+// API functions using CORRECT endpoints from documentation
 export const getCoin = async (config: LunarCrushConfig, symbol: string): Promise<CoinData> => {
-  const data = await makeRequest<any>(config, `/coins/${symbol.toLowerCase()}/v1`);
-  return transformCoinData(data);
+  try {
+    // Exact format: https://lunarcrush.com/api4/public/coins/BTC/v1
+    const response = await makeRequest<any>(config, `/coins/${symbol.toUpperCase()}/v1`);
+    return transformCoinData(response.data);
+  } catch (error) {
+    if (error instanceof LunarCrushError) {
+      // Preserve the original error with status code
+      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
 };
 
 export const getCoins = async (
@@ -144,12 +185,19 @@ export const getCoins = async (
   symbols?: string[],
   limit?: number
 ): Promise<CoinData[]> => {
-  const params: Record<string, any> = {};
-  if (symbols?.length) params.symbols = symbols.join(',');
-  if (limit) params.limit = limit;
+  try {
+    const params: Record<string, any> = {};
+    if (symbols?.length) params.symbols = symbols.join(',');
+    if (limit) params.limit = limit;
 
-  const data = await makeRequest<any>(config, '/coins', params);
-  return Array.isArray(data.data) ? data.data.map(transformCoinData) : [];
+    const response = await makeRequest<any>(config, '/coins/list/v1', params);
+    return Array.isArray(response.data) ? response.data.map(transformCoinData) : [];
+  } catch (error) {
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
 };
 
 export const getCoinTimeSeries = async (
@@ -158,13 +206,20 @@ export const getCoinTimeSeries = async (
   interval: '1d' | '1w' | '1m' | '3m' | '6m' | '1y' = '1w',
   metrics: string[] = ['price', 'volume', 'market_cap']
 ): Promise<TimeSeriesData[]> => {
-  const params = {
-    interval,
-    metrics: metrics.join(',')
-  };
+  try {
+    const params = {
+      interval,
+      metrics: metrics.join(',')
+    };
 
-  const data = await makeRequest<any>(config, `/coins/${symbol.toLowerCase()}/time-series`, params);
-  return Array.isArray(data.data) ? data.data.map(transformTimeSeriesData) : [];
+    const response = await makeRequest<any>(config, `/coins/${symbol.toUpperCase()}/time-series/v2`, params);
+    return Array.isArray(response.data) ? response.data.map(transformTimeSeriesData) : [];
+  } catch (error) {
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
 };
 
 export const getSocialPosts = async (
@@ -173,15 +228,29 @@ export const getSocialPosts = async (
   interval: '1d' | '1w' | '1m' = '1d',
   limit: number = 20
 ): Promise<SocialPost[]> => {
-  const params = { interval, limit };
+  try {
+    const params = { interval, limit };
 
-  const data = await makeRequest<any>(config, `/social/posts/${topic.toLowerCase()}`, params);
-  return Array.isArray(data.data) ? data.data.map(transformSocialPost) : [];
+    const response = await makeRequest<any>(config, `/topic/${topic.toLowerCase()}/posts/v1`, params);
+    return Array.isArray(response.data) ? response.data.map(transformSocialPost) : [];
+  } catch (error) {
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
 };
 
 export const getGlobalMetrics = async (config: LunarCrushConfig): Promise<GlobalMetrics> => {
-  const data = await makeRequest<any>(config, '/market/global');
-  return transformGlobalMetrics(data);
+  try {
+    const response = await makeRequest<any>(config, '/coins/list/v1');
+    return transformGlobalMetrics(response.data || {});
+  } catch (error) {
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
 };
 
 // Factory function to create a configured API client

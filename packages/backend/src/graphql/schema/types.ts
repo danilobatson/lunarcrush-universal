@@ -8,6 +8,7 @@ export const typeDefs = gql`
     symbol: String!
     name: String!
     price: Float!
+    close: Float!
     percent_change_24h: Float!
     percent_change_7d: Float!
     market_cap: Float!
@@ -24,6 +25,7 @@ export const typeDefs = gql`
   type TimeSeriesData {
     time: String!
     price: Float!
+    close: Float!
     volume: Float!
     market_cap: Float!
     sentiment: Float
