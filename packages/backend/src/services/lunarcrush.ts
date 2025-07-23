@@ -379,13 +379,27 @@ export const getTopicTimeSeries = async (config: LunarCrushConfig, topic: string
 
 export const getStocksList = async (config: LunarCrushConfig): Promise<any[]> => {
   try {
-    console.log(`🔍 getStocksList: NO PARAMETERS (as per API docs)`);
-
-    // The stocks/list/v1 endpoint doesn't accept ANY parameters
+    console.log('🔍 getStocksList v1: Basic plan (no sentiment data)');
+    // v1 endpoint for basic accounts - no social metrics
     const response = await makeRequest<any>(config, '/stocks/list/v1');
     return response.data;
   } catch (error) {
-    console.error('❌ getStocksList error:', error);
+    console.error('❌ getStocksList v1 error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getStocksListV2 = async (config: LunarCrushConfig): Promise<any[]> => {
+  try {
+    console.log('🔍 getStocksListV2: Premium plan (includes sentiment + social metrics)');
+    // v2 endpoint for premium accounts - includes social metrics
+    const response = await makeRequest<any>(config, '/stocks/list/v2');
+    return response.data;
+  } catch (error) {
+    console.error('❌ getStocksListV2 error:', error);
     if (error instanceof LunarCrushError) {
       throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
     }
@@ -443,8 +457,9 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
   getPostTimeSeries: (postType: string, postId: string) =>
     getPostTimeSeries(config, postType, postId),
 
-  // NEW STOCKS ENDPOINTS
-  getStocksList: () => getStocksList(config),
+  // STOCKS ENDPOINTS (both v1 and v2 for different subscription levels)
+  getStocksList: () => getStocksList(config),           // v1 - Basic plan
+  getStocksListV2: () => getStocksListV2(config),       // v2 - Premium plan
 });
 
 export type LunarCrushClient = ReturnType<typeof createLunarCrushClient>;

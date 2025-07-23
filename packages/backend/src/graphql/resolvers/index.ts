@@ -310,14 +310,23 @@ export const createResolvers = (lunarCrushConfig: LunarCrushConfig) => {
         }
       },
 
-      // ===== NEW STOCKS RESOLVERS =====
+            // ===== STOCKS RESOLVERS (v1 & v2 for different subscription levels) =====
 
       getStocksList: async (_: any, {}: {}) => {
         try {
-          return await client.getStocksList();
+          return await client.getStocksList();  // v1 - Basic plan (no sentiment)
         } catch (error) {
-          console.error('Error fetching stocks list:', error);
-          throw new Error(`Failed to fetch stocks list: ${error.message}`);
+          console.error('Error fetching stocks list v1:', error);
+          throw new Error(`Failed to fetch stocks list v1: ${error.message}`);
+        }
+      },
+
+      getStocksListV2: async (_: any, {}: {}) => {
+        try {
+          return await client.getStocksListV2();  // v2 - Premium plan (includes sentiment)
+        } catch (error) {
+          console.error('Error fetching stocks list v2:', error);
+          throw new Error(`Failed to fetch stocks list v2: ${error.message}`);
         }
       },
 

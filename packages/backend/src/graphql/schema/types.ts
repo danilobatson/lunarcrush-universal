@@ -408,8 +408,9 @@ export const typeDefs = `
       postId: String!
     ): [TimeSeriesData!]!
 
-    # ===== STOCK QUERIES - ALL FIELDS =====
-    getStocksList: [StockData!]!
+    # ===== STOCK QUERIES (v1 & v2 for different subscription levels) =====
+    getStocksList: [StockData!]!          # v1 - Basic plan (no sentiment data)
+    getStocksListV2: [StockData!]!        # v2 - Premium plan (includes sentiment + social metrics)
   }
 
   # ===== FUTURE SUBSCRIPTIONS =====

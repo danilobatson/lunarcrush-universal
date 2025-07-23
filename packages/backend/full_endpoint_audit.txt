@@ -1,0 +1,115 @@
+🔍 COMPREHENSIVE LUNARCRUSH ENDPOINT AUDIT
+==========================================
+Testing ALL 23+ endpoints for data completeness
+
+🪙 COINS ENDPOINTS
+==================
+1. Single Coin vs List Comparison:
+   /coins/BTC/v1 fields:
+17
+   /coins/list/v1 fields:
+31
+   /coins/list/v2 fields:
+31
+
+2. Crypto Metadata:
+   /coins/BTC/meta/v1:
+22
+
+3. Time Series:
+   /coins/BTC/time-series/v2:
+19
+
+📈 STOCKS ENDPOINTS
+==================
+4. Stocks List Comparison:
+   /stocks/list/v1 (basic account):
+jq: error (at <stdin>:0): null (null) has no keys
+   /stocks/list/v2 (premium account):
+21
+   Check for sentiment in v1:
+false
+   Check for sentiment in v2:
+true
+
+👥 CREATORS ENDPOINTS
+===================
+5. Creators List:
+   /creators/list/v1:
+jq: error (at <stdin>:0): null (null) has no keys
+
+6. Single Creator:
+   /creator/x/elonmusk/v1:
+8
+
+📂 CATEGORIES ENDPOINTS
+======================
+7. Categories List:
+   /categories/list/v1:
+jq: error (at <stdin>:0): null (null) has no keys
+
+8. Single Category:
+   /category/cryptocurrencies/v1:
+11
+
+📝 TOPICS ENDPOINTS
+==================
+9. Topic Data:
+   /topic/bitcoin/v1:
+13
+
+10. Topics List:
+    /topics/list/v1:
+jq: error (at <stdin>:0): null (null) has no keys
+
+🖼️ NFTS ENDPOINTS
+=================
+11. NFTs List v2:
+    /nfts/list/v2:
+15
+
+📰 POSTS ENDPOINTS
+==================
+12. Topic Posts:
+    /topic/bitcoin/posts/v1:
+14
+
+✅ BASIC AUDIT COMPLETE
+======================
+Now checking social metrics availability...
+
+🔍 SOCIAL METRICS DEEP DIVE
+============================
+Coins - Social Fields Available:
+Single coin:
+{
+  "sentiment": null,
+  "social_dominance": null,
+  "interactions_24h": null
+}
+List v1:
+{
+  "sentiment": 80,
+  "social_dominance": 19.34994081713174,
+  "interactions_24h": 107975998
+}
+List v2:
+{
+  "sentiment": 80,
+  "social_dominance": 19.34994081713174,
+  "interactions_24h": 107975998
+}
+
+Stocks - Social Fields Available:
+List v1 (basic):
+{
+  "sentiment": null,
+  "social_dominance": null,
+  "interactions_24h": null
+}
+List v2 (premium):
+{
+  "sentiment": 81,
+  "social_dominance": 0.4493365246575524,
+  "interactions_24h": 1520748
+}
