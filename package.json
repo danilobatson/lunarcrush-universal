@@ -26,5 +26,8 @@
   "packageManager": "yarn@4.0.0",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "unenv": "2.0.0-rc.17"
   }
 }
