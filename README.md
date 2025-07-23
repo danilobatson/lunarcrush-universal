@@ -3,6 +3,7 @@
 > **Production-Ready GraphQL API** providing complete access to LunarCrush's crypto social intelligence data with 39 endpoints, real-time sentiment analysis, and advanced social metrics.
 
 [![Live API](https://img.shields.io/badge/Live%20API-Production-green)](https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql)
+[![npm](https://img.shields.io/npm/v/create-lunarcrush-app.svg)](https://www.npmjs.com/package/create-lunarcrush-app)
 [![GraphQL](https://img.shields.io/badge/GraphQL-Introspection%20Enabled-blue)](https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql)
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange)](https://workers.cloudflare.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue)](https://www.typescriptlang.org/)
