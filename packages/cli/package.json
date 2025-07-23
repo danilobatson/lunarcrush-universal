@@ -1,43 +1,26 @@
 {
   "name": "create-lunarcrush-app",
   "version": "0.1.0",
-  "description": "Create LunarCrush apps with social trading and sentiment analysis features",
-  "homepage": "https://github.com/danilobatson/lunarcrush-universal",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/danilobatson/lunarcrush-universal.git",
-    "directory": "packages/cli"
-  },
+  "description": "Create Next.js apps showcasing LunarCrush social trading API",
   "main": "dist/index.js",
   "bin": "dist/index.js",
   "files": [
-    "dist"
+    "dist",
+    "templates"
   ],
   "scripts": {
-    "build": "npm run clean && tsc",
-    "clean": "rm -rf dist",
+    "build": "tsc",
     "dev": "tsx src/index.ts",
-    "prepublishOnly": "npm run build"
+    "clean": "rm -rf dist"
   },
-  "keywords": [
-    "lunarcrush",
-    "crypto",
-    "social-trading",
-    "sentiment-analysis",
-    "cli",
-    "create-app",
-    "nextjs",
-    "react"
-  ],
-  "author": "Danilo Batson <djbatson19@gmail.com>",
-  "license": "MIT",
   "dependencies": {
+    "@types/inquirer": "^9.0.8",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",
-    "fs-extra": "^11.2.0",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.8.2",
     "ora": "^5.4.1",
-    "prompts": "^2.4.2",
-    "validate-npm-package-name": "^5.0.0"
+    "prompts": "^2.4.2"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",

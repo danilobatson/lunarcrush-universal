@@ -1,3 +1,11 @@
+#!/bin/bash
+
+cd /Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages/cli
+
+echo "🔧 SIMPLIFYING CLI - NEXT.JS ONLY & CLEAN DESIGN"
+echo "==============================================="
+
+cat > src/index.ts << 'EOF'
 #!/usr/bin/env node
 
 import { execSync } from 'child_process';
@@ -292,7 +300,7 @@ async function createAPIShowcasePages(config: ProjectConfig) {
     for (const file of pageFilesToRemove) {
       const filePath = path.join(appDir, file);
       if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath);
+        await fs.remove(filePath);
         console.log(chalk.yellow(`🗑️  Removed existing: ${file}`));
       }
     }
@@ -823,3 +831,15 @@ if (require.main === module) {
 }
 
 export { main };
+EOF
+
+echo "✅ CLI simplified for professional portfolio use!"
+echo ""
+echo "📋 Key improvements:"
+echo "  - ✅ Next.js only (removed React/Vue placeholders)"
+echo "  - ✅ Removed empty Recent Social Posts section"
+echo "  - ✅ Cleaner, more focused design"
+echo "  - ✅ Full-width GraphQL example with better layout"
+echo "  - ✅ Professional presentation perfect for interviews"
+echo "  - ✅ Only shows relevant, working features"
+echo "  - ✅ Better button for GraphQL Playground link"
