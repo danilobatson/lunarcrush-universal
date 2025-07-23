@@ -1,0 +1,29 @@
+
+ ⛅️ wrangler 4.25.1
+───────────────────
+Your Worker has access to the following bindings:
+Binding                                                                           Resource                  Mode
+env.DB (lunarcrush-universal-db)                                                  D1 Database               local
+env.LUNARCRUSH_API_KEY (2593c430bd90424a886728435dd57004/LUNARCRUSH_API_KEY)      Secrets Store Secret      local
+env.ENVIRONMENT ("development")                                                   Environment Variable      local
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mBuild failed with 1 error:[0m
+
+  [31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "./schema/types"[0m
+  
+      src/graphql/server.ts:2:25:
+  [37m      2 │ import { typeDefs } from [32m'./schema/types'[37m;
+          ╵                          [32m~~~~~~~~~~~~~~~~[0m
+  
+  
+
+
+[wrangler:info] Ready on http://localhost:8787
+Error [ERR_IPC_CHANNEL_CLOSED]: Channel closed
+    at target.send (node:internal/child_process:754:16)
+    at /Users/batson/.nvm/versions/node/v20.12.2/lib/node_modules/wrangler/wrangler-dist/cli.js:182487:19
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5) {
+  code: 'ERR_IPC_CHANNEL_CLOSED'
+}
+🪵  Logs were written to "/Users/batson/Library/Preferences/.wrangler/logs/wrangler-2025-07-23_02-24-04_056.log"
