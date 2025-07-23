@@ -1039,7 +1039,7 @@ cors@^2.8.5:
     vary "^1"
 
 "create-lunarcrush-app@file:/Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages/cli":
-  version "0.1.1"
+  version "0.1.2"
   resolved "file:packages/cli"
   dependencies:
     "@types/inquirer" "^9.0.8"

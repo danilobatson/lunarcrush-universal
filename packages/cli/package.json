@@ -1,6 +1,6 @@
 {
   "name": "create-lunarcrush-app",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Create Next.js apps showcasing LunarCrush social trading API",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -50,7 +50,10 @@
     "react",
     "cryptocurrency",
     "api",
-    "graphql"
+    "graphql",
+    "npm",
+    "yarn",
+    "pnpm"
   ],
   "author": "Danilo Batson <djbatson19@gmail.com>",
   "license": "MIT"
