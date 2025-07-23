@@ -1,4 +1,5 @@
 import { ApolloServer } from '@apollo/server';
+import { renderPlaygroundPage } from 'graphql-playground-html';
 import { typeDefs } from './schema/types';
 import { createResolvers } from './resolvers';
 import { LunarCrushConfig } from '../services/lunarcrush';
@@ -13,7 +14,7 @@ export const createGraphQLServer = async (lunarCrushConfig: LunarCrushConfig) =>
     introspection: true, // ✅ EXPLICITLY ENABLED for auto-generated docs
     plugins: [],
     formatResponse: (response: any) => {
-      // Ensure the response format is exactly what GraphQL clients expect
+      // Ensure the response format is exactly what GraphQL Playground expects
       return response;
     },
   });
@@ -44,7 +45,7 @@ export const handleGraphQLRequest = async (
           operationName: operationName || undefined,
         });
 
-        // Return the response in the exact format GraphQL clients expect
+        // Return the response in the exact format GraphQL Playground expects
         const responseBody = {
           data: result.body.kind === 'single' ? result.body.singleResult.data : null,
           errors: result.body.kind === 'single' ? result.body.singleResult.errors : undefined,
@@ -61,7 +62,7 @@ export const handleGraphQLRequest = async (
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization, Apollo-Require-Preflight',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
           },
         });
       } catch (error) {
@@ -77,82 +78,56 @@ export const handleGraphQLRequest = async (
       }
     }
 
-    // Return GraphiQL HTML (much faster than Playground)
-    const graphiqlHtml = `<!DOCTYPE html>
-<html>
-<head>
-    <title>🌙 LunarCrush Universal Backend - GraphiQL</title>
-    <link href="https://unpkg.com/graphiql@3/graphiql.min.css" rel="stylesheet" />
-    <style>
-        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        .header { background: #1a1a1a; color: white; padding: 10px 20px; font-size: 18px; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <div class="header">🌙 LunarCrush Universal Backend - GraphiQL Explorer</div>
-    <div id="graphiql" style="height: calc(100vh - 50px);"></div>
-    
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/graphiql@3/graphiql.min.js"></script>
-    
-    <script>
-        const root = ReactDOM.createRoot(document.getElementById('graphiql'));
-        const fetcher = GraphiQL.createFetcher({
-            url: '${url.pathname}',
-        });
-        
-        const defaultQuery = \`# 🌙 LunarCrush Universal Backend - GraphiQL Explorer
+    // Otherwise, return GraphQL Playground HTML
+    const playgroundHtml = renderPlaygroundPage({
+      endpoint: `${url.origin}${url.pathname}`,
+      settings: {
+        'general.betaUpdates': false,
+        'editor.theme': 'dark',
+        'editor.cursorShape': 'line',
+        'editor.reuseHeaders': true,
+        'tracing.hideTracingResponse': true,
+        'queryPlan.hideQueryPlanResponse': true,
+        'editor.fontSize': 14,
+        'editor.fontFamily': "'Source Code Pro', 'Consolas', 'Inconsolata', 'Droid Sans Mono', 'Monaco', monospace",
+        'request.credentials': 'omit',
+      },
+      tabs: [
+        {
+          endpoint: `${url.origin}${url.pathname}`,
+          query: `# 🚀 LunarCrush Universal Backend - GraphQL API
 # ✅ Introspection ENABLED - Full auto-generated documentation!
-# 🚀 39 GraphQL Queries Available - Complete crypto social intelligence
 
-# Example: Get Bitcoin with social metrics
-{
-  getTopic(topic: "bitcoin") {
-    topic
-    title
-    interactions_24h
-    types_interactions
-    types_sentiment
-    num_contributors
+# Example: Get Bitcoin data
+query GetBitcoin {
+  getCrypto(symbol: "BTC") {
+    symbol
+    name
+    price
+    close
+    percent_change_24h
+    market_cap
+    galaxy_score
+    alt_rank
+    sentiment
   }
 }
 
-# Example: Get top cryptocurrencies with social data
-# {
-#   getCoinsList {
-#     symbol
-#     name
-#     price
-#     market_cap
-#     interactions_24h
-#     social_dominance
-#     galaxy_score
-#     alt_rank
-#   }
-# }
-
 # Health check
-# { health }\`;
+query HealthCheck {
+  health
+}`,
+        },
+      ],
+    });
 
-        root.render(
-            React.createElement(GraphiQL, {
-                fetcher,
-                defaultQuery,
-                plugins: [],
-            })
-        );
-    </script>
-</body>
-</html>`;
-
-    return new Response(graphiqlHtml, {
+    return new Response(playgroundHtml, {
       status: 200,
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Apollo-Require-Preflight',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
     });
   }
@@ -184,7 +159,7 @@ export const handleGraphQLRequest = async (
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization, Apollo-Require-Preflight',
+          'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
       });
     } catch (error) {
@@ -200,15 +175,14 @@ export const handleGraphQLRequest = async (
     }
   }
 
-  // Handle OPTIONS requests (CORS preflight) - Enhanced for Apollo Studio
+  // Handle OPTIONS requests (CORS preflight)
   if (request.method === 'OPTIONS') {
     return new Response(null, {
       status: 204,
       headers: {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Apollo-Require-Preflight',
-        'Access-Control-Max-Age': '86400',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
     });
   }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🌙 LunarCrush Universal Backend - GraphiQL</title>
+    <link href="https://unpkg.com/graphiql@3/graphiql.min.css" rel="stylesheet" />
+    <style>
+        body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        .header { background: #1a1a1a; color: white; padding: 10px 20px; font-size: 18px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">🌙 LunarCrush Universal Backend - GraphiQL Explorer</div>
+    <div id="graphiql" style="height: calc(100vh - 50px);"></div>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/graphiql@3/graphiql.min.js"></script>
+    
+    <script>
+        const root = ReactDOM.createRoot(document.getElementById('graphiql'));
+        const fetcher = GraphiQL.createFetcher({
+            url: '/graphql',
+        });
+        
+        const defaultQuery = `# 🌙 Welcome to LunarCrush Universal Backend!
+# This API provides complete access to crypto social intelligence data
+# Try these example queries:
+
+# Get Bitcoin social data
+{
+  getTopic(topic: "bitcoin") {
+    topic
+    title
+    interactions_24h
+    types_interactions
+    types_sentiment
+  }
+}
+
+# Get top cryptocurrencies with social metrics
+# {
+#   getCoinsList {
+#     symbol
+#     name
+#     price
+#     market_cap
+#     interactions_24h
+#     social_dominance
+#     galaxy_score
+#     alt_rank
+#   }
+# }`;
+
+        root.render(
+            React.createElement(GraphiQL, {
+                fetcher,
+                defaultQuery,
+                plugins: [],
+            })
+        );
+    </script>
+</body>
+</html>

@@ -5,7 +5,12 @@ import { handleGraphQLRequest, createGraphQLServer } from './graphql/server';
 const app = new Hono();
 
 // Add CORS middleware
-app.use('*', cors());
+app.use('*', cors({
+    origin: ['https://studio.apollographql.com', 'https://lunarcrush-universal-backend.cryptoguard-api.workers.dev'],
+    credentials: true,
+    allowMethods: ['GET', 'POST', 'OPTIONS'],
+    allowHeaders: ['Content-Type', 'Authorization', 'Apollo-Require-Preflight']
+  }));
 
 // Environment interface
 interface Environment {
