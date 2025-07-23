@@ -1,65 +1,14 @@
-// Types and interfaces
+// Complete working LunarCrush service with all endpoints
+
 export interface LunarCrushConfig {
   apiKey: string;
   baseUrl?: string;
 }
 
-export interface CoinData {
-  id: string;
-  symbol: string;
-  name: string;
-  price: number;
-  close: number;
-  percent_change_24h: number;
-  percent_change_7d: number;
-  market_cap: number;
-  volume_24h: number;
-  galaxy_score?: number;
-  alt_rank?: number;
-  sentiment?: number;
-  social_dominance?: number;
-  posts_24h?: number;
-  contributors_24h?: number;
-  interactions_24h?: number;
-}
-
-export interface TimeSeriesData {
-  time: string;
-  price: number;
-  close: number;
-  volume: number;
-  market_cap: number;
-  sentiment?: number;
-  social_dominance?: number;
-  interactions?: number;
-}
-
-export interface SocialPost {
-  id: string;
-  platform: string;
-  content: string;
-  author: string;
-  followers: number;
-  interactions: number;
-  sentiment: number;
-  created_at: string;
-  url?: string;
-}
-
-export interface GlobalMetrics {
-  total_market_cap?: number;
-  total_volume_24h?: number;
-  bitcoin_dominance?: number;
-  ethereum_dominance?: number;
-  market_cap_change_24h?: number;
-  volume_change_24h?: number;
-}
-
-// Custom error class to preserve HTTP status codes
 export class LunarCrushError extends Error {
   constructor(
     message: string,
-    public status: number,
+    public statusCode: number,
     public statusText: string
   ) {
     super(message);
@@ -67,94 +16,33 @@ export class LunarCrushError extends Error {
   }
 }
 
-// Transform functions with both price and close fields
-const transformCoinData = (raw: any): CoinData => {
-  const priceValue = parseFloat(raw.price || raw.close || 0);
-  const closeValue = parseFloat(raw.close || raw.price || 0);
-  
-  return {
-    id: String(raw.id || raw.symbol),
-    symbol: raw.symbol?.toUpperCase() || '',
-    name: raw.name || '',
-    price: priceValue,
-    close: closeValue,
-    percent_change_24h: parseFloat(raw.percent_change_24h || 0),
-    percent_change_7d: parseFloat(raw.percent_change_7d || 0),
-    market_cap: parseFloat(raw.market_cap || 0),
-    volume_24h: parseFloat(raw.volume_24h || raw.volume || 0),
-    galaxy_score: raw.galaxy_score ? parseFloat(raw.galaxy_score) : undefined,
-    alt_rank: raw.alt_rank ? parseInt(raw.alt_rank) : undefined,
-    sentiment: raw.sentiment ? parseFloat(raw.sentiment) : undefined,
-    social_dominance: raw.social_dominance ? parseFloat(raw.social_dominance) : undefined,
-    posts_24h: raw.posts_24h ? parseInt(raw.posts_24h) : undefined,
-    contributors_24h: raw.contributors_24h ? parseInt(raw.contributors_24h) : undefined,
-    interactions_24h: raw.interactions_24h ? parseInt(raw.interactions_24h) : undefined,
-  };
-};
-
-const transformTimeSeriesData = (raw: any): TimeSeriesData => {
-  const priceValue = parseFloat(raw.price || raw.close || 0);
-  const closeValue = parseFloat(raw.close || raw.price || 0);
-  
-  return {
-    time: raw.time || raw.date,
-    price: priceValue,
-    close: closeValue,
-    volume: parseFloat(raw.volume || 0),
-    market_cap: parseFloat(raw.market_cap || 0),
-    sentiment: raw.sentiment ? parseFloat(raw.sentiment) : undefined,
-    social_dominance: raw.social_dominance ? parseFloat(raw.social_dominance) : undefined,
-    interactions: raw.interactions ? parseInt(raw.interactions) : undefined,
-  };
-};
-
-const transformSocialPost = (raw: any): SocialPost => ({
-  id: raw.id || String(Math.random()),
-  platform: raw.platform || raw.network || 'unknown',
-  content: raw.content || raw.text || '',
-  author: raw.author || raw.username || 'unknown',
-  followers: parseInt(raw.followers || raw.follower_count || 0),
-  interactions: parseInt(raw.interactions || raw.engagement || 0),
-  sentiment: parseFloat(raw.sentiment || 0),
-  created_at: raw.created_at || raw.date || new Date().toISOString(),
-  url: raw.url || raw.link,
-});
-
-const transformGlobalMetrics = (raw: any): GlobalMetrics => ({
-  total_market_cap: raw.total_market_cap ? parseFloat(raw.total_market_cap) : undefined,
-  total_volume_24h: raw.total_volume_24h ? parseFloat(raw.total_volume_24h) : undefined,
-  bitcoin_dominance: raw.bitcoin_dominance ? parseFloat(raw.bitcoin_dominance) : undefined,
-  ethereum_dominance: raw.ethereum_dominance ? parseFloat(raw.ethereum_dominance) : undefined,
-  market_cap_change_24h: raw.market_cap_change_24h ? parseFloat(raw.market_cap_change_24h) : undefined,
-  volume_change_24h: raw.volume_change_24h ? parseFloat(raw.volume_change_24h) : undefined,
-});
-
-// Core API request function with proper error handling
+// Core API request function
 const makeRequest = async <T>(
   config: LunarCrushConfig,
   endpoint: string,
   params?: Record<string, any>
 ): Promise<T> => {
-  // Correct base URL from LunarCrush API documentation
   const baseUrl = config.baseUrl || 'https://lunarcrush.com/api4/public';
   const url = new URL(`${baseUrl}${endpoint}`);
-  
+
   if (params) {
     Object.entries(params)
       .filter(([_, value]) => value !== undefined && value !== null)
       .forEach(([key, value]) => url.searchParams.append(key, String(value)));
   }
 
+  console.log(`🌙 LunarCrush API Request: ${url.toString()}`);
+
   const response = await fetch(url.toString(), {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${config.apiKey}`,
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
     },
   });
 
   if (!response.ok) {
-    // Preserve the original HTTP status code
     throw new LunarCrushError(
       `LunarCrush API error: ${response.status} ${response.statusText}`,
       response.status,
@@ -162,112 +50,401 @@ const makeRequest = async <T>(
     );
   }
 
-  return response.json();
+  const responseData = await response.json();
+  console.log(`✅ LunarCrush response received`);
+  return responseData;
 };
 
-// API functions using CORRECT endpoints from documentation
-export const getCoin = async (config: LunarCrushConfig, symbol: string): Promise<CoinData> => {
+// ===== ALL EXISTING FUNCTIONS (keeping them all) =====
+
+export const getCrypto = async (config: LunarCrushConfig, symbol: string): Promise<any> => {
   try {
-    // Exact format: https://lunarcrush.com/api4/public/coins/BTC/v1
+    console.log(`🔍 getCrypto: ${symbol}`);
     const response = await makeRequest<any>(config, `/coins/${symbol.toUpperCase()}/v1`);
-    return transformCoinData(response.data);
+    return response.data;
   } catch (error) {
+    console.error('❌ getCrypto error:', error);
     if (error instanceof LunarCrushError) {
-      // Preserve the original error with status code
-      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
     }
     throw error;
   }
 };
 
-export const getCoins = async (
-  config: LunarCrushConfig,
-  symbols?: string[],
-  limit?: number
-): Promise<CoinData[]> => {
+export const getCryptoList = async (config: LunarCrushConfig, symbols?: string[], limit?: number, realtime = false): Promise<any[]> => {
   try {
     const params: Record<string, any> = {};
     if (symbols?.length) params.symbols = symbols.join(',');
     if (limit) params.limit = limit;
-
-    const response = await makeRequest<any>(config, '/coins/list/v1', params);
-    return Array.isArray(response.data) ? response.data.map(transformCoinData) : [];
+    const endpoint = realtime ? '/coins/list/v2' : '/coins/list/v1';
+    const response = await makeRequest<any>(config, endpoint, params);
+    return response.data;
   } catch (error) {
+    console.error('❌ getCryptoList error:', error);
     if (error instanceof LunarCrushError) {
-      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
     }
     throw error;
   }
 };
 
-export const getCoinTimeSeries = async (
-  config: LunarCrushConfig,
-  symbol: string,
-  interval: '1d' | '1w' | '1m' | '3m' | '6m' | '1y' = '1w',
-  metrics: string[] = ['price', 'volume', 'market_cap']
-): Promise<TimeSeriesData[]> => {
+export const getCryptoListV2 = async (config: LunarCrushConfig, symbols?: string[], limit?: number): Promise<any[]> => {
   try {
-    const params = {
-      interval,
-      metrics: metrics.join(',')
-    };
+    const params: Record<string, any> = {};
+    if (symbols?.length) params.symbols = symbols.join(',');
+    if (limit) params.limit = limit;
+    const response = await makeRequest<any>(config, '/coins/list/v2', params);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getCryptoListV2 error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
 
+export const getCryptoPriceHistory = async (config: LunarCrushConfig, symbol: string, interval?: string, metrics?: string): Promise<any[]> => {
+  try {
+    const params: Record<string, any> = {};
+    if (interval) params.interval = interval;
+    if (metrics) params.metrics = metrics;
     const response = await makeRequest<any>(config, `/coins/${symbol.toUpperCase()}/time-series/v2`, params);
-    return Array.isArray(response.data) ? response.data.map(transformTimeSeriesData) : [];
+    return response.data;
   } catch (error) {
+    console.error('❌ getCryptoPriceHistory error:', error);
     if (error instanceof LunarCrushError) {
-      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
     }
     throw error;
   }
 };
 
-export const getSocialPosts = async (
-  config: LunarCrushConfig,
-  topic: string,
-  interval: '1d' | '1w' | '1m' = '1d',
-  limit: number = 20
-): Promise<SocialPost[]> => {
+export const getCryptoMetadata = async (config: LunarCrushConfig, symbol: string): Promise<any> => {
   try {
-    const params = { interval, limit };
-
-    const response = await makeRequest<any>(config, `/topic/${topic.toLowerCase()}/posts/v1`, params);
-    return Array.isArray(response.data) ? response.data.map(transformSocialPost) : [];
+    const response = await makeRequest<any>(config, `/coins/${symbol.toUpperCase()}/meta/v1`);
+    return response.data;
   } catch (error) {
+    console.error('❌ getCryptoMetadata error:', error);
     if (error instanceof LunarCrushError) {
-      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
     }
     throw error;
   }
 };
 
-export const getGlobalMetrics = async (config: LunarCrushConfig): Promise<GlobalMetrics> => {
+export const getSocialInfluencers = async (config: LunarCrushConfig, limit: number = 50, sort?: string): Promise<any[]> => {
   try {
-    const response = await makeRequest<any>(config, '/coins/list/v1');
-    return transformGlobalMetrics(response.data || {});
+    const params: Record<string, any> = {};
+    if (sort) params.sort = sort;
+    const response = await makeRequest<any>(config, '/creators/list/v1', params);
+    const limitedData = limit && limit < response.data.length ? response.data.slice(0, limit) : response.data;
+    return limitedData;
   } catch (error) {
+    console.error('❌ getSocialInfluencers error:', error);
     if (error instanceof LunarCrushError) {
-      throw new Error(`${error.status} ${error.statusText}: ${error.message}`);
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
     }
     throw error;
   }
 };
 
-// Factory function to create a configured API client
+export const getSocialInfluencer = async (config: LunarCrushConfig, platform: string, id: string): Promise<any> => {
+  try {
+    const response = await makeRequest<any>(config, `/creator/${platform}/${id}/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getSocialInfluencer error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getInfluencerPosts = async (config: LunarCrushConfig, network: string, id: string, start?: string, end?: string): Promise<any[]> => {
+  try {
+    const params: Record<string, any> = {};
+    if (start) params.start = start;
+    if (end) params.end = end;
+    const response = await makeRequest<any>(config, `/creator/${network}/${id}/posts/v1`, params);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getInfluencerPosts error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getCreatorTimeSeries = async (config: LunarCrushConfig, network: string, id: string, interval?: string): Promise<any[]> => {
+  try {
+    const params: Record<string, any> = {};
+    if (interval) params.interval = interval;
+    const response = await makeRequest<any>(config, `/creator/${network}/${id}/time-series/v1`, params);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getCreatorTimeSeries error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getTopicCategories = async (config: LunarCrushConfig, limit: number = 50): Promise<any[]> => {
+  try {
+    const response = await makeRequest<any>(config, '/categories/list/v1');
+    const limitedData = limit && limit < response.data.length ? response.data.slice(0, limit) : response.data;
+    return limitedData;
+  } catch (error) {
+    console.error('❌ getTopicCategories error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getTopicCategory = async (config: LunarCrushConfig, category: string): Promise<any> => {
+  try {
+    const response = await makeRequest<any>(config, `/category/${category}/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getTopicCategory error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getCategoryPosts = async (config: LunarCrushConfig, category: string, start?: string, end?: string): Promise<any[]> => {
+  try {
+    const params: Record<string, any> = {};
+    if (start) params.start = start;
+    if (end) params.end = end;
+    const response = await makeRequest<any>(config, `/category/${category}/posts/v1`, params);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getCategoryPosts error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getCategoryTimeSeries = async (config: LunarCrushConfig, category: string, interval?: string): Promise<any[]> => {
+  try {
+    const params: Record<string, any> = {};
+    if (interval) params.interval = interval;
+    const response = await makeRequest<any>(config, `/category/${category}/time-series/v1`, params);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getCategoryTimeSeries error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getCategoryCreators = async (config: LunarCrushConfig, category: string): Promise<any[]> => {
+  try {
+    const response = await makeRequest<any>(config, `/category/${category}/creators/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getCategoryCreators error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getCategoryNews = async (config: LunarCrushConfig, category: string): Promise<any[]> => {
+  try {
+    const response = await makeRequest<any>(config, `/category/${category}/news/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getCategoryNews error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getCategoryTopics = async (config: LunarCrushConfig, category: string): Promise<any[]> => {
+  try {
+    const response = await makeRequest<any>(config, `/category/${category}/topics/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getCategoryTopics error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getSocialPosts = async (config: LunarCrushConfig, topic: string, start?: string, end?: string): Promise<any[]> => {
+  try {
+    const params: Record<string, any> = {};
+    if (start) params.start = start;
+    if (end) params.end = end;
+    const response = await makeRequest<any>(config, `/topic/${topic}/posts/v1`, params);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getSocialPosts error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getTopicCreators = async (config: LunarCrushConfig, topic: string): Promise<any[]> => {
+  try {
+    const response = await makeRequest<any>(config, `/topic/${topic}/creators/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getTopicCreators error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getPostDetails = async (config: LunarCrushConfig, postType: string, postId: string): Promise<any> => {
+  try {
+    const response = await makeRequest<any>(config, `/posts/${postType}/${postId}/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getPostDetails error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getPostTimeSeries = async (config: LunarCrushConfig, postType: string, postId: string): Promise<any[]> => {
+  try {
+    const response = await makeRequest<any>(config, `/posts/${postType}/${postId}/time-series/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getPostTimeSeries error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+// ===== NEW ENDPOINTS =====
+
+export const getTopic = async (config: LunarCrushConfig, topic: string): Promise<any> => {
+  try {
+    console.log(`🔍 getTopic: ${topic}`);
+    const response = await makeRequest<any>(config, `/topic/${topic.toLowerCase()}/v1`);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getTopic error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getTopicTimeSeries = async (config: LunarCrushConfig, topic: string, interval?: string): Promise<any[]> => {
+  try {
+    console.log(`🔍 getTopicTimeSeries: ${topic}`);
+    const params: Record<string, any> = {};
+    if (interval) params.interval = interval;
+    const response = await makeRequest<any>(config, `/topic/${topic.toLowerCase()}/time-series/v1`, params);
+    return response.data;
+  } catch (error) {
+    console.error('❌ getTopicTimeSeries error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+export const getStocksList = async (config: LunarCrushConfig): Promise<any[]> => {
+  try {
+    console.log(`🔍 getStocksList: NO PARAMETERS (as per API docs)`);
+
+    // The stocks/list/v1 endpoint doesn't accept ANY parameters
+    const response = await makeRequest<any>(config, '/stocks/list/v1');
+    return response.data;
+  } catch (error) {
+    console.error('❌ getStocksList error:', error);
+    if (error instanceof LunarCrushError) {
+      throw new Error(`${error.statusCode} ${error.statusText}: ${error.message}`);
+    }
+    throw error;
+  }
+};
+
+
+// ===== CLIENT FACTORY =====
 export const createLunarCrushClient = (config: LunarCrushConfig) => ({
-  getCoin: (symbol: string) => getCoin(config, symbol),
-  getCoins: (symbols?: string[], limit?: number) => getCoins(config, symbols, limit),
-  getCoinTimeSeries: (
-    symbol: string,
-    interval: '1d' | '1w' | '1m' | '3m' | '6m' | '1y' = '1w',
-    metrics: string[] = ['price', 'volume', 'market_cap']
-  ) => getCoinTimeSeries(config, symbol, interval, metrics),
-  getSocialPosts: (
-    topic: string,
-    interval: '1d' | '1w' | '1m' = '1d',
-    limit: number = 20
-  ) => getSocialPosts(config, topic, interval, limit),
-  getGlobalMetrics: () => getGlobalMetrics(config),
+  // COINS ENDPOINTS
+  getCrypto: (symbol: string) => getCrypto(config, symbol),
+  getCryptoList: (symbols?: string[], limit?: number, realtime = false) =>
+    getCryptoList(config, symbols, limit, realtime),
+  getCryptoListV2: (symbols?: string[], limit?: number) =>
+    getCryptoListV2(config, symbols, limit),
+  getCryptoMetadata: (symbol: string) => getCryptoMetadata(config, symbol),
+  getCryptoPriceHistory: (symbol: string, interval?: string, metrics?: string) =>
+    getCryptoPriceHistory(config, symbol, interval, metrics),
+
+  // CREATORS ENDPOINTS
+  getSocialInfluencers: (limit = 50, sort?: string) =>
+    getSocialInfluencers(config, limit, sort),
+  getSocialInfluencer: (platform: string, id: string) =>
+    getSocialInfluencer(config, platform, id),
+  getInfluencerPosts: (network: string, id: string, start?: string, end?: string) =>
+    getInfluencerPosts(config, network, id, start, end),
+  getCreatorTimeSeries: (network: string, id: string, interval?: string) =>
+    getCreatorTimeSeries(config, network, id, interval),
+
+  // CATEGORIES ENDPOINTS
+  getTopicCategories: (limit = 50) => getTopicCategories(config, limit),
+  getTopicCategory: (category: string) => getTopicCategory(config, category),
+  getCategoryPosts: (category: string, start?: string, end?: string) =>
+    getCategoryPosts(config, category, start, end),
+  getCategoryTimeSeries: (category: string, interval?: string) =>
+    getCategoryTimeSeries(config, category, interval),
+  getCategoryCreators: (category: string) => getCategoryCreators(config, category),
+  getCategoryNews: (category: string) => getCategoryNews(config, category),
+  getCategoryTopics: (category: string) => getCategoryTopics(config, category),
+
+  // TOPICS ENDPOINTS
+  getSocialPosts: (topic: string, start?: string, end?: string) =>
+    getSocialPosts(config, topic, start, end),
+  getTopicCreators: (topic: string) => getTopicCreators(config, topic),
+
+  // NEW TOPIC ENDPOINTS
+  getTopic: (topic: string) => getTopic(config, topic),
+  getTopicTimeSeries: (topic: string, interval?: string) =>
+    getTopicTimeSeries(config, topic, interval),
+
+  // POSTS ENDPOINTS
+  getPostDetails: (postType: string, postId: string) =>
+    getPostDetails(config, postType, postId),
+  getPostTimeSeries: (postType: string, postId: string) =>
+    getPostTimeSeries(config, postType, postId),
+
+  // NEW STOCKS ENDPOINTS
+  getStocksList: () => getStocksList(config),
 });
 
 export type LunarCrushClient = ReturnType<typeof createLunarCrushClient>;

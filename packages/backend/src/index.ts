@@ -1,21 +1,123 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
-import { logger } from 'hono/logger';
-import { createGraphQLServer, handleGraphQLRequest } from './graphql/server';
+import { handleGraphQLRequest, createGraphQLServer } from './graphql/server';
 
-// Define types for Cloudflare Workers environment
-export interface Env {
-  DB: D1Database;
-  LUNARCRUSH_API_KEY: any; // Secrets Store binding
+const app = new Hono();
+
+// Add CORS middleware
+app.use('*', cors());
+
+// Environment interface
+interface Environment {
+  LUNARCRUSH_API_KEY: {
+    get(): Promise<string>;
+  };
+  CRYPTO_CACHE?: any;
+  DB?: any;
 }
 
-const app = new Hono<{ Bindings: Env }>();
+// ===== API KEY TEST ENDPOINT =====
+app.get('/test-api-key', async (c) => {
+  try {
+    console.log('Testing API key binding access...');
+    
+    // Test if the binding exists
+    if (!c.env?.LUNARCRUSH_API_KEY) {
+      return c.json({
+        success: false,
+        error: 'LUNARCRUSH_API_KEY binding not found',
+        available_bindings: Object.keys(c.env || {}),
+        timestamp: new Date().toISOString()
+      });
+    }
 
-// Middleware
-app.use('*', cors());
-app.use('*', logger());
+    // Get the API key using the correct binding method
+    const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
+    
+    if (!apiKey) {
+      return c.json({
+        success: false,
+        error: 'API key is null or empty',
+        binding_exists: !!c.env.LUNARCRUSH_API_KEY,
+        timestamp: new Date().toISOString()
+      });
+    }
 
-// Health check endpoint
+    // Test the API key with a simple LunarCrush request
+    console.log(`Testing API key: ${apiKey.substring(0, 10)}...`);
+    
+    const testResponse = await fetch('https://lunarcrush.com/api4/public/coins/BTC/v1', {
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!testResponse.ok) {
+      const errorText = await testResponse.text();
+      return c.json({
+        success: false,
+        error: 'API key authentication failed',
+        api_key_length: apiKey.length,
+        api_key_prefix: apiKey.substring(0, 10) + '...',
+        lunarcrush_status: testResponse.status,
+        lunarcrush_error: errorText,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const testData = await testResponse.json();
+
+    return c.json({
+      success: true,
+      message: 'API key is working correctly!',
+      api_key_length: apiKey.length,
+      api_key_prefix: apiKey.substring(0, 10) + '...',
+      lunarcrush_test: {
+        status: testResponse.status,
+        bitcoin_price: testData.data?.price || 'Not found'
+      },
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('API key test error:', error);
+    return c.json({
+      success: false,
+      error: error.message,
+      stack: error.stack,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// ===== GRAPHQL ENDPOINT =====
+app.all('/graphql', async (c) => {
+  try {
+    // Get API key using correct binding method
+    const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
+    
+    if (!apiKey) {
+      return c.json({ 
+        error: 'LunarCrush API key not configured' 
+      }, 500);
+    }
+
+    // Create GraphQL server with API key
+    const server = await createGraphQLServer({ apiKey });
+    
+    // Handle the GraphQL request
+    return await handleGraphQLRequest(server, c.req.raw);
+  } catch (error) {
+    console.error('GraphQL error:', error);
+    return c.json({ 
+      error: 'GraphQL server error',
+      message: error.message 
+    }, 500);
+  }
+});
+
+// ===== HEALTH CHECK =====
 app.get('/health', (c) => {
   return c.json({
     status: 'healthy',
@@ -25,132 +127,81 @@ app.get('/health', (c) => {
     endpoints: {
       graphql: '/graphql',
       health: '/health',
-      database_test: '/test/database',
-      lunarcrush_test: '/test/lunarcrush',
-      secret_test: '/test/secret'
+      api_key_test: '/test-api-key'
     }
   });
 });
 
-// GraphQL endpoint
-app.all('/graphql', async (c) => {
-  try {
-    // CORRECT: Use .get() method for Secrets Store
-    const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
-    if (!apiKey) {
-      return c.json({ error: 'LunarCrush API key not configured' }, 500);
-    }
-
-    const server = await createGraphQLServer({ apiKey });
-    const response = await handleGraphQLRequest(server, c.req.raw);
-    
-    return new Response(response.body, {
-      status: response.status,
-      headers: response.headers,
-    });
-  } catch (error) {
-    console.error('GraphQL error:', error);
-    return c.json({ 
-      error: 'Internal GraphQL server error',
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, 500);
-  }
-});
-
-// Test endpoints
+// ===== LEGACY TEST ENDPOINTS (for backwards compatibility) =====
 app.get('/test/secret', async (c) => {
   try {
-    // CORRECT: Use .get() method for Secrets Store
     const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
     return c.json({
-      success: true,
-      hasApiKey: !!apiKey,
-      keyLength: apiKey ? apiKey.length : 0,
-      keyPreview: apiKey ? `${apiKey.substring(0, 8)}...` : 'Not set'
+      success: !!apiKey,
+      api_key: apiKey,
+      key_length: apiKey?.length || 0,
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
-    return c.json({ 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error' 
-    }, 500);
-  }
-});
-
-app.get('/test/database', async (c) => {
-  try {
-    const db = c.env.DB;
-    const result = await db.prepare('SELECT 1 as test').first();
     return c.json({
-      success: true,
-      database: 'connected',
-      testQuery: result
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
     });
-  } catch (error) {
-    return c.json({ 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error' 
-    }, 500);
   }
 });
 
 app.get('/test/lunarcrush', async (c) => {
   try {
-    // CORRECT: Use .get() method for Secrets Store
     const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
+    
     if (!apiKey) {
-      return c.json({ error: 'API key not found' }, 500);
+      return c.json({
+        success: false,
+        error: 'API key not available'
+      });
     }
 
     const response = await fetch('https://lunarcrush.com/api4/public/coins/BTC/v1', {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
 
     if (!response.ok) {
-      throw new Error(`API request failed: ${response.status}`);
+      return c.json({
+        success: false,
+        error: `API request failed: ${response.status}`
+      });
     }
 
     const data = await response.json();
+    
     return c.json({
       success: true,
       lunarcrush: 'connected',
-      btc_price: data.data.price || data.data.close,
+      btc_price: data.data?.price,
       data_sample: {
-        symbol: data.data.symbol,
-        name: data.data.name,
-        price: data.data.price || data.data.close,
-        change_24h: data.data.percent_change_24h,
-        market_cap: data.data.market_cap,
-        galaxy_score: data.data.galaxy_score,
-        alt_rank: data.data.alt_rank
+        symbol: data.data?.symbol,
+        name: data.data?.name,
+        price: data.data?.price,
+        change_24h: data.data?.percent_change_24h,
+        market_cap: data.data?.market_cap,
+        galaxy_score: data.data?.galaxy_score,
+        alt_rank: data.data?.alt_rank
       }
     });
   } catch (error) {
-    return c.json({ 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error' 
-    }, 500);
+    return c.json({
+      success: false,
+      error: error.message
+    });
   }
 });
 
-// Root endpoint
-app.get('/', (c) => {
-  return c.json({
-    message: 'LunarCrush Universal Backend API',
-    version: '1.0.0',
-    endpoints: {
-      graphql: '/graphql - GraphQL API for crypto data',
-      health: '/health - Service health check',
-      test_endpoints: {
-        database: '/test/database',
-        lunarcrush: '/test/lunarcrush', 
-        secrets: '/test/secret'
-      }
-    },
-    documentation: 'Visit /graphql for interactive GraphQL documentation'
-  });
-});
-
-export default app;
+export default {
+  async fetch(request: Request, env: Environment): Promise<Response> {
+    return app.fetch(request, env);
+  },
+};

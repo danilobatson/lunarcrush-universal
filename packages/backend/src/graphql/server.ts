@@ -7,7 +7,7 @@ import { LunarCrushConfig } from '../services/lunarcrush';
 // Create GraphQL server factory function
 export const createGraphQLServer = async (lunarCrushConfig: LunarCrushConfig) => {
   const resolvers = createResolvers(lunarCrushConfig);
-  
+
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -29,13 +29,13 @@ export const handleGraphQLRequest = async (
   request: Request
 ): Promise<Response> => {
   const url = new URL(request.url);
-  
+
   // Handle GraphQL operations via GET (for introspection queries)
   if (request.method === 'GET') {
     const query = url.searchParams.get('query');
     const variables = url.searchParams.get('variables');
     const operationName = url.searchParams.get('operationName');
-    
+
     // If there's a query parameter, execute the GraphQL operation
     if (query) {
       try {
@@ -77,7 +77,7 @@ export const handleGraphQLRequest = async (
         });
       }
     }
-    
+
     // Otherwise, return GraphQL Playground HTML
     const playgroundHtml = renderPlaygroundPage({
       endpoint: `${url.origin}${url.pathname}`,
@@ -100,7 +100,7 @@ export const handleGraphQLRequest = async (
 
 # Example: Get Bitcoin data
 query GetBitcoin {
-  coin(symbol: "BTC") {
+  getCrypto(symbol: "BTC") {
     symbol
     name
     price
@@ -123,7 +123,7 @@ query HealthCheck {
 
     return new Response(playgroundHtml, {
       status: 200,
-      headers: { 
+      headers: {
         'Content-Type': 'text/html; charset=utf-8',
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
