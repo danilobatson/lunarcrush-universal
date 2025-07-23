@@ -86,3 +86,12 @@ wrangler.toml.backup
 
 # Cloudflare Workers
 .wrangler/
+
+# Yarn PnP (Plug'n'Play) - auto-generated
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

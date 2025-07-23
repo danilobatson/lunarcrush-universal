@@ -503,7 +503,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hono/node-server@npm:^1.17.1":
+"@hono/node-server@npm:^1.13.7":
   version: 1.17.1
   resolution: "@hono/node-server@npm:1.17.1"
   peerDependencies:
@@ -734,6 +734,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@lunarcrush/universal-backend@workspace:packages/backend":
+  version: 0.0.0-use.local
+  resolution: "@lunarcrush/universal-backend@workspace:packages/backend"
+  dependencies:
+    "@cloudflare/workers-types": "npm:^4.20250722.0"
+    "@hono/node-server": "npm:^1.13.7"
+    "@types/node": "npm:^24.1.0"
+    hono: "npm:^4.6.12"
+    typescript: "npm:^5.8.3"
+    wrangler: "npm:^4.25.1"
+  languageName: unknown
+  linkType: soft
+
 "@manypkg/find-root@npm:^1.1.0":
   version: 1.1.0
   resolution: "@manypkg/find-root@npm:1.1.0"
@@ -955,19 +968,6 @@ __metadata:
   checksum: 429897e68110374f39b771ec47a7161fc6a8fc33e196857c0a396dc75df0b5f65e4d046674db764330b6bb66b39ef48dd7c53b6a2ee75cfb0681e0c1a7033962
   languageName: node
   linkType: hard
-
-"backend@workspace:packages/backend":
-  version: 0.0.0-use.local
-  resolution: "backend@workspace:packages/backend"
-  dependencies:
-    "@cloudflare/workers-types": "npm:^4.20250722.0"
-    "@hono/node-server": "npm:^1.17.1"
-    "@types/node": "npm:^24.1.0"
-    hono: "npm:^4.8.5"
-    typescript: "npm:^5.8.3"
-    wrangler: "npm:^4.25.1"
-  languageName: unknown
-  linkType: soft
 
 "balanced-match@npm:^1.0.0":
   version: 1.0.2
@@ -1509,7 +1509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hono@npm:^4.8.5":
+"hono@npm:^4.6.12":
   version: 4.8.5
   resolution: "hono@npm:4.8.5"
   checksum: f3d4632c92a51c8de5f5b645fbbe510c7bdab87390c3e84ee8cc3ba8e1f8912fe52444e58681307d95e45581d38a8cb178f615f73602d0acc768bf801eea18c1
