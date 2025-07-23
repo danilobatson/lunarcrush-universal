@@ -1,0 +1,20 @@
+name = "lunarcrush-universal-backend"
+main = "src/index.ts"
+compatibility_date = "2024-10-15"
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables (non-sensitive only)
+[vars]
+ENVIRONMENT = "development"
+
+# D1 Database configuration
+[[d1_databases]]
+binding = "DB"
+database_name = "lunarcrush-universal-db"
+database_id = "8eb77518-7262-429c-954b-ee5e9ca67213"
+
+# KV Storage for caching (we'll set this up later)
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "lunarcrush_cache_dev"
+# preview_id = "lunarcrush_cache_dev"

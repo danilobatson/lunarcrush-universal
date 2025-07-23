@@ -75,3 +75,14 @@ jspm_packages/
 
 # Turbo
 .turbo
+
+# Secrets and API keys
+.env
+.env.local
+.env.*.local
+wrangler.toml.backup
+*.key
+*.pem
+
+# Cloudflare Workers
+.wrangler/
