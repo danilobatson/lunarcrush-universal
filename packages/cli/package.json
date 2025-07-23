@@ -13,14 +13,12 @@
     "create-lunarcrush-app": "dist/index.js"
   },
   "files": [
-    "dist",
-    "templates"
+    "dist"
   ],
   "scripts": {
-    "build": "npm run clean && tsc && npm run copy-templates",
-    "copy-templates": "mkdir -p dist && cp -R templates dist/ || echo 'Templates copy failed, but continuing...'",
-    "dev": "tsx src/index.ts",
+    "build": "npm run clean && tsc",
     "clean": "rm -rf dist",
+    "dev": "tsx src/index.ts",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
