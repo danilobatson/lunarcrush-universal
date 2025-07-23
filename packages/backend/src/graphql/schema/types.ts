@@ -16,409 +16,693 @@ export const typeDefs = `
     DESC
   }
 
-  # ===== CRYPTO NESTED TYPES =====
-  
-  type BlockchainInfo {
+  # ===== EXACT API RESPONSE TYPES (FROM LUNARCRUSH DOCS) =====
+
+  # Config type (appears in all API responses)
+  type ApiConfig {
+    topic: String
+    id: String
+    name: String
+    symbol: String
+    interval: String
+    start: Int
+    end: Int
+    bucket: String
+    metrics: [String]
+    generated: Int
+    sort: String
+    desc: Boolean
+    limit: Int
+    page: Int
+    total_rows: Int
+    category: String
     type: String
-    network: String
+    remote_api: String
+  }
+
+  # ===== TOPICS LIST TYPE (EXACT FROM /topics/list/v1) =====
+  type TopicListItem {
+    topic: String!
+    title: String!
+    topic_rank: Int!
+    topic_rank_1h_previous: Int!
+    topic_rank_24h_previous: Int!
+    num_contributors: Float!
+    num_posts: Float!
+    interactions_24h: Float!
+  }
+
+  # ===== TOPIC DETAILS TYPE (EXACT FROM /topic/{topic}/v1) =====
+  type TopicDetails {
+    topic: String!
+    title: String!
+    topic_rank: Int!
+    related_topics: [String!]!
+    types_count: JSON!
+    types_interactions: JSON!
+    types_sentiment: JSON!
+    types_sentiment_detail: JSON!
+    interactions_24h: Float!
+    num_contributors: Int!
+    num_posts: Int!
+    categories: [String!]!
+    trend: String!
+  }
+
+  # ===== TOPIC TIME SERIES TYPE (EXACT FROM /topic/{topic}/time-series/v1) =====
+  type TopicTimeSeriesItem {
+    time: Int!
+    contributors_active: Int
+    contributors_created: Int
+    interactions: Float
+    posts_active: Int
+    posts_created: Int
+    sentiment: Float
+    spam: Int
+    alt_rank: Int
+    circulating_supply: Float
+    close: Float
+    galaxy_score: Float
+    high: Float
+    low: Float
+    market_cap: Float
+    market_dominance: Float
+    open: Float
+    social_dominance: Float
+    volume_24h: Float
+  }
+
+  # ===== TOPIC POSTS TYPE (EXACT FROM /topic/{topic}/posts/v1) =====
+  type TopicPost {
+    id: String!
+    post_type: String!
+    post_title: String!
+    post_link: String!
+    post_image: String
+    post_created: Int!
+    post_sentiment: Float!
+    creator_id: String!
+    creator_name: String!
+    creator_display_name: String!
+    creator_followers: Float!
+    creator_avatar: String!
+    interactions_24h: Float!
+    interactions_total: Float!
+  }
+
+  # ===== TOPIC NEWS TYPE (EXACT FROM /topic/{topic}/news/v1) =====
+  type TopicNews {
+    id: String!
+    post_type: String!
+    post_title: String!
+    post_link: String!
+    post_image: String
+    post_created: Int!
+    post_sentiment: Float!
+    creator_id: String!
+    creator_name: String!
+    creator_display_name: String!
+    creator_followers: Float!
+    creator_avatar: String!
+    interactions_24h: Float!
+    interactions_total: Float!
+  }
+
+  # ===== TOPIC CREATORS TYPE (EXACT FROM /topic/{topic}/creators/v1) =====
+  type TopicCreator {
+    creator_id: String!
+    creator_name: String!
+    creator_avatar: String!
+    creator_followers: Float!
+    creator_rank: Int!
+    interactions_24h: Float!
+  }
+
+  # ===== TOPIC WHATSUP TYPE (EXACT FROM /topic/{topic}/whatsup/v1) =====
+  type TopicWhatsup {
+    config: JSON!
+    summary: String!
+  }
+
+  # ===== CATEGORIES LIST TYPE (EXACT FROM /categories/list/v1) =====
+  type CategoryListItem {
+    category: String!
+    title: String!
+    category_rank: Int!
+    category_rank_1h_previous: Int!
+    category_rank_24h_previous: Int!
+    num_contributors: Float!
+    social_dominance: Float!
+    num_posts: Float!
+    interactions_24h: Float!
+  }
+
+  # ===== CATEGORY DETAILS TYPE (EXACT FROM /category/{category}/v1) =====
+  type CategoryDetails {
+    topic: String!
+    title: String!
+    related_topics: [String!]!
+    types_count: JSON!
+    types_interactions: JSON!
+    types_sentiment: JSON!
+    types_sentiment_detail: JSON!
+    interactions_24h: Float!
+    num_contributors: Int!
+    num_posts: Int!
+    trend: String!
+  }
+
+  # ===== CATEGORY TOPICS TYPE (EXACT FROM /category/{category}/topics/v1) =====
+  type CategoryTopic {
+    topic: String!
+    title: String!
+    topic_rank: Int!
+    topic_rank_1h_previous: Int!
+    topic_rank_24h_previous: Int!
+    num_contributors: Int!
+    social_dominance: Float!
+    num_posts: Int!
+    interactions_24h: Float!
+  }
+
+  # ===== CATEGORY TIME SERIES TYPE (EXACT FROM /category/{category}/time-series/v1) =====
+  type CategoryTimeSeriesItem {
+    time: Int!
+    contributors_active: Int!
+    contributors_created: Int!
+    interactions: Float!
+    posts_active: Int!
+    posts_created: Int!
+    sentiment: Float!
+    spam: Int!
+  }
+
+  # ===== CATEGORY POSTS TYPE (EXACT FROM /category/{category}/posts/v1) =====
+  type CategoryPost {
+    id: String!
+    post_type: String!
+    post_title: String!
+    post_link: String!
+    post_image: String
+    post_created: Int!
+    post_sentiment: Float!
+    creator_id: String!
+    creator_name: String!
+    creator_display_name: String!
+    creator_followers: Float!
+    creator_avatar: String!
+    interactions_24h: Float!
+    interactions_total: Float!
+  }
+
+  # ===== CATEGORY NEWS TYPE (EXACT FROM /category/{category}/news/v1) =====
+  type CategoryNews {
+    id: String!
+    post_type: String!
+    post_title: String!
+    post_link: String!
+    post_image: String
+    post_created: Int!
+    post_sentiment: Float!
+    creator_id: String!
+    creator_name: String!
+    creator_display_name: String!
+    creator_followers: Float!
+    creator_avatar: String!
+    interactions_24h: Float!
+    interactions_total: Float!
+  }
+
+  # ===== CATEGORY CREATORS TYPE (EXACT FROM /category/{category}/creators/v1) =====
+  type CategoryCreator {
+    creator_id: String!
+    creator_name: String!
+    creator_avatar: String!
+    creator_followers: Float!
+    creator_rank: Int!
+    interactions_24h: Float!
+  }
+
+  # ===== CREATORS LIST TYPE (EXACT FROM /creators/list/v1) =====
+  type CreatorListItem {
+    creator_name: String!
+    creator_display_name: String!
+    creator_id: String!
+    creator_network: String!
+    creator_avatar: String!
+    creator_followers: Float!
+    creator_posts: Int!
+    creator_rank: Int!
+    interactions_24h: Float!
+  }
+
+  # ===== CREATOR DETAILS TYPE (EXACT FROM /creator/{network}/{id}/v1) =====
+  type CreatorDetails {
+    creator_id: String!
+    creator_name: String!
+    creator_display_name: String!
+    creator_avatar: String!
+    creator_followers: Float!
+    creator_rank: String!
+    interactions_24h: Float!
+    topic_influence: [TopicInfluence!]!
+  }
+
+  type TopicInfluence {
+    topic: String!
+    count: Int!
+    percent: Float!
+    rank: Int!
+  }
+
+  # ===== CREATOR TIME SERIES TYPE (EXACT FROM /creator/{network}/{id}/time-series/v1) =====
+  type CreatorTimeSeriesItem {
+    time: Int!
+    followers: Int!
+    interactions: Float!
+    posts_active: Int!
+    creator_rank: Int!
+  }
+
+  # ===== CREATOR POSTS TYPE (EXACT FROM /creator/{network}/{id}/posts/v1) =====
+  type CreatorPost {
+    id: String!
+    post_type: String!
+    post_title: String!
+    post_created: Int!
+    post_sentiment: Float!
+    post_link: String!
+    post_image: String
+    creator_id: String!
+    creator_name: String!
+    creator_display_name: String!
+    creator_followers: Float!
+    creator_avatar: String!
+    interactions_24h: Float!
+    interactions_total: Float!
+  }
+
+  # ===== POST DETAILS TYPE (EXACT FROM /posts/{post_type}/{post_id}/v1) =====
+  type PostDetails {
+    type: String!
+    id: String!
+    title: String!
+    description: String
+    extraText: String
+    metrics: JSON
+    image: JSON
+    video: JSON
+    images: JSON
+    creator_id: String!
+    creator_name: String!
+    creator_display_name: String!
+    creator_avatar: String!
+    topics: [String!]!
+    categories: [String!]!
+  }
+
+  # ===== POST TIME SERIES TYPE (EXACT FROM /posts/{post_type}/{post_id}/time-series/v1) =====
+  type PostTimeSeriesItem {
+    time: String!
+    interactions: Float!
+  }
+
+  # ===== COINS LIST TYPE (EXACT FROM /coins/list/v2) =====
+  type CoinListItem {
+    id: Int!
+    symbol: String!
+    name: String!
+    price: Float!
+    price_btc: Float!
+    volume_24h: Float!
+    volatility: Float!
+    circulating_supply: Float!
+    max_supply: Float
+    percent_change_1h: Float!
+    percent_change_24h: Float!
+    percent_change_7d: Float!
+    market_cap: Float!
+    market_cap_rank: Int!
+    interactions_24h: Float!
+    social_volume_24h: Float!
+    social_dominance: Float!
+    market_dominance: Float!
+    market_dominance_prev: Float!
+    galaxy_score: Float!
+    galaxy_score_previous: Float!
+    alt_rank: Int!
+    alt_rank_previous: Int!
+    sentiment: Float!
+    categories: String!
+    blockchains: [BlockchainInfo!]!
+    percent_change_30d: Float!
+    last_updated_price: Int!
+    last_updated_price_by: String!
+    topic: String!
+    logo: String!
+  }
+
+  type BlockchainInfo {
+    type: String!
+    network: String!
     address: String
     decimals: Int
   }
 
-  type TopicInfluence {
-    topic: String
-    count: Int
-    percent: Float
-    rank: Int
-  }
-
-  # ===== COMPLETE CRYPTO DATA TYPE (ALL FIELDS) =====
-  type CryptoData {
-    # Basic identification
-    id: Int
-    symbol: String
-    name: String
-    
-    # Price data
-    price: Float
-    close: Float
-    percent_change_24h: Float
-    percent_change_7d: Float
-    percent_change_1h: Float
-    
-    # Market data
-    market_cap: Float
-    market_cap_rank: Int
-    volume_24h: Float
+  # ===== COIN DETAILS TYPE (EXACT FROM /coins/{coin}/v1) =====
+  type CoinDetails {
+    id: Int!
+    name: String!
+    symbol: String!
+    price: Float!
+    price_btc: Float!
+    market_cap: Float!
+    percent_change_24h: Float!
+    percent_change_7d: Float!
+    percent_change_30d: Float!
+    volume_24h: Float!
     max_supply: Float
-    circulating_supply: Float
-    
-    # Social metrics
-    galaxy_score: Float
-    galaxy_score_previous: Float
-    alt_rank: Int
-    alt_rank_previous: Int
-    interactions_24h: Float
-    social_volume_24h: Float
-    social_dominance: Float
-    market_dominance: Float
-    market_dominance_prev: Float
-    sentiment: Float
-    
-    # Categories and blockchain
-    categories: String
-    blockchains: [BlockchainInfo]
-    topic: String
-    
-    # Metadata
-    logo: String
-    last_updated_price: Int
-    last_updated_price_by: String
-    
-    # Social activity
-    posts_24h: Int
-    contributors_24h: Int
-    
-    # Additional fields from various endpoints
-    volatility: Float
-    posts_active: Int
-    contributors_active: Int
-    contributors_created: Int
-    posts_created: Int
-    high: Float
-    low: Float
-    volume: Float
-    spam: Int
+    circulating_supply: Float!
+    close: Float!
+    galaxy_score: Float!
+    alt_rank: Int!
+    volatility: Float!
+    market_cap_rank: Int!
   }
 
-  # ===== COMPLETE CRYPTO METADATA TYPE =====
-  type CryptoMetadata {
-    id: Int
-    symbol: String
-    name: String
-    description: String
-    website: String
-    twitter: String
-    discord: String
-    telegram: String
-    logo: String
-    blockchain: String
+  # ===== COIN TIME SERIES TYPE (EXACT FROM /coins/{coin}/time-series/v2) =====
+  type CoinTimeSeriesItem {
+    time: Int!
+    contributors_active: Int!
+    contributors_created: Int!
+    interactions: Float!
+    posts_active: Int!
+    posts_created: Int!
+    sentiment: Float!
+    spam: Int!
+    alt_rank: Int!
+    circulating_supply: Float!
+    close: Float!
+    galaxy_score: Float!
+    high: Float!
+    low: Float!
+    market_cap: Float!
+    market_dominance: Float!
+    open: Float!
+    social_dominance: Float!
+    volume_24h: Float!
+  }
+
+  # ===== COIN METADATA TYPE (EXACT FROM /coins/{coin}/meta/v1) =====
+  type CoinMetadata {
+    id: Int!
+    name: String!
+    symbol: String!
+    market_categories: String!
+    updated: Int!
+    blockchain: [BlockchainInfo!]!
+    short_summary: String!
+    description: String!
+    github_link: String
+    website_link: String
+    whitepaper_link: String
+    twitter_link: String
+    reddit_link: String
     header_image: String
     header_text: String
-    github_link: String
+    videos: String
     coingecko_link: String
     coinmarketcap_link: String
-    forum_link: String
-    market_categories: [String]
-    
-    # Additional metadata fields
-    api_endpoints: JSON
-    tags: [String]
-    platform: String
-    contract_address: String
-    slug: String
   }
 
-  # ===== COMPLETE SOCIAL INFLUENCER TYPE =====
-  type SocialInfluencer {
-    # Basic creator info
-    creator_id: String
-    creator_name: String
-    creator_display_name: String
-    creator_network: String
-    creator_avatar: String
-    creator_followers: Float
-    creator_posts: Int
-    creator_rank: Int
-    
-    # Social metrics
-    interactions_24h: Float
-    followers: Float
-    posts_active: Int
-    
-    # Topic influence (CRITICAL DATA)
-    topic_influence: [TopicInfluence]
-  }
-
-  # ===== COMPLETE TOPIC/CATEGORY DATA TYPE =====
-  type TopicData {
-    # Basic info
-    id: Int
-    topic: String
-    title: String
-    category: String
-    
-    # Rankings
-    topic_rank: Int
-    topic_rank_1h_previous: Int
-    topic_rank_24h_previous: Int
-    category_rank: Int
-    category_rank_1h_previous: Int
-    category_rank_24h_previous: Int
-    
-    # Social metrics
-    interactions_24h: Float
-    num_contributors: Int
-    num_posts: Int
-    social_dominance: Float
-    sentiment: Float
-    
-    # Categories and relationships
-    categories: [String]
-    related_topics: [String]
-    trend: String
-    
-    # Platform breakdown (CRITICAL DATA)
-    types_count: JSON
-    types_interactions: JSON
-    types_sentiment: JSON
-    types_sentiment_detail: JSON
-  }
-
-  # ===== COMPLETE SOCIAL POST TYPE =====
-  type SocialPost {
-    # Post identification
-    id: String
-    post_type: String
-    post_title: String
-    post_link: String
-    post_image: String
-    post_created: Int
-    post_sentiment: Float
-    
-    # Creator info
-    creator_id: String
-    creator_name: String
-    creator_display_name: String
-    creator_followers: Float
-    creator_avatar: String
-    creator_network: String
-    
-    # Engagement metrics
-    interactions_24h: Float
-    interactions_total: Float
-    
-    # Additional post fields
-    post_url: String
-    post_content: String
-    post_description: String
-    mentions: [String]
-    hashtags: [String]
-    media_urls: [String]
-  }
-
-  # ===== COMPLETE TIME SERIES TYPE =====
-  type TimeSeriesData {
-    # Time identification
-    time: String
-    
-    # Price data
-    price: Float
-    close: Float
-    high: Float
-    low: Float
-    volume: Float
-    
-    # Market data
-    market_cap: Float
-    circulating_supply: Float
-    
-    # Social metrics
-    sentiment: Float
-    social_dominance: Float
-    interactions: Float
-    alt_rank: Int
-    galaxy_score: Float
-    
-    # Activity metrics
-    contributors_active: Int
-    contributors_created: Int
-    posts_active: Int
-    posts_created: Int
-    spam: Int
-    
-    # Additional time series fields
-    market_dominance: Float
-    social_volume: Float
-    mentions: Int
-    engagement_rate: Float
-  }
-
-  # ===== COMPLETE STOCK DATA TYPE =====
-  type StockData {
-    # Basic identification
-    id: Int
-    symbol: String
-    name: String
-    
-    # Price data
-    price: Float
-    close: Float
-    percent_change_24h: Float
-    volume_24h: Float
-    
-    # Market data
-    market_cap: Float
-    market_cap_rank: Int
-    
-    # Social metrics
-    interactions_24h: Float
-    social_volume_24h: Float
-    social_dominance: Float
-    market_dominance: Float
+  # ===== STOCKS LIST TYPE (EXACT FROM /stocks/list/v2) =====
+  type StockListItem {
+    id: Int!
+    symbol: String!
+    name: String!
+    price: Float!
+    volume_24h: Float!
+    percent_change_24h: Float!
+    market_cap: Float!
+    market_cap_rank: Int!
+    interactions_24h: Float!
+    social_volume_24h: Float!
+    social_dominance: Float!
+    market_dominance: Float!
     market_dominance_prev: Float
-    galaxy_score: Float
-    galaxy_score_previous: Float
-    alt_rank: Int
-    alt_rank_previous: Int
-    sentiment: Float
-    
-    # Categories and metadata
-    categories: String
-    topic: String
-    logo: String
-    
-    # Additional stock fields
-    volume: Float
-    posts_24h: Int
-    contributors_24h: Int
-    sector: String
-    industry: String
-    exchange: String
+    galaxy_score: Float!
+    galaxy_score_previous: Float!
+    alt_rank: Int!
+    alt_rank_previous: Int!
+    sentiment: Float!
+    categories: String!
+    topic: String!
+    logo: String!
   }
 
-  # ===== POST DETAILS TYPE =====
-  type PostDetails {
-    # All post-specific fields
-    id: String
-    platform: String
-    content: String
-    author: String
-    author_id: String
-    author_followers: Int
-    author_avatar: String
-    
-    # Engagement
-    interactions: Int
-    likes: Int
-    shares: Int
-    comments: Int
-    views: Int
-    
-    # Metadata
-    created_at: String
-    updated_at: String
-    url: String
-    media_type: String
-    media_url: String
-    
-    # Analysis
-    sentiment: Float
-    topics: [String]
-    mentions: [String]
-    hashtags: [String]
+  # ===== STOCK DETAILS TYPE (EXACT FROM /stocks/{stock}/v1) =====
+  type StockDetails {
+    id: Int!
+    name: String!
+    symbol: String!
+    price: Float!
+    market_cap: Float!
+    percent_change_24h: Float!
+    volume_24h: Float!
+    close: Float!
+    market_cap_rank: Int!
   }
 
-  # ===== COMPLETE QUERY TYPE WITH ALL ENDPOINTS =====
+  # ===== STOCK TIME SERIES TYPE (EXACT FROM /stocks/{stock}/time-series/v2) =====
+  type StockTimeSeriesItem {
+    time: Int!
+    contributors_active: Int!
+    contributors_created: Int!
+    interactions: Float!
+    posts_active: Int!
+    posts_created: Int!
+    sentiment: Float!
+    spam: Int!
+    alt_rank: Int!
+    galaxy_score: Float!
+    social_dominance: Float!
+  }
+
+  # ===== NFTS LIST TYPE (EXACT FROM /nfts/list/v2) =====
+  type NftListItem {
+    id: Int!
+    lunar_id: String!
+    base_crypto: String!
+    name: String!
+    floor_price: Float!
+    volume_24h: Float!
+    percent_change_24h: Float!
+    market_cap: Float!
+    interactions_24h: Float!
+    social_volume_24h: Float!
+    social_contributors: Int!
+    social_dominance: Float!
+    galaxy_score: Float!
+    alt_rank: Int!
+    logo: String!
+  }
+
+  # ===== NFT DETAILS TYPE (EXACT FROM /nfts/{nft}/v1) =====
+  type NftDetails {
+    id: Int!
+    name: String!
+    floor_price: Float!
+    market_cap: Float!
+    percent_change_24h: Float!
+    volume_24h: Float!
+  }
+
+  # ===== NFT TIME SERIES TYPE (EXACT FROM /nfts/{nft}/time-series/v2) =====
+  type NftTimeSeriesItem {
+    time: Int!
+    market_cap: Float!
+    alt_rank: Int!
+    contributors_active: Int!
+    contributors_created: Int!
+    posts_active: Int!
+    posts_created: Int!
+    interactions: Float!
+    social_dominance: Float!
+    sentiment: Float!
+  }
+
+  # ===== SYSTEM CHANGES TYPE (EXACT FROM /system/changes) =====
+  type SystemChange {
+    asset_type: String!
+    asset_id: Int!
+    asset_name: String!
+    change: String!
+    description: String!
+    time: Int!
+  }
+
+  # ===== SEARCH TYPES (EXACT FROM /searches/list) =====
+  type SearchList {
+    id: String!
+    name: String!
+    search_json: JSON!
+    priority: Boolean!
+    created: Int!
+  }
+
+  # ===== COMPLETE QUERY TYPE WITH ALL EXACT ENDPOINTS =====
   type Query {
     # Health check
     health: String!
 
-    # ===== CRYPTO QUERIES - ALL FIELDS EXPOSED =====
-    getCrypto(symbol: String!): CryptoData
-    getCryptoList(
-      symbols: [String!]
-      limit: Int
-      realtime: Boolean
-      sort: String
-      filter: String
-    ): [CryptoData!]!
-    getCryptoListV2(
-      symbols: [String!]
-      limit: Int
-      sort: String
-      filter: String
-    ): [CryptoData!]!
-    getCryptoPriceHistory(
-      symbol: String!
+    # ===== TOPICS ENDPOINTS =====
+    getTopicsList: [TopicListItem!]!
+    getTopic(topic: String!): TopicDetails
+    getTopicWhatsup(topic: String!): TopicWhatsup
+    getTopicTimeSeries(
+      topic: String!
+      bucket: String
       interval: String
-      metrics: String
-    ): [TimeSeriesData!]!
-    getCryptoMetadata(symbol: String!): CryptoMetadata
-
-    # ===== SOCIAL INFLUENCER QUERIES - ALL FIELDS =====
-    getSocialInfluencers(
-      limit: Int
-      sort: String
-    ): [SocialInfluencer!]!
-    getSocialInfluencer(
-      platform: String!
-      id: String!
-    ): SocialInfluencer
-    getInfluencerPosts(
-      platform: String!
-      id: String!
       start: String
       end: String
-    ): [SocialPost!]!
-    getCreatorTimeSeries(
-      platform: String!
-      id: String!
-      interval: String
-    ): [TimeSeriesData!]!
-
-    # ===== SOCIAL POST QUERIES - ALL FIELDS =====
-    getSocialPosts(
+    ): [TopicTimeSeriesItem!]!
+    getTopicTimeSeriesV2(
+      topic: String!
+      bucket: String
+    ): [TopicTimeSeriesItem!]!
+    getTopicPosts(
       topic: String!
       start: String
       end: String
-    ): [SocialPost!]!
+    ): [TopicPost!]!
+    getTopicNews(topic: String!): [TopicNews!]!
+    getTopicCreators(topic: String!): [TopicCreator!]!
 
-    # ===== TOPIC CATEGORY QUERIES - ALL FIELDS =====
-    getTopicCategories(limit: Int): [TopicData!]!
-    getTopicCategory(category: String!): TopicData
+    # ===== CATEGORIES ENDPOINTS =====
+    getCategoriesList: [CategoryListItem!]!
+    getCategory(category: String!): CategoryDetails
+    getCategoryTopics(category: String!): [CategoryTopic!]!
+    getCategoryTimeSeries(
+      category: String!
+      bucket: String
+      interval: String
+      start: String
+      end: String
+    ): [CategoryTimeSeriesItem!]!
     getCategoryPosts(
       category: String!
       start: String
       end: String
-    ): [SocialPost!]!
-    getCategoryTimeSeries(
-      category: String!
+    ): [CategoryPost!]!
+    getCategoryNews(category: String!): [CategoryNews!]!
+    getCategoryCreators(category: String!): [CategoryCreator!]!
+
+    # ===== CREATORS ENDPOINTS =====
+    getCreatorsList: [CreatorListItem!]!
+    getCreator(network: String!, id: String!): CreatorDetails
+    getCreatorTimeSeries(
+      network: String!
+      id: String!
+      bucket: String
       interval: String
-    ): [TimeSeriesData!]!
-    getCategoryCreators(category: String!): [SocialInfluencer!]!
-    getCategoryNews(category: String!): [SocialPost!]!
-    getCategoryTopics(category: String!): [TopicData!]!
+      start: String
+      end: String
+    ): [CreatorTimeSeriesItem!]!
+    getCreatorPosts(
+      network: String!
+      id: String!
+      start: String
+      end: String
+    ): [CreatorPost!]!
 
-    # ===== TOPIC QUERIES - ALL FIELDS =====
-    getTopicCreators(topic: String!): [SocialInfluencer!]!
-    getTopic(topic: String!): TopicData
-    getTopicTimeSeries(
-      topic: String!
+    # ===== POSTS ENDPOINTS =====
+    getPostDetails(postType: String!, postId: String!): PostDetails
+    getPostTimeSeries(postType: String!, postId: String!): [PostTimeSeriesItem!]!
+
+    # ===== COINS ENDPOINTS =====
+    getCoinsList(
+      sort: String
+      filter: String
+      limit: Int
+      desc: String
+      page: Int
+    ): [CoinListItem!]!
+    getCoinsListV2(
+      sort: String
+      filter: String
+      limit: Int
+      desc: String
+      page: Int
+    ): [CoinListItem!]!
+    getCoin(coin: String!): CoinDetails
+    getCoinTimeSeries(
+      coin: String!
+      bucket: String
       interval: String
-    ): [TimeSeriesData!]!
+      start: String
+      end: String
+    ): [CoinTimeSeriesItem!]!
+    getCoinMeta(coin: String!): CoinMetadata
 
-    # ===== POST QUERIES - ALL FIELDS =====
-    getPostDetails(
-      postType: String!
-      postId: String!
-    ): PostDetails
-    getPostTimeSeries(
-      postType: String!
-      postId: String!
-    ): [TimeSeriesData!]!
+    # ===== STOCKS ENDPOINTS =====
+    getStocksList(
+      sort: String
+      limit: Int
+      desc: String
+      page: Int
+    ): [StockListItem!]!
+    getStocksListV2(
+      sort: String
+      limit: Int
+      desc: String
+      page: Int
+    ): [StockListItem!]!
+    getStock(stock: String!): StockDetails
+    getStockTimeSeries(
+      stock: String!
+      bucket: String
+      interval: String
+      start: String
+      end: String
+    ): [StockTimeSeriesItem!]!
 
-    # ===== STOCK QUERIES (v1 & v2 for different subscription levels) =====
-    getStocksList: [StockData!]!          # v1 - Basic plan (no sentiment data)
-    getStocksListV2: [StockData!]!        # v2 - Premium plan (includes sentiment + social metrics)
+    # ===== NFTS ENDPOINTS =====
+    getNftsList(
+      sort: String
+      limit: Int
+      desc: String
+      page: Int
+    ): [NftListItem!]!
+    getNftsListV2(
+      sort: String
+      limit: Int
+      desc: String
+      page: Int
+    ): [NftListItem!]!
+    getNft(nft: String!): NftDetails
+    getNftTimeSeries(
+      nft: String!
+      bucket: String
+      interval: String
+      start: String
+      end: String
+    ): [NftTimeSeriesItem!]!
+    getNftTimeSeriesV1(nft: String!): JSON
+
+    # ===== SYSTEM ENDPOINTS =====
+    getSystemChanges: [SystemChange!]!
+
+    # ===== SEARCHES ENDPOINTS =====
+    getSearchesList: [SearchList!]!
+    getSearch(slug: String!): JSON
+    searchPosts(term: String, searchJson: String): JSON
   }
 
   # ===== FUTURE SUBSCRIPTIONS =====
   type Subscription {
-    # Real-time updates
-    cryptoPriceUpdates(symbol: String): CryptoData
-    socialSentimentUpdates(topic: String): SocialPost
-    influencerUpdates(creatorId: String): SocialInfluencer
-    topicTrendingUpdates: TopicData
+    # Real-time updates (placeholder)
+    topicUpdates(topic: String!): TopicDetails
+    cryptoUpdates(symbol: String!): CoinDetails
+    creatorUpdates(creatorId: String!): CreatorDetails
   }
 `;
