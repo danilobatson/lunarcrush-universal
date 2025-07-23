@@ -290,15 +290,8 @@ export function ApolloWrapper({ children }: { children: React.ReactNode }) {
 
 export const GET_BITCOIN_DATA = gql\`
   query GetBitcoinData {
-    getCrypto(symbol: "btc") {
-      symbol
-      name
-      price
-      percent_change_24h
-      market_cap
-      sentiment
-      social_dominance
-      interactions_24h
+    getCoin(coin: "btc") {
+      id name symbol price price_btc market_cap percent_change_24h percent_change_7d percent_change_30d volume_24h max_supply circulating_supply close galaxy_score alt_rank volatility market_cap_rank
     }
   }
 \`;
@@ -398,11 +391,12 @@ export default function Home() {
           </h2>
           {loading && <p className="text-sm opacity-50">Loading Bitcoin data...</p>}
           {error && <p className="text-sm text-red-500">Error: {error.message}</p>}
-          {data && data.getCrypto && (
+          {data && data.getCoin && (
             <div className="text-sm opacity-70">
-              <p><strong>Price:</strong> \${data.getCrypto.price?.toLocaleString()}</p>
-              <p><strong>24h Change:</strong> {data.getCrypto.percent_change_24h}%</p>
-              <p><strong>Sentiment:</strong> {data.getCrypto.sentiment}/100</p>
+              <p><strong>Price:</strong> \${data.getCoin.price?.toLocaleString()}</p>
+              <p><strong>24h Change:</strong> {data.getCoin.percent_change_24h}</p>
+              <p><strong>Galaxy Score:</strong> {data.getCoin.galaxy_score}</p>
+              <p><strong>Alt Rank:</strong> {data.getCoin.alt_rank}</p>
               <p className="mt-2 text-xs opacity-50">Updates every 30 seconds</p>
             </div>
           )}

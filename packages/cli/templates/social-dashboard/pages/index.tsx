@@ -26,7 +26,7 @@ export default function Home() {
             <code className={styles.code}>pages/index.tsx</code>
           </p>
           <div>
-            
+
               href="https://lunarcrush.com/developers"
               target="_blank"
               rel="noopener noreferrer"
@@ -56,14 +56,15 @@ export default function Home() {
             </h2>
             {loading && <p>Loading Bitcoin data...</p>}
             {error && <p>Error: {error.message}</p>}
-            {data && (
-              <div>
-                <p><strong>Price:</strong> ${data.getCrypto.price?.toLocaleString()}</p>
-                <p><strong>24h Change:</strong> {data.getCrypto.price_change_24h}%</p>
-                <p><strong>Sentiment:</strong> {data.getCrypto.sentiment}/100</p>
-                <p><strong>Social Dominance:</strong> {data.getCrypto.social_dominance}%</p>
-              </div>
-            )}
+            {data && data.getCoin && (
+            <div className="text-sm opacity-70">
+              <p><strong>Price:</strong> \${data.getCoin.price?.toLocaleString()}</p>
+              <p><strong>24h Change:</strong> {data.getCoin.percent_change_24h}</p>
+              <p><strong>Galaxy Score:</strong> {data.getCoin.galaxy_score}</p>
+              <p><strong>Alt Rank:</strong> {data.getCoin.alt_rank}</p>
+              <p className="mt-2 text-xs opacity-50">Updates every 30 seconds</p>
+            </div>
+          )}
           </div>
 
           {/* Developer Info Card */}
@@ -73,17 +74,17 @@ export default function Home() {
             </h2>
             <p>Explore the GraphQL API and documentation.</p>
             <div style={{ marginTop: '1rem' }}>
-              <a 
-                href="https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql" 
-                target="_blank" 
+              <a
+                href="https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql"
+                target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'block', marginBottom: '0.5rem', color: '#0070f3' }}
               >
                 🚀 GraphQL Playground
               </a>
-              <a 
-                href="https://lunarcrush.com/developers" 
-                target="_blank" 
+              <a
+                href="https://lunarcrush.com/developers"
+                target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: 'block', color: '#0070f3' }}
               >
