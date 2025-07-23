@@ -9,9 +9,7 @@
     "directory": "packages/cli"
   },
   "main": "dist/index.js",
-  "bin": {
-    "create-lunarcrush-app": "dist/index.js"
-  },
+  "bin": "dist/index.js",
   "files": [
     "dist"
   ],
@@ -34,18 +32,18 @@
   "author": "Danilo Batson <djbatson19@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "commander": "^11.1.0",
-    "prompts": "^2.4.2",
     "chalk": "^4.1.2",
-    "ora": "^5.4.1",
+    "commander": "^11.1.0",
     "fs-extra": "^11.2.0",
+    "ora": "^5.4.1",
+    "prompts": "^2.4.2",
     "validate-npm-package-name": "^5.0.0"
   },
   "devDependencies": {
-    "@types/prompts": "^2.4.9",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.10.5",
-    "typescript": "^5.3.3",
-    "tsx": "^4.6.2"
+    "@types/prompts": "^2.4.9",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
   }
 }

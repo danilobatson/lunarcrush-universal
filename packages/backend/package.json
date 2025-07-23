@@ -13,9 +13,11 @@
   },
   "dependencies": {
     "@apollo/server": "^5.0.0",
+    "@cloudflare/unenv-preset": "^2.4.0",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
-    "hono": "^4.6.12"
+    "hono": "^4.6.12",
+    "unenv": "^1.10.0"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250722.0",
