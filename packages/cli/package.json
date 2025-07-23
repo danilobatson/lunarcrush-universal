@@ -33,5 +33,25 @@
   "funding": {
     "type": "github",
     "url": "https://github.com/sponsors/danilobatson"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danilobatson/lunarcrush-universal.git",
+    "directory": "packages/cli"
+  },
+  "keywords": [
+    "lunarcrush",
+    "crypto",
+    "social-trading",
+    "sentiment-analysis",
+    "cli",
+    "create-app",
+    "nextjs",
+    "react",
+    "cryptocurrency",
+    "api",
+    "graphql"
+  ],
+  "author": "Danilo Batson <djbatson19@gmail.com>",
+  "license": "MIT"
 }
