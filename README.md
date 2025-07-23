@@ -8,15 +8,48 @@
 [![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange)](https://workers.cloudflare.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue)](https://www.typescriptlang.org/)
 
-## 🎯 **Current Status: Phase 1 Complete ✅**
+## 🎯 **Quick Start - Build a Crypto Social Trading App**
 
-**Phase:** Foundation Setup (100% Complete)
-**Next Phase:** CLI Development & Blog Article Creation
-**Live API:** https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql
+**Create a professional crypto dashboard in 30 seconds:**
+
+### With npm/npx:
+```bash
+npx create-lunarcrush-app my-crypto-dashboard
+cd my-crypto-dashboard
+npm run dev
+```
+
+### With Yarn:
+```bash
+# Modern Yarn (v2+)
+yarn dlx create-lunarcrush-app my-crypto-dashboard
+
+# Classic Yarn
+yarn create lunarcrush-app my-crypto-dashboard
+
+cd my-crypto-dashboard
+yarn dev
+```
+
+### With pnpm:
+```bash
+pnpm dlx create-lunarcrush-app my-crypto-dashboard
+cd my-crypto-dashboard
+pnpm dev
+```
+
+**🎉 Result:** Professional Next.js app with live Bitcoin price ($118K+), 103M+ social interactions, and beautiful glassmorphism UI!
 
 ---
 
-## 🔥 **What's Built & Working**
+## 🔥 **What You Get**
+
+### **📦 CLI Tool (`create-lunarcrush-app`)**
+- **🚀 Instant Setup**: Production-ready Next.js apps in 30 seconds
+- **📊 Live Data**: Real Bitcoin price, social metrics, sentiment analysis
+- **🎨 Modern UI**: Glassmorphism design with dark theme
+- **⚡ GraphQL Ready**: Pre-configured Apollo Client
+- **📱 Responsive**: Works on desktop, tablet, mobile
 
 ### **🌟 Production GraphQL API**
 - **39 GraphQL Queries** covering all LunarCrush endpoints
@@ -32,12 +65,6 @@
 - **TypeScript**: Full type safety with comprehensive interfaces
 - **CORS Configured**: Works with Apollo Studio and all GraphQL clients
 
-### **🎨 Developer Experience**
-- **Fast GraphiQL Interface**: Lightning-fast local GraphQL explorer
-- **Apollo Studio Ready**: Professional cloud-based GraphQL IDE
-- **Auto-generated Documentation**: Complete schema introspection
-- **Real Example Data**: Bitcoin shows 103M interactions, $118K price
-
 ---
 
 ## 🏗️ **Architecture**
@@ -52,7 +79,7 @@ lunarcrush-universal/
 │   │   │   ├── types/        # TypeScript definitions
 │   │   │   └── index.ts      # Hono server with CORS
 │   │   └── wrangler.toml     # Cloudflare configuration
-│   ├── cli/                  # 🔧 Create-app CLI (IN PROGRESS)
+│   ├── cli/                  # 🔧 Create-app CLI (PUBLISHED ✅)
 │   ├── client/               # 📦 Universal client library
 │   ├── types/                # 🔗 Shared TypeScript definitions
 │   └── templates/            # 📋 Framework templates
@@ -66,7 +93,7 @@ lunarcrush-universal/
 
 ---
 
-## 🚀 **Quick Start - API Usage**
+## 🚀 **API Usage Examples**
 
 ### **GraphiQL Explorer (Fast)**
 ```bash
@@ -129,6 +156,25 @@ open https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql
 
 ## 🛠️ **Development**
 
+### **Get Started with CLI Development**
+```bash
+# Clone the repository
+git clone https://github.com/danilobatson/lunarcrush-universal.git
+cd lunarcrush-universal
+
+# Install dependencies
+yarn install
+
+# Run CLI locally
+cd packages/cli
+npm run dev
+
+# Test CLI
+npm run build
+npm link
+create-lunarcrush-app test-project
+```
+
 ### **Backend Development**
 ```bash
 # Start local development
@@ -160,19 +206,44 @@ yarn format
 
 ---
 
-## 🎯 **Phase 2 Roadmap**
+## 📋 **Package Manager Support**
 
-### **Next Priorities:**
-1. **CLI Tool Development** - `@lunarcrush/create-app` for instant project scaffolding
-2. **Framework Templates** - React, Next.js, Vue templates with pre-built components
-3. **Blog Article Creation** - "Build Advanced Crypto Social Analytics in 20 Minutes"
-4. **Documentation Site** - Comprehensive guides and examples
+### **CLI Tool Usage**
+| Package Manager  | Command                                 |
+| ---------------- | --------------------------------------- |
+| **npm/npx**      | `npx create-lunarcrush-app my-app`      |
+| **Yarn Modern**  | `yarn dlx create-lunarcrush-app my-app` |
+| **Yarn Classic** | `yarn create lunarcrush-app my-app`     |
+| **pnpm**         | `pnpm dlx create-lunarcrush-app my-app` |
 
-### **Planned Features:**
-- **NPM Package**: `@lunarcrush/universal-client`
-- **React Components**: Pre-built social analytics components
-- **TypeScript SDK**: Complete type-safe client library
-- **45+ Blog Articles**: Framework-specific integration guides
+### **Development Commands**
+| Task           | npm             | Yarn         | pnpm           |
+| -------------- | --------------- | ------------ | -------------- |
+| **Install**    | `npm install`   | `yarn`       | `pnpm install` |
+| **Dev Server** | `npm run dev`   | `yarn dev`   | `pnpm dev`     |
+| **Build**      | `npm run build` | `yarn build` | `pnpm build`   |
+| **Test**       | `npm test`      | `yarn test`  | `pnpm test`    |
+
+---
+
+## 🎯 **Current Status: Phase 1 Complete ✅**
+
+**Phase:** Foundation Setup (100% Complete)
+**Next Phase:** CLI Development & Blog Article Creation
+**Live API:** https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql
+
+### **✅ Completed:**
+- [x] **Production GraphQL API** with 39 endpoints
+- [x] **CLI Tool Published** on npm as `create-lunarcrush-app`
+- [x] **Live Data Integration** with 103M+ daily interactions
+- [x] **Modern Tech Stack** (TypeScript, GraphQL, Cloudflare Workers)
+- [x] **Professional Documentation** with Apollo Studio support
+
+### **🎯 Next Priorities:**
+1. **Framework Templates** - React, Next.js, Vue templates with pre-built components
+2. **Blog Article Creation** - "Build Advanced Crypto Social Analytics in 20 Minutes"
+3. **Documentation Site** - Comprehensive guides and examples
+4. **NPM Client Library** - `@lunarcrush/universal-client`
 
 ---
 
@@ -231,6 +302,7 @@ MIT License - Open source and free to use.
 
 [![API Status](https://img.shields.io/badge/API-Live-green)](https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/health)
 [![GraphQL Playground](https://img.shields.io/badge/GraphQL-Explorer-blue)](https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql)
+[![CLI Tool](https://img.shields.io/badge/CLI-npm%20published-orange)](https://www.npmjs.com/package/create-lunarcrush-app)
 
 **⭐ Star this repo if you found it helpful!**
 
