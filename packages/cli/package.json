@@ -1,6 +1,6 @@
 {
   "name": "create-lunarcrush-app",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create Next.js apps showcasing LunarCrush social trading API",
   "main": "dist/index.js",
   "bin": "dist/index.js",
