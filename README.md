@@ -78,16 +78,16 @@ console.log(`
    📈 Trend: ${bitcoin.data.trend}
 `);
 AI Analysis
-typescriptconst analysis = await client.aiAnalyze('bitcoin', 
+typescriptconst analysis = await client.aiAnalyze('bitcoin',
   'What does the social sentiment suggest for trading?'
 );
 
 console.log(analysis.data.aiInsights.recommendation);
 // "Declining social interest detected - monitor for further developments"
 Top Cryptocurrencies by Social Volume
-typescriptconst cryptos = await client.cryptocurrencies({ 
+typescriptconst cryptos = await client.cryptocurrencies({
   limit: 10,
-  sort: 'interactions_24h' 
+  sort: 'interactions_24h'
 });
 
 cryptos.data.forEach(coin => {
@@ -115,5 +115,5 @@ GraphQL Playground: https://lunarcrush-universal-backend.cryptoguard-api.workers
 Portfolio: https://danilobatson.github.io/
 
 
-Built by Danilo Batson - Software Engineer
+Built by Danilo Jamaal - Software Engineer
 Currently interviewing at Amazon. This project showcases enterprise-scale TypeScript development, AI integration, and production deployment skills.
