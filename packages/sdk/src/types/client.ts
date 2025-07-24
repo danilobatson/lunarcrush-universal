@@ -1,14 +1,15 @@
-export interface LunarCrushConfig {
-  baseUrl?: string;
-  timeout?: number;
+// 🌙 LunarCrush Universal SDK - Client Configuration Types
+// ========================================================
+
+export interface LunarCrushClientConfig {
+  endpoint?: string;
+  headers?: Record<string, string>;
 }
 
-export class LunarCrushAPIError extends Error {
-  public readonly code: number;
-  
-  constructor(code: number, message: string) {
-    super(message);
-    this.name = 'LunarCrushAPIError';
-    this.code = code;
-  }
+export interface GraphQLClientConfig {
+  endpoint: string;
+  headers?: Record<string, string>;
 }
+
+// Export for backward compatibility
+export type LunarCrushConfig = LunarCrushClientConfig;

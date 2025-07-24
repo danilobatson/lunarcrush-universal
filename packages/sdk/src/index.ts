@@ -1,11 +1,20 @@
-export { LunarCrushClient } from './client';
-export { LunarCrushClient as default } from './client';
-export type * from './types';
-export const VERSION = '1.0.0';
+// 🌙 LunarCrush Universal SDK - Main Export
+// ==========================================
+// Comprehensive crypto social intelligence SDK
 
-import { LunarCrushClient } from './client';
-import type { LunarCrushConfig } from './types';
+export { LunarCrushClient } from './client/LunarCrushClient';
+export type { LunarCrushClientConfig } from './client/LunarCrushClient';
 
-export function createClient(config: LunarCrushConfig = {}) {
-  return new LunarCrushClient(config);
-}
+// Export types for comprehensive data structures
+export * from './types/api';
+export * from './types/client';
+
+// Export GraphQL utilities
+export { createGraphQLClient, GraphQLClient } from './utils/graphql';
+export type { GraphQLClientConfig } from './utils/graphql';
+
+// Re-export comprehensive queries for advanced users
+export * from './utils/queries';
+
+// Default export for convenience
+export { LunarCrushClient as default } from './client/LunarCrushClient';

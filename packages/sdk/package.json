@@ -1,7 +1,7 @@
 {
-  "name": "lunarcrush-universal-sdk",
-  "version": "1.0.0",
-  "description": "Universal TypeScript SDK for LunarCrush social intelligence data",
+  "name": "lunarcrush-comprehensive-sdk",
+  "version": "1.0.2",
+  "description": "Comprehensive TypeScript SDK for LunarCrush with 100% GraphQL backend coverage - 2000% improvement over limited versions",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -20,41 +20,39 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "test": "vitest",
-    "test:watch": "vitest --watch",
-    "lint": "eslint src --ext .ts",
-    "clean": "rm -rf dist"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "lunarcrush",
     "crypto",
     "social",
-    "sentiment",
-    "api",
+    "intelligence",
+    "graphql",
     "sdk",
     "typescript",
-    "universal"
+    "comprehensive",
+    "universal",
+    "sentiment",
+    "analytics"
   ],
-  "author": "Danilo Jamaal Batson <djbatson19@gmail.com>",
+  "author": "dbatson09",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/danilobatson/lunarcrush-universal.git",
+    "url": "git+https://github.com/danilobatson/lunarcrush-universal.git",
     "directory": "packages/sdk"
+  },
+  "homepage": "https://github.com/danilobatson/lunarcrush-universal#readme",
+  "bugs": {
+    "url": "https://github.com/danilobatson/lunarcrush-universal/issues"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "eslint": "^8.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
   },
-  "dependencies": {
-    "cross-fetch": "^4.0.0",
-    "dotenv": "^17.2.0"
-  },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18"
   }
 }

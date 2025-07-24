@@ -354,7 +354,7 @@ export const typeDefs = `
     alt_rank_previous: Int!
     sentiment: Float  # 🔧 FIXED: Made nullable (removed !)
     categories: String!
-    blockchains: [BlockchainInfo!]!
+    blockchains: [BlockchainInfo]
     percent_change_30d: Float!
     last_updated_price: Int!
     last_updated_price_by: String!
@@ -363,8 +363,8 @@ export const typeDefs = `
   }
 
   type BlockchainInfo {
-    type: String!
-    network: String!
+    type: String
+    network: String
     address: String
     decimals: Int
   }
@@ -420,7 +420,7 @@ export const typeDefs = `
     symbol: String!
     market_categories: String!
     updated: Int!
-    blockchain: [BlockchainInfo!]!
+    blockchain: [BlockchainInfo]
     short_summary: String!
     description: String!
     github_link: String

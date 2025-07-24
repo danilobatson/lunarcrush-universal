@@ -1,0 +1,25 @@
+# Source files (only publish dist)
+src/
+tests/
+*.test.ts
+*.test.js
+
+# Development files
+tsconfig.json
+vitest.config.ts
+.env*
+*.log
+
+# Build tools
+node_modules/
+coverage/
+
+# Git and editor files
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Documentation that's not needed in package
+docs/
+examples/
