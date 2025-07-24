@@ -19,14 +19,7 @@ export class LunarCrushMCPService {
       const basicAuthHeader = 'Basic ' + Buffer.from(`user:${this.apiKey}`).toString('base64');
 
       this.transport = new StreamableHTTPClientTransport(
-        new URL('https://lunarcrush.ai/mcp'),
-        {
-          headers: {
-            'Authorization': basicAuthHeader,
-            'Content-Type': 'application/json',
-            'User-Agent': 'LunarCrush-Universal-Backend/1.0.0'
-          }
-        }
+        new URL('https://lunarcrush.ai/mcp')
       );
 
       this.client = new Client(
@@ -62,13 +55,7 @@ export class LunarCrushMCPService {
       try {
         // Fallback to URL parameter method
         this.transport = new StreamableHTTPClientTransport(
-          new URL(`https://lunarcrush.ai/mcp?key=${this.apiKey}`),
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              'User-Agent': 'LunarCrush-Universal-Backend/1.0.0'
-            }
-          }
+          new URL(`https://lunarcrush.ai/mcp?key=${this.apiKey}`)
         );
 
         this.client = new Client(

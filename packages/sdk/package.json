@@ -1,6 +1,6 @@
 {
   "name": "lunarcrush-comprehensive-sdk",
-  "version": "1.0.2",
+  "version": "2.0.1",
   "description": "Comprehensive TypeScript SDK for LunarCrush with 100% GraphQL backend coverage - 2000% improvement over limited versions",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -51,6 +51,9 @@
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@lunarcrush/shared-types": "workspace:*"
   },
   "engines": {
     "node": ">=18"

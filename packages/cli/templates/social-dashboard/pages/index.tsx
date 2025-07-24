@@ -2,12 +2,13 @@ import Head from 'next/head'
 import { Inter } from 'next/font/google'
 import styles from '../styles/Home.module.css'
 import { useQuery } from '@apollo/client'
-import { GET_BITCOIN_DATA } from '../src/lib/queries'
+import { GET_COIN_GQL } from '../src/lib/queries'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-  const { data, loading, error } = useQuery(GET_BITCOIN_DATA, {
+  const { data, loading, error } = useQuery(GET_COIN_GQL, {
+    variables: { coin: 'btc' },
     pollInterval: 30000, // Refresh every 30 seconds
   });
 

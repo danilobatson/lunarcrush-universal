@@ -1,0 +1,32 @@
+{
+  "name": "@lunarcrush/shared-types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types and schemas for LunarCrush Universal SDK - Single source of truth",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist"
+  },
+  "keywords": [
+    "lunarcrush",
+    "typescript",
+    "types",
+    "schema",
+    "crypto",
+    "social",
+    "api"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "src/**/*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}

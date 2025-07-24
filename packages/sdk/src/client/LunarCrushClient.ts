@@ -1,232 +1,315 @@
 import { createGraphQLClient, GraphQLClient } from '../utils/graphql';
-import {
-  HEALTH_QUERY,
-  GET_TOPIC_QUERY,
-  GET_TOPICS_LIST_QUERY,
-  GET_COINS_LIST_QUERY,
-  GET_COIN_QUERY,
-  GET_STOCKS_LIST_QUERY,
-  GET_STOCK_QUERY,
-  GET_CATEGORIES_LIST_QUERY,
-  GET_CATEGORY_QUERY,
-  GET_CREATORS_LIST_QUERY,
-  GET_CREATOR_QUERY,
-  GET_TOPIC_TIME_SERIES_QUERY,
-  GET_COIN_TIME_SERIES_QUERY,
-  GET_TOPIC_POSTS_QUERY,
-  GET_TOPIC_NEWS_QUERY,
-  GET_SEARCHES_LIST_QUERY,
-  SEARCH_POSTS_QUERY,
-  GET_SYSTEM_CHANGES_QUERY,
-} from '../utils/queries';
-
-export interface LunarCrushClientConfig {
-  endpoint?: string;
-  headers?: Record<string, string>;
-}
+import type { LunarCrushClientConfig } from '@lunarcrush/shared-types';
+import { GRAPHQL_QUERIES } from '@lunarcrush/shared-types';
 
 export class LunarCrushClient {
-  private client: GraphQLClient;
+	private client: GraphQLClient;
 
-  constructor(config: LunarCrushClientConfig = {}) {
-    this.client = createGraphQLClient({
-      endpoint: config.endpoint || 'https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql',
-      headers: config.headers,
-    });
-  }
+	constructor(config: LunarCrushClientConfig = {}) {
+		this.client = createGraphQLClient({
+			endpoint:
+				config.endpoint ||
+				'https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql',
+			headers: config.headers,
+		});
+	}
 
-  // ===== HEALTH =====
-  async health(): Promise<string> {
-    const response = await this.client.request(HEALTH_QUERY);
-    return response.health;
-  }
+	// ===== HEALTH =====
+	async health(): Promise<string> {
+		const response = await this.client.request(GRAPHQL_QUERIES.HEALTH);
+		return response.health;
+	}
 
-  // ===== TOPICS METHODS (COMPREHENSIVE) =====
+	// ===== TOPICS METHODS (STANDARDIZED) =====
 
-  async topic(topic: string): Promise<any> {
-    const response = await this.client.request(GET_TOPIC_QUERY, { topic });
-    return response.getTopic;
-  }
+	/**
+	 * Get list of trending topics
+	 */
+	async getTopicsList(): Promise<any[]> {
+		const response = await this.client.request(GRAPHQL_QUERIES.GET_TOPICS_LIST);
+		return response.getTopicsList;
+	}
 
-  async topics(): Promise<any[]> {
-    const response = await this.client.request(GET_TOPICS_LIST_QUERY);
-    return response.getTopicsList;
-  }
+	/**
+	 * Get detailed information for a specific topic
+	 * @param topic Topic name or hashtag
+	 */
+	async getTopic(topic: string): Promise<any> {
+		const response = await this.client.request(GRAPHQL_QUERIES.GET_TOPIC, {
+			topic,
+		});
+		return response.getTopic;
+	}
 
-  async topicTimeSeries(
-    topic: string,
-    options: {
-      bucket?: string;
-      interval?: string;
-      start?: string;
-      end?: string;
-    } = {}
-  ): Promise<any[]> {
-    const response = await this.client.request(GET_TOPIC_TIME_SERIES_QUERY, {
-      topic,
-      ...options,
-    });
-    return response.getTopicTimeSeries;
-  }
+	/**
+	 * Get AI-generated summary for a topic
+	 * @param topic Topic name or hashtag
+	 */
+	async getTopicWhatsup(topic: string): Promise<any> {
+		const response = await this.client.request(
+			GRAPHQL_QUERIES.GET_TOPIC_WHATSUP,
+			{ topic }
+		);
+		return response.getTopicWhatsup;
+	}
 
-  async topicPosts(
-    topic: string,
-    options: {
-      start?: string;
-      end?: string;
-    } = {}
-  ): Promise<any[]> {
-    const response = await this.client.request(GET_TOPIC_POSTS_QUERY, {
-      topic,
-      ...options,
-    });
-    return response.getTopicPosts;
-  }
+	/**
+	 * Get time series data for a topic
+	 * @param topic Topic name or hashtag
+	 * @param options Time series parameters
+	 */
+	async getTopicTimeSeries(
+		topic: string,
+		options: {
+			bucket?: string;
+			interval?: string;
+			start?: string;
+			end?: string;
+		} = {}
+	): Promise<any[]> {
+		const response = await this.client.request(
+			GRAPHQL_QUERIES.GET_TOPIC_TIME_SERIES,
+			{
+				topic,
+				...options,
+			}
+		);
+		return response.getTopicTimeSeries;
+	}
 
-  async topicNews(topic: string): Promise<any[]> {
-    const response = await this.client.request(GET_TOPIC_NEWS_QUERY, { topic });
-    return response.getTopicNews;
-  }
+	/**
+	 * Get posts related to a topic
+	 * @param topic Topic name or hashtag
+	 * @param options Time range parameters
+	 */
+	async getTopicPosts(
+		topic: string,
+		options: {
+			start?: string;
+			end?: string;
+		} = {}
+	): Promise<any[]> {
+		const response = await this.client.request(
+			GRAPHQL_QUERIES.GET_TOPIC_POSTS,
+			{
+				topic,
+				...options,
+			}
+		);
+		return response.getTopicPosts;
+	}
 
-  // ===== COINS METHODS (COMPREHENSIVE) =====
+	/**
+	 * Get news related to a topic
+	 * @param topic Topic name or hashtag
+	 */
+	async getTopicNews(topic: string): Promise<any[]> {
+		const response = await this.client.request(GRAPHQL_QUERIES.GET_TOPIC_NEWS, {
+			topic,
+		});
+		return response.getTopicNews;
+	}
 
-  async cryptocurrencies(
-    options: {
-      sort?: string;
-      filter?: string;
-      limit?: number;
-      desc?: string;
-      page?: number;
-    } = {}
-  ): Promise<any[]> {
-    const response = await this.client.request(GET_COINS_LIST_QUERY, options);
-    return response.getCoinsList;
-  }
+	/**
+	 * Get creators discussing a topic
+	 * @param topic Topic name or hashtag
+	 */
+	async getTopicCreators(topic: string): Promise<any[]> {
+		const response = await this.client.request(
+			GRAPHQL_QUERIES.GET_TOPIC_CREATORS,
+			{ topic }
+		);
+		return response.getTopicCreators;
+	}
 
-  async cryptocurrency(coin: string): Promise<any> {
-    const response = await this.client.request(GET_COIN_QUERY, { coin });
-    return response.getCoin;
-  }
+	// ===== COINS METHODS (STANDARDIZED) =====
 
-  async cryptocurrencyTimeSeries(
-    coin: string,
-    options: {
-      bucket?: string;
-      interval?: string;
-      start?: string;
-      end?: string;
-    } = {}
-  ): Promise<any[]> {
-    const response = await this.client.request(GET_COIN_TIME_SERIES_QUERY, {
-      coin,
-      ...options,
-    });
-    return response.getCoinTimeSeries;
-  }
+	/**
+	 * Get list of cryptocurrencies with social and price data
+	 * @param options Query parameters for filtering and pagination
+	 */
+	async getCoinsList(
+		options: {
+			sort?: string;
+			filter?: string;
+			limit?: number;
+			desc?: string;
+			page?: number;
+		} = {}
+	): Promise<any[]> {
+		const response = await this.client.request(
+			GRAPHQL_QUERIES.GET_COINS_LIST,
+			options
+		);
+		return response.getCoinsList;
+	}
 
-  // ===== STOCKS METHODS (NEW) =====
+	/**
+	 * Get detailed information for a single cryptocurrency
+	 * @param coin Cryptocurrency symbol or name (e.g., 'BTC', 'bitcoin')
+	 */
+	async getCoin(coin: string): Promise<any> {
+		const response = await this.client.request(GRAPHQL_QUERIES.GET_COIN, {
+			coin,
+		});
+		return response.getCoin;
+	}
 
-  async stocks(
-    options: {
-      sort?: string;
-      limit?: number;
-      desc?: string;
-      page?: number;
-    } = {}
-  ): Promise<any[]> {
-    const response = await this.client.request(GET_STOCKS_LIST_QUERY, options);
-    return response.getStocksList;
-  }
+	/**
+	 * Get time series data for a cryptocurrency
+	 * @param coin Cryptocurrency symbol or name
+	 * @param options Time series parameters
+	 */
+	async getCoinTimeSeries(
+		coin: string,
+		options: {
+			bucket?: string;
+			interval?: string;
+			start?: string;
+			end?: string;
+		} = {}
+	): Promise<any[]> {
+		const response = await this.client.request(
+			GRAPHQL_QUERIES.GET_COIN_TIME_SERIES,
+			{
+				coin,
+				...options,
+			}
+		);
+		return response.getCoinTimeSeries;
+	}
 
-  async stock(stock: string): Promise<any> {
-    const response = await this.client.request(GET_STOCK_QUERY, { stock });
-    return response.getStock;
-  }
+	/**
+	 * Get metadata for a cryptocurrency
+	 * @param coin Cryptocurrency symbol or name
+	 */
+	async getCoinMeta(coin: string): Promise<any> {
+		const response = await this.client.request(GRAPHQL_QUERIES.GET_COIN_META, {
+			coin,
+		});
+		return response.getCoinMeta;
+	}
 
-  // ===== CATEGORIES METHODS (NEW) =====
+	// ===== BACKWARD COMPATIBILITY ALIASES =====
+	// These provide backward compatibility for existing SDK users
 
-  async categories(): Promise<any[]> {
-    const response = await this.client.request(GET_CATEGORIES_LIST_QUERY);
-    return response.getCategoriesList;
-  }
+	/**
+	 * @deprecated Use getTopic() instead
+	 */
+	async topic(topic: string): Promise<any> {
+		console.warn('⚠️  topic() is deprecated, use getTopic() instead');
+		return this.getTopic(topic);
+	}
 
-  async category(category: string): Promise<any> {
-    const response = await this.client.request(GET_CATEGORY_QUERY, { category });
-    return response.getCategory;
-  }
+	/**
+	 * @deprecated Use getTopicsList() instead
+	 */
+	async topics(): Promise<any[]> {
+		console.warn('⚠️  topics() is deprecated, use getTopicsList() instead');
+		return this.getTopicsList();
+	}
 
-  // ===== CREATORS METHODS (NEW) =====
+	/**
+	 * @deprecated Use getTopicTimeSeries() instead
+	 */
+	async topicTimeSeries(
+		topic: string,
+		options: {
+			bucket?: string;
+			interval?: string;
+			start?: string;
+			end?: string;
+		} = {}
+	): Promise<any[]> {
+		console.warn(
+			'⚠️  topicTimeSeries() is deprecated, use getTopicTimeSeries() instead'
+		);
+		return this.getTopicTimeSeries(topic, options);
+	}
 
-  async creators(): Promise<any[]> {
-    const response = await this.client.request(GET_CREATORS_LIST_QUERY);
-    return response.getCreatorsList;
-  }
+	/**
+	 * @deprecated Use getTopicPosts() instead
+	 */
+	async topicPosts(
+		topic: string,
+		options: {
+			start?: string;
+			end?: string;
+		} = {}
+	): Promise<any[]> {
+		console.warn('⚠️  topicPosts() is deprecated, use getTopicPosts() instead');
+		return this.getTopicPosts(topic, options);
+	}
 
-  async creator(network: string, id: string): Promise<any> {
-    const response = await this.client.request(GET_CREATOR_QUERY, { network, id });
-    return response.getCreator;
-  }
+	/**
+	 * @deprecated Use getTopicNews() instead
+	 */
+	async topicNews(topic: string): Promise<any[]> {
+		console.warn('⚠️  topicNews() is deprecated, use getTopicNews() instead');
+		return this.getTopicNews(topic);
+	}
 
-  // ===== SEARCH METHODS (NEW) =====
+	/**
+	 * @deprecated Use getCoin() instead
+	 */
+	async cryptocurrency(coin: string): Promise<any> {
+		console.warn('⚠️  cryptocurrency() is deprecated, use getCoin() instead');
+		return this.getCoin(coin);
+	}
 
-  async searches(): Promise<any[]> {
-    const response = await this.client.request(GET_SEARCHES_LIST_QUERY);
-    return response.getSearchesList;
-  }
+	/**
+	 * @deprecated Use getCoinsList() instead
+	 */
+	async cryptocurrencies(
+		options: {
+			sort?: string;
+			filter?: string;
+			limit?: number;
+			desc?: string;
+			page?: number;
+		} = {}
+	): Promise<any[]> {
+		console.warn(
+			'⚠️  cryptocurrencies() is deprecated, use getCoinsList() instead'
+		);
+		return this.getCoinsList(options);
+	}
 
-  async searchPosts(term?: string, searchJson?: string): Promise<any> {
-    const response = await this.client.request(SEARCH_POSTS_QUERY, { term, searchJson });
-    return response.searchPosts;
-  }
+	/**
+	 * @deprecated Use getCoinTimeSeries() instead
+	 */
+	async cryptocurrencyTimeSeries(
+		coin: string,
+		options: {
+			bucket?: string;
+			interval?: string;
+			start?: string;
+			end?: string;
+		} = {}
+	): Promise<any[]> {
+		console.warn(
+			'⚠️  cryptocurrencyTimeSeries() is deprecated, use getCoinTimeSeries() instead'
+		);
+		return this.getCoinTimeSeries(coin, options);
+	}
 
-  // ===== SYSTEM METHODS (NEW) =====
+	/**
+	 * Convenience method for Bitcoin data
+	 * @deprecated Use getCoin('btc') instead
+	 */
+	async bitcoin(): Promise<any> {
+		console.warn('⚠️  bitcoin() is deprecated, use getCoin("btc") instead');
+		return this.getCoin('btc');
+	}
 
-  async systemChanges(): Promise<any[]> {
-    const response = await this.client.request(GET_SYSTEM_CHANGES_QUERY);
-    return response.getSystemChanges;
-  }
-
-  // ===== CONVENIENT ALIASES (MAINTAINING BACKWARD COMPATIBILITY) =====
-
-  async bitcoin(): Promise<any> {
-    return this.topic('bitcoin');
-  }
-
-  async ethereum(): Promise<any> {
-    return this.topic('ethereum');
-  }
-
-  async topCryptos(limit = 10): Promise<any[]> {
-    return this.cryptocurrencies({ limit, sort: 'galaxy_score' });
-  }
-
-  // ===== COMPREHENSIVE DATA SHOWCASE METHODS =====
-
-  async getComprehensiveTopicData(topic: string): Promise<{
-    details: any;
-    timeSeries: any[];
-    posts: any[];
-    news: any[];
-  }> {
-    const [details, timeSeries, posts, news] = await Promise.all([
-      this.topic(topic),
-      this.topicTimeSeries(topic, { bucket: '1d' }),
-      this.topicPosts(topic),
-      this.topicNews(topic),
-    ]);
-
-    return { details, timeSeries, posts, news };
-  }
-
-  async getComprehensiveCryptoData(coin: string): Promise<{
-    details: any;
-    timeSeries: any[];
-  }> {
-    const [details, timeSeries] = await Promise.all([
-      this.cryptocurrency(coin),
-      this.cryptocurrencyTimeSeries(coin, { bucket: '1d' }),
-    ]);
-
-    return { details, timeSeries };
-  }
+	/**
+	 * Convenience method for Ethereum data
+	 * @deprecated Use getCoin('eth') instead
+	 */
+	async ethereum(): Promise<any> {
+		console.warn('⚠️  ethereum() is deprecated, use getCoin("eth") instead');
+		return this.getCoin('eth');
+	}
 }
+
+export default LunarCrushClient;

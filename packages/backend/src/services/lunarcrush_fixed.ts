@@ -50,7 +50,7 @@ const makeRequest = async <T>(
     );
   }
 
-  const responseData = await response.json();
+  const responseData = await response.json() as T;
   console.log(`✅ LunarCrush response received`);
   return responseData;
 };

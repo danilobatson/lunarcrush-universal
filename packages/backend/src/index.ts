@@ -2,7 +2,19 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { handleGraphQLRequest, createGraphQLServer } from './graphql/server';
 
-const app = new Hono();
+// Type definitions for Cloudflare Workers environment
+interface Env {
+  LUNARCRUSH_API_KEY?: string;
+  [key: string]: any;
+}
+
+interface HonoContext {
+  env: Env;
+  req: any;
+  json: (obj: any) => Response;
+}
+
+const app = new Hono<{ Bindings: Env }>();
 
 // Add CORS middleware
 app.use('*', cors({
@@ -25,7 +37,7 @@ interface Environment {
 app.get('/test-api-key', async (c) => {
   try {
     console.log('Testing API key binding access...');
-    
+
     // Test if the binding exists
     if (!c.env?.LUNARCRUSH_API_KEY) {
       return c.json({
@@ -38,7 +50,7 @@ app.get('/test-api-key', async (c) => {
 
     // Get the API key using the correct binding method
     const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
-    
+
     if (!apiKey) {
       return c.json({
         success: false,
@@ -50,7 +62,7 @@ app.get('/test-api-key', async (c) => {
 
     // Test the API key with a simple LunarCrush request
     console.log(`Testing API key: ${apiKey.substring(0, 10)}...`);
-    
+
     const testResponse = await fetch('https://lunarcrush.com/api4/public/coins/BTC/v1', {
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -71,7 +83,7 @@ app.get('/test-api-key', async (c) => {
       });
     }
 
-    const testData = await testResponse.json();
+    const testData = await testResponse.json() as any;
 
     return c.json({
       success: true,
@@ -89,8 +101,8 @@ app.get('/test-api-key', async (c) => {
     console.error('API key test error:', error);
     return c.json({
       success: false,
-      error: error.message,
-      stack: error.stack,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
       timestamp: new Date().toISOString()
     });
   }
@@ -101,23 +113,23 @@ app.all('/graphql', async (c) => {
   try {
     // Get API key using correct binding method
     const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
-    
+
     if (!apiKey) {
-      return c.json({ 
-        error: 'LunarCrush API key not configured' 
+      return c.json({
+        error: 'LunarCrush API key not configured'
       }, 500);
     }
 
     // Create GraphQL server with API key
     const server = await createGraphQLServer({ apiKey });
-    
+
     // Handle the GraphQL request
     return await handleGraphQLRequest(server, c.req.raw);
   } catch (error) {
     console.error('GraphQL error:', error);
-    return c.json({ 
+    return c.json({
       error: 'GraphQL server error',
-      message: error.message 
+      message: error instanceof Error ? error.message : String(error)
     }, 500);
   }
 });
@@ -150,7 +162,7 @@ app.get('/test/secret', async (c) => {
   } catch (error) {
     return c.json({
       success: false,
-      error: error.message,
+      error: error instanceof Error ? error.message : String(error),
       timestamp: new Date().toISOString()
     });
   }
@@ -159,7 +171,7 @@ app.get('/test/secret', async (c) => {
 app.get('/test/lunarcrush', async (c) => {
   try {
     const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
-    
+
     if (!apiKey) {
       return c.json({
         success: false,
@@ -181,8 +193,8 @@ app.get('/test/lunarcrush', async (c) => {
       });
     }
 
-    const data = await response.json();
-    
+    const data = await response.json() as any;
+
     return c.json({
       success: true,
       lunarcrush: 'connected',
@@ -200,7 +212,7 @@ app.get('/test/lunarcrush', async (c) => {
   } catch (error) {
     return c.json({
       success: false,
-      error: error.message
+      error: error instanceof Error ? error.message : String(error)
     });
   }
 });

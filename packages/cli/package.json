@@ -1,6 +1,6 @@
 {
   "name": "create-lunarcrush-app",
-  "version": "0.1.2",
+  "version": "1.0.1",
   "description": "Create Next.js apps showcasing LunarCrush social trading API",
   "main": "dist/index.js",
   "bin": "dist/index.js",
@@ -14,6 +14,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@lunarcrush/shared-types": "workspace:*",
     "@types/inquirer": "^9.0.8",
     "chalk": "^4.1.2",
     "commander": "^11.1.0",

@@ -2,21 +2,29 @@
 
 > **Production-ready ecosystem for crypto social intelligence with published npm SDK**
 
-![npm](https://img.shields.io/npm/v/lunarcrush-sdk) ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue) ![AI Powered](https://img.shields.io/badge/AI-Powered-brightgreen)
+![npm](https://img.shields.io/npm/v/lunarcrush-comprehensive-sdk) ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue) ![AI Powered](https://img.shields.io/badge/AI-Powered-brightgreen)
 
 ## 🎯 **Published & Production Ready**
 
-### **📦 [lunarcrush-sdk](https://www.npmjs.com/package/lunarcrush-sdk) - Live on npm!**
+### **📦 [lunarcrush-comprehensive-sdk](https://www.npmjs.com/package/lunarcrush-comprehensive-sdk) - Live on npm!**
 ```bash
-npm install lunarcrush-sdk
-Universal TypeScript SDK processing 100M+ daily crypto social interactions with AI analysis
-typescriptimport LunarCrushClient from 'lunarcrush-sdk';
+npm install lunarcrush-comprehensive-sdk
+```
 
-const client = new LunarCrushClient({ aiMode: true });
-const bitcoin = await client.topic('bitcoin');
-console.log(`Bitcoin: ${bitcoin.data.interactions_24h.toLocaleString()} interactions!`);
-🛠️ create-lunarcrush-app - CLI Tool
-bashnpx create-lunarcrush-app my-crypto-app
+Universal TypeScript SDK processing 100M+ daily crypto social interactions with AI analysis
+
+```typescript
+import { LunarCrushClient } from 'lunarcrush-comprehensive-sdk';
+
+const client = new LunarCrushClient();
+const bitcoin = await client.getTopic('bitcoin');
+console.log(`Bitcoin: ${bitcoin.interactions_24h.toLocaleString()} interactions!`);
+```
+
+### **🛠️ [create-lunarcrush-app](https://www.npmjs.com/package/create-lunarcrush-app) - CLI Tool**
+```bash
+npx create-lunarcrush-app my-crypto-app
+```
 
 🏗️ Complete System Architecture
 lunarcrush-universal/
@@ -28,11 +36,11 @@ lunarcrush-universal/
 └── apps/
     ├── docs/                 # 📚 Documentation
     └── examples/             # 💡 Working examples
-🔥 Live Production Endpoints
+### 🔥 Live Production Endpoints
 
-GraphQL API: https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql
-npm SDK: https://www.npmjs.com/package/lunarcrush-sdk
-CLI Tool: https://www.npmjs.com/package/create-lunarcrush-app
+- **GraphQL API**: <https://lunarcrush-universal-backend.cryptoguard-api.workers.dev/graphql>
+- **npm SDK**: <https://www.npmjs.com/package/lunarcrush-comprehensive-sdk>
+- **CLI Tool**: <https://www.npmjs.com/package/create-lunarcrush-app>
 
 💡 Key Features
 🤖 AI-Powered Analysis

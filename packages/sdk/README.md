@@ -2,7 +2,7 @@
 
 🌙 **Comprehensive TypeScript SDK for LunarCrush crypto social intelligence**
 
-**✨ 100% GraphQL backend coverage - 2000% improvement over limited versions!**
+**✨ 100% GraphQL backend coverage with standardized method names and shared type system**
 
 ## 🚀 Installation
 
@@ -10,14 +10,15 @@
 npm install lunarcrush-comprehensive-sdk
 ```
 
-## 📊 Transformation Overview
+## 📊 SDK Features
 
-This SDK provides **complete access** to LunarCrush data with massive improvements:
+This SDK provides **complete access** to LunarCrush data with comprehensive improvements:
 
-- **📈 Methods**: 6 → 23 (283% increase)
-- **📊 Topic Fields**: 5 → 13+ (160% increase)
-- **💰 Crypto Fields**: 5 → 31+ (520% increase)
-- **🎯 Backend Coverage**: 5% → 100% (2000% improvement)
+- **📈 Methods**: 23 standardized methods with backward compatibility
+- **📊 Topic Fields**: 13+ comprehensive topic fields
+- **💰 Crypto Fields**: 31+ detailed cryptocurrency fields  
+- **🎯 Backend Coverage**: 100% GraphQL API coverage
+- **🔄 Shared Types**: Uses `@lunarcrush/shared-types` for consistency across all packages
 
 ## 🎯 Quick Start
 
@@ -26,76 +27,86 @@ import { LunarCrushClient } from 'lunarcrush-comprehensive-sdk';
 
 const client = new LunarCrushClient();
 
-// Get comprehensive Bitcoin data (13+ fields vs 5 before)
-const bitcoin = await client.topic('bitcoin');
+// Get comprehensive Bitcoin data with 13+ fields
+const bitcoin = await client.getTopicByName('bitcoin');
 console.log({
   topic: bitcoin.topic,
-  rank: bitcoin.topic_rank,           // NEW!
-  sentiment: bitcoin.types_sentiment, // NEW!
-  categories: bitcoin.categories,     // NEW!
+  rank: bitcoin.topic_rank,
+  sentiment: bitcoin.types_sentiment,
+  categories: bitcoin.categories,
   interactions: bitcoin.interactions_24h
 });
 
-// Get comprehensive crypto list (31+ fields vs 5 before)
-const cryptos = await client.cryptocurrencies({ limit: 10 });
+// Get comprehensive crypto list with 31+ fields
+const cryptos = await client.getCryptocurrencies({ limit: 10 });
 console.log({
   name: cryptos[0].name,
   price: cryptos[0].price,
-  marketCap: cryptos[0].market_cap,        // NEW!
-  galaxyScore: cryptos[0].galaxy_score,    // NEW!
-  altRank: cryptos[0].alt_rank,            // NEW!
-  sentiment: cryptos[0].sentiment,         // NEW!
-  socialDominance: cryptos[0].social_dominance, // NEW!
-  blockchains: cryptos[0].blockchains      // NEW!
+  marketCap: cryptos[0].market_cap,
+  galaxyScore: cryptos[0].galaxy_score,
+  altRank: cryptos[0].alt_rank,
+  sentiment: cryptos[0].sentiment,
+  socialDominance: cryptos[0].social_dominance,
+  blockchains: cryptos[0].blockchains
 });
 ```
 
-## 📋 All 23 Methods Available
+## 📋 All 23 Standardized Methods
 
 ### Core Enhanced Methods
-- `health()` - API health check
-- `topic(topic)` - **13+ fields** (vs 5 before)
-- `topics()` - List all topics
-- `cryptocurrencies(options)` - **31+ fields** (vs 5 before)
-- `cryptocurrency(coin)` - Single crypto details
-- `bitcoin()`, `ethereum()` - Enhanced convenience methods
 
-### New Comprehensive Methods
-- `stocks(options)` - Stock data with social intelligence
-- `stock(symbol)` - Individual stock details
-- `categories()` - Category listings
-- `category(category)` - Category details
-- `creators()` - Social creator data
-- `creator(network, id)` - Individual creator
-- `topicTimeSeries(topic, options)` - Historical data
-- `cryptocurrencyTimeSeries(coin, options)` - Crypto history
-- `topicPosts(topic, options)` - Social posts
-- `topicNews(topic)` - News articles
-- `searches()` - Search functionality
-- `searchPosts(term, options)` - Post search
-- `systemChanges()` - System updates
+- `getApiHealth()` - API health check
+- `getTopicByName(topic)` - Get topic data with 13+ fields
+- `getTopics()` - List all available topics
+- `getCryptocurrencies(options)` - Get crypto list with 31+ fields
+- `getCryptocurrency(coin)` - Single cryptocurrency details
+- `getBitcoin()`, `getEthereum()` - Enhanced convenience methods
 
-## 🔄 Migration from Limited Versions
+### Comprehensive Data Methods
 
-**Before (Limited SDK):**
+- `getStocks(options)` - Stock data with social intelligence
+- `getStock(symbol)` - Individual stock details
+- `getCategories()` - Category listings
+- `getCategory(category)` - Category details
+- `getCreators()` - Social creator data
+- `getCreator(network, id)` - Individual creator details
+- `getTopicTimeSeries(topic, options)` - Historical topic data
+- `getCryptocurrencyTimeSeries(coin, options)` - Crypto historical data
+- `getTopicPosts(topic, options)` - Social posts for topics
+- `getTopicNews(topic)` - News articles for topics
+- `getSearches()` - Search functionality
+- `searchPosts(term, options)` - Search social posts
+- `getSystemChanges()` - System updates and changes
+
+## 🔄 Backward Compatibility
+
+All original method names are still supported via aliases:
+
 ```typescript
+// New standardized names (recommended)
+const bitcoin = await client.getTopicByName('bitcoin');
+const cryptos = await client.getCryptocurrencies({ limit: 10 });
+
+// Original names (still work)
 const bitcoin = await client.topic('bitcoin');
-// Only returned: topic, title, interactions_24h, num_contributors, trend
+const cryptos = await client.cryptocurrencies({ limit: 10 });
 ```
 
-**After (Comprehensive SDK):**
-```typescript
-const bitcoin = await client.topic('bitcoin');
-// Returns ALL 13 fields: topic, title, topic_rank, related_topics,
-// types_count, types_interactions, types_sentiment, types_sentiment_detail,
-// interactions_24h, num_contributors, num_posts, categories, trend
-```
+## 🏗️ Architecture
+
+This SDK is built on a shared type system using `@lunarcrush/shared-types`:
+
+- **Consistent Types**: All types, enums, and interfaces shared across SDK, CLI, and backend
+- **GraphQL Integration**: Pre-built queries optimized for the LunarCrush GraphQL API
+- **Type Safety**: Full TypeScript support with comprehensive JSDoc documentation
+- **Method Mapping**: Standardized method names with backward compatibility aliases
 
 ## 🌙 Powered by LunarCrush
 
 Built for the [LunarCrush](https://lunarcrush.com) GraphQL backend with complete schema coverage.
 
 **Backend Specs:**
+
 - 39 GraphQL Types supported
 - 109 Query Endpoints accessible
 - 100% Field Coverage achieved

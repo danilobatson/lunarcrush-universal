@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "wrangler dev --local",
-    "deploy": "wrangler deploy",
+    "deploy": "npx wrangler@latest deploy",
     "db:migrate": "wrangler d1 execute lunarcrush-universal-db --local --file=./src/migrations/0001_initial_schema.sql",
     "db:query": "wrangler d1 execute lunarcrush-universal-db --local --command",
     "db:remote": "wrangler d1 execute lunarcrush-universal-db --remote --command",
@@ -15,6 +15,7 @@
     "@apollo/server": "^5.0.0",
     "@cloudflare/unenv-preset": "^2.4.0",
     "@google/generative-ai": "^0.24.1",
+    "@lunarcrush/shared-types": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.16.0",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",

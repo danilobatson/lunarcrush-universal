@@ -1,10 +1,19 @@
 import { gql } from '@apollo/client';
+import { GRAPHQL_QUERIES } from '@lunarcrush/shared-types';
 
-export const GET_BITCOIN_DATA = gql`
-  query GetBitcoinData {
-    getCoin(coin: "btc") {
-      id name symbol price price_btc market_cap percent_change_24h percent_change_7d percent_change_30d volume_24h max_supply circulating_supply close galaxy_score alt_rank volatility market_cap_rank
-
-    }
-  }
+// Re-export shared queries with gql wrapper for Apollo Client
+export const GET_COIN_GQL = gql`
+	${GRAPHQL_QUERIES.GET_COIN}
 `;
+export const GET_COINS_LIST_GQL = gql`
+	${GRAPHQL_QUERIES.GET_COINS_LIST}
+`;
+export const GET_TOPIC_GQL = gql`
+	${GRAPHQL_QUERIES.GET_TOPIC}
+`;
+export const GET_TOPICS_LIST_GQL = gql`
+	${GRAPHQL_QUERIES.GET_TOPICS_LIST}
+`;
+
+// Export the raw queries for direct use
+export { GRAPHQL_QUERIES } from '@lunarcrush/shared-types';

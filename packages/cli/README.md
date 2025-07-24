@@ -223,31 +223,37 @@ my-crypto-app/
 
 ## 🔗 **API Integration Examples**
 
+### **Shared GraphQL Queries**
+The CLI template uses `@lunarcrush/shared-types` for consistent GraphQL integration:
+
+```typescript
+import { GRAPHQL_QUERIES } from '@lunarcrush/shared-types';
+import { gql } from '@apollo/client';
+
+// Using shared queries with Apollo Client
+const GET_COIN_GQL = gql`${GRAPHQL_QUERIES.GET_COIN}`;
+
+const { data, loading, error } = useQuery(GET_COIN_GQL, {
+  variables: { symbol: 'BTC' },
+  pollInterval: 30000, // Update every 30 seconds
+});
+```
+
 ### **Real-Time Bitcoin Data**
 ```typescript
-const { data, loading, error } = useQuery(GET_BITCOIN_DATA, {
-  pollInterval: 30000, // Update every 30 seconds
+// Using standardized shared queries
+const { data } = useQuery(GET_TOPIC_GQL, {
+  variables: { topic: 'bitcoin' },
+  pollInterval: 30000,
 });
 ```
 
 ### **Social Sentiment Analysis**
 ```typescript
-const { data: sentiment } = useQuery(GET_SENTIMENT_DATA, {
-  variables: { symbol: 'BTC' }
+const { data: cryptos } = useQuery(GET_COINS_LIST_GQL, {
+  variables: { limit: 10, order_by: 'galaxy_score' }
 });
 ```
-
-### **Custom GraphQL Queries**
-```graphql
-query GetCryptoSocial($symbol: String!) {
-  getCoin(symbol: $symbol) {
-    price
-    socialInteractions24h
-    sentimentScore
-    socialDominance
-    alt_rank
-    galaxy_score
-  }
 }
 ```
 

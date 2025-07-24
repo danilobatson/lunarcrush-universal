@@ -12,10 +12,6 @@ export const createGraphQLServer = async (lunarCrushConfig: LunarCrushConfig) =>
     resolvers,
     introspection: true, // ✅ EXPLICITLY ENABLED for auto-generated docs
     plugins: [],
-    formatResponse: (response: any) => {
-      // Ensure the response format is exactly what GraphQL clients expect
-      return response;
-    },
   });
 
   await server.start();
@@ -66,7 +62,7 @@ export const handleGraphQLRequest = async (
         });
       } catch (error) {
         return new Response(JSON.stringify({
-          errors: [{ message: error.message }]
+          errors: [{ message: error instanceof Error ? error.message : String(error) }]
         }), {
           status: 500,
           headers: {
@@ -160,7 +156,7 @@ export const handleGraphQLRequest = async (
   // Handle GraphQL queries (POST requests)
   if (request.method === 'POST') {
     try {
-      const body = await request.json();
+      const body = await request.json() as { query?: string; variables?: any; operationName?: string };
       const result = await server.executeOperation({
         query: body.query,
         variables: body.variables,
@@ -189,7 +185,7 @@ export const handleGraphQLRequest = async (
       });
     } catch (error) {
       return new Response(JSON.stringify({
-        errors: [{ message: error.message }]
+        errors: [{ message: error instanceof Error ? error.message : String(error) }]
       }), {
         status: 500,
         headers: {
