@@ -1,0 +1,44 @@
+{
+  "name": "@lunarcrush/sdk",
+  "version": "1.0.0",
+  "description": "Universal SDK for LunarCrush social intelligence data",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist", "README.md"],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest",
+    "test:real": "vitest --run src/__tests__/real-api.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "crypto", "social", "sentiment", "api", "lunarcrush", 
+    "universal", "framework-agnostic", "typescript", "ai"
+  ],
+  "author": "Danilo Batson <dbatson19@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danilobatson/lunarcrush-universal.git",
+    "directory": "packages/sdk"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
