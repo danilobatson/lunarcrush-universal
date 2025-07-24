@@ -1,0 +1,644 @@
+🧹 LunarCrush Universal Backend - Cleanup Diagnostic
+===================================================
+Generated: Wed Jul 23 20:14:36 PDT 2025
+Repository: /Users/batson/Desktop/ForTheNerds/lunarcrush-universal
+
+📋 PROJECT OVERVIEW
+==================
+Repository location: /Users/batson/Desktop/ForTheNerds/lunarcrush-universal
+Git status:
+?? cleanup_diagnostic.sh
+?? cleanup_diagnostic_report.txt
+
+📁 COMPLETE DIRECTORY STRUCTURE
+===============================
+.
+├── .DS_Store
+├── .gitignore
+├── .yarn
+│   └── install-state.gz
+├── .yarnrc.yml
+├── apps
+│   ├── docs
+│   └── examples
+├── cleanup_diagnostic_report.txt
+├── cleanup_diagnostic.sh
+├── package-lock.json
+├── package.json
+├── packages
+│   ├── .DS_Store
+│   ├── backend
+│   │   ├── .DS_Store
+│   │   ├── .env
+│   │   ├── .env.example
+│   │   ├── .gitignore
+│   │   ├── .wrangler
+│   │   │   ├── state
+│   │   │   │   └── v3
+│   │   │   │       ├── cache
+│   │   │   │       │   └── miniflare-CacheObject
+│   │   │   │       ├── d1
+│   │   │   │       │   └── miniflare-D1DatabaseObject
+│   │   │   │       │       ├── e59fab2c399e1f5837dc87eaa07158ff0bb97a8ec4b6d4192623dc7b9c2fd15e.sqlite
+│   │   │   │       │       ├── e59fab2c399e1f5837dc87eaa07158ff0bb97a8ec4b6d4192623dc7b9c2fd15e.sqlite-shm
+│   │   │   │       │       └── e59fab2c399e1f5837dc87eaa07158ff0bb97a8ec4b6d4192623dc7b9c2fd15e.sqlite-wal
+│   │   │   │       ├── secrets-store
+│   │   │   │       │   ├── 2593c430bd90424a886728435dd57004
+│   │   │   │       │   │   └── blobs
+│   │   │   │       │   │       └── b66d44c3e07b9ee027c4efc99c6d4fbf59a6e2c67d88fd8d25add11f9476f8950000019834be2e1d
+│   │   │   │       │   └── miniflare-secrets-store-KVNamespaceObject
+│   │   │   │       │       └── 8be429160fa2d3a95617588553e86f9639eeb00dda7a811e9a1f7df111be7c32.sqlite
+│   │   │   │       └── workflows
+│   │   │   └── tmp
+│   │   ├── add_both_stocks_endpoints.js
+│   │   ├── graphql_page.html
+│   │   ├── package.json
+│   │   ├── package.json.tmp
+│   │   ├── README.md
+│   │   ├── src
+│   │   │   ├── .DS_Store
+│   │   │   ├── graphql
+│   │   │   │   ├── .DS_Store
+│   │   │   │   ├── graphiql_page.html
+│   │   │   │   ├── resolvers
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── schema
+│   │   │   │   │   └── types.ts
+│   │   │   │   ├── server.ts
+│   │   │   │   └── simple_handler.ts
+│   │   │   ├── index.ts
+│   │   │   ├── middleware
+│   │   │   ├── migrations
+│   │   │   │   └── 0001_initial_schema.sql
+│   │   │   ├── routes
+│   │   │   ├── services
+│   │   │   │   ├── ai
+│   │   │   │   │   ├── ai-analytics-service.ts
+│   │   │   │   │   ├── gemini-service.ts
+│   │   │   │   │   └── mcp-service.ts
+│   │   │   │   ├── lunarcrush_fixed.ts
+│   │   │   │   └── lunarcrush.ts
+│   │   │   └── types
+│   │   ├── test
+│   │   ├── tsconfig.json
+│   │   └── wrangler.toml
+│   ├── cli
+│   │   ├── .DS_Store
+│   │   ├── package.json
+│   │   ├── README.md
+│   │   ├── src
+│   │   │   ├── index.ts
+│   │   │   ├── index.ts.broken
+│   │   │   └── types.d.ts
+│   │   ├── templates
+│   │   │   ├── .DS_Store
+│   │   │   └── social-dashboard
+│   │   │       ├── .DS_Store
+│   │   │       ├── next-env.d.ts
+│   │   │       ├── next.config.js
+│   │   │       ├── package.json
+│   │   │       ├── pages
+│   │   │       │   ├── _app.tsx
+│   │   │       │   ├── api
+│   │   │       │   └── index.tsx
+│   │   │       ├── public
+│   │   │       │   └── favicon.ico
+│   │   │       ├── README.md
+│   │   │       ├── src
+│   │   │       │   └── lib
+│   │   │       │       ├── apollo.ts
+│   │   │       │       └── queries.ts
+│   │   │       ├── styles
+│   │   │       │   ├── globals.css
+│   │   │       │   └── Home.module.css
+│   │   │       └── tsconfig.json
+│   │   └── tsconfig.json
+│   ├── client
+│   ├── sdk
+│   │   ├── .DS_Store
+│   │   ├── lunarcrush-sdk-1.0.0.tgz
+│   │   ├── lunarcrush-sdk-1.0.1.tgz
+│   │   ├── package.json
+│   │   ├── README.md
+│   │   ├── src
+│   │   │   ├── __tests__
+│   │   │   │   ├── basic.test.ts
+│   │   │   │   └── real-api.test.ts
+│   │   │   ├── .DS_Store
+│   │   │   ├── enhanced-config.ts
+│   │   │   └── index.ts
+│   │   ├── test-readme.html
+│   │   └── tsconfig.json
+│   ├── templates
+│   └── types
+├── README.md
+├── test-output
+├── test-polling
+├── tools
+│   ├── config
+│   └── scripts
+│       ├── package-info.sh
+│       ├── project-info.sh
+│       └── quick-status.sh
+├── turbo.json
+└── yarn.lock
+
+52 directories, 78 files
+
+📦 PACKAGE.JSON FILES ANALYSIS
+==============================
+📄 ./test-polling/node_modules/lunarcrush-sdk/package.json:
+Name:   "name": "lunarcrush-sdk",
+Version:   "version": "1.0.0",
+Scripts:
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest",
+    "test:real": "vitest --run src/__tests__/real-api.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "crypto",
+    "social",
+    "sentiment",
+    "api",
+    "lunarcrush",
+    "universal",
+    "framework-agnostic",
+    "typescript",
+    "ai"
+  ],
+  "author": "Danilo Batson <dbatson19@gmail.com>",
+  "license": "MIT",
+---
+📄 ./package.json:
+Name:   "name": "lunarcrush-universal",
+Version:   "version": "1.0.0",
+Scripts:
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "clean": "turbo run clean",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "turbo run build --filter=./packages/* && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "prettier": "^3.1.0",
+    "turbo": "^1.11.2"
+  },
+  "packageManager": "yarn@4.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+---
+📄 ./packages/backend/node_modules/@types/node/package.json:
+Name:     "name": "@types/node",
+Version:     "version": "24.1.0",
+Scripts:
+    "scripts": {},
+    "dependencies": {
+        "undici-types": "~7.8.0"
+    },
+    "peerDependencies": {},
+    "typesPublisherContentHash": "83cb68186fcf703a4b7951de645e523dc4495aa83f0ef95d9b64cb5032c5b1d6",
+    "typeScriptVersion": "5.1"
+}
+---
+📄 ./packages/backend/node_modules/@cloudflare/unenv-preset/dist/runtime/polyfill/package.json:
+Name: 
+Version: 
+Scripts:
+---
+📄 ./packages/backend/node_modules/@cloudflare/unenv-preset/package.json:
+Name:   "name": "@cloudflare/unenv-preset",
+Version:   "version": "2.4.0",
+Scripts:
+  "scripts": {
+    "build": "unbuild",
+    "check:lint": "eslint",
+    "check:type": "tsc --noEmit",
+    "test:ci": "vitest run",
+    "test:watch": "vitest"
+  }
+}
+---
+📄 ./packages/backend/node_modules/unenv/runtime/polyfill/package.json:
+Name: 
+Version: 
+Scripts:
+---
+📄 ./packages/backend/node_modules/unenv/package.json:
+Name:   "name": "unenv",
+Version:   "version": "1.10.0",
+Scripts:
+  "scripts": {
+    "build": "unbuild",
+    "lint": "eslint . && prettier -c src test",
+    "lint:fix": "eslint --fix . && prettier -w src test",
+    "prepack": "unbuild",
+    "release": "pnpm test && changelogen --release && pnpm publish && git push --follow-tags",
+    "test": "pnpm lint && pnpm typecheck",
+    "test:deno": "NODE_NO_WARNINGS=1 pnpm jiti test/deno.ts",
+    "test:cf": "pnpm jiti test/cloudflare.ts",
+    "test:vc": "pnpm jiti test/vercel.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "consola": "^3.2.3",
+    "defu": "^6.1.4",
+    "mime": "^3.0.0",
+    "node-fetch-native": "^1.6.4",
+    "pathe": "^1.1.2"
+  },
+  "devDependencies": {
+---
+📄 ./packages/backend/node_modules/undici-types/package.json:
+Name:   "name": "undici-types",
+Version:   "version": "7.8.0",
+Scripts:
+---
+📄 ./packages/backend/node_modules/pathe/package.json:
+Name:   "name": "pathe",
+Version:   "version": "1.1.2",
+Scripts:
+  "scripts": {
+    "build": "unbuild",
+    "dev": "vitest",
+    "lint": "eslint --ext .ts . && prettier -c src test",
+    "lint:fix": "eslint --cache --ext .ts,.js,.mjs,.cjs . --fix && prettier -c src test -w",
+    "release": "pnpm test && pnpm build && changelogen --release && pnpm publish && git push --follow-tags",
+    "test": "pnpm lint && vitest run --coverage",
+    "test:types": "tsc --noEmit"
+  }
+}
+---
+📄 ./packages/backend/package.json:
+Name:   "name": "@lunarcrush/universal-backend",
+Version:   "version": "1.0.0",
+Scripts:
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 execute lunarcrush-universal-db --local --file=./src/migrations/0001_initial_schema.sql",
+    "db:query": "wrangler d1 execute lunarcrush-universal-db --local --command",
+    "db:remote": "wrangler d1 execute lunarcrush-universal-db --remote --command",
+    "build": "echo 'Build complete'",
+    "test": "echo 'Tests not implemented yet'"
+  },
+  "dependencies": {
+    "@apollo/server": "^5.0.0",
+    "@cloudflare/unenv-preset": "^2.4.0",
+    "@google/generative-ai": "^0.24.1",
+    "@modelcontextprotocol/sdk": "^1.16.0",
+    "graphql": "^16.11.0",
+    "graphql-tag": "^2.12.6",
+    "hono": "^4.6.12",
+    "node-fetch": "^3.3.2",
+    "unenv": "^1.10.0"
+  },
+---
+📄 ./packages/cli/package.json:
+Name:   "name": "create-lunarcrush-app",
+Version:   "version": "0.1.2",
+Scripts:
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@types/inquirer": "^9.0.8",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.8.2",
+    "ora": "^5.4.1",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.10.5",
+    "@types/prompts": "^2.4.9",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
+---
+📄 ./packages/cli/templates/social-dashboard/package.json:
+Name:   "name": "lunarcrush-social-dashboard",
+Version:   "version": "0.1.0",
+Scripts:
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "14.0.4",
+    "react": "^18",
+    "react-dom": "^18",
+    "@apollo/client": "^3.8.8",
+    "graphql": "^16.8.1"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4"
+---
+📄 ./packages/sdk/package.json:
+Name:   "name": "lunarcrush-sdk",
+Version:   "version": "1.0.0",
+Scripts:
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest",
+    "test:real": "vitest --run src/__tests__/real-api.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "crypto",
+    "social",
+    "sentiment",
+    "api",
+    "lunarcrush",
+    "universal",
+    "framework-agnostic",
+    "typescript",
+    "ai"
+  ],
+  "author": "Danilo Jamaal <dbatson19@gmail.com>",
+  "license": "MIT",
+---
+
+⚠️  POTENTIALLY PROBLEMATIC FILES
+=================================
+🗃️ Backup/Temp Files:
+./packages/backend/package.json.tmp
+
+📝 Log Files:
+
+🧪 Test/Mock Files:
+./test-polling
+./test-output
+./packages/backend/test
+./packages/sdk/test-readme.html
+./packages/sdk/src/__tests__
+./packages/sdk/src/__tests__/basic.test.ts
+./packages/sdk/src/__tests__/real-api.test.ts
+
+💾 Environment/Config Files:
+./packages/backend/.env
+./packages/backend/.env.example
+./packages/backend/wrangler.toml
+./packages/cli/templates/social-dashboard/next.config.js
+
+🔧 CLI PACKAGE ANALYSIS
+=======================
+CLI Package found at packages/cli/
+CLI Dependencies:
+  "dependencies": {
+    "@types/inquirer": "^9.0.8",
+    "chalk": "^4.1.2",
+    "commander": "^11.1.0",
+    "fs-extra": "^11.3.0",
+    "inquirer": "^12.8.2",
+    "ora": "^5.4.1",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.10.5",
+    "@types/prompts": "^2.4.9",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
+  },
+  "homepage": "https://github.com/danilobatson/lunarcrush-universal#readme",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/danilobatson"
+
+CLI Source Files:
+packages/cli/src/types.d.ts
+packages/cli/src/index.ts.broken
+packages/cli/src/index.ts
+CLI Dist Files:
+packages/cli/dist/index.js
+packages/cli/dist/index.js.map
+packages/cli/dist/index.d.ts
+packages/cli/dist/index.d.ts.map
+
+🌐 BACKEND PACKAGE ANALYSIS
+===========================
+Backend Package found at packages/backend/
+Backend Dependencies:
+  "dependencies": {
+    "@apollo/server": "^5.0.0",
+    "@cloudflare/unenv-preset": "^2.4.0",
+    "@google/generative-ai": "^0.24.1",
+    "@modelcontextprotocol/sdk": "^1.16.0",
+    "graphql": "^16.11.0",
+    "graphql-tag": "^2.12.6",
+    "hono": "^4.6.12",
+    "node-fetch": "^3.3.2",
+    "unenv": "^1.10.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250722.0",
+    "@hono/node-server": "^1.13.7",
+    "@types/node": "^24.1.0",
+    "typescript": "^5.8.3",
+    "wrangler": "^4.25.1"
+  },
+  "packageManager": "yarn@4.0.0"
+}
+
+Backend Source Files:
+packages/backend/src/migrations/0001_initial_schema.sql
+packages/backend/src/.DS_Store
+packages/backend/src/graphql/.DS_Store
+packages/backend/src/graphql/simple_handler.ts
+packages/backend/src/graphql/graphiql_page.html
+packages/backend/src/graphql/resolvers/index.ts
+packages/backend/src/graphql/schema/types.ts
+packages/backend/src/graphql/server.ts
+packages/backend/src/index.ts
+packages/backend/src/services/lunarcrush_fixed.ts
+packages/backend/src/services/lunarcrush.ts
+packages/backend/src/services/ai/ai-analytics-service.ts
+packages/backend/src/services/ai/gemini-service.ts
+packages/backend/src/services/ai/mcp-service.ts
+Wrangler Config:
+name = "lunarcrush-universal-backend"
+main = "src/index.ts"
+secrets_store_secrets = [
+  { binding = "LUNARCRUSH_API_KEY", store_id= "2593c430bd90424a886728435dd57004", secret_name = "LUNARCRUSH_API_KEY" }
+]
+compatibility_date = "2024-10-15"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true
+head_sampling_rate = 1 # optional. default = 1.
+
+# Environment variables (non-sensitive only)
+[vars]
+ENVIRONMENT = "development"
+
+# D1 Database configuration
+[[d1_databases]]
+binding = "DB"
+database_name = "lunarcrush-universal-db"
+
+📚 SDK PACKAGE ANALYSIS
+=======================
+SDK Package found at packages/sdk/
+SDK Source Files:
+packages/sdk/src/__tests__/basic.test.ts
+packages/sdk/src/__tests__/real-api.test.ts
+packages/sdk/src/enhanced-config.ts
+packages/sdk/src/index.ts
+
+📊 LARGE FILES ANALYSIS
+=======================
+Files larger than 1MB:
+
+🔍 DUPLICATE FILE PATTERNS
+==========================
+Multiple package.json files:
+./test-polling/node_modules/lunarcrush-sdk/package.json
+./package.json
+./packages/backend/node_modules/@types/node/package.json
+./packages/backend/node_modules/@cloudflare/unenv-preset/dist/runtime/polyfill/package.json
+./packages/backend/node_modules/@cloudflare/unenv-preset/package.json
+./packages/backend/node_modules/unenv/runtime/polyfill/package.json
+./packages/backend/node_modules/unenv/package.json
+./packages/backend/node_modules/undici-types/package.json
+./packages/backend/node_modules/pathe/package.json
+./packages/backend/package.json
+./packages/cli/package.json
+./packages/cli/templates/social-dashboard/package.json
+./packages/sdk/package.json
+
+Multiple README files:
+./test-polling/node_modules/lunarcrush-sdk/README.md
+./README.md
+./packages/backend/node_modules/@types/node/README.md
+./packages/backend/node_modules/@cloudflare/unenv-preset/README.md
+./packages/backend/node_modules/unenv/README.md
+./packages/backend/node_modules/undici-types/README.md
+./packages/backend/node_modules/pathe/README.md
+./packages/backend/README.md
+./packages/cli/README.md
+./packages/cli/templates/social-dashboard/README.md
+./packages/sdk/README.md
+
+🔄 GIT REPOSITORY ANALYSIS
+==========================
+Recent commits (last 10):
+54e4e22 chore: update author name to Danilo Jamaal in package.json and README files
+3cd8572 docs: update SDK README with compelling features
+e2e4137 feat: update main README with published SDK details
+d337441 fix: make sentiment field nullable to handle null values
+b44ae4d chore: update create-lunarcrush-app version to 0.1.2 and add funding information
+5260038 docs: enhance READMEs with comprehensive package manager support
+0d1dc13 chore: update package.json to include repository details and keywords
+2141d2a chore: update README and package.json with npm badge and funding information
+509dc05 Implement code changes to enhance functionality and improve performance
+4129ddc chore: remove my-lunarcrush-app package and its related files
+
+Untracked files:
+cleanup_diagnostic.sh
+cleanup_diagnostic_report.txt
+
+🔗 DEPENDENCY ANALYSIS
+======================
+Root dependencies:
+  "dependencies": {
+    "unenv": "2.0.0-rc.17"
+  }
+}
+
+Root devDependencies:
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "prettier": "^3.1.0",
+    "turbo": "^1.11.2"
+  },
+  "packageManager": "yarn@4.0.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "unenv": "2.0.0-rc.17"
+  }
+}
+
+🔐 ENVIRONMENT & SECRETS ANALYSIS
+=================================
+Environment files found:
+./packages/backend/.env
+./packages/backend/.env.example
+
+Potential secrets in files (first 5 matches):
+./package-lock.json:    "node_modules/@inquirer/password": {
+./package-lock.json:      "resolved": "https://registry.npmjs.org/@inquirer/password/-/password-4.0.17.tgz",
+./package-lock.json:        "@inquirer/password": "^4.0.17",
+./package-lock.json:    "node_modules/js-tokens": {
+./package-lock.json:      "resolved": "https://registry.npmjs.org/js-tokens/-/js-tokens-9.0.1.tgz",
+
+✅ WORKING FEATURES VERIFICATION
+================================
+CLI executable check:
+total 104
+drwxr-xr-x@  6 batson  staff    192 Jul 23 13:28 .
+drwxr-xr-x  10 batson  staff    320 Jul 23 15:15 ..
+-rw-r--r--@  1 batson  staff    112 Jul 23 15:15 index.d.ts
+-rw-r--r--@  1 batson  staff    161 Jul 23 15:15 index.d.ts.map
+-rwxr-xr-x@  1 batson  staff  31457 Jul 23 15:15 index.js
+-rw-r--r--@  1 batson  staff  11530 Jul 23 15:15 index.js.map
+
+Backend deployment check:
+name = "lunarcrush-universal-backend"
+  { binding = "LUNARCRUSH_API_KEY", store_id= "2593c430bd90424a886728435dd57004", secret_name = "LUNARCRUSH_API_KEY" }
+database_name = "lunarcrush-universal-db"
+database_id = "8eb77518-7262-429c-954b-ee5e9ca67213"
+
+🧹 CLEANUP RECOMMENDATIONS
+==========================
+Based on analysis, the following items should be reviewed for cleanup:
+
+🗑️  Found        1 backup/temporary files that can likely be deleted
+📁 Empty directories that can be removed:
+./tools/config
+./packages/types
+./packages/backend/test
+./packages/backend/.wrangler/state/v3/cache/miniflare-CacheObject
+./packages/backend/.wrangler/state/v3/workflows
+./packages/backend/.wrangler/tmp
+./packages/backend/src/middleware
+./packages/backend/src/types
+./packages/backend/src/routes
+./packages/cli/templates/social-dashboard/pages/api
+./packages/sdk/dist
+./packages/templates
+./packages/client
+./apps/docs
+./apps/examples
+
+🎯 NEXT STEPS
+============
+1. Review the files marked for cleanup above
+2. Verify working features (CLI, Backend API, SDK)
+3. Remove unnecessary files identified in this report
+4. Update documentation and README files
+5. Test all packages after cleanup
+
