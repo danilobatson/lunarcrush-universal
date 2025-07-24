@@ -193,7 +193,7 @@ export const typeDefs = `
     interactions: Float!
     posts_active: Int!
     posts_created: Int!
-    sentiment: Float!
+    sentiment: Float
     spam: Int!
   }
 
@@ -327,7 +327,7 @@ export const typeDefs = `
     interactions: Float!
   }
 
-  # ===== COINS LIST TYPE (EXACT FROM /coins/list/v2) =====
+  # ===== COINS LIST TYPE (EXACT FROM /coins/list/v2) - FIXED NULLABLE SENTIMENT =====
   type CoinListItem {
     id: Int!
     symbol: String!
@@ -352,7 +352,7 @@ export const typeDefs = `
     galaxy_score_previous: Float!
     alt_rank: Int!
     alt_rank_previous: Int!
-    sentiment: Float!
+    sentiment: Float  # 🔧 FIXED: Made nullable (removed !)
     categories: String!
     blockchains: [BlockchainInfo!]!
     percent_change_30d: Float!
@@ -398,7 +398,7 @@ export const typeDefs = `
     interactions: Float!
     posts_active: Int!
     posts_created: Int!
-    sentiment: Float!
+    sentiment: Float
     spam: Int!
     alt_rank: Int!
     circulating_supply: Float!
@@ -435,7 +435,7 @@ export const typeDefs = `
     coinmarketcap_link: String
   }
 
-  # ===== STOCKS LIST TYPE (EXACT FROM /stocks/list/v2) =====
+  # ===== STOCKS LIST TYPE (EXACT FROM /stocks/list/v2) - FIXED NULLABLE SENTIMENT =====
   type StockListItem {
     id: Int!
     symbol: String!
@@ -454,7 +454,7 @@ export const typeDefs = `
     galaxy_score_previous: Float!
     alt_rank: Int!
     alt_rank_previous: Int!
-    sentiment: Float!
+    sentiment: Float  # 🔧 FIXED: Made nullable (removed !)
     categories: String!
     topic: String!
     logo: String!
@@ -481,7 +481,7 @@ export const typeDefs = `
     interactions: Float!
     posts_active: Int!
     posts_created: Int!
-    sentiment: Float!
+    sentiment: Float
     spam: Int!
     alt_rank: Int!
     galaxy_score: Float!
@@ -528,7 +528,7 @@ export const typeDefs = `
     posts_created: Int!
     interactions: Float!
     social_dominance: Float!
-    sentiment: Float!
+    sentiment: Float
   }
 
   # ===== SYSTEM CHANGES TYPE (EXACT FROM /system/changes) =====

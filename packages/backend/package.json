@@ -14,9 +14,12 @@
   "dependencies": {
     "@apollo/server": "^5.0.0",
     "@cloudflare/unenv-preset": "^2.4.0",
+    "@google/generative-ai": "^0.24.1",
+    "@modelcontextprotocol/sdk": "^1.16.0",
     "graphql": "^16.11.0",
     "graphql-tag": "^2.12.6",
     "hono": "^4.6.12",
+    "node-fetch": "^3.3.2",
     "unenv": "^1.10.0"
   },
   "devDependencies": {
