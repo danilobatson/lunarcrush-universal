@@ -16,7 +16,7 @@ This SDK provides **complete access** to LunarCrush data with comprehensive impr
 
 - **📈 Methods**: 23 standardized methods with backward compatibility
 - **📊 Topic Fields**: 13+ comprehensive topic fields
-- **💰 Crypto Fields**: 31+ detailed cryptocurrency fields  
+- **💰 Crypto Fields**: 31+ detailed cryptocurrency fields
 - **🎯 Backend Coverage**: 100% GraphQL API coverage
 - **🔄 Shared Types**: Uses `@lunarcrush/shared-types` for consistency across all packages
 

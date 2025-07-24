@@ -4,77 +4,93 @@ import { createResolvers } from './resolvers';
 import { LunarCrushConfig } from '../services/lunarcrush';
 
 // Create GraphQL server factory function
-export const createGraphQLServer = async (lunarCrushConfig: LunarCrushConfig) => {
-  const resolvers = createResolvers(lunarCrushConfig);
+export const createGraphQLServer = async (
+	lunarCrushConfig: LunarCrushConfig
+) => {
+	const resolvers = createResolvers(lunarCrushConfig);
 
-  const server = new ApolloServer({
-    typeDefs,
-    resolvers,
-    introspection: true, // ✅ EXPLICITLY ENABLED for auto-generated docs
-    plugins: [],
-  });
+	const server = new ApolloServer({
+		typeDefs,
+		resolvers,
+		introspection: true, // ✅ EXPLICITLY ENABLED for auto-generated docs
+		plugins: [],
+	});
 
-  await server.start();
-  return server;
+	await server.start();
+	return server;
 };
 
 // Helper function to handle GraphQL requests in Hono
 export const handleGraphQLRequest = async (
-  server: ApolloServer<any>,
-  request: Request
+	server: ApolloServer<any>,
+	request: Request
 ): Promise<Response> => {
-  const url = new URL(request.url);
+	const url = new URL(request.url);
 
-  // Handle GraphQL operations via GET (for introspection queries)
-  if (request.method === 'GET') {
-    const query = url.searchParams.get('query');
-    const variables = url.searchParams.get('variables');
-    const operationName = url.searchParams.get('operationName');
+	// Handle GraphQL operations via GET (for introspection queries)
+	if (request.method === 'GET') {
+		const query = url.searchParams.get('query');
+		const variables = url.searchParams.get('variables');
+		const operationName = url.searchParams.get('operationName');
 
-    // If there's a query parameter, execute the GraphQL operation
-    if (query) {
-      try {
-        const result = await server.executeOperation({
-          query,
-          variables: variables ? JSON.parse(variables) : undefined,
-          operationName: operationName || undefined,
-        });
+		// If there's a query parameter, execute the GraphQL operation
+		if (query) {
+			try {
+				const result = await server.executeOperation({
+					query,
+					variables: variables ? JSON.parse(variables) : undefined,
+					operationName: operationName || undefined,
+				});
 
-        // Return the response in the exact format GraphQL clients expect
-        const responseBody = {
-          data: result.body.kind === 'single' ? result.body.singleResult.data : null,
-          errors: result.body.kind === 'single' ? result.body.singleResult.errors : undefined,
-        };
+				// Return the response in the exact format GraphQL clients expect
+				const responseBody = {
+					data:
+						result.body.kind === 'single'
+							? result.body.singleResult.data
+							: null,
+					errors:
+						result.body.kind === 'single'
+							? result.body.singleResult.errors
+							: undefined,
+				};
 
-        // Clean up undefined values
-        if (!responseBody.errors) {
-          delete responseBody.errors;
-        }
+				// Clean up undefined values
+				if (!responseBody.errors) {
+					delete responseBody.errors;
+				}
 
-        return new Response(JSON.stringify(responseBody), {
-          status: 200,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization, Apollo-Require-Preflight',
-          },
-        });
-      } catch (error) {
-        return new Response(JSON.stringify({
-          errors: [{ message: error instanceof Error ? error.message : String(error) }]
-        }), {
-          status: 500,
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-          },
-        });
-      }
-    }
+				return new Response(JSON.stringify(responseBody), {
+					status: 200,
+					headers: {
+						'Content-Type': 'application/json',
+						'Access-Control-Allow-Origin': '*',
+						'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+						'Access-Control-Allow-Headers':
+							'Content-Type, Authorization, Apollo-Require-Preflight',
+					},
+				});
+			} catch (error) {
+				return new Response(
+					JSON.stringify({
+						errors: [
+							{
+								message: error instanceof Error ? error.message : String(error),
+							},
+						],
+					}),
+					{
+						status: 500,
+						headers: {
+							'Content-Type': 'application/json',
+							'Access-Control-Allow-Origin': '*',
+						},
+					}
+				);
+			}
+		}
 
-    // Return GraphiQL HTML (much faster than Playground)
-    const graphiqlHtml = `<!DOCTYPE html>
+		// Return GraphiQL HTML (much faster than Playground)
+		const graphiqlHtml = `<!DOCTYPE html>
 <html>
 <head>
     <title>🌙 LunarCrush Universal Backend - GraphiQL</title>
@@ -87,17 +103,17 @@ export const handleGraphQLRequest = async (
 <body>
     <div class="header">🌙 LunarCrush Universal Backend - GraphiQL Explorer</div>
     <div id="graphiql" style="height: calc(100vh - 50px);"></div>
-    
+
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/graphiql@3/graphiql.min.js"></script>
-    
+
     <script>
         const root = ReactDOM.createRoot(document.getElementById('graphiql'));
         const fetcher = GraphiQL.createFetcher({
             url: '${url.pathname}',
         });
-        
+
         const defaultQuery = \`# 🌙 LunarCrush Universal Backend - GraphiQL Explorer
 # ✅ Introspection ENABLED - Full auto-generated documentation!
 # 🚀 39 GraphQL Queries Available - Complete crypto social intelligence
@@ -142,72 +158,88 @@ export const handleGraphQLRequest = async (
 </body>
 </html>`;
 
-    return new Response(graphiqlHtml, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Apollo-Require-Preflight',
-      },
-    });
-  }
+		return new Response(graphiqlHtml, {
+			status: 200,
+			headers: {
+				'Content-Type': 'text/html; charset=utf-8',
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+				'Access-Control-Allow-Headers':
+					'Content-Type, Authorization, Apollo-Require-Preflight',
+			},
+		});
+	}
 
-  // Handle GraphQL queries (POST requests)
-  if (request.method === 'POST') {
-    try {
-      const body = await request.json() as { query?: string; variables?: any; operationName?: string };
-      const result = await server.executeOperation({
-        query: body.query,
-        variables: body.variables,
-        operationName: body.operationName,
-      });
+	// Handle GraphQL queries (POST requests)
+	if (request.method === 'POST') {
+		try {
+			const body = (await request.json()) as {
+				query?: string;
+				variables?: any;
+				operationName?: string;
+			};
+			const result = await server.executeOperation({
+				query: body.query,
+				variables: body.variables,
+				operationName: body.operationName,
+			});
 
-      // Return in the format GraphQL clients expect
-      const responseBody = {
-        data: result.body.kind === 'single' ? result.body.singleResult.data : null,
-        errors: result.body.kind === 'single' ? result.body.singleResult.errors : undefined,
-      };
+			// Return in the format GraphQL clients expect
+			const responseBody = {
+				data:
+					result.body.kind === 'single' ? result.body.singleResult.data : null,
+				errors:
+					result.body.kind === 'single'
+						? result.body.singleResult.errors
+						: undefined,
+			};
 
-      // Clean up undefined values
-      if (!responseBody.errors) {
-        delete responseBody.errors;
-      }
+			// Clean up undefined values
+			if (!responseBody.errors) {
+				delete responseBody.errors;
+			}
 
-      return new Response(JSON.stringify(responseBody), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization, Apollo-Require-Preflight',
-        },
-      });
-    } catch (error) {
-      return new Response(JSON.stringify({
-        errors: [{ message: error instanceof Error ? error.message : String(error) }]
-      }), {
-        status: 500,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
-      });
-    }
-  }
+			return new Response(JSON.stringify(responseBody), {
+				status: 200,
+				headers: {
+					'Content-Type': 'application/json',
+					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+					'Access-Control-Allow-Headers':
+						'Content-Type, Authorization, Apollo-Require-Preflight',
+				},
+			});
+		} catch (error) {
+			return new Response(
+				JSON.stringify({
+					errors: [
+						{ message: error instanceof Error ? error.message : String(error) },
+					],
+				}),
+				{
+					status: 500,
+					headers: {
+						'Content-Type': 'application/json',
+						'Access-Control-Allow-Origin': '*',
+					},
+				}
+			);
+		}
+	}
 
-  // Handle OPTIONS requests (CORS preflight) - Enhanced for Apollo Studio
-  if (request.method === 'OPTIONS') {
-    return new Response(null, {
-      status: 204,
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, Apollo-Require-Preflight',
-        'Access-Control-Max-Age': '86400',
-      },
-    });
-  }
+	// Handle OPTIONS requests (CORS preflight) - Enhanced for Apollo Studio
+	if (request.method === 'OPTIONS') {
+		return new Response(null, {
+			status: 204,
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+				'Access-Control-Allow-Headers':
+					'Content-Type, Authorization, Apollo-Require-Preflight',
+				'Access-Control-Max-Age': '86400',
+			},
+		});
+	}
 
-  return new Response('Method not allowed', { status: 405 });
+	return new Response('Method not allowed', { status: 405 });
 };
