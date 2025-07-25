@@ -16,10 +16,16 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=./packages/* && changeset publish"
+    "release": "turbo run build --filter=./packages/* && changeset publish",
+    "dev:types": "npm run codegen:watch",
+    "build:types": "npm run codegen",
+    "types:generate": "node scripts/generate-types.js",
+    "types:verify": "node scripts/verify-types.js",
+    "build:all": "npm run build --workspaces"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
+    "@graphql-codegen/cli": "^5.0.7",
     "prettier": "^3.1.0",
     "turbo": "^1.11.2"
   },
@@ -28,6 +34,14 @@
     "node": ">=18"
   },
   "dependencies": {
+    "@graphql-codegen/typescript-resolvers": "^4.5.1",
+    "graphql": "^16.11.0",
     "unenv": "2.0.0-rc.17"
+  },
+  "resolutions": {
+    "graphql": "^16.11.0",
+    "@graphql-tools/schema": "^10.0.0",
+    "@graphql-tools/utils": "^10.0.0",
+    "@types/node": "^20.0.0"
   }
 }

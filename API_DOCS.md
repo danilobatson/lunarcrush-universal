@@ -10,8 +10,6 @@ Example request:
 curl -H "Authorization: Bearer <API_KEY>" https://lunarcrush.com/api4/public/topics/list/v1
 ```
 
-
-
 Example response:
 
 ```json
