@@ -1,0 +1,40 @@
+Current directory: /Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages/backend-yoga
+🔧 Wrangler whoami:
+
+ ⛅️ wrangler 4.25.1 (update available 4.26.0)
+─────────────────────────────────────────────
+Getting User settings...
+👋 You are logged in with an OAuth Token, associated with the email djbatson19@gmail.com.
+┌────────────────────────────────┬──────────────────────────────────┐
+│ Account Name                   │ Account ID                       │
+├────────────────────────────────┼──────────────────────────────────┤
+│ Djbatson19@gmail.com's Account │ 833a73cbe5b85826664e9dcea2478d41 │
+└────────────────────────────────┴──────────────────────────────────┘
+🔓 Token Permissions:
+Scope (Access)
+- account (read)
+- user (read)
+- workers (write)
+- workers_kv (write)
+- workers_routes (write)
+- workers_scripts (write)
+- workers_tail (read)
+- d1 (write)
+- pages (write)
+- zone (read)
+- ssl_certs (write)
+- ai (write)
+- queues (write)
+- pipelines (write)
+- secrets_store (write)
+- offline_access 
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mWrangler is missing some expected Oauth scopes. To fix this, run `wrangler login` to refresh your token. The missing scopes are:[0m
+
+  - containers:write
+  - cloudchamber:write
+
+
+
+🔧 Available workers (if accessible):
+Wrangler available

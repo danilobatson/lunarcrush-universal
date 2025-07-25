@@ -1,0 +1,139 @@
+import { createYoga, createSchema } from 'graphql-yoga'
+import { typeDefs } from './schema'
+import { 
+  LunarCrushConfig,
+  createLunarCrushClient
+} from './services/lunarcrush'
+
+// Cloudflare Workers environment with secret store
+interface Env {
+  LUNARCRUSH_API_KEY: {
+    get(): Promise<string>
+  }
+  ENVIRONMENT?: string
+  DB?: D1Database
+  CACHE?: KVNamespace
+}
+
+// Create resolvers factory function (COPIED FROM WORKING LEGACY)
+const createResolvers = (lunarCrushConfig: LunarCrushConfig) => {
+  const client = createLunarCrushClient(lunarCrushConfig);
+
+  return {
+    Query: {
+      health: async (_: any, __: any, { env }: { env: Env }) => {
+        try {
+          const apiKey = await env.LUNARCRUSH_API_KEY.get()
+          console.log('Health check - API key retrieved, length:', apiKey?.length || 0)
+          return `API Key from secret store: ${apiKey ? 'FOUND' : 'MISSING'}, Length: ${apiKey?.length || 0}`
+        } catch (error) {
+          console.error('Error getting API key from secret store:', error)
+          return `Error accessing secret store: ${error.message}`
+        }
+      },
+
+      // ===== TOPICS RESOLVERS (EXACT FROM LEGACY) =====
+      getTopicsList: async () => {
+        try {
+          console.log('🌙 getTopicsList called')
+          return await client.getTopicsList();
+        } catch (error) {
+          console.error('❌ getTopicsList error:', error);
+          throw new Error(`Failed to fetch topics list: ${error.message}`);
+        }
+      },
+
+      getTopic: async (_: any, { topic }: { topic: string }) => {
+        try {
+          console.log('🌙 getTopic called with topic:', topic)
+          return await client.getTopic(topic);
+        } catch (error) {
+          console.error('❌ getTopic error:', error);
+          throw new Error(`Failed to fetch topic ${topic}: ${error.message}`);
+        }
+      },
+
+      // ===== COINS RESOLVERS (EXACT FROM LEGACY) =====
+      getCoinsList: async (_: any, args: any) => {
+        try {
+          console.log('🌙 getCoinsList called with args:', args)
+          return await client.getCoinsList(
+            args.sort,
+            args.filter, 
+            args.limit,
+            args.desc,
+            args.page
+          );
+        } catch (error) {
+          console.error('❌ getCoinsList error:', error);
+          throw new Error(`Failed to fetch coins list: ${error.message}`);
+        }
+      },
+
+      getCoin: async (_: any, { coin }: { coin: string }) => {
+        try {
+          console.log('🌙 getCoin called with coin:', coin)
+          return await client.getCoin(coin);
+        } catch (error) {
+          console.error('❌ getCoin error:', error);
+          throw new Error(`Failed to fetch coin ${coin}: ${error.message}`);
+        }
+      }
+    }
+  }
+}
+
+export default {
+  async fetch(request: Request, env: Env): Promise<Response> {
+    console.log('🚀 Worker started, initializing LunarCrush config...')
+    
+    try {
+      // Get API key from secret store (FIXED ACCESS PATTERN)
+      const apiKey = await env.LUNARCRUSH_API_KEY.get()
+      console.log('✅ API key retrieved, length:', apiKey?.length || 0)
+      
+      if (!apiKey) {
+        throw new Error('LUNARCRUSH_API_KEY not found in secret store')
+      }
+
+      // Create LunarCrush config
+      const lunarCrushConfig: LunarCrushConfig = {
+        apiKey,
+        baseUrl: 'https://lunarcrush.com/api4/public'
+      }
+
+      // Create resolvers with proper config
+      const resolvers = createResolvers(lunarCrushConfig)
+
+      const yoga = createYoga({
+        schema: createSchema({
+          typeDefs,
+          resolvers
+        }),
+        context: { env },
+        landingPage: false,
+        graphiql: {
+          title: 'LunarCrush GraphQL API - WORKING VERSION',
+        },
+        cors: {
+          origin: '*',
+          credentials: true,
+        },
+      })
+
+      return yoga.fetch(request, env)
+    } catch (error) {
+      console.error('❌ Worker initialization error:', error)
+      return new Response(
+        JSON.stringify({ 
+          error: 'Worker initialization failed', 
+          message: error.message 
+        }), 
+        { 
+          status: 500, 
+          headers: { 'Content-Type': 'application/json' } 
+        }
+      )
+    }
+  }
+}
