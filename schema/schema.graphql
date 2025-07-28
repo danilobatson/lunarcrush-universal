@@ -173,6 +173,7 @@ type TopicCreator {
   creator_followers: Float  # Fixed: was 'followers'
   creator_avatar: String  # Fixed: was 'avatar'
   interactions_24h: Float
+  id: String
 }
 
 # Fixed Category types
@@ -185,6 +186,7 @@ type CategoryDetails {
   category: String
   name: String  # Fixed: was 'title'
   description: String
+  category: String
 }
 
 type CategoryTopic {
@@ -200,16 +202,19 @@ type CategoryTimeSeriesItem {
 type CategoryPost {
   id: String
   post_title: String  # Fixed: was 'title'
+  title: String
 }
 
 type CategoryNews {
   id: String
   post_title: String  # Fixed: was 'title'
+  title: String
 }
 
 type CategoryCreator {
   creator_id: String  # Fixed: was 'id'
   creator_name: String  # Fixed: was 'name'
+  id: String
 }
 
 # Fixed Creator types
@@ -219,6 +224,7 @@ type CreatorListItem {
   creator_display_name: String  # Fixed: was 'display_name'
   creator_followers: Float  # Fixed: was 'followers'
   network: String
+  id: String
 }
 
 type CreatorDetails {
@@ -228,6 +234,7 @@ type CreatorDetails {
   creator_followers: Float  # Fixed: was 'followers'
   network: String
   creator_avatar: String  # Fixed: was 'avatar'
+  id: String
 }
 
 type CreatorTimeSeriesItem {
@@ -238,6 +245,7 @@ type CreatorTimeSeriesItem {
 type CreatorPost {
   id: String
   post_title: String  # Fixed: was 'title'
+  title: String
 }
 
 # Fixed Coin types
@@ -249,6 +257,7 @@ type CoinListItem {
   price: Float  # Fixed: was 'close'
   market_cap: Float
   alt_rank: Int
+  close: Float
 }
 
 type CoinDetails {
@@ -283,6 +292,7 @@ type StockListItem {
   symbol: String  # Still exists but 'stock' is the ID
   logo: String
   price: Float  # Fixed: was 'close'
+  close: Float
 }
 
 type StockDetails {
@@ -328,12 +338,17 @@ type SystemChange {
   type: String
   description: String  # Fixed: was 'change'
   timestamp: Int
+  id: String
 }
 
-type SearchItem {  # Fixed: was SearchList
-  search_id: String  # Fixed: was 'id'
-  search_query: String  # Fixed: was 'query'
-  created: Int
+type SearchList {
+  id: String
+  query: String
+}
+
+type SearchItem {
+  id: String
+  query: String
 }
 
 type PostDetails {
