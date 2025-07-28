@@ -1,0 +1,3 @@
+✅ CLI uses GraphQL - benefits from codegen
+  - Found GraphQL usage in CLI source files
+ℹ️  CLI has simple structure - types codegen sufficient

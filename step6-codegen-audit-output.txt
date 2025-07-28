@@ -1,0 +1,208 @@
+🔍 Step 6: CodeGen Audit and Architecture Cleanup
+Generated: Mon Jul 28 10:38:00 PDT 2025
+=========================================================
+
+📋 CURRENT CODEGEN ARCHITECTURE AUDIT:
+Single source of truth: schema/schema.graphql (     673 lines)
+
+Available codegen scripts:
+total 32
+drwxr-xr-x   5 batson  staff   160 Jul 28 10:31 .
+drwxr-xr-x  24 batson  staff   768 Jul 28 10:38 ..
+-rwxr-xr-x@  1 batson  staff  2029 Jul 28 10:31 generate-backend-schema.js
+-rwxr-xr-x@  1 batson  staff  7376 Jul 24 22:29 generate-types.js
+-rwxr-xr-x   1 batson  staff  2196 Jul 24 21:37 verify-types.js
+
+🔍 SHARED-TYPES USAGE ANALYSIS:
+
+All packages:
+total 24
+drwxr-xr-x  11 batson  staff   352 Jul 28 10:05 .
+drwxr-xr-x  24 batson  staff   768 Jul 28 10:38 ..
+-rw-r--r--@  1 batson  staff  6148 Jul 27 13:04 .DS_Store
+drwxr-xr-x@ 18 batson  staff   576 Jul 28 09:57 backend-legacy
+drwxr-xr-x@ 15 batson  staff   480 Jul 28 10:31 backend-yoga
+drwxr-xr-x@  2 batson  staff    64 Jul 27 12:19 backup-all-broken-files
+drwxr-xr-x  11 batson  staff   352 Jul 24 21:48 cli
+drwxr-xr-x@  3 batson  staff    96 Jul 24 21:06 react-hooks
+drwxr-xr-x  12 batson  staff   384 Jul 24 21:37 sdk
+drwxr-xr-x  10 batson  staff   320 Jul 25 20:38 shared-types
+-rw-r--r--@  1 batson  staff   104 Jul 28 10:05 step3-locate-files-output.txt
+
+Packages importing from @lunarcrush/shared-types:
+--- backend-legacy ---
+✅ Uses shared-types dependency
+    "@google/generative-ai": "^0.24.1",
+    "@lunarcrush/shared-types": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.16.0",
+No source files import shared-types
+⚠️  Manual type files found:        1
+packages/backend-legacy//src/graphql/schema/types.ts
+
+--- backend-yoga ---
+✅ Uses shared-types dependency
+    "@google/generative-ai": "^0.24.1",
+    "@lunarcrush/shared-types": "workspace:*",
+    "graphql": "^16.11.0",
+No source files import shared-types
+⚠️  Manual type files found:        1
+packages/backend-yoga//src/schema.ts
+
+--- backup-all-broken-files ---
+
+--- cli ---
+✅ Uses shared-types dependency
+  "dependencies": {
+    "@lunarcrush/shared-types": "workspace:*",
+    "@types/inquirer": "^9.0.8",
+No source files import shared-types
+⚠️  Manual type files found:        1
+packages/cli//src/types.d.ts
+
+--- react-hooks ---
+No source files import shared-types
+✅ No manual type files
+
+--- sdk ---
+✅ Uses shared-types dependency
+  "dependencies": {
+    "@lunarcrush/shared-types": "workspace:*"
+  },
+Source files importing shared-types:        5
+packages/sdk//src/types.backup/api.ts
+packages/sdk//src/types.backup/client.ts
+packages/sdk//src/types.backup/index.ts
+✅ No manual type files
+
+--- shared-types ---
+✅ Uses shared-types dependency
+{
+  "name": "@lunarcrush/shared-types",
+  "version": "1.0.0",
+No source files import shared-types
+✅ No manual type files
+
+📊 SHARED-TYPES CONTENT ANALYSIS:
+Shared-types directory structure:
+packages/shared-types/.DS_Store
+packages/shared-types/dist/generated/types.js
+packages/shared-types/dist/generated/types.js.map
+packages/shared-types/dist/generated/types.d.ts
+packages/shared-types/dist/generated/types.d.ts.map
+packages/shared-types/dist/graphql-queries.d.ts.map
+packages/shared-types/dist/index.js
+packages/shared-types/dist/client-methods.d.ts.map
+packages/shared-types/dist/graphql-queries.js
+packages/shared-types/dist/graphql-queries.js.map
+
+Generated types file:      506 lines
+First 20 lines:
+// Generated TypeScript types for LunarCrush Universal API
+// This file is auto-generated from GraphQL schema
+// Generated: 2025-07-25T05:29:09.285Z
+
+export enum TimeInterval {
+  ONE_DAY = 'ONE_DAY',
+  ONE_WEEK = 'ONE_WEEK',
+  ONE_MONTH = 'ONE_MONTH',
+  THREE_MONTHS = 'THREE_MONTHS',
+  SIX_MONTHS = 'SIX_MONTHS',
+  ONE_YEAR = 'ONE_YEAR',
+}
+
+export enum SortDirection {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+export interface ApiConfig {
+  topic?: string | null;
+
+Contains: 35 interfaces, 2 enums
+Shared-types package.json:
+{
+  "name": "@lunarcrush/shared-types",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for LunarCrush Universal API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run clean && npm run generate && npm run compile",
+    "clean": "rm -rf dist",
+    "generate": "cd ../.. && npm run types:generate",
+    "compile": "tsc",
+    "dev": "tsc --watch",
+    "types:check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
+
+🔧 DIRECT CODEGEN FEASIBILITY ANALYSIS:
+
+Current codegen scripts analysis:
+generate-types.js output target:
+14:const outputPath = 'packages/shared-types/src/generated/types.ts';
+242:const outputDir = path.dirname(outputPath);
+248:fs.writeFileSync(outputPath, output, 'utf8');
+generate-backend-schema.js output target:
+16:const outputPath = 'packages/backend-yoga/src/schema.ts';
+52:const outputDir = path.dirname(outputPath);
+58:fs.writeFileSync(outputPath, generatedSchema);
+
+💡 PROPOSED NEW ARCHITECTURE:
+
+Option 1: Direct Package CodeGen (Recommended)
+- Each package generates its own types directly from schema/schema.graphql
+- Eliminates shared-types directory
+- Each package has its own src/generated/ directory
+- Single codegen script with package-specific outputs
+
+Option 2: Keep Shared-Types with Enhanced CodeGen
+- Improve shared-types to be purely generated
+- Ensure all packages use only generated types
+- Remove any manual type definitions
+
+🧪 TESTING DIRECT CODEGEN APPROACH:
+
+✅ Created test script: scripts/generate-package-types.js
+Testing direct package codegen...
+🔄 Generating types directly in packages...
+📊 Schema content: 13544 characters
+✅ Generated packages/backend-yoga/src/generated/types.ts
+✅ Generated packages/sdk/src/generated/types.ts
+✅ Generated packages/cli/src/generated/types.ts
+✅ Generated types for 3 packages
+📊 Generated: 32 interfaces, 3 enums
+🎯 Ready for package-specific usage!
+✅ Direct package codegen test successful!
+
+📊 SIZE AND DEPENDENCY COMPARISON:
+
+Shared-types approach:
+- shared-types/src/generated/types.ts:      506 lines
+
+Direct package approach (test):
+- packages/backend-yoga/src/generated/types.ts:      465 lines
+- packages/sdk/src/generated/types.ts:      465 lines
+- packages/cli/src/generated/types.ts:      465 lines
+
+💡 RECOMMENDATIONS:
+
+Current shared-types usage: 5 files across all packages
+
+🎯 RECOMMENDED ACTION: ENHANCE SHARED-TYPES CODEGEN
+- High usage suggests keeping shared-types makes sense
+- Ensure all shared-types content is auto-generated
+- Remove any manual type definitions
+
+=========================================================
+📊 CodeGen Audit Complete!
+=========================================================

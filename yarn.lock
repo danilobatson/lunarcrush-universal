@@ -2494,6 +2494,7 @@ __metadata:
     "@types/node": "npm:^24.1.0"
     graphql: "npm:^16.11.0"
     graphql-yoga: "npm:^5.10.4"
+    hono: "npm:^4.8.9"
     node-fetch: "npm:^3.3.2"
     typescript: "npm:^5.8.3"
     wrangler: "npm:^4.25.1"
@@ -5138,6 +5139,13 @@ __metadata:
   version: 4.8.5
   resolution: "hono@npm:4.8.5"
   checksum: f3d4632c92a51c8de5f5b645fbbe510c7bdab87390c3e84ee8cc3ba8e1f8912fe52444e58681307d95e45581d38a8cb178f615f73602d0acc768bf801eea18c1
+  languageName: node
+  linkType: hard
+
+"hono@npm:^4.8.9":
+  version: 4.8.9
+  resolution: "hono@npm:4.8.9"
+  checksum: 385539d1787fdc747bc869ef0e5ccc9f39cbe40289b94f23eecfc82c6ca440f059704647cd6381a5066d2cf7baa43ab25184c78d44af4c5c98a5c5b07670059e
   languageName: node
   linkType: hard
 

@@ -1,0 +1,2 @@
+✅ SDK uses GraphQL client - benefits from client codegen
+✅ SDK has client structure - may benefit from method codegen
