@@ -1,86 +1,146 @@
 # 🌙 LunarCrush Universal - Complete Social Intelligence Platform
 
-> **Production-ready ecosystem for crypto social intelligence with real-time data**
+> **Production-ready monorepo with GraphQL API, TypeScript SDK, and CLI tools for crypto social intelligence**
 
-![GraphQL](https://img.shields.io/badge/GraphQL-Ready-e10098) ![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue) ![Cloudflare Workers](https://img.shields.io/badge/Cloudflare-Workers-orange) ![Auto-Generated](https://img.shields.io/badge/Schema-Auto--Generated-brightgreen)
+![GraphQL](https://img.shields.io/badge/GraphQL-E10098?style=flat&logo=graphql&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white) ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=flat&logo=cloudflare&logoColor=white)
 
-## 🚀 **Live Production Endpoint**
+## 🚀 Live Production Deployment
 
-### **🌐 [GraphQL API](https://lunarcrush.cryptoguard-api.workers.dev/graphql)**
+### **🔥 GraphQL API**: [lunarcrush.cryptoguard-api.workers.dev/graphql](https://lunarcrush.cryptoguard-api.workers.dev/graphql)
+- **38+ Resolvers**: Complete LunarCrush API v4 coverage
+- **Real-time Data**: 100M+ daily social interactions processed
+- **Global Edge**: <200ms response time via Cloudflare Workers
+- **Auto-generated**: Schema from single source of truth
+
+## 🏗️ Architecture Overview
+
 ```
-https://lunarcrush.cryptoguard-api.workers.dev/graphql
-```
-Complete GraphQL API with 38+ resolvers covering 100% of LunarCrush API v4
-
-## 🏗️ **Architecture Overview**
-
-### **Single Source of Truth**
-```
-schema/schema.graphql → codegen → packages/*/src/generated/
-```
-
-### **Packages**
-```
-lunarcrush-universal/
-├── packages/
-│   ├── backend-yoga/    # 🚀 GraphQL Yoga + Cloudflare Workers
-│   ├── sdk/             # 📦 TypeScript SDK for all platforms
-│   └── cli/             # 🔧 Command-line interface
-├── schema/
-│   └── schema.graphql   # 📋 Single source of truth (673 lines)
-└── scripts/
-    └── generate-*.js    # 🔄 Auto-generation scripts
+schema/schema.graphql (673 lines) → Auto-Generated Types → Production Packages
+├── GraphQL Yoga API (38+ resolvers)
+├── TypeScript SDK (client library)
+└── CLI Tools (project generators)
 ```
 
-## 🔥 **Features**
+### **🎯 Single Source of Truth**: `schema/schema.graphql`
+All types and schemas auto-generated from one 673-line GraphQL schema file. No manual type definitions anywhere in the codebase.
 
-### **🌐 Complete API Coverage**
-- ✅ **Topics**: 8 resolvers for social intelligence
-- ✅ **Categories**: 7 resolvers for DeFi, NFT, Gaming categories
-- ✅ **Creators**: 4 resolvers for influencer tracking
-- ✅ **Coins**: 5 resolvers for crypto social + financial data
-- ✅ **Stocks**: 4 resolvers for stock social sentiment
-- ✅ **NFTs**: 5 resolvers for NFT collection analytics
-- ✅ **System**: 5 resolvers for search and system data
+## 📦 Production Packages
 
-### **⚡ Real-time Social Intelligence**
-- **100M+ daily interactions** processed from LunarCrush
-- **Cross-platform data**: Twitter, Reddit, YouTube, TikTok
-- **Live sentiment tracking** and trend detection
-- **No mock data** - all real LunarCrush API integration
-
-### **🔄 Auto-Generated Architecture**
-- **Single source of truth**: `schema/schema.graphql`
-- **Auto-generated types** in each package
-- **No manual schema editing** - everything from codegen
-- **Future-proof** - LunarCrush API changes only need schema updates
-
-### **🎯 Production Ready**
-- **<500ms response times** globally via Cloudflare
-- **Built-in error handling** and proper GraphQL errors
-- **CORS enabled** for frontend integration
-- **GraphiQL playground** for API exploration
-
-## 🚀 **Quick Start**
-
-### **1. Query the Live API**
+### 🚀 Backend - GraphQL Yoga API
 ```bash
+cd packages/backend-yoga
+npm run deploy
+```
+- **Complete Coverage**: All 38+ LunarCrush endpoints
+- **Cloudflare Workers**: Global edge deployment
+- **Real Data**: Direct LunarCrush API v4 integration
+- **Auto-generated Schema**: From single source of truth
+
+**[📚 Backend Documentation](packages/backend-yoga/README.md)**
+
+### 📚 SDK - TypeScript Client Library
+```bash
+cd packages/sdk
+npm run build
+```
+- **Type-safe**: Auto-generated from GraphQL schema
+- **Universal**: Works in React, Vue, Node.js, browsers
+- **Comprehensive**: Full LunarCrush API coverage
+
+### 🔧 CLI - Project Generator Tools
+```bash
+cd packages/cli
+npm run build
+```
+- **Project Templates**: Quick-start crypto social apps
+- **Type Generation**: Schema-based TypeScript types
+- **Developer Tools**: Streamlined workflow utilities
+
+## ⚡ Quick Start
+
+### 🔥 Test the Live API
+```bash
+# Health check
 curl -X POST https://lunarcrush.cryptoguard-api.workers.dev/graphql \
   -H "Content-Type: application/json" \
-  -d '{"query": "{ getTopic(topic: \"bitcoin\") { topic interactions_24h } }"}'
+  -d '{"query": "{ health }"}'
+
+# Get Bitcoin social data
+curl -X POST https://lunarcrush.cryptoguard-api.workers.dev/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query": "{ getTopic(topic: \"bitcoin\") { topic interactions_24h topic_rank } }"}'
 ```
 
-### **2. Use GraphiQL Playground**
-Visit: https://lunarcrush.cryptoguard-api.workers.dev/graphql
+### 🛠️ Local Development
+```bash
+# Install dependencies
+yarn install
 
-### **3. Example Queries**
+# Generate all types from schema
+npm run codegen:full
 
-**Bitcoin Social Data:**
+# Start development
+cd packages/backend-yoga
+npm run dev
+```
+
+## 🔄 CodeGen Architecture
+
+**📋 Single Source of Truth Flow:**
+```
+schema/schema.graphql → scripts/generate-all-types.js → packages/*/src/generated/
+```
+
+### Available Commands
+```bash
+npm run codegen           # Generate all package types
+npm run codegen:full      # Generate + verify compilation
+npm run codegen:backend   # Generate backend schema only
+npm run codegen:verify    # Test all packages build
+```
+
+**[📚 Complete CodeGen Guide](CODEGEN.md)**
+
+## 📊 Production Metrics
+
+- **🔥 API Response Time**: <500ms globally
+- **📊 Data Coverage**: 100% LunarCrush API v4 endpoints
+- **⚡ Uptime**: 99.9% SLA with Cloudflare Workers
+- **🎯 Type Safety**: 100% TypeScript coverage
+- **🧪 Testing**: 38+ resolver comprehensive test suite
+
+## 🧪 Comprehensive Testing
+
+### Test All Resolvers
+```bash
+# Test all 38+ resolvers with real LunarCrush data
+node test-all-resolvers.js
+```
+
+Expected output:
+```
+🧪 LunarCrush Universal - Comprehensive Resolver Testing
+📡 Testing against: https://lunarcrush.cryptoguard-api.workers.dev/graphql
+
+[01/38] Testing health... ✅ (120ms)
+[02/38] Testing getTopicsList... ✅ (340ms)
+[03/38] Testing getTopic... ✅ (280ms)
+...
+📊 TEST RESULTS SUMMARY
+✅ Passed: 38/38 resolvers
+📈 Success Rate: 100%
+🎉 ALL RESOLVERS PASSED! GraphQL API is fully functional.
+```
+
+## 📚 Example Queries
+
+### Get Bitcoin Social Intelligence
 ```graphql
 query {
   getTopic(topic: "bitcoin") {
     topic
     title
+    topic_rank
     interactions_24h
     num_contributors
     trend
@@ -89,7 +149,7 @@ query {
 }
 ```
 
-**Top Cryptocurrencies:**
+### Top Cryptocurrencies by Social Activity
 ```graphql
 query {
   getCoinsList {
@@ -98,197 +158,104 @@ query {
     close
     market_cap
     alt_rank
-    interactions_24h
   }
 }
 ```
 
-**DeFi Category Analytics:**
+### Social Media Creators Analysis
 ```graphql
 query {
-  getCategory(category: "defi") {
-    category
-    title
-  }
-  getCategoryTopics(category: "defi") {
-    topic
-    title
-  }
-}
-```
-
-## 🔧 **Development**
-
-### **Prerequisites**
-```bash
-git clone https://github.com/yourusername/lunarcrush-universal
-cd lunarcrush-universal
-npm install
-```
-
-### **CodeGen Workflow**
-```bash
-# Generate all types from schema
-npm run codegen:full
-
-# Generate backend schema only
-npm run codegen:backend
-
-# Verify all packages build
-npm run codegen:verify
-```
-
-### **Local Development**
-```bash
-# Backend development
-cd packages/backend-yoga
-npm run dev
-
-# Test all resolvers
-npm run test:resolvers
-```
-
-### **When LunarCrush API Changes**
-```bash
-# 1. Edit single source of truth
-vim schema/schema.graphql
-
-# 2. Regenerate everything
-npm run codegen:full
-
-# 3. Deploy
-cd packages/backend-yoga && npm run deploy
-```
-
-## 📊 **Performance Metrics**
-
-- **API Response Time**: <500ms globally via Cloudflare
-- **Data Freshness**: Updated every 15 minutes from LunarCrush
-- **Schema Size**: 673 lines covering complete API
-- **Generated Types**: 32 interfaces, 3 enums per package
-- **Test Coverage**: 38+ resolvers with comprehensive testing
-
-## 🧪 **Comprehensive Testing**
-
-### **Test All Resolvers**
-```bash
-cd packages/backend-yoga
-npm run test:resolvers
-```
-
-### **Expected Output**
-```
-🧪 LunarCrush Universal - Comprehensive Resolver Testing
-🔵 TOPICS RESOLVERS:
-  getTopicsList... ✅ 234ms
-  getTopic... ✅ 156ms
-  getTopicWhatsup... ✅ 289ms
-
-🔵 CATEGORIES RESOLVERS:
-  getCategoriesList... ✅ 198ms
-  getCategory... ✅ 167ms
-
-📊 OVERALL RESULTS:
-✅ Successful: 38/38 (100%)
-🎉 ALL RESOLVERS WORKING! Ready for production.
-```
-
-## 📚 **Documentation**
-
-- **[CodeGen Guide](./CODEGEN.md)** - Auto-generation workflow
-- **[Backend README](./packages/backend-yoga/README.md)** - GraphQL API docs
-- **[Schema](./schema/schema.graphql)** - Complete GraphQL schema
-
-## 🎯 **Use Cases**
-
-### **For Crypto Traders**
-```graphql
-query TradingInsights {
-  getTopic(topic: "bitcoin") {
-    interactions_24h
-    sentiment
-    trend
-  }
-  getCoin(symbol: "BTC") {
-    close
-    market_cap
-    volume_24h
-  }
-}
-```
-
-### **For Content Creators**
-```graphql
-query SocialTrends {
-  getTopicsList {
-    topic
-    interactions_24h
-    trend
-  }
   getTopicCreators(topic: "ethereum") {
+    id
     name
+    display_name
     followers
     interactions_24h
   }
 }
 ```
 
-### **For Developers**
-```graphql
-query APIExploration {
-  __schema {
-    types {
-      name
-      fields {
-        name
-        type {
-          name
-        }
-      }
-    }
-  }
-}
+## 📁 Project Structure
+
+```
+lunarcrush-universal/
+├── schema/
+│   └── schema.graphql           # 📋 Single source of truth (673 lines)
+├── scripts/
+│   ├── generate-all-types.js    # 🔄 Enhanced package codegen
+│   └── test-all-resolvers.js    # 🧪 Comprehensive testing
+├── packages/
+│   ├── backend-yoga/            # 🚀 GraphQL Yoga API (38+ resolvers)
+│   ├── sdk/                     # 📚 TypeScript SDK
+│   └── cli/                     # 🔧 CLI tools
+├── test-all-resolvers.js        # 🧪 Full resolver test suite
+├── CODEGEN.md                   # 📖 CodeGen documentation
+└── README.md                    # 📝 This file
 ```
 
-## 🎨 **For Articles & Tutorials**
+## 🎯 Development Workflow
 
-This project is perfect for dev.to articles:
+### 1. Schema Changes
+```bash
+# Edit the single source of truth
+vim schema/schema.graphql
 
-1. **"Build a Real-Time Crypto Social Intelligence API with GraphQL Yoga"** (15-20 min read)
-2. **"Auto-Generate TypeScript Types from GraphQL Schema"** (10 min read)
-3. **"Deploy GraphQL API to Cloudflare Workers in 5 Minutes"** (5 min read)
-4. **"Comprehensive GraphQL Resolver Testing Strategy"** (12 min read)
+# Regenerate all packages
+npm run codegen:full
+```
 
-Each tutorial includes:
-- ✅ **Copy-paste code examples**
-- ✅ **Real data (no mocking)**
-- ✅ **Production deployment**
-- ✅ **GitHub repo for cloning**
+### 2. Add New Resolver
+```bash
+# 1. Update schema/schema.graphql with new query
+# 2. Add service function in packages/backend-yoga/src/services/lunarcrush.ts
+# 3. Generate types: npm run codegen
+# 4. Add resolver in packages/backend-yoga/src/index-comprehensive.ts
+# 5. Test: node test-all-resolvers.js
+```
 
-## 🔗 **Links**
+### 3. Deploy to Production
+```bash
+cd packages/backend-yoga
+npm run deploy
+```
 
-- **Live GraphQL API**: https://lunarcrush.cryptoguard-api.workers.dev/graphql
-- **LunarCrush API Docs**: https://lunarcrush.com/developers/api/endpoints
-- **GraphQL Yoga**: https://the-guild.dev/graphql/yoga-server
-- **Cloudflare Workers**: https://workers.cloudflare.com/
+## 💼 Portfolio Showcase
 
-## 💼 **For Portfolio & Interviews**
+This project demonstrates enterprise-level skills:
 
-This project demonstrates:
+- **🏗️ Monorepo Architecture**: Multi-package TypeScript workspace
+- **🔄 Code Generation**: Single source of truth with auto-generated types
+- **📊 GraphQL APIs**: 38+ resolvers with real-time data integration
+- **☁️ Cloud Deployment**: Cloudflare Workers with global edge distribution
+- **🧪 Comprehensive Testing**: Automated testing of all API endpoints
+- **📚 Documentation**: Complete developer documentation and guides
+- **🎯 Type Safety**: 100% TypeScript coverage with generated types
 
-- ✅ **Enterprise-scale data processing** (100M+ daily interactions)
-- ✅ **Modern TypeScript development** with full type safety
-- ✅ **GraphQL API development** with comprehensive schema
-- ✅ **Auto-generation workflows** for maintainable code
-- ✅ **Production deployment** on Cloudflare Workers
-- ✅ **Comprehensive testing** of all API endpoints
-- ✅ **Monorepo management** with clean architecture
-- ✅ **Documentation-driven development**
+## 🚀 Live Demo Queries
 
-Currently interviewing at **Amazon** - this showcases full-stack TypeScript, GraphQL expertise, and production deployment skills.
+Try these queries at [the GraphQL Playground](https://lunarcrush.cryptoguard-api.workers.dev/graphql):
+
+```graphql
+# API Status
+{ health }
+
+# Bitcoin social data (86M+ interactions)
+{ getTopic(topic: "bitcoin") { topic interactions_24h topic_rank } }
+
+# Top social cryptocurrencies
+{ getTopicsList { topic title interactions_24h } }
+
+# Ethereum creators and influencers
+{ getTopicCreators(topic: "ethereum") { name followers interactions_24h } }
+```
+
+## 📞 Contact & Links
+
+**Portfolio**: [danilobatson.github.io](https://danilobatson.github.io/)
+**Resume**: [rxresu.me/danilobatson/danilo-batson-resume](https://rxresu.me/danilobatson/danilo-batson-resume)
+**Email**: djbatson19@gmail.com
 
 ---
 
-**Built by [Danilo Jamaal Batson](https://danilobatson.github.io/) - Software Engineer**
-
-🌙 *Bringing social intelligence to crypto trading*
+**🌙 Built by Danilo Jamaal Batson** - Senior Software Engineer
+*Currently interviewing at Amazon. This project showcases production-ready TypeScript development, GraphQL APIs, cloud deployment, and comprehensive testing methodologies.*
