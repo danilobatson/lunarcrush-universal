@@ -189,7 +189,7 @@ export default {
 
         graphiql: {
           title: 'LunarCrush Universal API - Production Ready',
-          defaultQuery: '# LunarCrush Universal API - Production Ready\n\n# Health monitoring\nquery HealthCheck {\n  health\n}\n\nquery SimpleHealth {\n  healthSimple\n}\n\n# Bitcoin social data\nquery BitcoinData {\n  getTopic(topic: "bitcoin") {\n    topic\n    title\n    interactions_24h\n    topic_rank\n  }\n}'
+          defaultQuery: '# LunarCrush Universal API - Production Ready\n\n# Health monitoring\nquery HealthCheck {\n  health\n}\n\nquery SimpleHealth {\n  healthSimple\n}\n\n# Bitcoin social data\nquery BitcoinData {\n  getTopic(topic: "bitcoin") {\n    topic\n    title\n    interactions_24h\n    topic_rank\n  }\n}\n\n# Test fixed resolvers\nquery TestFixedResolvers {\n  searchPosts(term: "bitcoin") {\n    id\n    title\n  }\n}'
         }
       })
 

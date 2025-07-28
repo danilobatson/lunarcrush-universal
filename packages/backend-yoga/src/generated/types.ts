@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for backend-yoga
  * Source: schema/schema.graphql
- * Generated: 2025-07-28T18:06:51.294Z
+ * Generated: 2025-07-28T21:07:29.869Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -121,20 +121,25 @@ export interface TopicNews {
 export interface TopicCreator {
   creator_id?: String  # Fixed: was 'id' | null;
   creator_name?: String  # Fixed: was 'name' | null;
+  name?: string | null;
   creator_display_name?: String  # Fixed: was 'display_name' | null;
   creator_followers?: Float  # Fixed: was 'followers' | null;
+  followers?: number | null;
   creator_avatar?: String  # Fixed: was 'avatar' | null;
   interactions_24h?: number | null;
+  id?: string | null;
 }
 
 export interface CategoryListItem {
   category?: string | null;
   name?: String  # Fixed: was 'title' | null;
+  title?: string | null;
 }
 
 export interface CategoryDetails {
   category?: string | null;
   name?: String  # Fixed: was 'title' | null;
+  title?: string | null;
   description?: string | null;
 }
 
@@ -151,33 +156,43 @@ export interface CategoryTimeSeriesItem {
 export interface CategoryPost {
   id?: string | null;
   post_title?: String  # Fixed: was 'title' | null;
+  title?: string | null;
 }
 
 export interface CategoryNews {
   id?: string | null;
   post_title?: String  # Fixed: was 'title' | null;
+  title?: string | null;
 }
 
 export interface CategoryCreator {
   creator_id?: String  # Fixed: was 'id' | null;
   creator_name?: String  # Fixed: was 'name' | null;
+  name?: string | null;
+  id?: string | null;
 }
 
 export interface CreatorListItem {
   creator_id?: String  # Fixed: was 'id' | null;
   creator_name?: String  # Fixed: was 'name' | null;
+  name?: string | null;
   creator_display_name?: String  # Fixed: was 'display_name' | null;
   creator_followers?: Float  # Fixed: was 'followers' | null;
+  followers?: number | null;
   network?: string | null;
+  id?: string | null;
 }
 
 export interface CreatorDetails {
   creator_id?: String  # Fixed: was 'id' | null;
   creator_name?: String  # Fixed: was 'name' | null;
+  name?: string | null;
   creator_display_name?: String  # Fixed: was 'display_name' | null;
   creator_followers?: Float  # Fixed: was 'followers' | null;
+  followers?: number | null;
   network?: string | null;
   creator_avatar?: String  # Fixed: was 'avatar' | null;
+  id?: string | null;
 }
 
 export interface CreatorTimeSeriesItem {
@@ -188,6 +203,7 @@ export interface CreatorTimeSeriesItem {
 export interface CreatorPost {
   id?: string | null;
   post_title?: String  # Fixed: was 'title' | null;
+  title?: string | null;
 }
 
 export interface CoinListItem {
@@ -198,10 +214,12 @@ export interface CoinListItem {
   price?: Float  # Fixed: was 'close' | null;
   market_cap?: number | null;
   alt_rank?: number | null;
+  close?: number | null;
 }
 
 export interface CoinDetails {
   coin?: String  # Fixed: primary identifier | null;
+  close?: number | null;
   name?: string | null;
   symbol?: string | null;
   logo?: string | null;
@@ -220,7 +238,7 @@ export interface CoinTimeSeriesItem {
 }
 
 export interface CoinMeta {
-  coin?: String  # Fixed: was 'symbol' | null;
+  symbol?: String  coin: String  # Fixed: was 'symbol' | null;
   name?: string | null;
   description?: string | null;
 }
@@ -231,10 +249,12 @@ export interface StockListItem {
   symbol?: String  # Still exists but 'stock' is the ID | null;
   logo?: string | null;
   price?: Float  # Fixed: was 'close' | null;
+  close?: number | null;
 }
 
 export interface StockDetails {
   stock?: String  # Fixed: primary identifier | null;
+  close?: number | null;
   name?: string | null;
   symbol?: string | null;
   logo?: string | null;
@@ -249,14 +269,14 @@ export interface StockTimeSeriesItem {
 }
 
 export interface NftListItem {
-  collection?: String  # Fixed: was 'id' | null;
+  id?: String  collection: String  # Fixed: was 'id' | null;
   name?: string | null;
   logo?: string | null;
   floor_price?: number | null;
 }
 
 export interface NftDetails {
-  collection?: String  # Fixed: was 'id' | null;
+  id?: String  collection: String  # Fixed: was 'id' | null;
   name?: string | null;
   logo?: string | null;
   floor_price?: number | null;
@@ -270,27 +290,44 @@ export interface NftTimeSeriesItem {
 }
 
 export interface SystemChange {
-  change_id?: String  # Fixed: was 'id' | null;
+  change?: String  # Fixed: was 'id' | null;
   type?: string | null;
   description?: String  # Fixed: was 'change' | null;
   timestamp?: number | null;
+  id?: string | null;
 }
 
-export interface SearchItem  # Fixed: was SearchList {
-  search_id?: String  # Fixed: was 'id' | null;
-  search_query?: String  # Fixed: was 'query' | null;
-  created?: number | null;
+export interface SearchList {
+  id?: string | null;
+  query?: string | null;
+}
+
+export interface SearchItem {
+  id?: string | null;
+  query?: string | null;
 }
 
 export interface PostDetails {
   id?: string | null;
+  title?: string | null;
+  content?: string | null;
   post_title?: String  # Fixed: was 'title' | null;
-  post_content?: String  # Fixed: was 'content' | null;
 }
 
 export interface PostTimeSeriesItem {
   time?: number | null;
   interactions?: number | null;
+}
+
+export interface SearchResult {
+  id?: string | null;
+  query?: string | null;
+  results?: string | null;
+}
+
+export interface SearchPost {
+  id?: string | null;
+  title?: string | null;
 }
 
 // ===== HELPER TYPES =====

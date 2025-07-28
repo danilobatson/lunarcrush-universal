@@ -52,7 +52,6 @@
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
   },
-  "dependencies": {},
   "engines": {
     "node": ">=18"
   }

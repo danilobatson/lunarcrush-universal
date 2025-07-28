@@ -27,7 +27,6 @@ type Query {
   error: String
   # Health check
   health: String
-  healthSimple: String
 
   # ===== TOPICS ENDPOINTS =====
   getTopicsList: [TopicListItem]
