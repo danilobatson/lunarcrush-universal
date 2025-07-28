@@ -21,7 +21,10 @@
     "build:types": "npm run codegen",
     "types:generate": "node scripts/generate-types.js",
     "types:verify": "node scripts/verify-types.js",
-    "build:all": "npm run build --workspaces"
+    "build:all": "npm run build --workspaces",
+    "codegen:backend": "node scripts/generate-backend-schema.js",
+    "codegen:all": "npm run types:generate && npm run codegen:backend",
+    "codegen:full": "npm run codegen:all && npm run codegen:verify"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",

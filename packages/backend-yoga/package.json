@@ -9,14 +9,16 @@
     "deploy": "wrangler deploy",
     "build": "tsc",
     "type-check": "tsc --noEmit",
-    "codegen": "npm run codegen:full",
-    "codegen:full": "../../scripts/codegen-workflow.sh full"
+    "codegen": "node ../../scripts/generate-backend-schema.js",
+    "codegen:full": "../../scripts/codegen-workflow.sh full",
+    "prebuild": "npm run codegen"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@lunarcrush/shared-types": "workspace:*",
     "graphql": "^16.11.0",
     "graphql-yoga": "^5.10.4",
+    "hono": "^4.8.9",
     "node-fetch": "^3.3.2"
   },
   "devDependencies": {
