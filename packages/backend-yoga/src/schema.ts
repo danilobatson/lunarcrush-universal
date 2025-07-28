@@ -10,8 +10,8 @@
 
 /**
  * LunarCrush GraphQL Schema - Auto-Generated from Single Source of Truth
- * Source: schema/schema.graphql (364 lines)
- * Generated: 2025-07-28T18:15:07.260Z
+ * Source: schema/schema.graphql (388 lines)
+ * Generated: 2025-07-28T19:58:23.051Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -40,6 +40,7 @@ enum SortDirection {
 # ===== QUERY ROOT =====
 
 type Query {
+  error: String
   # Health check
   health: String
 
@@ -71,30 +72,30 @@ type Query {
   # ===== COINS ENDPOINTS (Fixed argument names) =====
   getCoinsList: [CoinListItem]
   getCoinsListV2: [CoinListItem]
-  getCoin(coin: String): CoinDetails  # Fixed: coin not symbol
-  getCoinTimeSeries(coin: String, bucket: String, interval: String, start: String, end: String): [CoinTimeSeriesItem]  # Fixed: coin not symbol
-  getCoinMeta(coin: String): CoinMeta  # Fixed: coin not symbol
+  getCoin(symbol: String): CoinDetails  # Fixed: coin not symbol
+  getCoinTimeSeries(symbol: String, bucket: String, interval: String, start: String, end: String): [CoinTimeSeriesItem]  # Fixed: coin not symbol
+  getCoinMeta(symbol: String): CoinMeta  # Fixed: coin not symbol
 
   # ===== STOCKS ENDPOINTS (Fixed argument names) =====
   getStocksList: [StockListItem]
   getStocksListV2: [StockListItem]
-  getStock(stock: String): StockDetails  # Fixed: stock not symbol
-  getStockTimeSeries(stock: String, bucket: String, interval: String, start: String, end: String): [StockTimeSeriesItem]  # Fixed: stock not symbol
+  getStock(symbol: String): StockDetails  # Fixed: stock not symbol
+  getStockTimeSeries(symbol: String, bucket: String, interval: String, start: String, end: String): [StockTimeSeriesItem]  # Fixed: stock not symbol
 
   # ===== NFTS ENDPOINTS (Fixed argument names) =====
   getNftsList: [NftListItem]
   getNftsListV2: [NftListItem]
-  getNft(collection: String): NftDetails  # Fixed: collection not id
-  getNftTimeSeries(collection: String, bucket: String, interval: String, start: String, end: String): [NftTimeSeriesItem]  # Fixed: collection not id
-  getNftTimeSeriesV1(collection: String, bucket: String, interval: String, start: String, end: String): JSON  # Fixed: returns JSON scalar
+  getNft(id: String): NftDetails  # Fixed: collection not id
+  getNftTimeSeries(id: String, bucket: String, interval: String, start: String, end: String): [NftTimeSeriesItem]  # Fixed: collection not id
+  getNftTimeSeriesV1(id: String, bucket: String, interval: String, start: String, end: String): [NftTimeSeriesItem]  # Fixed: returns JSON scalar
 
   # ===== SYSTEM ENDPOINTS (Fixed return types and arguments) =====
   getSystemChanges: [SystemChange]
   getSearchesList: [SearchItem]  # Fixed: SearchItem not SearchList
-  getSearch(search_id: String): JSON  # Fixed: returns JSON scalar, argument name
-  searchPosts(term: String): JSON  # Fixed: returns JSON scalar
-  getPostDetails(post_id: String): PostDetails  # Fixed: post_id not id
-  getPostTimeSeries(post_id: String, bucket: String, interval: String, start: String, end: String): [PostTimeSeriesItem]  # Fixed: post_id not id
+  getSearch(id: String): SearchResult  # Fixed: returns JSON scalar, argument name
+  searchPosts(term: String): [SearchPost]  # Fixed: returns JSON scalar
+  getPostDetails(id: String): PostDetails  # Fixed: post_id not id
+  getPostTimeSeries(id: String, bucket: String, interval: String, start: String, end: String): [PostTimeSeriesItem]  # Fixed: post_id not id
 }
 
 # ===== CORRECTED TYPE DEFINITIONS =====
@@ -185,8 +186,10 @@ type TopicNews {
 type TopicCreator {
   creator_id: String  # Fixed: was 'id'
   creator_name: String  # Fixed: was 'name'
+    name: String
   creator_display_name: String  # Fixed: was 'display_name'
   creator_followers: Float  # Fixed: was 'followers'
+    followers: Float
   creator_avatar: String  # Fixed: was 'avatar'
   interactions_24h: Float
   id: String
@@ -196,13 +199,14 @@ type TopicCreator {
 type CategoryListItem {
   category: String
   name: String  # Fixed: was 'title'
+    title: String
 }
 
 type CategoryDetails {
   category: String
   name: String  # Fixed: was 'title'
+    title: String
   description: String
-  category: String
 }
 
 type CategoryTopic {
@@ -230,6 +234,7 @@ type CategoryNews {
 type CategoryCreator {
   creator_id: String  # Fixed: was 'id'
   creator_name: String  # Fixed: was 'name'
+    name: String
   id: String
 }
 
@@ -237,8 +242,10 @@ type CategoryCreator {
 type CreatorListItem {
   creator_id: String  # Fixed: was 'id'
   creator_name: String  # Fixed: was 'name'
+    name: String
   creator_display_name: String  # Fixed: was 'display_name'
   creator_followers: Float  # Fixed: was 'followers'
+    followers: Float
   network: String
   id: String
 }
@@ -246,8 +253,10 @@ type CreatorListItem {
 type CreatorDetails {
   creator_id: String  # Fixed: was 'id'
   creator_name: String  # Fixed: was 'name'
+    name: String
   creator_display_name: String  # Fixed: was 'display_name'
   creator_followers: Float  # Fixed: was 'followers'
+    followers: Float
   network: String
   creator_avatar: String  # Fixed: was 'avatar'
   id: String
@@ -278,6 +287,7 @@ type CoinListItem {
 
 type CoinDetails {
   coin: String  # Fixed: primary identifier
+    close: Float
   name: String
   symbol: String
   logo: String
@@ -296,7 +306,7 @@ type CoinTimeSeriesItem {
 }
 
 type CoinMeta {
-  coin: String  # Fixed: was 'symbol'
+  symbol: String  coin: String  # Fixed: was 'symbol'
   name: String
   description: String
 }
@@ -313,6 +323,7 @@ type StockListItem {
 
 type StockDetails {
   stock: String  # Fixed: primary identifier
+    close: Float
   name: String
   symbol: String
   logo: String
@@ -328,14 +339,14 @@ type StockTimeSeriesItem {
 
 # Fixed NFT types
 type NftListItem {
-  collection: String  # Fixed: was 'id'
+  id: String  collection: String  # Fixed: was 'id'
   name: String
   logo: String
   floor_price: Float
 }
 
 type NftDetails {
-  collection: String  # Fixed: was 'id'
+  id: String  collection: String  # Fixed: was 'id'
   name: String
   logo: String
   floor_price: Float
@@ -350,7 +361,7 @@ type NftTimeSeriesItem {
 
 # Fixed System types
 type SystemChange {
-  change_id: String  # Fixed: was 'id'
+  change: String  # Fixed: was 'id'
   type: String
   description: String  # Fixed: was 'change'
   timestamp: Int
@@ -369,13 +380,26 @@ type SearchItem {
 
 type PostDetails {
   id: String
+    title: String
+  content: String
   post_title: String  # Fixed: was 'title'
-  post_content: String  # Fixed: was 'content'
 }
 
 type PostTimeSeriesItem {
   time: Int
   interactions: Float
+}
+
+# Additional types for fixed JSON returns
+type SearchResult {
+  id: String
+  query: String
+  results: [String]
+}
+
+type SearchPost {
+  id: String
+  title: String
 }
 `;
 

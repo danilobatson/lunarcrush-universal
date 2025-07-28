@@ -1,1 +1,0 @@
-Checking backend-yoga parent directory: /Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages

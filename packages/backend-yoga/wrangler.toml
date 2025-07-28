@@ -1,5 +1,5 @@
 name = "lunarcrush"
-main = "src/index-comprehensive.ts"
+main = "src/index.ts"
 secrets_store_secrets = [
   { binding = "LUNARCRUSH_API_KEY", store_id= "2593c430bd90424a886728435dd57004", secret_name = "LUNARCRUSH_API_KEY" }
 ]
