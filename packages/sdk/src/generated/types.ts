@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for sdk
  * Source: schema/schema.graphql
- * Generated: 2025-07-28T17:40:45.813Z
+ * Generated: 2025-07-28T18:06:51.296Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -35,124 +35,68 @@ export enum SortDirection {
   DESC = 'DESC',
 }
 
-export enum AssetType {
-  TOPIC = 'TOPIC',
-  COIN = 'COIN',
-  STOCK = 'STOCK',
-  NFT = 'NFT',
-  CATEGORY = 'CATEGORY',
-  CREATOR = 'CREATOR',
-}
-
 // ===== INTERFACES =====
-
-export interface ApiConfig {
-  generated_at?: Date | null;
-  request_cost?: number | null;
-  credits_left?: number | null;
-  credits_cost?: number | null;
-  server_time?: number | null;
-}
 
 export interface TopicListItem {
   topic?: string | null;
   title?: string | null;
   topic_rank?: number | null;
+  topic_rank_1h_previous?: number | null;
+  topic_rank_24h_previous?: number | null;
+  num_contributors?: number | null;
+  num_posts?: number | null;
   interactions_24h?: number | null;
-  posts_active?: number | null;
-  contributors_active?: number | null;
-  sentiment?: number | null;
-  social_dominance?: number | null;
-  price?: number | null;
-  price_formatted?: string | null;
-  percent_change_24h?: number | null;
-  percent_change_7d?: number | null;
-  market_cap?: number | null;
-  market_cap_formatted?: string | null;
-  volume_24h?: number | null;
-  market_dominance?: number | null;
-  galaxy_score?: number | null;
-  alt_rank?: number | null;
-  close?: number | null;
-  volatility?: number | null;
-  categories?: string | null;
-  classification?: string | null;
-  description?: string | null;
-  logo?: string | null;
-  github?: string | null;
-  website?: string | null;
-  coingecko?: string | null;
-  coinmarketcap?: string | null;
-  twitter?: string | null;
-  telegram?: string | null;
-  discord?: string | null;
-  reddit?: string | null;
-  medium?: string | null;
-  youtube?: string | null;
-  linkedin?: string | null;
-  facebook?: string | null;
-  instagram?: string | null;
-  tiktok?: string | null;
 }
 
 export interface TopicDetails {
   topic?: string | null;
   title?: string | null;
   topic_rank?: number | null;
+  related_topics?: string | null;
+  types_count?: any | null;
+  types_interactions?: any | null;
+  types_sentiment?: any | null;
+  types_sentiment_detail?: any | null;
   interactions_24h?: number | null;
-  posts_active?: number | null;
-  contributors_active?: number | null;
-  sentiment?: number | null;
-  social_dominance?: number | null;
-  price?: number | null;
-  price_formatted?: string | null;
-  percent_change_24h?: number | null;
-  percent_change_7d?: number | null;
-  market_cap?: number | null;
-  market_cap_formatted?: string | null;
-  volume_24h?: number | null;
-  market_dominance?: number | null;
-  galaxy_score?: number | null;
-  alt_rank?: number | null;
-  close?: number | null;
-  volatility?: number | null;
+  num_contributors?: number | null;
+  num_posts?: number | null;
   categories?: string | null;
-  classification?: string | null;
-  description?: string | null;
-  logo?: string | null;
-  github?: string | null;
-  website?: string | null;
-  coingecko?: string | null;
-  coinmarketcap?: string | null;
-  twitter?: string | null;
-  telegram?: string | null;
-  discord?: string | null;
-  reddit?: string | null;
-  medium?: string | null;
-  youtube?: string | null;
-  linkedin?: string | null;
-  facebook?: string | null;
-  instagram?: string | null;
-  tiktok?: string | null;
+  trend?: string | null;
+}
+
+export interface TopicWhatsup {
+  summary?: string | null;
 }
 
 export interface TopicTimeSeriesItem {
-  time?: Date | null;
+  time?: number | null;
+  contributors_active?: number | null;
+  contributors_created?: number | null;
   interactions?: number | null;
-  posts?: number | null;
-  contributors?: number | null;
+  posts_active?: number | null;
+  posts_created?: number | null;
   sentiment?: number | null;
-  price?: number | null;
+  spam?: number | null;
+  alt_rank?: number | null;
+  circulating_supply?: number | null;
+  close?: number | null;
+  galaxy_score?: number | null;
+  high?: number | null;
+  low?: number | null;
   market_cap?: number | null;
-  volume?: number | null;
+  market_dominance?: number | null;
+  open?: number | null;
+  social_dominance?: number | null;
+  volume_24h?: number | null;
 }
 
 export interface TopicPost {
+  id?: string | null;
   post_type?: string | null;
   post_title?: string | null;
   post_link?: string | null;
   post_image?: string | null;
-  post_created?: Date | null;
+  post_created?: number | null;
   post_sentiment?: number | null;
   creator_id?: string | null;
   creator_name?: string | null;
@@ -164,310 +108,189 @@ export interface TopicPost {
 }
 
 export interface TopicNews {
+  id?: string | null;
   post_type?: string | null;
   post_title?: string | null;
   post_link?: string | null;
   post_image?: string | null;
-  post_created?: Date | null;
+  post_created?: number | null;
   post_sentiment?: number | null;
   creator_id?: string | null;
-  creator_name?: string | null;
-  creator_display_name?: string | null;
-  creator_followers?: number | null;
-  creator_avatar?: string | null;
-  interactions_24h?: number | null;
-  interactions_total?: number | null;
 }
 
 export interface TopicCreator {
-  creator_id?: string | null;
-  creator_name?: string | null;
-  creator_avatar?: string | null;
-  creator_followers?: number | null;
-  creator_rank?: number | null;
+  creator_id?: String  # Fixed: was 'id' | null;
+  creator_name?: String  # Fixed: was 'name' | null;
+  creator_display_name?: String  # Fixed: was 'display_name' | null;
+  creator_followers?: Float  # Fixed: was 'followers' | null;
+  creator_avatar?: String  # Fixed: was 'avatar' | null;
   interactions_24h?: number | null;
-}
-
-export interface TopicWhatsup {
-  topic?: string | null;
-  summary?: string | null;
-}
-
-export interface CoinListItem {
-  id?: number | null;
-  name?: string | null;
-  symbol?: string | null;
-  slug?: string | null;
-  price?: number | null;
-  price_formatted?: string | null;
-  percent_change_1h?: number | null;
-  percent_change_24h?: number | null;
-  percent_change_7d?: number | null;
-  percent_change_30d?: number | null;
-  market_cap?: number | null;
-  market_cap_formatted?: string | null;
-  volume_24h?: number | null;
-  circulating_supply?: number | null;
-  max_supply?: number | null;
-  galaxy_score?: number | null;
-  alt_rank?: number | null;
-  volatility?: number | null;
-  interactions_24h?: number | null;
-  posts_active?: number | null;
-  contributors_active?: number | null;
-  sentiment?: number | null;
-  social_dominance?: number | null;
-  network?: string | null;
-  address?: string | null;
-  categories?: string | null;
-  logo?: string | null;
-}
-
-export interface CoinDetails {
-  id?: number | null;
-  name?: string | null;
-  symbol?: string | null;
-  slug?: string | null;
-  price?: number | null;
-  price_formatted?: string | null;
-  percent_change_1h?: number | null;
-  percent_change_24h?: number | null;
-  percent_change_7d?: number | null;
-  percent_change_30d?: number | null;
-  market_cap?: number | null;
-  market_cap_formatted?: string | null;
-  volume_24h?: number | null;
-  circulating_supply?: number | null;
-  max_supply?: number | null;
-  galaxy_score?: number | null;
-  alt_rank?: number | null;
-  volatility?: number | null;
-  interactions_24h?: number | null;
-  posts_active?: number | null;
-  contributors_active?: number | null;
-  sentiment?: number | null;
-  social_dominance?: number | null;
-  network?: string | null;
-  address?: string | null;
-  categories?: string | null;
-  logo?: string | null;
-}
-
-export interface CoinTimeSeriesItem {
-  time?: Date | null;
-  price?: number | null;
-  market_cap?: number | null;
-  volume?: number | null;
-  interactions?: number | null;
-  posts?: number | null;
-  contributors?: number | null;
-  sentiment?: number | null;
-}
-
-export interface CoinMetadata {
-  id?: number | null;
-  name?: string | null;
-  symbol?: string | null;
-  description?: string | null;
-  website?: string | null;
-  github?: string | null;
-  twitter?: string | null;
-  telegram?: string | null;
-  discord?: string | null;
-  reddit?: string | null;
-  medium?: string | null;
-  youtube?: string | null;
-  linkedin?: string | null;
-  facebook?: string | null;
-  instagram?: string | null;
-  tiktok?: string | null;
-  logo?: string | null;
-  categories?: string | null;
 }
 
 export interface CategoryListItem {
   category?: string | null;
-  title?: string | null;
-  category_rank?: number | null;
-  interactions_24h?: number | null;
-  posts_active?: number | null;
-  contributors_active?: number | null;
-  sentiment?: number | null;
-  topics_count?: number | null;
+  name?: String  # Fixed: was 'title' | null;
 }
 
 export interface CategoryDetails {
   category?: string | null;
-  title?: string | null;
-  category_rank?: number | null;
-  interactions_24h?: number | null;
-  posts_active?: number | null;
-  contributors_active?: number | null;
-  sentiment?: number | null;
-  topics_count?: number | null;
+  name?: String  # Fixed: was 'title' | null;
   description?: string | null;
 }
 
 export interface CategoryTopic {
   topic?: string | null;
   title?: string | null;
-  topic_rank?: number | null;
-  interactions_24h?: number | null;
-  sentiment?: number | null;
-  price?: number | null;
-  market_cap?: number | null;
 }
 
 export interface CategoryTimeSeriesItem {
-  time?: Date | null;
+  time?: number | null;
   interactions?: number | null;
-  posts?: number | null;
-  contributors?: number | null;
-  sentiment?: number | null;
 }
 
 export interface CategoryPost {
-  post_type?: string | null;
-  post_title?: string | null;
-  post_link?: string | null;
-  post_image?: string | null;
-  post_created?: Date | null;
-  post_sentiment?: number | null;
-  creator_id?: string | null;
-  creator_name?: string | null;
-  creator_display_name?: string | null;
-  creator_followers?: number | null;
-  creator_avatar?: string | null;
-  interactions_24h?: number | null;
-  interactions_total?: number | null;
+  id?: string | null;
+  post_title?: String  # Fixed: was 'title' | null;
 }
 
 export interface CategoryNews {
-  post_type?: string | null;
-  post_title?: string | null;
-  post_link?: string | null;
-  post_image?: string | null;
-  post_created?: Date | null;
-  post_sentiment?: number | null;
-  creator_id?: string | null;
-  creator_name?: string | null;
-  creator_display_name?: string | null;
-  creator_followers?: number | null;
-  creator_avatar?: string | null;
-  interactions_24h?: number | null;
-  interactions_total?: number | null;
+  id?: string | null;
+  post_title?: String  # Fixed: was 'title' | null;
 }
 
 export interface CategoryCreator {
-  creator_id?: string | null;
-  creator_name?: string | null;
-  creator_avatar?: string | null;
-  creator_followers?: number | null;
-  creator_rank?: number | null;
-  interactions_24h?: number | null;
+  creator_id?: String  # Fixed: was 'id' | null;
+  creator_name?: String  # Fixed: was 'name' | null;
 }
 
 export interface CreatorListItem {
-  creator_id?: string | null;
-  creator_name?: string | null;
-  creator_display_name?: string | null;
-  creator_avatar?: string | null;
-  creator_followers?: number | null;
-  creator_rank?: number | null;
-  interactions_24h?: number | null;
+  creator_id?: String  # Fixed: was 'id' | null;
+  creator_name?: String  # Fixed: was 'name' | null;
+  creator_display_name?: String  # Fixed: was 'display_name' | null;
+  creator_followers?: Float  # Fixed: was 'followers' | null;
   network?: string | null;
 }
 
 export interface CreatorDetails {
-  creator_id?: string | null;
-  creator_name?: string | null;
-  creator_display_name?: string | null;
-  creator_avatar?: string | null;
-  creator_followers?: number | null;
-  creator_rank?: number | null;
-  interactions_24h?: number | null;
+  creator_id?: String  # Fixed: was 'id' | null;
+  creator_name?: String  # Fixed: was 'name' | null;
+  creator_display_name?: String  # Fixed: was 'display_name' | null;
+  creator_followers?: Float  # Fixed: was 'followers' | null;
   network?: string | null;
-  description?: string | null;
-  verified?: boolean | null;
+  creator_avatar?: String  # Fixed: was 'avatar' | null;
 }
 
 export interface CreatorTimeSeriesItem {
-  time?: Date | null;
+  time?: number | null;
   interactions?: number | null;
-  posts?: number | null;
-  followers?: number | null;
 }
 
 export interface CreatorPost {
-  post_type?: string | null;
-  post_title?: string | null;
-  post_link?: string | null;
-  post_image?: string | null;
-  post_created?: Date | null;
-  post_sentiment?: number | null;
+  id?: string | null;
+  post_title?: String  # Fixed: was 'title' | null;
+}
+
+export interface CoinListItem {
+  coin?: String  # Fixed: primary identifier | null;
+  name?: string | null;
+  symbol?: String  # Still exists but 'coin' is the ID | null;
+  logo?: string | null;
+  price?: Float  # Fixed: was 'close' | null;
+  market_cap?: number | null;
+  alt_rank?: number | null;
+}
+
+export interface CoinDetails {
+  coin?: String  # Fixed: primary identifier | null;
+  name?: string | null;
+  symbol?: string | null;
+  logo?: string | null;
+  price?: Float  # Fixed: was 'close' | null;
+  market_cap?: number | null;
+  alt_rank?: number | null;
   interactions_24h?: number | null;
-  interactions_total?: number | null;
+}
+
+export interface CoinTimeSeriesItem {
+  time?: number | null;
+  close?: Float  # This one stays 'close' for time series | null;
+  high?: number | null;
+  low?: number | null;
+  volume_24h?: number | null;
+}
+
+export interface CoinMeta {
+  coin?: String  # Fixed: was 'symbol' | null;
+  name?: string | null;
+  description?: string | null;
+}
+
+export interface StockListItem {
+  stock?: String  # Fixed: primary identifier | null;
+  name?: string | null;
+  symbol?: String  # Still exists but 'stock' is the ID | null;
+  logo?: string | null;
+  price?: Float  # Fixed: was 'close' | null;
+}
+
+export interface StockDetails {
+  stock?: String  # Fixed: primary identifier | null;
+  name?: string | null;
+  symbol?: string | null;
+  logo?: string | null;
+  price?: Float  # Fixed: was 'close' | null;
+  interactions_24h?: number | null;
+}
+
+export interface StockTimeSeriesItem {
+  time?: number | null;
+  close?: Float  # This one stays 'close' for time series | null;
+  volume?: number | null;
+}
+
+export interface NftListItem {
+  collection?: String  # Fixed: was 'id' | null;
+  name?: string | null;
+  logo?: string | null;
+  floor_price?: number | null;
+}
+
+export interface NftDetails {
+  collection?: String  # Fixed: was 'id' | null;
+  name?: string | null;
+  logo?: string | null;
+  floor_price?: number | null;
+  interactions_24h?: number | null;
+}
+
+export interface NftTimeSeriesItem {
+  time?: number | null;
+  floor_price?: number | null;
+  volume?: number | null;
+}
+
+export interface SystemChange {
+  change_id?: String  # Fixed: was 'id' | null;
+  type?: string | null;
+  description?: String  # Fixed: was 'change' | null;
+  timestamp?: number | null;
+}
+
+export interface SearchItem  # Fixed: was SearchList {
+  search_id?: String  # Fixed: was 'id' | null;
+  search_query?: String  # Fixed: was 'query' | null;
+  created?: number | null;
 }
 
 export interface PostDetails {
-  post_type?: string | null;
-  post_id?: string | null;
-  post_title?: string | null;
-  post_link?: string | null;
-  post_image?: string | null;
-  post_created?: Date | null;
-  post_sentiment?: number | null;
-  creator_id?: string | null;
-  creator_name?: string | null;
-  creator_display_name?: string | null;
-  creator_followers?: number | null;
-  creator_avatar?: string | null;
-  interactions_24h?: number | null;
-  interactions_total?: number | null;
+  id?: string | null;
+  post_title?: String  # Fixed: was 'title' | null;
+  post_content?: String  # Fixed: was 'content' | null;
 }
 
 export interface PostTimeSeriesItem {
-  time?: Date | null;
+  time?: number | null;
   interactions?: number | null;
-}
-
-export interface SearchResult {
-  type?: string | null;
-  id?: string | null;
-  name?: string | null;
-  symbol?: string | null;
-  description?: string | null;
-  logo?: string | null;
-}
-
-export interface TopicListResponse {
-  config?: ApiConfig | null;
-  data?: TopicListItem[] | null;
-}
-
-export interface TopicDetailsResponse {
-  config?: ApiConfig | null;
-  data?: TopicDetails | null;
-}
-
-export interface CoinListResponse {
-  config?: ApiConfig | null;
-  data?: CoinListItem[] | null;
-}
-
-export interface CoinDetailsResponse {
-  config?: ApiConfig | null;
-  data?: CoinDetails | null;
-}
-
-export interface CategoryListResponse {
-  config?: ApiConfig | null;
-  data?: CategoryListItem[] | null;
-}
-
-export interface CreatorListResponse {
-  config?: ApiConfig | null;
-  data?: CreatorListItem[] | null;
 }
 
 // ===== HELPER TYPES =====

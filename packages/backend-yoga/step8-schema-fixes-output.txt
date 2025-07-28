@@ -1,0 +1,449 @@
+src/generated/types.ts(122,24): error TS1127: Invalid character.
+src/generated/types.ts(122,26): error TS1005: ';' expected.
+src/generated/types.ts(122,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(123,16): error TS1109: Expression expected.
+src/generated/types.ts(123,26): error TS1127: Invalid character.
+src/generated/types.ts(123,28): error TS1005: ';' expected.
+src/generated/types.ts(123,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(124,24): error TS1109: Expression expected.
+src/generated/types.ts(124,34): error TS1127: Invalid character.
+src/generated/types.ts(124,36): error TS1005: ';' expected.
+src/generated/types.ts(124,43): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(125,21): error TS1109: Expression expected.
+src/generated/types.ts(125,30): error TS1127: Invalid character.
+src/generated/types.ts(125,32): error TS1005: ';' expected.
+src/generated/types.ts(125,39): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(126,18): error TS1109: Expression expected.
+src/generated/types.ts(126,28): error TS1127: Invalid character.
+src/generated/types.ts(126,30): error TS1005: ';' expected.
+src/generated/types.ts(126,37): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(127,20): error TS1109: Expression expected.
+src/generated/types.ts(128,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(132,18): error TS1127: Invalid character.
+src/generated/types.ts(132,20): error TS1005: ';' expected.
+src/generated/types.ts(132,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(133,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(137,18): error TS1127: Invalid character.
+src/generated/types.ts(137,20): error TS1005: ';' expected.
+src/generated/types.ts(137,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(138,15): error TS1109: Expression expected.
+src/generated/types.ts(139,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(153,24): error TS1127: Invalid character.
+src/generated/types.ts(153,26): error TS1005: ';' expected.
+src/generated/types.ts(153,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(154,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(158,24): error TS1127: Invalid character.
+src/generated/types.ts(158,26): error TS1005: ';' expected.
+src/generated/types.ts(158,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(159,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(162,24): error TS1127: Invalid character.
+src/generated/types.ts(162,26): error TS1005: ';' expected.
+src/generated/types.ts(162,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(163,16): error TS1109: Expression expected.
+src/generated/types.ts(163,26): error TS1127: Invalid character.
+src/generated/types.ts(163,28): error TS1005: ';' expected.
+src/generated/types.ts(163,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(164,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(167,24): error TS1127: Invalid character.
+src/generated/types.ts(167,26): error TS1005: ';' expected.
+src/generated/types.ts(167,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(168,16): error TS1109: Expression expected.
+src/generated/types.ts(168,26): error TS1127: Invalid character.
+src/generated/types.ts(168,28): error TS1005: ';' expected.
+src/generated/types.ts(168,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(169,24): error TS1109: Expression expected.
+src/generated/types.ts(169,34): error TS1127: Invalid character.
+src/generated/types.ts(169,36): error TS1005: ';' expected.
+src/generated/types.ts(169,43): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(170,21): error TS1109: Expression expected.
+src/generated/types.ts(170,30): error TS1127: Invalid character.
+src/generated/types.ts(170,32): error TS1005: ';' expected.
+src/generated/types.ts(170,39): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(171,11): error TS1109: Expression expected.
+src/generated/types.ts(172,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(175,24): error TS1127: Invalid character.
+src/generated/types.ts(175,26): error TS1005: ';' expected.
+src/generated/types.ts(175,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(176,16): error TS1109: Expression expected.
+src/generated/types.ts(176,26): error TS1127: Invalid character.
+src/generated/types.ts(176,28): error TS1005: ';' expected.
+src/generated/types.ts(176,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(177,24): error TS1109: Expression expected.
+src/generated/types.ts(177,34): error TS1127: Invalid character.
+src/generated/types.ts(177,36): error TS1005: ';' expected.
+src/generated/types.ts(177,43): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(178,21): error TS1109: Expression expected.
+src/generated/types.ts(178,30): error TS1127: Invalid character.
+src/generated/types.ts(178,32): error TS1005: ';' expected.
+src/generated/types.ts(178,39): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(179,11): error TS1109: Expression expected.
+src/generated/types.ts(180,18): error TS1109: Expression expected.
+src/generated/types.ts(180,28): error TS1127: Invalid character.
+src/generated/types.ts(180,30): error TS1005: ';' expected.
+src/generated/types.ts(180,37): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(181,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(190,24): error TS1127: Invalid character.
+src/generated/types.ts(190,26): error TS1005: ';' expected.
+src/generated/types.ts(190,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(191,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(194,18): error TS1127: Invalid character.
+src/generated/types.ts(194,20): error TS1005: ';' expected.
+src/generated/types.ts(194,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(195,8): error TS1109: Expression expected.
+src/generated/types.ts(196,10): error TS1109: Expression expected.
+src/generated/types.ts(196,20): error TS1127: Invalid character.
+src/generated/types.ts(196,22): error TS1005: ';' expected.
+src/generated/types.ts(196,28): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(196,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(196,46): error TS1005: ';' expected.
+src/generated/types.ts(196,49): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(197,8): error TS1109: Expression expected.
+src/generated/types.ts(198,9): error TS1109: Expression expected.
+src/generated/types.ts(198,18): error TS1127: Invalid character.
+src/generated/types.ts(198,20): error TS1005: ';' expected.
+src/generated/types.ts(198,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(199,14): error TS1109: Expression expected.
+src/generated/types.ts(200,12): error TS1109: Expression expected.
+src/generated/types.ts(201,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(204,18): error TS1127: Invalid character.
+src/generated/types.ts(204,20): error TS1005: ';' expected.
+src/generated/types.ts(204,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(205,8): error TS1109: Expression expected.
+src/generated/types.ts(206,10): error TS1109: Expression expected.
+src/generated/types.ts(207,8): error TS1109: Expression expected.
+src/generated/types.ts(208,9): error TS1109: Expression expected.
+src/generated/types.ts(208,18): error TS1127: Invalid character.
+src/generated/types.ts(208,20): error TS1005: ';' expected.
+src/generated/types.ts(208,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(209,14): error TS1109: Expression expected.
+src/generated/types.ts(210,12): error TS1109: Expression expected.
+src/generated/types.ts(211,20): error TS1109: Expression expected.
+src/generated/types.ts(212,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(216,18): error TS1127: Invalid character.
+src/generated/types.ts(216,20): error TS1005: ';' expected.
+src/generated/types.ts(216,25): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(216,29): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(216,43): error TS1005: ';' expected.
+src/generated/types.ts(216,47): error TS1005: '(' expected.
+src/generated/types.ts(216,52): error TS1005: ';' expected.
+src/generated/types.ts(217,8): error TS1109: Expression expected.
+src/generated/types.ts(217,23): error TS1005: ')' expected.
+src/generated/types.ts(218,7): error TS1109: Expression expected.
+src/generated/types.ts(219,14): error TS1109: Expression expected.
+src/generated/types.ts(220,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(223,18): error TS1127: Invalid character.
+src/generated/types.ts(223,20): error TS1005: ';' expected.
+src/generated/types.ts(223,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(224,8): error TS1109: Expression expected.
+src/generated/types.ts(225,15): error TS1109: Expression expected.
+src/generated/types.ts(226,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(229,19): error TS1127: Invalid character.
+src/generated/types.ts(229,21): error TS1005: ';' expected.
+src/generated/types.ts(229,28): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(230,8): error TS1109: Expression expected.
+src/generated/types.ts(231,10): error TS1109: Expression expected.
+src/generated/types.ts(231,20): error TS1127: Invalid character.
+src/generated/types.ts(231,22): error TS1005: ';' expected.
+src/generated/types.ts(231,28): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(231,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(231,47): error TS1005: ';' expected.
+src/generated/types.ts(231,50): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(232,8): error TS1109: Expression expected.
+src/generated/types.ts(233,9): error TS1109: Expression expected.
+src/generated/types.ts(233,18): error TS1127: Invalid character.
+src/generated/types.ts(233,20): error TS1005: ';' expected.
+src/generated/types.ts(233,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(234,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(237,19): error TS1127: Invalid character.
+src/generated/types.ts(237,21): error TS1005: ';' expected.
+src/generated/types.ts(237,28): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(238,8): error TS1109: Expression expected.
+src/generated/types.ts(239,10): error TS1109: Expression expected.
+src/generated/types.ts(240,8): error TS1109: Expression expected.
+src/generated/types.ts(241,9): error TS1109: Expression expected.
+src/generated/types.ts(241,18): error TS1127: Invalid character.
+src/generated/types.ts(241,20): error TS1005: ';' expected.
+src/generated/types.ts(241,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(242,20): error TS1109: Expression expected.
+src/generated/types.ts(243,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(247,18): error TS1127: Invalid character.
+src/generated/types.ts(247,20): error TS1005: ';' expected.
+src/generated/types.ts(247,25): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(247,29): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(247,43): error TS1005: ';' expected.
+src/generated/types.ts(247,47): error TS1005: '(' expected.
+src/generated/types.ts(247,52): error TS1005: ';' expected.
+src/generated/types.ts(248,10): error TS1109: Expression expected.
+src/generated/types.ts(248,25): error TS1005: ')' expected.
+src/generated/types.ts(249,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(252,24): error TS1127: Invalid character.
+src/generated/types.ts(252,26): error TS1005: ';' expected.
+src/generated/types.ts(252,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(253,8): error TS1109: Expression expected.
+src/generated/types.ts(254,8): error TS1109: Expression expected.
+src/generated/types.ts(255,15): error TS1109: Expression expected.
+src/generated/types.ts(256,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(259,24): error TS1127: Invalid character.
+src/generated/types.ts(259,26): error TS1005: ';' expected.
+src/generated/types.ts(259,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(260,8): error TS1109: Expression expected.
+src/generated/types.ts(261,8): error TS1109: Expression expected.
+src/generated/types.ts(262,15): error TS1109: Expression expected.
+src/generated/types.ts(263,20): error TS1109: Expression expected.
+src/generated/types.ts(264,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(273,23): error TS1127: Invalid character.
+src/generated/types.ts(273,25): error TS1005: ';' expected.
+src/generated/types.ts(273,32): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(274,8): error TS1109: Expression expected.
+src/generated/types.ts(275,15): error TS1109: Expression expected.
+src/generated/types.ts(275,25): error TS1127: Invalid character.
+src/generated/types.ts(275,27): error TS1005: ';' expected.
+src/generated/types.ts(275,34): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(276,13): error TS1109: Expression expected.
+src/generated/types.ts(277,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(279,30): error TS1127: Invalid character.
+src/generated/types.ts(279,32): error TS1005: ';' expected.
+src/generated/types.ts(279,39): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(279,43): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(280,13): error TS1109: Expression expected.
+src/generated/types.ts(280,23): error TS1127: Invalid character.
+src/generated/types.ts(280,25): error TS1005: ';' expected.
+src/generated/types.ts(280,32): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(281,16): error TS1109: Expression expected.
+src/generated/types.ts(281,26): error TS1127: Invalid character.
+src/generated/types.ts(281,28): error TS1005: ';' expected.
+src/generated/types.ts(281,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(282,11): error TS1109: Expression expected.
+src/generated/types.ts(287,24): error TS1127: Invalid character.
+src/generated/types.ts(287,26): error TS1005: ';' expected.
+src/generated/types.ts(287,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(288,16): error TS1109: Expression expected.
+src/generated/types.ts(288,26): error TS1127: Invalid character.
+src/generated/types.ts(288,28): error TS1005: ';' expected.
+src/generated/types.ts(288,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(289,1): error TS1128: Declaration or statement expected.
+⚠️ TypeScript compilation output:
+src/generated/types.ts(122,24): error TS1127: Invalid character.
+src/generated/types.ts(122,26): error TS1005: ';' expected.
+src/generated/types.ts(122,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(123,16): error TS1109: Expression expected.
+src/generated/types.ts(123,26): error TS1127: Invalid character.
+src/generated/types.ts(123,28): error TS1005: ';' expected.
+src/generated/types.ts(123,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(124,24): error TS1109: Expression expected.
+src/generated/types.ts(124,34): error TS1127: Invalid character.
+src/generated/types.ts(124,36): error TS1005: ';' expected.
+src/generated/types.ts(124,43): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(125,21): error TS1109: Expression expected.
+src/generated/types.ts(125,30): error TS1127: Invalid character.
+src/generated/types.ts(125,32): error TS1005: ';' expected.
+src/generated/types.ts(125,39): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(126,18): error TS1109: Expression expected.
+src/generated/types.ts(126,28): error TS1127: Invalid character.
+src/generated/types.ts(126,30): error TS1005: ';' expected.
+src/generated/types.ts(126,37): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(127,20): error TS1109: Expression expected.
+src/generated/types.ts(128,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(132,18): error TS1127: Invalid character.
+src/generated/types.ts(132,20): error TS1005: ';' expected.
+src/generated/types.ts(132,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(133,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(137,18): error TS1127: Invalid character.
+src/generated/types.ts(137,20): error TS1005: ';' expected.
+src/generated/types.ts(137,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(138,15): error TS1109: Expression expected.
+src/generated/types.ts(139,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(153,24): error TS1127: Invalid character.
+src/generated/types.ts(153,26): error TS1005: ';' expected.
+src/generated/types.ts(153,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(154,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(158,24): error TS1127: Invalid character.
+src/generated/types.ts(158,26): error TS1005: ';' expected.
+src/generated/types.ts(158,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(159,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(162,24): error TS1127: Invalid character.
+src/generated/types.ts(162,26): error TS1005: ';' expected.
+src/generated/types.ts(162,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(163,16): error TS1109: Expression expected.
+src/generated/types.ts(163,26): error TS1127: Invalid character.
+src/generated/types.ts(163,28): error TS1005: ';' expected.
+src/generated/types.ts(163,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(164,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(167,24): error TS1127: Invalid character.
+src/generated/types.ts(167,26): error TS1005: ';' expected.
+src/generated/types.ts(167,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(168,16): error TS1109: Expression expected.
+src/generated/types.ts(168,26): error TS1127: Invalid character.
+src/generated/types.ts(168,28): error TS1005: ';' expected.
+src/generated/types.ts(168,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(169,24): error TS1109: Expression expected.
+src/generated/types.ts(169,34): error TS1127: Invalid character.
+src/generated/types.ts(169,36): error TS1005: ';' expected.
+src/generated/types.ts(169,43): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(170,21): error TS1109: Expression expected.
+src/generated/types.ts(170,30): error TS1127: Invalid character.
+src/generated/types.ts(170,32): error TS1005: ';' expected.
+src/generated/types.ts(170,39): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(171,11): error TS1109: Expression expected.
+src/generated/types.ts(172,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(175,24): error TS1127: Invalid character.
+src/generated/types.ts(175,26): error TS1005: ';' expected.
+src/generated/types.ts(175,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(176,16): error TS1109: Expression expected.
+src/generated/types.ts(176,26): error TS1127: Invalid character.
+src/generated/types.ts(176,28): error TS1005: ';' expected.
+src/generated/types.ts(176,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(177,24): error TS1109: Expression expected.
+src/generated/types.ts(177,34): error TS1127: Invalid character.
+src/generated/types.ts(177,36): error TS1005: ';' expected.
+src/generated/types.ts(177,43): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(178,21): error TS1109: Expression expected.
+src/generated/types.ts(178,30): error TS1127: Invalid character.
+src/generated/types.ts(178,32): error TS1005: ';' expected.
+src/generated/types.ts(178,39): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(179,11): error TS1109: Expression expected.
+src/generated/types.ts(180,18): error TS1109: Expression expected.
+src/generated/types.ts(180,28): error TS1127: Invalid character.
+src/generated/types.ts(180,30): error TS1005: ';' expected.
+src/generated/types.ts(180,37): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(181,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(190,24): error TS1127: Invalid character.
+src/generated/types.ts(190,26): error TS1005: ';' expected.
+src/generated/types.ts(190,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(191,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(194,18): error TS1127: Invalid character.
+src/generated/types.ts(194,20): error TS1005: ';' expected.
+src/generated/types.ts(194,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(195,8): error TS1109: Expression expected.
+src/generated/types.ts(196,10): error TS1109: Expression expected.
+src/generated/types.ts(196,20): error TS1127: Invalid character.
+src/generated/types.ts(196,22): error TS1005: ';' expected.
+src/generated/types.ts(196,28): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(196,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(196,46): error TS1005: ';' expected.
+src/generated/types.ts(196,49): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(197,8): error TS1109: Expression expected.
+src/generated/types.ts(198,9): error TS1109: Expression expected.
+src/generated/types.ts(198,18): error TS1127: Invalid character.
+src/generated/types.ts(198,20): error TS1005: ';' expected.
+src/generated/types.ts(198,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(199,14): error TS1109: Expression expected.
+src/generated/types.ts(200,12): error TS1109: Expression expected.
+src/generated/types.ts(201,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(204,18): error TS1127: Invalid character.
+src/generated/types.ts(204,20): error TS1005: ';' expected.
+src/generated/types.ts(204,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(205,8): error TS1109: Expression expected.
+src/generated/types.ts(206,10): error TS1109: Expression expected.
+src/generated/types.ts(207,8): error TS1109: Expression expected.
+src/generated/types.ts(208,9): error TS1109: Expression expected.
+src/generated/types.ts(208,18): error TS1127: Invalid character.
+src/generated/types.ts(208,20): error TS1005: ';' expected.
+src/generated/types.ts(208,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(209,14): error TS1109: Expression expected.
+src/generated/types.ts(210,12): error TS1109: Expression expected.
+src/generated/types.ts(211,20): error TS1109: Expression expected.
+src/generated/types.ts(212,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(216,18): error TS1127: Invalid character.
+src/generated/types.ts(216,20): error TS1005: ';' expected.
+src/generated/types.ts(216,25): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(216,29): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(216,43): error TS1005: ';' expected.
+src/generated/types.ts(216,47): error TS1005: '(' expected.
+src/generated/types.ts(216,52): error TS1005: ';' expected.
+src/generated/types.ts(217,8): error TS1109: Expression expected.
+src/generated/types.ts(217,23): error TS1005: ')' expected.
+src/generated/types.ts(218,7): error TS1109: Expression expected.
+src/generated/types.ts(219,14): error TS1109: Expression expected.
+src/generated/types.ts(220,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(223,18): error TS1127: Invalid character.
+src/generated/types.ts(223,20): error TS1005: ';' expected.
+src/generated/types.ts(223,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(224,8): error TS1109: Expression expected.
+src/generated/types.ts(225,15): error TS1109: Expression expected.
+src/generated/types.ts(226,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(229,19): error TS1127: Invalid character.
+src/generated/types.ts(229,21): error TS1005: ';' expected.
+src/generated/types.ts(229,28): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(230,8): error TS1109: Expression expected.
+src/generated/types.ts(231,10): error TS1109: Expression expected.
+src/generated/types.ts(231,20): error TS1127: Invalid character.
+src/generated/types.ts(231,22): error TS1005: ';' expected.
+src/generated/types.ts(231,28): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(231,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(231,47): error TS1005: ';' expected.
+src/generated/types.ts(231,50): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(232,8): error TS1109: Expression expected.
+src/generated/types.ts(233,9): error TS1109: Expression expected.
+src/generated/types.ts(233,18): error TS1127: Invalid character.
+src/generated/types.ts(233,20): error TS1005: ';' expected.
+src/generated/types.ts(233,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(234,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(237,19): error TS1127: Invalid character.
+src/generated/types.ts(237,21): error TS1005: ';' expected.
+src/generated/types.ts(237,28): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(238,8): error TS1109: Expression expected.
+src/generated/types.ts(239,10): error TS1109: Expression expected.
+src/generated/types.ts(240,8): error TS1109: Expression expected.
+src/generated/types.ts(241,9): error TS1109: Expression expected.
+src/generated/types.ts(241,18): error TS1127: Invalid character.
+src/generated/types.ts(241,20): error TS1005: ';' expected.
+src/generated/types.ts(241,27): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(242,20): error TS1109: Expression expected.
+src/generated/types.ts(243,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(247,18): error TS1127: Invalid character.
+src/generated/types.ts(247,20): error TS1005: ';' expected.
+src/generated/types.ts(247,25): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(247,29): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(247,43): error TS1005: ';' expected.
+src/generated/types.ts(247,47): error TS1005: '(' expected.
+src/generated/types.ts(247,52): error TS1005: ';' expected.
+src/generated/types.ts(248,10): error TS1109: Expression expected.
+src/generated/types.ts(248,25): error TS1005: ')' expected.
+src/generated/types.ts(249,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(252,24): error TS1127: Invalid character.
+src/generated/types.ts(252,26): error TS1005: ';' expected.
+src/generated/types.ts(252,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(253,8): error TS1109: Expression expected.
+src/generated/types.ts(254,8): error TS1109: Expression expected.
+src/generated/types.ts(255,15): error TS1109: Expression expected.
+src/generated/types.ts(256,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(259,24): error TS1127: Invalid character.
+src/generated/types.ts(259,26): error TS1005: ';' expected.
+src/generated/types.ts(259,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(260,8): error TS1109: Expression expected.
+src/generated/types.ts(261,8): error TS1109: Expression expected.
+src/generated/types.ts(262,15): error TS1109: Expression expected.
+src/generated/types.ts(263,20): error TS1109: Expression expected.
+src/generated/types.ts(264,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(273,23): error TS1127: Invalid character.
+src/generated/types.ts(273,25): error TS1005: ';' expected.
+src/generated/types.ts(273,32): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(274,8): error TS1109: Expression expected.
+src/generated/types.ts(275,15): error TS1109: Expression expected.
+src/generated/types.ts(275,25): error TS1127: Invalid character.
+src/generated/types.ts(275,27): error TS1005: ';' expected.
+src/generated/types.ts(275,34): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(276,13): error TS1109: Expression expected.
+src/generated/types.ts(277,1): error TS1128: Declaration or statement expected.
+src/generated/types.ts(279,30): error TS1127: Invalid character.
+src/generated/types.ts(279,32): error TS1005: ';' expected.
+src/generated/types.ts(279,39): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(279,43): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(280,13): error TS1109: Expression expected.
+src/generated/types.ts(280,23): error TS1127: Invalid character.
+src/generated/types.ts(280,25): error TS1005: ';' expected.
+src/generated/types.ts(280,32): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(281,16): error TS1109: Expression expected.
+src/generated/types.ts(281,26): error TS1127: Invalid character.
+src/generated/types.ts(281,28): error TS1005: ';' expected.
+src/generated/types.ts(281,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(282,11): error TS1109: Expression expected.
+src/generated/types.ts(287,24): error TS1127: Invalid character.
+src/generated/types.ts(287,26): error TS1005: ';' expected.
+src/generated/types.ts(287,33): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(288,16): error TS1109: Expression expected.
+src/generated/types.ts(288,26): error TS1127: Invalid character.
+src/generated/types.ts(288,28): error TS1005: ';' expected.
+src/generated/types.ts(288,35): error TS1434: Unexpected keyword or identifier.
+src/generated/types.ts(289,1): error TS1128: Declaration or statement expected.

@@ -9,12 +9,12 @@
 
 /**
  * LunarCrush GraphQL Schema - Auto-Generated
- * Source: schema/schema.graphql (674 lines)
- * Generated: 2025-07-28T17:40:45.809Z
+ * Source: schema/schema.graphql (349 lines)
+ * Generated: 2025-07-28T18:06:51.291Z
  */
 
-export const typeDefs = `# LunarCrush Universal Backend - Official API Schema
-# Based on LunarCrush API v4 Documentation
+export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
+# Fixed to match actual LunarCrush API v4 responses
 # https://lunarcrush.com/developers/api/endpoints
 # Single source of truth for all LunarCrush API types
 
@@ -36,655 +36,330 @@ enum SortDirection {
   DESC
 }
 
-enum AssetType {
-  TOPIC
-  COIN
-  STOCK
-  NFT
-  CATEGORY
-  CREATOR
-}
-
-# ===== CORE API TYPES =====
-
-type ApiConfig {
-  generated_at: Date
-  request_cost: Int
-  credits_left: Int
-  credits_cost: Int
-  server_time: Int
-}
-
-# ===== TOPIC TYPES (Topics are social discussions about cryptocurrencies) =====
-
-type TopicListItem {
-  # Core identifiers
-  topic: String
-  title: String
-  topic_rank: Int
-
-  # Social metrics
-  interactions_24h: Int
-  posts_active: Int
-  contributors_active: Int
-  sentiment: Float
-  social_dominance: Float
-
-  # Market data
-  price: Float
-  price_formatted: String
-  percent_change_24h: Float
-  percent_change_7d: Float
-  market_cap: Float
-  market_cap_formatted: String
-  volume_24h: Float
-  market_dominance: Float
-
-  # LunarCrush metrics
-  galaxy_score: Float
-  alt_rank: Int
-  close: Float
-  volatility: Float
-
-  # Metadata
-  categories: [String]
-  classification: String
-  description: String
-  logo: String
-
-  # Links
-  github: String
-  website: String
-  coingecko: String
-  coinmarketcap: String
-  twitter: String
-  telegram: String
-  discord: String
-  reddit: String
-  medium: String
-  youtube: String
-  linkedin: String
-  facebook: String
-  instagram: String
-  tiktok: String
-}
-
-type TopicDetails {
-  # Same fields as TopicListItem plus additional details
-  topic: String
-  title: String
-  topic_rank: Int
-  interactions_24h: Int
-  posts_active: Int
-  contributors_active: Int
-  sentiment: Float
-  social_dominance: Float
-  price: Float
-  price_formatted: String
-  percent_change_24h: Float
-  percent_change_7d: Float
-  market_cap: Float
-  market_cap_formatted: String
-  volume_24h: Float
-  market_dominance: Float
-  galaxy_score: Float
-  alt_rank: Int
-  close: Float
-  volatility: Float
-  categories: [String]
-  classification: String
-  description: String
-  logo: String
-  github: String
-  website: String
-  coingecko: String
-  coinmarketcap: String
-  twitter: String
-  telegram: String
-  discord: String
-  reddit: String
-  medium: String
-  youtube: String
-  linkedin: String
-  facebook: String
-  instagram: String
-  tiktok: String
-}
-
-type TopicTimeSeriesItem {
-  time: Date
-  interactions: Int
-  posts: Int
-  contributors: Int
-  sentiment: Float
-  price: Float
-  market_cap: Float
-  volume: Float
-}
-
-type TopicPost {
-  post_type: String
-  post_title: String
-  post_link: String
-  post_image: String
-  post_created: Date
-  post_sentiment: Float
-  creator_id: String
-  creator_name: String
-  creator_display_name: String
-  creator_followers: Int
-  creator_avatar: String
-  interactions_24h: Int
-  interactions_total: Int
-}
-
-type TopicNews {
-  post_type: String
-  post_title: String
-  post_link: String
-  post_image: String
-  post_created: Date
-  post_sentiment: Float
-  creator_id: String
-  creator_name: String
-  creator_display_name: String
-  creator_followers: Int
-  creator_avatar: String
-  interactions_24h: Int
-  interactions_total: Int
-}
-
-type TopicCreator {
-  creator_id: String
-  creator_name: String
-  creator_avatar: String
-  creator_followers: Int
-  creator_rank: Int
-  interactions_24h: Int
-}
-
-type TopicWhatsup {
-  # TODO: Define based on API response structure
-  topic: String
-  summary: String
-}
-
-# ===== COIN TYPES (Coins are cryptocurrency assets with market data) =====
-
-type CoinListItem {
-  # Core identifiers
-  id: Int
-  name: String
-  symbol: String
-  slug: String
-
-  # Market data
-  price: Float
-  price_formatted: String
-  percent_change_1h: Float
-  percent_change_24h: Float
-  percent_change_7d: Float
-  percent_change_30d: Float
-  market_cap: Float
-  market_cap_formatted: String
-  volume_24h: Float
-  circulating_supply: Float
-  max_supply: Float
-
-  # LunarCrush metrics
-  galaxy_score: Float
-  alt_rank: Int
-  volatility: Float
-
-  # Social metrics
-  interactions_24h: Int
-  posts_active: Int
-  contributors_active: Int
-  sentiment: Float
-  social_dominance: Float
-
-  # Technical data
-  network: String
-  address: String
-
-  # Metadata
-  categories: [String]
-  logo: String
-}
-
-type CoinDetails {
-  # Same as CoinListItem with additional metadata
-  id: Int
-  name: String
-  symbol: String
-  slug: String
-  price: Float
-  price_formatted: String
-  percent_change_1h: Float
-  percent_change_24h: Float
-  percent_change_7d: Float
-  percent_change_30d: Float
-  market_cap: Float
-  market_cap_formatted: String
-  volume_24h: Float
-  circulating_supply: Float
-  max_supply: Float
-  galaxy_score: Float
-  alt_rank: Int
-  volatility: Float
-  interactions_24h: Int
-  posts_active: Int
-  contributors_active: Int
-  sentiment: Float
-  social_dominance: Float
-  network: String
-  address: String
-  categories: [String]
-  logo: String
-}
-
-type CoinTimeSeriesItem {
-  time: Date
-  price: Float
-  market_cap: Float
-  volume: Float
-  interactions: Int
-  posts: Int
-  contributors: Int
-  sentiment: Float
-}
-
-type CoinMetadata {
-  id: Int
-  name: String
-  symbol: String
-  description: String
-  website: String
-  github: String
-  twitter: String
-  telegram: String
-  discord: String
-  reddit: String
-  medium: String
-  youtube: String
-  linkedin: String
-  facebook: String
-  instagram: String
-  tiktok: String
-  logo: String
-  categories: [String]
-}
-
-# ===== CATEGORY TYPES =====
-
-type CategoryListItem {
-  category: String
-  title: String
-  category_rank: Int
-  interactions_24h: Int
-  posts_active: Int
-  contributors_active: Int
-  sentiment: Float
-  topics_count: Int
-}
-
-type CategoryDetails {
-  category: String
-  title: String
-  category_rank: Int
-  interactions_24h: Int
-  posts_active: Int
-  contributors_active: Int
-  sentiment: Float
-  topics_count: Int
-  description: String
-}
-
-type CategoryTopic {
-  topic: String
-  title: String
-  topic_rank: Int
-  interactions_24h: Int
-  sentiment: Float
-  price: Float
-  market_cap: Float
-}
-
-type CategoryTimeSeriesItem {
-  time: Date
-  interactions: Int
-  posts: Int
-  contributors: Int
-  sentiment: Float
-}
-
-type CategoryPost {
-  post_type: String
-  post_title: String
-  post_link: String
-  post_image: String
-  post_created: Date
-  post_sentiment: Float
-  creator_id: String
-  creator_name: String
-  creator_display_name: String
-  creator_followers: Int
-  creator_avatar: String
-  interactions_24h: Int
-  interactions_total: Int
-}
-
-type CategoryNews {
-  post_type: String
-  post_title: String
-  post_link: String
-  post_image: String
-  post_created: Date
-  post_sentiment: Float
-  creator_id: String
-  creator_name: String
-  creator_display_name: String
-  creator_followers: Int
-  creator_avatar: String
-  interactions_24h: Int
-  interactions_total: Int
-}
-
-type CategoryCreator {
-  creator_id: String
-  creator_name: String
-  creator_avatar: String
-  creator_followers: Int
-  creator_rank: Int
-  interactions_24h: Int
-}
-
-# ===== CREATOR TYPES =====
-
-type CreatorListItem {
-  creator_id: String
-  creator_name: String
-  creator_display_name: String
-  creator_avatar: String
-  creator_followers: Int
-  creator_rank: Int
-  interactions_24h: Int
-  network: String
-}
-
-type CreatorDetails {
-  creator_id: String
-  creator_name: String
-  creator_display_name: String
-  creator_avatar: String
-  creator_followers: Int
-  creator_rank: Int
-  interactions_24h: Int
-  network: String
-  # Additional creator details
-  description: String
-  verified: Boolean
-}
-
-type CreatorTimeSeriesItem {
-  time: Date
-  interactions: Int
-  posts: Int
-  followers: Int
-}
-
-type CreatorPost {
-  post_type: String
-  post_title: String
-  post_link: String
-  post_image: String
-  post_created: Date
-  post_sentiment: Float
-  interactions_24h: Int
-  interactions_total: Int
-}
-
-# ===== POST TYPES =====
-
-type PostDetails {
-  post_type: String
-  post_id: String
-  post_title: String
-  post_link: String
-  post_image: String
-  post_created: Date
-  post_sentiment: Float
-  creator_id: String
-  creator_name: String
-  creator_display_name: String
-  creator_followers: Int
-  creator_avatar: String
-  interactions_24h: Int
-  interactions_total: Int
-}
-
-type PostTimeSeriesItem {
-  time: Date
-  interactions: Int
-}
-
-# ===== SEARCH TYPES =====
-
-type SearchResult {
-  type: String
-  id: String
-  name: String
-  symbol: String
-  description: String
-  logo: String
-}
-
-# ===== RESPONSE WRAPPER TYPES =====
-
-type TopicListResponse {
-  config: ApiConfig
-  data: [TopicListItem]
-}
-
-type TopicDetailsResponse {
-  config: ApiConfig
-  data: TopicDetails
-}
-
-type CoinListResponse {
-  config: ApiConfig
-  data: [CoinListItem]
-}
-
-type CoinDetailsResponse {
-  config: ApiConfig
-  data: CoinDetails
-}
-
-type CategoryListResponse {
-  config: ApiConfig
-  data: [CategoryListItem]
-}
-
-type CreatorListResponse {
-  config: ApiConfig
-  data: [CreatorListItem]
-}
-
-# ===== ROOT QUERY TYPE =====
-# Based on official LunarCrush API v4 endpoints
+# ===== QUERY ROOT =====
 
 type Query {
   # Health check
   health: String
 
   # ===== TOPICS ENDPOINTS =====
-  # https://lunarcrush.com/api4/public/topics/list/v1
-  getTopicsList(
-    sort: String
-    limit: Int
-  ): TopicListResponse
-
-  # https://lunarcrush.com/api4/public/topic/:topic/v1
-  getTopic(topic: String!): TopicDetailsResponse
-
-  # https://lunarcrush.com/api4/public/topic/:topic/whatsup/v1
-  getTopicWhatsup(topic: String!): TopicWhatsup
-
-  # https://lunarcrush.com/api4/public/topic/:topic/time-series/v1
-  getTopicTimeSeries(
-    topic: String!
-    bucket: String
-    interval: String
-    start: String
-    end: String
-  ): [TopicTimeSeriesItem]
-
-  # https://lunarcrush.com/api4/public/topic/:topic/time-series/v2
-  getTopicTimeSeriesV2(
-    topic: String!
-    bucket: String
-  ): [TopicTimeSeriesItem]
-
-  # https://lunarcrush.com/api4/public/topic/:topic/posts/v1
-  getTopicPosts(
-    topic: String!
-    start: String
-    end: String
-  ): [TopicPost]
-
-  # https://lunarcrush.com/api4/public/topic/:topic/news/v1
-  getTopicNews(topic: String!): [TopicNews]
-
-  # https://lunarcrush.com/api4/public/topic/:topic/creators/v1
-  getTopicCreators(topic: String!): [TopicCreator]
-
-  # ===== COINS ENDPOINTS =====
-  # https://lunarcrush.com/api4/public/coins/list/v1
-  getCoinsList(
-    sort: String
-    filter: String
-    limit: Int
-  ): CoinListResponse
-
-  # https://lunarcrush.com/api4/public/coins/list/v2
-  getCoinsListV2(
-    sort: String
-    filter: String
-    limit: Int
-  ): CoinListResponse
-
-  # https://lunarcrush.com/api4/public/coins/:coin/v1
-  getCoin(coin: String!): CoinDetailsResponse
-
-  # https://lunarcrush.com/api4/public/coins/:coin/meta/v1
-  getCoinMeta(coin: String!): CoinMetadata
-
-  # https://lunarcrush.com/api4/public/coins/:coin/time-series/v1
-  getCoinTimeSeries(
-    coin: String!
-    bucket: String
-    interval: String
-    start: String
-    end: String
-  ): [CoinTimeSeriesItem]
-
-  # https://lunarcrush.com/api4/public/coins/:coin/time-series/v2
-  getCoinTimeSeriesV2(
-    coin: String!
-    bucket: String
-    change: String
-  ): [CoinTimeSeriesItem]
+  getTopicsList: [TopicListItem]
+  getTopic(topic: String): TopicDetails
+  getTopicWhatsup(topic: String): TopicWhatsup
+  getTopicTimeSeries(topic: String, bucket: String, interval: String, start: String, end: String): [TopicTimeSeriesItem]
+  getTopicTimeSeriesV2(topic: String, bucket: String): [TopicTimeSeriesItem]
+  getTopicPosts(topic: String, start: String, end: String): [TopicPost]
+  getTopicNews(topic: String): [TopicNews]
+  getTopicCreators(topic: String): [TopicCreator]
 
   # ===== CATEGORIES ENDPOINTS =====
-  # https://lunarcrush.com/api4/public/categories/list/v1
-  getCategoriesList: CategoryListResponse
-
-  # https://lunarcrush.com/api4/public/category/:category/v1
-  getCategory(category: String!): CategoryDetails
-
-  # https://lunarcrush.com/api4/public/category/:category/topics/v1
-  getCategoryTopics(category: String!): [CategoryTopic]
-
-  # https://lunarcrush.com/api4/public/category/:category/time-series/v1
-  getCategoryTimeSeries(
-    category: String!
-    bucket: String
-    interval: String
-    start: String
-    end: String
-  ): [CategoryTimeSeriesItem]
-
-  # https://lunarcrush.com/api4/public/category/:category/posts/v1
-  getCategoryPosts(
-    category: String!
-    start: String
-    end: String
-  ): [CategoryPost]
-
-  # https://lunarcrush.com/api4/public/category/:category/news/v1
-  getCategoryNews(category: String!): [CategoryNews]
-
-  # https://lunarcrush.com/api4/public/category/:category/creators/v1
-  getCategoryCreators(category: String!): [CategoryCreator]
+  getCategoriesList: [CategoryListItem]
+  getCategory(category: String): CategoryDetails
+  getCategoryTopics(category: String): [CategoryTopic]
+  getCategoryTimeSeries(category: String, bucket: String, interval: String, start: String, end: String): [CategoryTimeSeriesItem]
+  getCategoryPosts(category: String, start: String, end: String): [CategoryPost]
+  getCategoryNews(category: String): [CategoryNews]
+  getCategoryCreators(category: String): [CategoryCreator]
 
   # ===== CREATORS ENDPOINTS =====
-  # https://lunarcrush.com/api4/public/creators/list/v1
-  getCreatorsList(
-    sort: String
-    limit: Int
-  ): CreatorListResponse
+  getCreatorsList: [CreatorListItem]
+  getCreator(network: String, id: String): CreatorDetails
+  getCreatorTimeSeries(network: String, id: String, bucket: String, interval: String, start: String, end: String): [CreatorTimeSeriesItem]
+  getCreatorPosts(network: String, id: String, start: String, end: String): [CreatorPost]
 
-  # https://lunarcrush.com/api4/public/creator/:network/:id/v1
-  getCreator(network: String!, id: String!): CreatorDetails
+  # ===== COINS ENDPOINTS (Fixed argument names) =====
+  getCoinsList: [CoinListItem]
+  getCoinsListV2: [CoinListItem]
+  getCoin(coin: String): CoinDetails  # Fixed: coin not symbol
+  getCoinTimeSeries(coin: String, bucket: String, interval: String, start: String, end: String): [CoinTimeSeriesItem]  # Fixed: coin not symbol
+  getCoinMeta(coin: String): CoinMeta  # Fixed: coin not symbol
 
-  # https://lunarcrush.com/api4/public/creator/:network/:id/time-series/v1
-  getCreatorTimeSeries(
-    network: String!
-    id: String!
-    bucket: String
-    interval: String
-    start: String
-    end: String
-  ): [CreatorTimeSeriesItem]
+  # ===== STOCKS ENDPOINTS (Fixed argument names) =====
+  getStocksList: [StockListItem]
+  getStocksListV2: [StockListItem]
+  getStock(stock: String): StockDetails  # Fixed: stock not symbol
+  getStockTimeSeries(stock: String, bucket: String, interval: String, start: String, end: String): [StockTimeSeriesItem]  # Fixed: stock not symbol
 
-  # https://lunarcrush.com/api4/public/creator/:network/:id/posts/v1
-  getCreatorPosts(
-    network: String!
-    id: String!
-    start: String
-    end: String
-  ): [CreatorPost]
+  # ===== NFTS ENDPOINTS (Fixed argument names) =====
+  getNftsList: [NftListItem]
+  getNftsListV2: [NftListItem]
+  getNft(collection: String): NftDetails  # Fixed: collection not id
+  getNftTimeSeries(collection: String, bucket: String, interval: String, start: String, end: String): [NftTimeSeriesItem]  # Fixed: collection not id
+  getNftTimeSeriesV1(collection: String, bucket: String, interval: String, start: String, end: String): JSON  # Fixed: returns JSON scalar
 
-  # ===== POSTS ENDPOINTS =====
-  # https://lunarcrush.com/api4/public/posts/:post_type/:post_id/v1
-  getPost(post_type: String!, post_id: String!): PostDetails
-
-  # https://lunarcrush.com/api4/public/posts/:post_type/:post_id/time-series/v1
-  getPostTimeSeries(
-    post_type: String!
-    post_id: String!
-    bucket: String
-    interval: String
-    start: String
-    end: String
-  ): [PostTimeSeriesItem]
-
-  # ===== SEARCH ENDPOINTS =====
-  # https://lunarcrush.com/api4/public/searches/:slug
-  getSearch(slug: String!): [SearchResult]
+  # ===== SYSTEM ENDPOINTS (Fixed return types and arguments) =====
+  getSystemChanges: [SystemChange]
+  getSearchesList: [SearchItem]  # Fixed: SearchItem not SearchList
+  getSearch(search_id: String): JSON  # Fixed: returns JSON scalar, argument name
+  searchPosts(term: String): JSON  # Fixed: returns JSON scalar
+  getPostDetails(post_id: String): PostDetails  # Fixed: post_id not id
+  getPostTimeSeries(post_id: String, bucket: String, interval: String, start: String, end: String): [PostTimeSeriesItem]  # Fixed: post_id not id
 }
 
-# ===== SUBSCRIPTION TYPE =====
-type Subscription {
-  # Real-time topic updates
-  topicUpdates(topic: String!): TopicDetails
+# ===== CORRECTED TYPE DEFINITIONS =====
 
-  # Real-time coin updates
-  coinUpdates(coin: String!): CoinDetails
+# Topics Types (mostly correct)
+type TopicListItem {
+  topic: String
+  title: String
+  topic_rank: Int
+  topic_rank_1h_previous: Int
+  topic_rank_24h_previous: Int
+  num_contributors: Float
+  num_posts: Float
+  interactions_24h: Float
+}
 
-  # Real-time category updates
-  categoryUpdates(category: String!): CategoryDetails
+type TopicDetails {
+  topic: String
+  title: String
+  topic_rank: Int
+  related_topics: [String]
+  types_count: JSON
+  types_interactions: JSON
+  types_sentiment: JSON
+  types_sentiment_detail: JSON
+  interactions_24h: Float
+  num_contributors: Int
+  num_posts: Int
+  categories: [String]
+  trend: String
+}
+
+type TopicWhatsup {
+  summary: String
+}
+
+type TopicTimeSeriesItem {
+  time: Int
+  contributors_active: Int
+  contributors_created: Int
+  interactions: Float
+  posts_active: Int
+  posts_created: Int
+  sentiment: Float
+  spam: Int
+  alt_rank: Int
+  circulating_supply: Float
+  close: Float
+  galaxy_score: Float
+  high: Float
+  low: Float
+  market_cap: Float
+  market_dominance: Float
+  open: Float
+  social_dominance: Float
+  volume_24h: Float
+}
+
+type TopicPost {
+  id: String
+  post_type: String
+  post_title: String
+  post_link: String
+  post_image: String
+  post_created: Int
+  post_sentiment: Float
+  creator_id: String
+  creator_name: String
+  creator_display_name: String
+  creator_followers: Float
+  creator_avatar: String
+  interactions_24h: Float
+  interactions_total: Float
+}
+
+type TopicNews {
+  id: String
+  post_type: String
+  post_title: String
+  post_link: String
+  post_image: String
+  post_created: Int
+  post_sentiment: Float
+  creator_id: String
+}
+
+# Fixed TopicCreator with correct field names
+type TopicCreator {
+  creator_id: String  # Fixed: was 'id'
+  creator_name: String  # Fixed: was 'name'
+  creator_display_name: String  # Fixed: was 'display_name'
+  creator_followers: Float  # Fixed: was 'followers'
+  creator_avatar: String  # Fixed: was 'avatar'
+  interactions_24h: Float
+}
+
+# Fixed Category types
+type CategoryListItem {
+  category: String
+  name: String  # Fixed: was 'title'
+}
+
+type CategoryDetails {
+  category: String
+  name: String  # Fixed: was 'title'
+  description: String
+}
+
+type CategoryTopic {
+  topic: String
+  title: String
+}
+
+type CategoryTimeSeriesItem {
+  time: Int
+  interactions: Float
+}
+
+type CategoryPost {
+  id: String
+  post_title: String  # Fixed: was 'title'
+}
+
+type CategoryNews {
+  id: String
+  post_title: String  # Fixed: was 'title'
+}
+
+type CategoryCreator {
+  creator_id: String  # Fixed: was 'id'
+  creator_name: String  # Fixed: was 'name'
+}
+
+# Fixed Creator types
+type CreatorListItem {
+  creator_id: String  # Fixed: was 'id'
+  creator_name: String  # Fixed: was 'name'
+  creator_display_name: String  # Fixed: was 'display_name'
+  creator_followers: Float  # Fixed: was 'followers'
+  network: String
+}
+
+type CreatorDetails {
+  creator_id: String  # Fixed: was 'id'
+  creator_name: String  # Fixed: was 'name'
+  creator_display_name: String  # Fixed: was 'display_name'
+  creator_followers: Float  # Fixed: was 'followers'
+  network: String
+  creator_avatar: String  # Fixed: was 'avatar'
+}
+
+type CreatorTimeSeriesItem {
+  time: Int
+  interactions: Float
+}
+
+type CreatorPost {
+  id: String
+  post_title: String  # Fixed: was 'title'
+}
+
+# Fixed Coin types
+type CoinListItem {
+  coin: String  # Fixed: primary identifier
+  name: String
+  symbol: String  # Still exists but 'coin' is the ID
+  logo: String
+  price: Float  # Fixed: was 'close'
+  market_cap: Float
+  alt_rank: Int
+}
+
+type CoinDetails {
+  coin: String  # Fixed: primary identifier
+  name: String
+  symbol: String
+  logo: String
+  price: Float  # Fixed: was 'close'
+  market_cap: Float
+  alt_rank: Int
+  interactions_24h: Float
+}
+
+type CoinTimeSeriesItem {
+  time: Int
+  close: Float  # This one stays 'close' for time series
+  high: Float
+  low: Float
+  volume_24h: Float
+}
+
+type CoinMeta {
+  coin: String  # Fixed: was 'symbol'
+  name: String
+  description: String
+}
+
+# Fixed Stock types
+type StockListItem {
+  stock: String  # Fixed: primary identifier
+  name: String
+  symbol: String  # Still exists but 'stock' is the ID
+  logo: String
+  price: Float  # Fixed: was 'close'
+}
+
+type StockDetails {
+  stock: String  # Fixed: primary identifier
+  name: String
+  symbol: String
+  logo: String
+  price: Float  # Fixed: was 'close'
+  interactions_24h: Float
+}
+
+type StockTimeSeriesItem {
+  time: Int
+  close: Float  # This one stays 'close' for time series
+  volume: Float
+}
+
+# Fixed NFT types
+type NftListItem {
+  collection: String  # Fixed: was 'id'
+  name: String
+  logo: String
+  floor_price: Float
+}
+
+type NftDetails {
+  collection: String  # Fixed: was 'id'
+  name: String
+  logo: String
+  floor_price: Float
+  interactions_24h: Float
+}
+
+type NftTimeSeriesItem {
+  time: Int
+  floor_price: Float
+  volume: Float
+}
+
+# Fixed System types
+type SystemChange {
+  change_id: String  # Fixed: was 'id'
+  type: String
+  description: String  # Fixed: was 'change'
+  timestamp: Int
+}
+
+type SearchItem {  # Fixed: was SearchList
+  search_id: String  # Fixed: was 'id'
+  search_query: String  # Fixed: was 'query'
+  created: Int
+}
+
+type PostDetails {
+  id: String
+  post_title: String  # Fixed: was 'title'
+  post_content: String  # Fixed: was 'content'
+}
+
+type PostTimeSeriesItem {
+  time: Int
+  interactions: Float
 }
 `;
 
