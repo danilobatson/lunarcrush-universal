@@ -8,9 +8,9 @@
 // ===================================================================
 
 /**
- * LunarCrush API Types - Auto-Generated for sdk
+ * LunarCrush API Types - Auto-Generated for backend-yoga
  * Source: schema/schema.graphql
- * Generated: 2025-07-28T17:40:45.813Z
+ * Generated: 2025-07-28T17:40:45.811Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema

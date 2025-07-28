@@ -52,9 +52,7 @@
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"
   },
-  "dependencies": {
-    "@lunarcrush/shared-types": "workspace:*"
-  },
+  "dependencies": {},
   "engines": {
     "node": ">=18"
   }
