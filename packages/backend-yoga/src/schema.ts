@@ -11,7 +11,7 @@
 /**
  * LunarCrush GraphQL Schema - Auto-Generated from Single Source of Truth
  * Source: schema/schema.graphql (388 lines)
- * Generated: 2025-07-28T19:58:23.051Z
+ * Generated: 2025-07-28T20:03:53.203Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
