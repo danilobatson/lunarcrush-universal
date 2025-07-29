@@ -9,8 +9,8 @@
 
 /**
  * LunarCrush GraphQL Schema - Auto-Generated
- * Source: schema/schema.graphql (395 lines)
- * Generated: 2025-07-29T20:33:35.365Z
+ * Source: schema/schema.graphql (451 lines)
+ * Generated: 2025-07-29T20:43:45.559Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -204,44 +204,100 @@ type TopicCreator {
 # Fixed Category types
 type CategoryListItem {
   category: String
-  name: String  # Fixed: was 'title'
-    title: String
+  title: String
+  # ADDED: Missing fields from API analysis
+  category_rank: Int
+  category_rank_1h_previous: Int
+  category_rank_24h_previous: Int
+  interactions_24h: Float
+  num_contributors: Float
+  num_posts: Float
+  social_dominance: Float
 }
 
 type CategoryDetails {
   category: String
-  name: String  # Fixed: was 'title'
-    title: String
-  description: String
+  title: String
+  # ADDED: Missing fields from API analysis
+  topic: String
+  interactions_24h: Float
+  num_contributors: Int
+  num_posts: Int
+  trend: String
+  related_topics: [String]
+  types_count: JSON
+  types_interactions: JSON
+  types_sentiment: JSON
 }
 
 type CategoryTopic {
   topic: String
   title: String
+  # ADDED: Missing fields from API analysis
+  topic_rank: Int
+  topic_rank_1h_previous: Int
+  topic_rank_24h_previous: Int
+  interactions_24h: Float
+  num_contributors: Float
+  num_posts: Float
+  social_dominance: Float
 }
 
 type CategoryTimeSeriesItem {
   time: Int
   interactions: Float
+  # ADDED: Missing fields from API analysis
+  contributors_active: Int
+  contributors_created: Int
+  posts_active: Int
+  posts_created: Int
+  sentiment: Float
+  spam: Int
 }
 
 type CategoryPost {
   id: String
-  post_title: String  # Fixed: was 'title'
-  title: String
+  post_title: String
+  post_type: String
+  # ADDED: Missing fields from API analysis
+  post_link: String
+  post_image: String
+  post_created: Int
+  post_sentiment: Float
+  creator_id: String
+  creator_name: String
+  creator_display_name: String
+  creator_followers: Float
+  creator_avatar: String
+  interactions_24h: Float
+  interactions_total: Float
 }
 
 type CategoryNews {
   id: String
-  post_title: String  # Fixed: was 'title'
-  title: String
+  post_title: String
+  post_type: String
+  # ADDED: Missing fields from API analysis
+  post_link: String
+  post_image: String
+  post_created: Int
+  post_sentiment: Float
+  creator_id: String
+  creator_name: String
+  creator_display_name: String
+  creator_followers: Float
+  creator_avatar: String
+  interactions_24h: Float
+  interactions_total: Float
 }
 
 type CategoryCreator {
-  creator_id: String  # Fixed: was 'id'
-  creator_name: String  # Fixed: was 'name'
-    name: String
-  id: String
+  creator_id: String
+  creator_name: String
+  creator_followers: Float
+  creator_avatar: String
+  creator_rank: Int
+  interactions_24h: Float
 }
 
 # Fixed Creator types

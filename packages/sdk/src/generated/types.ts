@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for sdk
  * Source: schema/schema.graphql
- * Generated: 2025-07-29T20:33:35.368Z
+ * Generated: 2025-07-29T20:43:45.563Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -138,44 +138,94 @@ export interface TopicCreator {
 
 export interface CategoryListItem {
   category?: string | null;
-  name?: String  # Fixed: was 'title' | null;
   title?: string | null;
+  category_rank?: number | null;
+  category_rank_1h_previous?: number | null;
+  category_rank_24h_previous?: number | null;
+  interactions_24h?: number | null;
+  num_contributors?: number | null;
+  num_posts?: number | null;
+  social_dominance?: number | null;
 }
 
 export interface CategoryDetails {
   category?: string | null;
-  name?: String  # Fixed: was 'title' | null;
   title?: string | null;
-  description?: string | null;
+  topic?: string | null;
+  interactions_24h?: number | null;
+  num_contributors?: number | null;
+  num_posts?: number | null;
+  trend?: string | null;
+  related_topics?: string | null;
+  types_count?: any | null;
+  types_interactions?: any | null;
+  types_sentiment?: any | null;
 }
 
 export interface CategoryTopic {
   topic?: string | null;
   title?: string | null;
+  topic_rank?: number | null;
+  topic_rank_1h_previous?: number | null;
+  topic_rank_24h_previous?: number | null;
+  interactions_24h?: number | null;
+  num_contributors?: number | null;
+  num_posts?: number | null;
+  social_dominance?: number | null;
 }
 
 export interface CategoryTimeSeriesItem {
   time?: number | null;
   interactions?: number | null;
+  contributors_active?: number | null;
+  contributors_created?: number | null;
+  posts_active?: number | null;
+  posts_created?: number | null;
+  sentiment?: number | null;
+  spam?: number | null;
 }
 
 export interface CategoryPost {
   id?: string | null;
-  post_title?: String  # Fixed: was 'title' | null;
-  title?: string | null;
+  post_title?: string | null;
+  post_type?: string | null;
+  post_link?: string | null;
+  post_image?: string | null;
+  post_created?: number | null;
+  post_sentiment?: number | null;
+  creator_id?: string | null;
+  creator_name?: string | null;
+  creator_display_name?: string | null;
+  creator_followers?: number | null;
+  creator_avatar?: string | null;
+  interactions_24h?: number | null;
+  interactions_total?: number | null;
 }
 
 export interface CategoryNews {
   id?: string | null;
-  post_title?: String  # Fixed: was 'title' | null;
-  title?: string | null;
+  post_title?: string | null;
+  post_type?: string | null;
+  post_link?: string | null;
+  post_image?: string | null;
+  post_created?: number | null;
+  post_sentiment?: number | null;
+  creator_id?: string | null;
+  creator_name?: string | null;
+  creator_display_name?: string | null;
+  creator_followers?: number | null;
+  creator_avatar?: string | null;
+  interactions_24h?: number | null;
+  interactions_total?: number | null;
 }
 
 export interface CategoryCreator {
-  creator_id?: String  # Fixed: was 'id' | null;
-  creator_name?: String  # Fixed: was 'name' | null;
-  name?: string | null;
-  id?: string | null;
+  creator_id?: string | null;
+  creator_name?: string | null;
+  creator_followers?: number | null;
+  creator_avatar?: string | null;
+  creator_rank?: number | null;
+  interactions_24h?: number | null;
 }
 
 export interface CreatorListItem {
