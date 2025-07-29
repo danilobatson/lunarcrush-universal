@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for cli
  * Source: schema/schema.graphql
- * Generated: 2025-07-29T21:11:49.545Z
+ * Generated: 2025-07-29T21:21:19.124Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -378,28 +378,59 @@ export interface CoinMeta {
 }
 
 export interface StockListItem {
-  stock?: String  # Fixed: primary identifier | null;
-  name?: string | null;
-  symbol?: String  # Still exists but 'stock' is the ID | null;
-  logo?: string | null;
-  price?: Float  # Fixed: was 'close' | null;
-  close?: number | null;
+  id?: Int                      # Primary identifier from API | null;
+  symbol?: String               # Stock symbol | null;
+  name?: String                 # Company name | null;
+  logo?: String                 # Company logo URL | null;
+  price?: Float                 # Current price | null;
+  alt_rank?: Int                # ADDED: AltRank | null;
+  alt_rank_previous?: Int       # ADDED: Previous AltRank | null;
+  categories?: String         # ADDED: Stock categories[] | null;
+  galaxy_score?: Float          # ADDED: Galaxy Score | null;
+  galaxy_score_previous?: Float # ADDED: Previous Galaxy Score | null;
+  interactions_24h?: Float      # ADDED: 24h interactions | null;
+  market_cap?: Float            # ADDED: Market cap | null;
+  market_cap_rank?: Int         # ADDED: Market cap rank | null;
+  market_dominance?: Float      # ADDED: Market dominance | null;
+  market_dominance_prev?: Float # ADDED: Previous market dominance | null;
+  percent_change_24h?: Float    # ADDED: 24h price change | null;
+  sentiment?: Float             # ADDED: Social sentiment | null;
+  social_dominance?: Float      # ADDED: Social dominance | null;
+  social_volume_24h?: Float     # ADDED: 24h social volume | null;
+  topic?: String                # ADDED: Associated topic | null;
+  volume_24h?: Float            # ADDED: 24h trading volume | null;
 }
 
 export interface StockDetails {
-  stock?: String  # Fixed: primary identifier | null;
-  close?: number | null;
-  name?: string | null;
-  symbol?: string | null;
-  logo?: string | null;
-  price?: Float  # Fixed: was 'close' | null;
-  interactions_24h?: number | null;
+  id?: Int                      # Primary identifier from API | null;
+  symbol?: String               # Stock symbol | null;
+  name?: String                 # Company name | null;
+  close?: Float                 # Closing price | null;
+  price?: Float                 # Current price | null;
+  market_cap?: Float            # ADDED: Market cap | null;
+  market_cap_rank?: Int         # ADDED: Market cap rank | null;
+  percent_change_24h?: Float    # ADDED: 24h price change | null;
+  volume_24h?: Float            # ADDED: 24h trading volume | null;
 }
 
 export interface StockTimeSeriesItem {
-  time?: number | null;
-  close?: Float  # This one stays 'close' for time series | null;
-  volume?: number | null;
+  time?: Int                    # Timestamp | null;
+  close?: Float                 # Closing price | null;
+  alt_rank?: Int                # ADDED: AltRank | null;
+  contributors_active?: Int     # ADDED: Active contributors | null;
+  contributors_created?: Int    # ADDED: New contributors | null;
+  galaxy_score?: Float          # ADDED: Galaxy Score | null;
+  high?: Float                  # ADDED: High price | null;
+  interactions?: Float          # ADDED: Social interactions | null;
+  low?: Float                   # ADDED: Low price | null;
+  market_cap?: Float            # ADDED: Market cap | null;
+  market_dominance?: Float      # ADDED: Market dominance | null;
+  open?: Float                  # ADDED: Opening price | null;
+  posts_active?: Int            # ADDED: Active posts | null;
+  posts_created?: Int           # ADDED: New posts | null;
+  sentiment?: Float             # ADDED: Social sentiment | null;
+  social_dominance?: Float      # ADDED: Social dominance | null;
+  spam?: Int                    # ADDED: Spam count | null;
 }
 
 export interface NftListItem {

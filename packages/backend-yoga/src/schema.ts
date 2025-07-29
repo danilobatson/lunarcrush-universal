@@ -9,8 +9,8 @@
 
 /**
  * LunarCrush GraphQL Schema - Auto-Generated
- * Source: schema/schema.graphql (534 lines)
- * Generated: 2025-07-29T21:11:49.541Z
+ * Source: schema/schema.graphql (565 lines)
+ * Generated: 2025-07-29T21:21:19.117Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -458,28 +458,59 @@ type CoinMeta {
 
 # Fixed Stock types
 type StockListItem {
-  stock: String  # Fixed: primary identifier
-  name: String
-  symbol: String  # Still exists but 'stock' is the ID
-  logo: String
-  price: Float  # Fixed: was 'close'
-  close: Float
+  id: Int                      # Primary identifier from API
+  symbol: String               # Stock symbol
+  name: String                 # Company name
+  logo: String                 # Company logo URL
+  price: Float                 # Current price
+  alt_rank: Int                # ADDED: AltRank
+  alt_rank_previous: Int       # ADDED: Previous AltRank
+  categories: [String]         # ADDED: Stock categories
+  galaxy_score: Float          # ADDED: Galaxy Score
+  galaxy_score_previous: Float # ADDED: Previous Galaxy Score
+  interactions_24h: Float      # ADDED: 24h interactions
+  market_cap: Float            # ADDED: Market cap
+  market_cap_rank: Int         # ADDED: Market cap rank
+  market_dominance: Float      # ADDED: Market dominance
+  market_dominance_prev: Float # ADDED: Previous market dominance
+  percent_change_24h: Float    # ADDED: 24h price change
+  sentiment: Float             # ADDED: Social sentiment
+  social_dominance: Float      # ADDED: Social dominance
+  social_volume_24h: Float     # ADDED: 24h social volume
+  topic: String                # ADDED: Associated topic
+  volume_24h: Float            # ADDED: 24h trading volume
 }
 
 type StockDetails {
-  stock: String  # Fixed: primary identifier
-    close: Float
-  name: String
-  symbol: String
-  logo: String
-  price: Float  # Fixed: was 'close'
-  interactions_24h: Float
+  id: Int                      # Primary identifier from API
+  symbol: String               # Stock symbol
+  name: String                 # Company name
+  close: Float                 # Closing price
+  price: Float                 # Current price
+  market_cap: Float            # ADDED: Market cap
+  market_cap_rank: Int         # ADDED: Market cap rank
+  percent_change_24h: Float    # ADDED: 24h price change
+  volume_24h: Float            # ADDED: 24h trading volume
 }
 
 type StockTimeSeriesItem {
-  time: Int
-  close: Float  # This one stays 'close' for time series
-  volume: Float
+  time: Int                    # Timestamp
+  close: Float                 # Closing price
+  alt_rank: Int                # ADDED: AltRank
+  contributors_active: Int     # ADDED: Active contributors
+  contributors_created: Int    # ADDED: New contributors
+  galaxy_score: Float          # ADDED: Galaxy Score
+  high: Float                  # ADDED: High price
+  interactions: Float          # ADDED: Social interactions
+  low: Float                   # ADDED: Low price
+  market_cap: Float            # ADDED: Market cap
+  market_dominance: Float      # ADDED: Market dominance
+  open: Float                  # ADDED: Opening price
+  posts_active: Int            # ADDED: Active posts
+  posts_created: Int           # ADDED: New posts
+  sentiment: Float             # ADDED: Social sentiment
+  social_dominance: Float      # ADDED: Social dominance
+  spam: Int                    # ADDED: Spam count
 }
 
 # Fixed NFT types
