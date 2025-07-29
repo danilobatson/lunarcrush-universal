@@ -500,24 +500,47 @@ type StockTimeSeriesItem {
 
 # Fixed NFT types
 type NftListItem {
-  id: String  collection: String  # Fixed: was 'id'
+  id: String
   name: String
   logo: String
   floor_price: Float
+  # ADDED: 11 missing fields from API analysis
+  alt_rank: Int                 # ADDED: AltRank for NFT collections
+  base_crypto: String           # ADDED: Base cryptocurrency
+  galaxy_score: Float           # ADDED: Galaxy Score metric
+  interactions_24h: Float       # ADDED: Social interactions
+  lunar_id: String              # ADDED: LunarCrush internal ID
+  market_cap: Float             # ADDED: Market capitalization
+  percent_change_24h: Float     # ADDED: 24h price change
+  social_contributors: Int      # ADDED: Number of social contributors
+  social_dominance: Float       # ADDED: Social dominance metric
+  social_volume_24h: Float      # ADDED: Social volume
+  volume_24h: Float             # ADDED: Trading volume
 }
 
 type NftDetails {
-  id: String  collection: String  # Fixed: was 'id'
+  id: String
   name: String
-  logo: String
   floor_price: Float
-  interactions_24h: Float
+  # ADDED: 3 missing fields from API analysis
+  market_cap: Float             # ADDED: Market capitalization
+  percent_change_24h: Float     # ADDED: 24h price change
+  volume_24h: Float             # ADDED: Trading volume
+  # REMOVED: logo, interactions_24h (not in API details response)
 }
 
 type NftTimeSeriesItem {
   time: Int
-  floor_price: Float
-  volume: Float
+  # REPLACED: floor_price, volume with 9 actual API fields
+  alt_rank: Int                 # ADDED: AltRank over time
+  contributors_active: Int      # ADDED: Active social contributors
+  contributors_created: Int     # ADDED: New contributors created
+  interactions: Float           # ADDED: Social interactions
+  market_cap: Float             # ADDED: Market cap over time
+  posts_active: Int             # ADDED: Active posts
+  posts_created: Int            # ADDED: New posts created
+  sentiment: Float              # ADDED: Social sentiment score
+  social_dominance: Float       # ADDED: Social dominance metric
 }
 
 # Fixed System types

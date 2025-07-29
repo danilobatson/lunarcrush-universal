@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for backend-yoga
  * Source: schema/schema.graphql
- * Generated: 2025-07-29T21:21:19.120Z
+ * Generated: 2025-07-29T21:30:47.456Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -434,24 +434,43 @@ export interface StockTimeSeriesItem {
 }
 
 export interface NftListItem {
-  id?: String  collection: String  # Fixed: was 'id' | null;
+  id?: string | null;
   name?: string | null;
   logo?: string | null;
   floor_price?: number | null;
+  alt_rank?: Int                 # ADDED: AltRank for NFT collections | null;
+  base_crypto?: String           # ADDED: Base cryptocurrency | null;
+  galaxy_score?: Float           # ADDED: Galaxy Score metric | null;
+  interactions_24h?: Float       # ADDED: Social interactions | null;
+  lunar_id?: String              # ADDED: LunarCrush internal ID | null;
+  market_cap?: Float             # ADDED: Market capitalization | null;
+  percent_change_24h?: Float     # ADDED: 24h price change | null;
+  social_contributors?: Int      # ADDED: Number of social contributors | null;
+  social_dominance?: Float       # ADDED: Social dominance metric | null;
+  social_volume_24h?: Float      # ADDED: Social volume | null;
+  volume_24h?: Float             # ADDED: Trading volume | null;
 }
 
 export interface NftDetails {
-  id?: String  collection: String  # Fixed: was 'id' | null;
+  id?: string | null;
   name?: string | null;
-  logo?: string | null;
   floor_price?: number | null;
-  interactions_24h?: number | null;
+  market_cap?: Float             # ADDED: Market capitalization | null;
+  percent_change_24h?: Float     # ADDED: 24h price change | null;
+  volume_24h?: Float             # ADDED: Trading volume | null;
 }
 
 export interface NftTimeSeriesItem {
   time?: number | null;
-  floor_price?: number | null;
-  volume?: number | null;
+  alt_rank?: Int                 # ADDED: AltRank over time | null;
+  contributors_active?: Int      # ADDED: Active social contributors | null;
+  contributors_created?: Int     # ADDED: New contributors created | null;
+  interactions?: Float           # ADDED: Social interactions | null;
+  market_cap?: Float             # ADDED: Market cap over time | null;
+  posts_active?: Int             # ADDED: Active posts | null;
+  posts_created?: Int            # ADDED: New posts created | null;
+  sentiment?: Float              # ADDED: Social sentiment score | null;
+  social_dominance?: Float       # ADDED: Social dominance metric | null;
 }
 
 export interface SystemChange {
