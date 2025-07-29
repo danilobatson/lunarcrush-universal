@@ -591,6 +591,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@envelop/response-cache-redis@npm:^4.2.4":
+  version: 4.2.4
+  resolution: "@envelop/response-cache-redis@npm:4.2.4"
+  dependencies:
+    "@envelop/response-cache": "npm:^8.0.0"
+    "@whatwg-node/promise-helpers": "npm:^1.2.4"
+    ioredis: "npm:^5.4.2"
+    tslib: "npm:^2.5.0"
+  checksum: 59ffbb06a473586d38c9fda14d80f41a8a15eb6a00a39aa32d3bb429987180db29acac85ad8125d4cf30248846b9d3d56c73524d96d036c8d358537ca0d6bc34
+  languageName: node
+  linkType: hard
+
+"@envelop/response-cache@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@envelop/response-cache@npm:8.0.0"
+  dependencies:
+    "@graphql-tools/utils": "npm:^10.0.3"
+    "@whatwg-node/fetch": "npm:^0.10.0"
+    "@whatwg-node/promise-helpers": "npm:^1.2.4"
+    fast-json-stable-stringify: "npm:^2.1.0"
+    lru-cache: "npm:^10.0.0"
+    tslib: "npm:^2.5.0"
+  peerDependencies:
+    "@envelop/core": ^5.3.0
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+  checksum: 6b403aad3d19fb0ee9767639d03c99b2fa39c066541c08acd73ec589d31acefd347e14c853bc327716583a1c316ab79cb8f6f669b7546851efc258158bd86c9f
+  languageName: node
+  linkType: hard
+
 "@envelop/types@npm:^5.2.1":
   version: 5.2.1
   resolution: "@envelop/types@npm:5.2.1"
@@ -1797,6 +1826,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@graphql-yoga/plugin-csrf-prevention@npm:^3.15.1":
+  version: 3.15.1
+  resolution: "@graphql-yoga/plugin-csrf-prevention@npm:3.15.1"
+  peerDependencies:
+    graphql-yoga: ^5.15.1
+  checksum: 016f7db07e7f11ae4592d3064614e7c541dd835bcd78971960f035fe2e7b2159c7d5c4505ed48dec0f38ae5dcb04307d9c7b7981448cf7fda2ddcdaa51780860
+  languageName: node
+  linkType: hard
+
+"@graphql-yoga/plugin-response-cache@npm:^3.17.1":
+  version: 3.17.1
+  resolution: "@graphql-yoga/plugin-response-cache@npm:3.17.1"
+  dependencies:
+    "@envelop/core": "npm:^5.3.0"
+    "@envelop/response-cache": "npm:^8.0.0"
+    "@whatwg-node/promise-helpers": "npm:^1.2.4"
+  peerDependencies:
+    graphql: ^15.2.0 || ^16.0.0
+    graphql-yoga: ^5.15.1
+  checksum: 2391e67662e051980c8c1baaee914c2f623ed74c3575f427a6dd65d4add3bac0c51b2a33edff92106b730f5ff62abbc2254cd0aa6ea0f6b509d12e438b596e75
+  languageName: node
+  linkType: hard
+
 "@graphql-yoga/subscription@npm:^5.0.5":
   version: 5.0.5
   resolution: "@graphql-yoga/subscription@npm:5.0.5"
@@ -2219,6 +2271,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ioredis/commands@npm:^1.1.1":
+  version: 1.3.0
+  resolution: "@ioredis/commands@npm:1.3.0"
+  checksum: 5ab990a8f69c20daf3d7d64307aa9f13ee727c92ab4c7664a6943bb500227667a0c368892e9c4913f06416377db47dba78d58627fe723da476d25f2c04a6d5aa
+  languageName: node
+  linkType: hard
+
 "@isaacs/cliui@npm:^8.0.2":
   version: 8.0.2
   resolution: "@isaacs/cliui@npm:8.0.2"
@@ -2302,11 +2361,16 @@ __metadata:
     "@cloudflare/workers-types": "npm:^4.20250722.0"
     "@envelop/core": "npm:^5.3.0"
     "@envelop/live-query": "npm:^9.0.0"
+    "@envelop/response-cache-redis": "npm:^4.2.4"
     "@google/generative-ai": "npm:^0.24.1"
+    "@graphql-yoga/plugin-csrf-prevention": "npm:^3.15.1"
+    "@graphql-yoga/plugin-response-cache": "npm:^3.17.1"
     "@types/node": "npm:^24.1.0"
+    "@upstash/redis": "npm:^1.35.1"
     graphql: "npm:^16.11.0"
     graphql-yoga: "npm:^5.10.4"
     hono: "npm:^4.8.9"
+    ioredis: "npm:^5.6.1"
     node-fetch: "npm:^3.3.2"
     typescript: "npm:^5.8.3"
     wrangler: "npm:^4.25.1"
@@ -2714,6 +2778,15 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: 61aff1129143fcc4312f083bc9e9e168aa3026b7dd6e70796276dcfb2c8211c4292603f9c4864fae702f2ed86e4abd4d38aa421831c2fd7f856c931a481afbab
+  languageName: node
+  linkType: hard
+
+"@upstash/redis@npm:^1.35.1":
+  version: 1.35.1
+  resolution: "@upstash/redis@npm:1.35.1"
+  dependencies:
+    uncrypto: "npm:^0.1.3"
+  checksum: 8d7fbe5e4cd448d0f28c7251ae99e414bb31b64411ab583659acbc583cd95428c0efa146617484b749816658e88760aa641c4f0a955190092859a9bf44d63953
   languageName: node
   linkType: hard
 
@@ -3335,6 +3408,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cluster-key-slot@npm:^1.1.0":
+  version: 1.1.2
+  resolution: "cluster-key-slot@npm:1.1.2"
+  checksum: d7d39ca28a8786e9e801eeb8c770e3c3236a566625d7299a47bb71113fb2298ce1039596acb82590e598c52dbc9b1f088c8f587803e697cb58e1867a95ff94d3
+  languageName: node
+  linkType: hard
+
 "color-convert@npm:^2.0.1":
   version: 2.0.1
   resolution: "color-convert@npm:2.0.1"
@@ -3560,6 +3640,13 @@ __metadata:
   version: 6.1.4
   resolution: "defu@npm:6.1.4"
   checksum: 2d6cc366262dc0cb8096e429368e44052fdf43ed48e53ad84cc7c9407f890301aa5fcb80d0995abaaf842b3949f154d060be4160f7a46cb2bc2f7726c81526f5
+  languageName: node
+  linkType: hard
+
+"denque@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "denque@npm:2.1.0"
+  checksum: f9ef81aa0af9c6c614a727cb3bd13c5d7db2af1abf9e6352045b86e85873e629690f6222f4edd49d10e4ccf8f078bbeec0794fafaf61b659c0589d0c511ec363
   languageName: node
   linkType: hard
 
@@ -4055,6 +4142,13 @@ __metadata:
     merge2: "npm:^1.3.0"
     micromatch: "npm:^4.0.8"
   checksum: f6aaa141d0d3384cf73cbcdfc52f475ed293f6d5b65bfc5def368b09163a9f7e5ec2b3014d80f733c405f58e470ee0cc451c2937685045cddcdeaa24199c43fe
+  languageName: node
+  linkType: hard
+
+"fast-json-stable-stringify@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "fast-json-stable-stringify@npm:2.1.0"
+  checksum: 7f081eb0b8a64e0057b3bb03f974b3ef00135fbf36c1c710895cd9300f13c94ba809bb3a81cf4e1b03f6e5285610a61abbd7602d0652de423144dfee5a389c9b
   languageName: node
   linkType: hard
 
@@ -4625,6 +4719,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ioredis@npm:^5.4.2, ioredis@npm:^5.6.1":
+  version: 5.6.1
+  resolution: "ioredis@npm:5.6.1"
+  dependencies:
+    "@ioredis/commands": "npm:^1.1.1"
+    cluster-key-slot: "npm:^1.1.0"
+    debug: "npm:^4.3.4"
+    denque: "npm:^2.1.0"
+    lodash.defaults: "npm:^4.2.0"
+    lodash.isarguments: "npm:^3.1.0"
+    redis-errors: "npm:^1.2.0"
+    redis-parser: "npm:^3.0.0"
+    standard-as-callback: "npm:^2.1.0"
+  checksum: 26ae49cf448e807e454a9bdea5a9dfdcf669e2fdbf2df341900a0fb693c5662fea7e39db3227ce8972d1bda0ba7da9b7410e5163b12d8878a579548d847220ac
+  languageName: node
+  linkType: hard
+
 "ip-address@npm:^9.0.5":
   version: 9.0.5
   resolution: "ip-address@npm:9.0.5"
@@ -5006,6 +5117,20 @@ __metadata:
   dependencies:
     p-locate: "npm:^4.1.0"
   checksum: 33a1c5247e87e022f9713e6213a744557a3e9ec32c5d0b5efb10aa3a38177615bf90221a5592674857039c1a0fd2063b82f285702d37b792d973e9e72ace6c59
+  languageName: node
+  linkType: hard
+
+"lodash.defaults@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "lodash.defaults@npm:4.2.0"
+  checksum: d5b77aeb702caa69b17be1358faece33a84497bcca814897383c58b28a2f8dfc381b1d9edbec239f8b425126a3bbe4916223da2a576bb0411c2cefd67df80707
+  languageName: node
+  linkType: hard
+
+"lodash.isarguments@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "lodash.isarguments@npm:3.1.0"
+  checksum: 5e8f95ba10975900a3920fb039a3f89a5a79359a1b5565e4e5b4310ed6ebe64011e31d402e34f577eca983a1fc01ff86c926e3cbe602e1ddfc858fdd353e62d8
   languageName: node
   linkType: hard
 
@@ -6022,6 +6147,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"redis-errors@npm:^1.0.0, redis-errors@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "redis-errors@npm:1.2.0"
+  checksum: 5b316736e9f532d91a35bff631335137a4f974927bb2fb42bf8c2f18879173a211787db8ac4c3fde8f75ed6233eb0888e55d52510b5620e30d69d7d719c8b8a7
+  languageName: node
+  linkType: hard
+
+"redis-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "redis-parser@npm:3.0.0"
+  dependencies:
+    redis-errors: "npm:^1.0.0"
+  checksum: ee16ac4c7b2a60b1f42a2cdaee22b005bd4453eb2d0588b8a4939718997ae269da717434da5d570fe0b05030466eeb3f902a58cf2e8e1ca058bf6c9c596f632f
+  languageName: node
+  linkType: hard
+
 "relay-runtime@npm:12.0.0":
   version: 12.0.0
   resolution: "relay-runtime@npm:12.0.0"
@@ -6545,6 +6686,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"standard-as-callback@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "standard-as-callback@npm:2.1.0"
+  checksum: 012677236e3d3fdc5689d29e64ea8a599331c4babe86956bf92fc5e127d53f85411c5536ee0079c52c43beb0026b5ce7aa1d834dd35dd026e82a15d1bcaead1f
+  languageName: node
+  linkType: hard
+
 "std-env@npm:^3.5.0":
   version: 3.9.0
   resolution: "std-env@npm:3.9.0"
@@ -7046,6 +7194,13 @@ __metadata:
   version: 0.1.2
   resolution: "unc-path-regex@npm:0.1.2"
   checksum: bf9c781c4e2f38e6613ea17a51072e4b416840fbe6eeb244597ce9b028fac2fb6cfd3dde1f14111b02c245e665dc461aab8168ecc30b14364d02caa37f812996
+  languageName: node
+  linkType: hard
+
+"uncrypto@npm:^0.1.3":
+  version: 0.1.3
+  resolution: "uncrypto@npm:0.1.3"
+  checksum: 74a29afefd76d5b77bedc983559ceb33f5bbc8dada84ff33755d1e3355da55a4e03a10e7ce717918c436b4dfafde1782e799ebaf2aadd775612b49f7b5b2998e
   languageName: node
   linkType: hard
 

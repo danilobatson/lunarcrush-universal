@@ -3,6 +3,9 @@ main = "src/index.ts"
 secrets_store_secrets = [
   { binding = "LUNARCRUSH_API_KEY", store_id= "2593c430bd90424a886728435dd57004", secret_name = "LUNARCRUSH_API_KEY" }
 ]
+kv_namespaces = [
+  { binding = "LUNARCRUSH_CACHE", id = "6bf88b7f2bac40e9888dc565db7e8faf" }
+]
 compatibility_date = "2024-10-15"
 compatibility_flags = ["nodejs_compat"]
 
