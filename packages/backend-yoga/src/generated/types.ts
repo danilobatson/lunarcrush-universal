@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for backend-yoga
  * Source: schema/schema.graphql
- * Generated: 2025-07-29T21:30:47.456Z
+ * Generated: 2025-07-29T21:38:11.090Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -474,11 +474,12 @@ export interface NftTimeSeriesItem {
 }
 
 export interface SystemChange {
-  change?: String  # Fixed: was 'id' | null;
-  type?: string | null;
-  description?: String  # Fixed: was 'change' | null;
-  timestamp?: number | null;
-  id?: string | null;
+  asset_id?: String           # ADDED: Missing asset identifier | null;
+  asset_name?: String         # ADDED: Missing asset name | null;
+  asset_type?: String         # ADDED: Missing asset type | null;
+  change?: String            # KEEP: Change description | null;
+  description?: String       # KEEP: Change details | null;
+  time?: Int                 # RENAMED: from timestamp to match API | null;
 }
 
 export interface SearchList {
@@ -510,8 +511,12 @@ export interface SearchResult {
 }
 
 export interface SearchPost {
-  id?: string | null;
-  title?: string | null;
+  id?: String                # KEEP: Post identifier | null;
+  post_created?: Int         # ADDED: Creation timestamp | null;
+  post_link?: String         # ADDED: Link to original post | null;
+  post_type?: String         # ADDED: Post type (twitter, youtube, etc) | null;
+  text?: String              # ADDED: Post content text | null;
+  text_highlight?: String    # ADDED: Highlighted search terms | null;
 }
 
 // ===== HELPER TYPES =====

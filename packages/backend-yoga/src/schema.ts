@@ -9,8 +9,8 @@
 
 /**
  * LunarCrush GraphQL Schema - Auto-Generated
- * Source: schema/schema.graphql (588 lines)
- * Generated: 2025-07-29T21:30:47.454Z
+ * Source: schema/schema.graphql (593 lines)
+ * Generated: 2025-07-29T21:38:11.088Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -560,11 +560,12 @@ type NftTimeSeriesItem {
 
 # Fixed System types
 type SystemChange {
-  change: String  # Fixed: was 'id'
-  type: String
-  description: String  # Fixed: was 'change'
-  timestamp: Int
-  id: String
+  asset_id: String           # ADDED: Missing asset identifier
+  asset_name: String         # ADDED: Missing asset name
+  asset_type: String         # ADDED: Missing asset type
+  change: String            # KEEP: Change description
+  description: String       # KEEP: Change details
+  time: Int                 # RENAMED: from timestamp to match API
 }
 
 type SearchList {
@@ -597,8 +598,12 @@ type SearchResult {
 }
 
 type SearchPost {
-  id: String
-  title: String
+  id: String                # KEEP: Post identifier
+  post_created: Int         # ADDED: Creation timestamp
+  post_link: String         # ADDED: Link to original post
+  post_type: String         # ADDED: Post type (twitter, youtube, etc)
+  text: String              # ADDED: Post content text
+  text_highlight: String    # ADDED: Highlighted search terms
 }
 `;
 
