@@ -10,7 +10,7 @@
 /**
  * LunarCrush GraphQL Schema - Auto-Generated
  * Source: schema/schema.graphql (451 lines)
- * Generated: 2025-07-29T20:43:45.559Z
+ * Generated: 2025-07-29T20:44:10.973Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
