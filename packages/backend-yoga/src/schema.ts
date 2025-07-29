@@ -9,8 +9,8 @@
 
 /**
  * LunarCrush GraphQL Schema - Auto-Generated
- * Source: schema/schema.graphql (451 lines)
- * Generated: 2025-07-29T20:44:10.973Z
+ * Source: schema/schema.graphql (465 lines)
+ * Generated: 2025-07-29T20:52:02.499Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -300,39 +300,53 @@ type CategoryCreator {
   interactions_24h: Float
 }
 
-# Fixed Creator types
+# Fixed Creator types - 100% API coverage
 type CreatorListItem {
-  creator_id: String  # Fixed: was 'id'
-  creator_name: String  # Fixed: was 'name'
-    name: String
-  creator_display_name: String  # Fixed: was 'display_name'
-  creator_followers: Float  # Fixed: was 'followers'
-    followers: Float
-  network: String
-  id: String
+  creator_id: String
+  creator_name: String
+  creator_display_name: String
+  creator_followers: Float
+  creator_avatar: String        # ADDED: Missing from API analysis
+  creator_network: String       # FIXED: Was 'network', API returns 'creator_network'
+  creator_posts: Int            # ADDED: Missing from API analysis
+  creator_rank: Int             # ADDED: Missing from API analysis
+  interactions_24h: Float       # ADDED: Missing from API analysis
 }
 
 type CreatorDetails {
-  creator_id: String  # Fixed: was 'id'
-  creator_name: String  # Fixed: was 'name'
-    name: String
-  creator_display_name: String  # Fixed: was 'display_name'
-  creator_followers: Float  # Fixed: was 'followers'
-    followers: Float
-  network: String
-  creator_avatar: String  # Fixed: was 'avatar'
-  id: String
+  creator_id: String
+  creator_name: String
+  creator_display_name: String
+  creator_followers: Float
+  creator_avatar: String
+  creator_rank: Int             # ADDED: Missing from API analysis
+  interactions_24h: Float       # ADDED: Missing from API analysis
+  topic_influence: JSON         # ADDED: CRITICAL social trading data!
 }
 
 type CreatorTimeSeriesItem {
   time: Int
   interactions: Float
+  creator_rank: Int             # ADDED: Missing from API analysis
+  followers: Float              # ADDED: Missing from API analysis
+  posts_active: Int             # ADDED: Missing from API analysis
 }
 
 type CreatorPost {
   id: String
-  post_title: String  # Fixed: was 'title'
-  title: String
+  post_type: String             # ADDED: Missing from API analysis
+  post_title: String
+  post_link: String             # ADDED: Missing from API analysis
+  post_image: String            # ADDED: Missing from API analysis
+  post_created: Int             # ADDED: Missing from API analysis
+  post_sentiment: Float         # ADDED: Missing from API analysis
+  creator_id: String            # ADDED: Missing from API analysis
+  creator_name: String          # ADDED: Missing from API analysis
+  creator_display_name: String  # ADDED: Missing from API analysis
+  creator_followers: Float      # ADDED: Missing from API analysis
+  creator_avatar: String        # ADDED: Missing from API analysis
+  interactions_24h: Float       # ADDED: Missing from API analysis
+  interactions_total: Float     # ADDED: Missing from API analysis
 }
 
 # Fixed Coin types

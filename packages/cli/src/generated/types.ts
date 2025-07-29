@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for cli
  * Source: schema/schema.graphql
- * Generated: 2025-07-29T20:44:10.977Z
+ * Generated: 2025-07-29T20:52:02.504Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -229,37 +229,51 @@ export interface CategoryCreator {
 }
 
 export interface CreatorListItem {
-  creator_id?: String  # Fixed: was 'id' | null;
-  creator_name?: String  # Fixed: was 'name' | null;
-  name?: string | null;
-  creator_display_name?: String  # Fixed: was 'display_name' | null;
-  creator_followers?: Float  # Fixed: was 'followers' | null;
-  followers?: number | null;
-  network?: string | null;
-  id?: string | null;
+  creator_id?: string | null;
+  creator_name?: string | null;
+  creator_display_name?: string | null;
+  creator_followers?: number | null;
+  creator_avatar?: String        # ADDED: Missing from API analysis | null;
+  creator_network?: String       # FIXED: Was 'network', API returns 'creator_network' | null;
+  creator_posts?: Int            # ADDED: Missing from API analysis | null;
+  creator_rank?: Int             # ADDED: Missing from API analysis | null;
+  interactions_24h?: Float       # ADDED: Missing from API analysis | null;
 }
 
 export interface CreatorDetails {
-  creator_id?: String  # Fixed: was 'id' | null;
-  creator_name?: String  # Fixed: was 'name' | null;
-  name?: string | null;
-  creator_display_name?: String  # Fixed: was 'display_name' | null;
-  creator_followers?: Float  # Fixed: was 'followers' | null;
-  followers?: number | null;
-  network?: string | null;
-  creator_avatar?: String  # Fixed: was 'avatar' | null;
-  id?: string | null;
+  creator_id?: string | null;
+  creator_name?: string | null;
+  creator_display_name?: string | null;
+  creator_followers?: number | null;
+  creator_avatar?: string | null;
+  creator_rank?: Int             # ADDED: Missing from API analysis | null;
+  interactions_24h?: Float       # ADDED: Missing from API analysis | null;
+  topic_influence?: JSON         # ADDED: CRITICAL social trading data | null;
 }
 
 export interface CreatorTimeSeriesItem {
   time?: number | null;
   interactions?: number | null;
+  creator_rank?: Int             # ADDED: Missing from API analysis | null;
+  followers?: Float              # ADDED: Missing from API analysis | null;
+  posts_active?: Int             # ADDED: Missing from API analysis | null;
 }
 
 export interface CreatorPost {
   id?: string | null;
-  post_title?: String  # Fixed: was 'title' | null;
-  title?: string | null;
+  post_type?: String             # ADDED: Missing from API analysis | null;
+  post_title?: string | null;
+  post_link?: String             # ADDED: Missing from API analysis | null;
+  post_image?: String            # ADDED: Missing from API analysis | null;
+  post_created?: Int             # ADDED: Missing from API analysis | null;
+  post_sentiment?: Float         # ADDED: Missing from API analysis | null;
+  creator_id?: String            # ADDED: Missing from API analysis | null;
+  creator_name?: String          # ADDED: Missing from API analysis | null;
+  creator_display_name?: String  # ADDED: Missing from API analysis | null;
+  creator_followers?: Float      # ADDED: Missing from API analysis | null;
+  creator_avatar?: String        # ADDED: Missing from API analysis | null;
+  interactions_24h?: Float       # ADDED: Missing from API analysis | null;
+  interactions_total?: Float     # ADDED: Missing from API analysis | null;
 }
 
 export interface CoinListItem {
