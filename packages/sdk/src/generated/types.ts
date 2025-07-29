@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for sdk
  * Source: schema/schema.graphql
- * Generated: 2025-07-29T20:29:37.416Z
+ * Generated: 2025-07-29T20:33:35.368Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
