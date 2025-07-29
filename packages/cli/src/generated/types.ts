@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for cli
  * Source: schema/schema.graphql
- * Generated: 2025-07-28T21:07:29.872Z
+ * Generated: 2025-07-29T20:29:37.417Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -116,6 +116,12 @@ export interface TopicNews {
   post_created?: number | null;
   post_sentiment?: number | null;
   creator_id?: string | null;
+  creator_name?: String           # ADDED: Missing from API analysis | null;
+  creator_display_name?: String   # ADDED: Missing from API analysis | null;
+  creator_followers?: Float       # ADDED: Missing from API analysis | null;
+  creator_avatar?: String         # ADDED: Missing from API analysis | null;
+  interactions_24h?: Float        # ADDED: Missing from API analysis | null;
+  interactions_total?: Float      # ADDED: Missing from API analysis | null;
 }
 
 export interface TopicCreator {

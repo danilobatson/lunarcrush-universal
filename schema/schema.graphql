@@ -165,6 +165,12 @@ type TopicNews {
   post_created: Int
   post_sentiment: Float
   creator_id: String
+  creator_name: String           # ADDED: Missing from API analysis
+  creator_display_name: String   # ADDED: Missing from API analysis
+  creator_followers: Float       # ADDED: Missing from API analysis
+  creator_avatar: String         # ADDED: Missing from API analysis
+  interactions_24h: Float        # ADDED: Missing from API analysis
+  interactions_total: Float      # ADDED: Missing from API analysis
 }
 
 # Fixed TopicCreator with correct field names

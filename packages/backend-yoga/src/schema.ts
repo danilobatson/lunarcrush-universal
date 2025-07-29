@@ -9,8 +9,8 @@
 
 /**
  * LunarCrush GraphQL Schema - Auto-Generated
- * Source: schema/schema.graphql (389 lines)
- * Generated: 2025-07-28T21:07:29.867Z
+ * Source: schema/schema.graphql (395 lines)
+ * Generated: 2025-07-29T20:29:37.412Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -180,6 +180,12 @@ type TopicNews {
   post_created: Int
   post_sentiment: Float
   creator_id: String
+  creator_name: String           # ADDED: Missing from API analysis
+  creator_display_name: String   # ADDED: Missing from API analysis
+  creator_followers: Float       # ADDED: Missing from API analysis
+  creator_avatar: String         # ADDED: Missing from API analysis
+  interactions_24h: Float        # ADDED: Missing from API analysis
+  interactions_total: Float      # ADDED: Missing from API analysis
 }
 
 # Fixed TopicCreator with correct field names
