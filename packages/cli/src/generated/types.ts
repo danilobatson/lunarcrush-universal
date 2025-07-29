@@ -10,7 +10,7 @@
 /**
  * LunarCrush API Types - Auto-Generated for cli
  * Source: schema/schema.graphql
- * Generated: 2025-07-29T20:52:02.504Z
+ * Generated: 2025-07-29T21:11:49.545Z
  *
  * This replaces the old @lunarcrush/shared-types package
  * Each package now generates its own types directly from the schema
@@ -277,40 +277,104 @@ export interface CreatorPost {
 }
 
 export interface CoinListItem {
-  coin?: String  # Fixed: primary identifier | null;
-  name?: string | null;
-  symbol?: String  # Still exists but 'coin' is the ID | null;
-  logo?: string | null;
-  price?: Float  # Fixed: was 'close' | null;
-  market_cap?: number | null;
-  alt_rank?: number | null;
-  close?: number | null;
-}
-
-export interface CoinDetails {
-  coin?: String  # Fixed: primary identifier | null;
-  close?: number | null;
+  id?: Int                          # CHANGED: Use API id as primary | null;
   name?: string | null;
   symbol?: string | null;
   logo?: string | null;
-  price?: Float  # Fixed: was 'close' | null;
+  price?: number | null;
   market_cap?: number | null;
   alt_rank?: number | null;
-  interactions_24h?: number | null;
+  alt_rank_previous?: Int           # Previous AltRank position | null;
+  blockchains?: JSON              # Blockchain information array[] | null;
+  categories?: String             # Categories this coin belongs to[] | null;
+  circulating_supply?: Float        # Circulating supply amount | null;
+  galaxy_score?: Float              # LunarCrush Galaxy Score | null;
+  galaxy_score_previous?: Float     # Previous Galaxy Score | null;
+  interactions_24h?: Float          # 24h social interactions | null;
+  last_updated_price?: Int          # Price last update timestamp | null;
+  last_updated_price_by?: String    # Price update source | null;
+  market_cap_rank?: Int             # Market cap ranking | null;
+  market_dominance?: Float          # Market dominance percentage | null;
+  market_dominance_prev?: Float     # Previous market dominance | null;
+  max_supply?: Float                # Maximum supply | null;
+  percent_change_1h?: Float         # 1 hour price change % | null;
+  percent_change_24h?: Float        # 24 hour price change % | null;
+  percent_change_30d?: Float        # 30 day price change % | null;
+  percent_change_7d?: Float         # 7 day price change % | null;
+  price_btc?: Float                 # Price in BTC | null;
+  sentiment?: Float                 # Social sentiment score | null;
+  social_dominance?: Float          # Social dominance percentage | null;
+  social_volume_24h?: Float         # 24h social volume | null;
+  topic?: String                    # Associated social topic | null;
+  volatility?: Float                # Price volatility metric | null;
+  volume_24h?: Float                # 24h trading volume | null;
+}
+
+export interface CoinDetails {
+  id?: Int                          # CHANGED: Use API id as primary | null;
+  name?: string | null;
+  symbol?: string | null;
+  price?: number | null;
+  market_cap?: number | null;
+  alt_rank?: number | null;
+  close?: Float                     # Keep - exists in API | null;
+  circulating_supply?: Float        # Circulating supply amount | null;
+  galaxy_score?: Float              # LunarCrush Galaxy Score | null;
+  market_cap_rank?: Int             # Market cap ranking | null;
+  max_supply?: Float                # Maximum supply | null;
+  percent_change_24h?: Float        # 24 hour price change % | null;
+  percent_change_30d?: Float        # 30 day price change % | null;
+  percent_change_7d?: Float         # 7 day price change % | null;
+  price_btc?: Float                 # Price in BTC | null;
+  volatility?: Float                # Price volatility metric | null;
+  volume_24h?: Float                # 24h trading volume | null;
 }
 
 export interface CoinTimeSeriesItem {
   time?: number | null;
-  close?: Float  # This one stays 'close' for time series | null;
+  close?: number | null;
   high?: number | null;
   low?: number | null;
   volume_24h?: number | null;
+  alt_rank?: Int                    # AltRank at this time | null;
+  circulating_supply?: Float        # Supply at this time | null;
+  contributors_active?: Int         # Active contributors count | null;
+  contributors_created?: Int        # New contributors count | null;
+  galaxy_score?: Float              # Galaxy Score at this time | null;
+  interactions?: Float              # Social interactions | null;
+  market_cap?: Float                # Market cap at this time | null;
+  market_dominance?: Float          # Market dominance at this time | null;
+  open?: Float                      # Opening price | null;
+  posts_active?: Int                # Active posts count | null;
+  posts_created?: Int               # New posts count | null;
+  sentiment?: Float                 # Sentiment score | null;
+  social_dominance?: Float          # Social dominance percentage | null;
+  spam?: Int                        # Spam posts count | null;
 }
 
 export interface CoinMeta {
-  symbol?: String  coin: String  # Fixed: was 'symbol' | null;
+  id?: Int                          # CHANGED: Use API id as primary | null;
   name?: string | null;
+  symbol?: String                   # ADDED: Missing symbol field | null;
   description?: string | null;
+  blockchain?: String               # Blockchain platform | null;
+  coingecko_link?: String           # CoinGecko URL | null;
+  coinmarketcap_link?: String       # CoinMarketCap URL | null;
+  forum_link?: String               # Forum discussion URL | null;
+  github_link?: String              # GitHub repository URL | null;
+  header_image?: String             # Header image URL | null;
+  header_text?: String              # Header text content | null;
+  market_categories?: String      # Market category classifications[] | null;
+  overview_promotion?: String       # Promotional overview text | null;
+  sections_order?: String         # Content sections order[] | null;
+  short_summary?: String            # Brief summary description | null;
+  telegram_link?: String            # Telegram group URL | null;
+  twitter_link?: String             # Twitter profile URL | null;
+  updated?: Int                     # Last update timestamp | null;
+  videos?: JSON                   # Video content array[] | null;
+  website_link?: String             # Official website URL | null;
+  whitepaper_link?: String          # Whitepaper document URL | null;
+  wikipedia_link?: String           # Wikipedia page URL | null;
 }
 
 export interface StockListItem {

@@ -9,8 +9,8 @@
 
 /**
  * LunarCrush GraphQL Schema - Auto-Generated
- * Source: schema/schema.graphql (465 lines)
- * Generated: 2025-07-29T20:52:02.499Z
+ * Source: schema/schema.graphql (534 lines)
+ * Generated: 2025-07-29T21:11:49.541Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -351,40 +351,109 @@ type CreatorPost {
 
 # Fixed Coin types
 type CoinListItem {
-  coin: String  # Fixed: primary identifier
-  name: String
-  symbol: String  # Still exists but 'coin' is the ID
-  logo: String
-  price: Float  # Fixed: was 'close'
-  market_cap: Float
-  alt_rank: Int
-  close: Float
-}
-
-type CoinDetails {
-  coin: String  # Fixed: primary identifier
-    close: Float
+  id: Int                          # CHANGED: Use API id as primary
   name: String
   symbol: String
   logo: String
-  price: Float  # Fixed: was 'close'
+  price: Float
   market_cap: Float
   alt_rank: Int
-  interactions_24h: Float
+  # ADDED 23 MISSING FIELDS FROM API:
+  alt_rank_previous: Int           # Previous AltRank position
+  blockchains: [JSON]              # Blockchain information array
+  categories: [String]             # Categories this coin belongs to
+  circulating_supply: Float        # Circulating supply amount
+  galaxy_score: Float              # LunarCrush Galaxy Score
+  galaxy_score_previous: Float     # Previous Galaxy Score
+  interactions_24h: Float          # 24h social interactions
+  last_updated_price: Int          # Price last update timestamp
+  last_updated_price_by: String    # Price update source
+  market_cap_rank: Int             # Market cap ranking
+  market_dominance: Float          # Market dominance percentage
+  market_dominance_prev: Float     # Previous market dominance
+  max_supply: Float                # Maximum supply
+  percent_change_1h: Float         # 1 hour price change %
+  percent_change_24h: Float        # 24 hour price change %
+  percent_change_30d: Float        # 30 day price change %
+  percent_change_7d: Float         # 7 day price change %
+  price_btc: Float                 # Price in BTC
+  sentiment: Float                 # Social sentiment score
+  social_dominance: Float          # Social dominance percentage
+  social_volume_24h: Float         # 24h social volume
+  topic: String                    # Associated social topic
+  volatility: Float                # Price volatility metric
+  volume_24h: Float                # 24h trading volume
+}
+
+type CoinDetails {
+  id: Int                          # CHANGED: Use API id as primary
+  name: String
+  symbol: String
+  price: Float
+  market_cap: Float
+  alt_rank: Int
+  close: Float                     # Keep - exists in API
+  # ADDED 12 MISSING FIELDS FROM API:
+  circulating_supply: Float        # Circulating supply amount
+  galaxy_score: Float              # LunarCrush Galaxy Score
+  market_cap_rank: Int             # Market cap ranking
+  max_supply: Float                # Maximum supply
+  percent_change_24h: Float        # 24 hour price change %
+  percent_change_30d: Float        # 30 day price change %
+  percent_change_7d: Float         # 7 day price change %
+  price_btc: Float                 # Price in BTC
+  volatility: Float                # Price volatility metric
+  volume_24h: Float                # 24h trading volume
+  # REMOVED: logo (not in this API), interactions_24h (wrong endpoint)
 }
 
 type CoinTimeSeriesItem {
   time: Int
-  close: Float  # This one stays 'close' for time series
+  close: Float
   high: Float
   low: Float
   volume_24h: Float
+  # ADDED 14 MISSING FIELDS FROM API:
+  alt_rank: Int                    # AltRank at this time
+  circulating_supply: Float        # Supply at this time
+  contributors_active: Int         # Active contributors count
+  contributors_created: Int        # New contributors count
+  galaxy_score: Float              # Galaxy Score at this time
+  interactions: Float              # Social interactions
+  market_cap: Float                # Market cap at this time
+  market_dominance: Float          # Market dominance at this time
+  open: Float                      # Opening price
+  posts_active: Int                # Active posts count
+  posts_created: Int               # New posts count
+  sentiment: Float                 # Sentiment score
+  social_dominance: Float          # Social dominance percentage
+  spam: Int                        # Spam posts count
 }
 
 type CoinMeta {
-  symbol: String  coin: String  # Fixed: was 'symbol'
+  id: Int                          # CHANGED: Use API id as primary
   name: String
+  symbol: String                   # ADDED: Missing symbol field
   description: String
+  # ADDED 19 MISSING METADATA FIELDS FROM API:
+  blockchain: String               # Blockchain platform
+  coingecko_link: String           # CoinGecko URL
+  coinmarketcap_link: String       # CoinMarketCap URL
+  forum_link: String               # Forum discussion URL
+  github_link: String              # GitHub repository URL
+  header_image: String             # Header image URL
+  header_text: String              # Header text content
+  market_categories: [String]      # Market category classifications
+  overview_promotion: String       # Promotional overview text
+  sections_order: [String]         # Content sections order
+  short_summary: String            # Brief summary description
+  telegram_link: String            # Telegram group URL
+  twitter_link: String             # Twitter profile URL
+  updated: Int                     # Last update timestamp
+  videos: [JSON]                   # Video content array
+  website_link: String             # Official website URL
+  whitepaper_link: String          # Whitepaper document URL
+  wikipedia_link: String           # Wikipedia page URL
 }
 
 # Fixed Stock types
