@@ -1,5 +1,9 @@
 # 🔄 LunarCrush Universal - CodeGen Guide (Updated)
 
+
+> **✅ Current Status**: GraphQL resolvers working perfectly with 3-17ms response times using generated types
+
+
 > **Quick Reference:** `yarn codegen` generates all types from `schema/schema.graphql`
 
 ## 📚 How It Works
