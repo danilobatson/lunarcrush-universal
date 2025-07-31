@@ -25,34 +25,34 @@ echo "⚡ Analyzing Hono source code..."
 HONO_SOURCE_ANALYSIS=""
 if [ -d "packages/hono/src" ]; then
     cd packages/hono
-    
+
     # Get actual source structure
     HONO_SRC_STRUCTURE=$(find src -name "*.ts" -o -name "*.js" | sort | jq -R -s 'split("\n")[:-1]')
-    
+
     # Analyze GraphQL files
     HONO_GRAPHQL_FILES=$(find src -name "*graphql*" -o -name "*schema*" -o -name "*resolver*" | jq -R -s 'split("\n")[:-1]')
-    
+
     # Get main entry point
     HONO_MAIN_CONTENT=""
     if [ -f "src/index.ts" ]; then
         HONO_MAIN_CONTENT=$(head -30 src/index.ts | jq -R -s .)
     fi
-    
+
     # Get GraphQL resolvers content
     HONO_RESOLVERS_CONTENT=""
     if [ -f "src/graphql/pure-resolvers.ts" ]; then
         HONO_RESOLVERS_CONTENT=$(head -50 src/graphql/pure-resolvers.ts | jq -R -s .)
     fi
-    
+
     # Find ALL mock data instances
     HONO_MOCK_INSTANCES=$(grep -r -n "Math.random\|mock\|fake\|dummy" src/ 2>/dev/null | jq -R -s 'split("\n")[:-1]')
-    
+
     # Check current schema approach
     HONO_SCHEMA_CONTENT=""
     if [ -f "src/graphql/schema.ts" ]; then
         HONO_SCHEMA_CONTENT=$(head -30 src/graphql/schema.ts | jq -R -s .)
     fi
-    
+
     cd ../..
 fi
 
@@ -62,34 +62,34 @@ echo "🧘 Analyzing Backend-Yoga source..."
 YOGA_SOURCE_ANALYSIS=""
 if [ -d "packages/backend-yoga/src" ]; then
     cd packages/backend-yoga
-    
+
     # Get source structure
     YOGA_SRC_STRUCTURE=$(find src -name "*.ts" -o -name "*.js" | sort | jq -R -s 'split("\n")[:-1]')
-    
+
     # Get LunarCrush service content (this is what we need to port)
     YOGA_LUNARCRUSH_SERVICE=""
     if [ -f "src/services/lunarcrush.ts" ]; then
         YOGA_LUNARCRUSH_SERVICE=$(head -100 src/services/lunarcrush.ts | jq -R -s .)
     fi
-    
+
     # Get LunarCrush fixes content
     YOGA_LUNARCRUSH_FIXES=""
     if [ -f "src/services/lunarcrush-fixes.ts" ]; then
         YOGA_LUNARCRUSH_FIXES=$(head -50 src/services/lunarcrush-fixes.ts | jq -R -s .)
     fi
-    
+
     # Get main index to understand integration pattern
     YOGA_MAIN_CONTENT=""
     if [ -f "src/index.ts" ]; then
         YOGA_MAIN_CONTENT=$(head -50 src/index.ts | jq -R -s .)
     fi
-    
+
     # Get schema content
     YOGA_SCHEMA_CONTENT=""
     if [ -f "src/schema.ts" ]; then
         YOGA_SCHEMA_CONTENT=$(head -50 src/schema.ts | jq -R -s .)
     fi
-    
+
     cd ../..
 fi
 
@@ -99,21 +99,21 @@ echo "📋 Checking schema/codegen setup..."
 SCHEMA_SETUP=""
 if [ -f "schema/schema.graphql" ]; then
     SCHEMA_CONTENT=$(head -50 schema/schema.graphql | jq -R -s .)
-    SCHEMA_EXISTS="true"
+    SCHEMA_EXISTS="True"
 else
     SCHEMA_CONTENT="null"
-    SCHEMA_EXISTS="false"
+    SCHEMA_EXISTS="False"
 fi
 
 # Check for codegen config
 CODEGEN_CONFIG=""
 if [ -f "codegen.yml" ] || [ -f "codegen.yaml" ] || [ -f "codegen.ts" ]; then
-    CODEGEN_EXISTS="true"
+    CODEGEN_EXISTS="True"
     if [ -f "codegen.yml" ]; then
         CODEGEN_CONFIG=$(head -20 codegen.yml | jq -R -s .)
     fi
 else
-    CODEGEN_EXISTS="false"
+    CODEGEN_EXISTS="False"
     CODEGEN_CONFIG="null"
 fi
 
@@ -197,4 +197,3 @@ echo "============================================="
 echo ""
 echo "📤 Upload analysis file: $ANALYSIS_FILE"
 echo "📋 Next: Run Phase 2 migration script"
-
