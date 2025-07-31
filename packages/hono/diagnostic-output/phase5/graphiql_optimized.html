@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>GraphiQL - Enhanced LunarCrush Universal API</title>
+  <link href="https://unpkg.com/graphiql@3.0.6/graphiql.min.css" rel="stylesheet" />
+  <style>
+    body { margin: 0; font-family: system-ui; }
+    #graphiql { height: 100vh; }
+    .title { background: #1a1a1a; color: #fff; padding: 10px; font-size: 18px; display: flex; justify-content: space-between; align-items: center; }
+    .request-info { background: #2a2a2a; color: #ccc; padding: 5px 10px; font-size: 12px; }
+    .features { background: #4ade80; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-left: 10px; }
+  </style>
+</head>
+<body>
+  <div class="title">
+    <span>🚀 Enhanced LunarCrush Universal API - GraphiQL</span>
+    <span class="features">STREAMING • COOKIES • VALIDATION • JSX</span>
+  </div>
+  <div class="request-info">
+    Request ID: f7416587-5da8-43d4-a0ac-ccc7d8b066b8 | User Agent: curl/8.7.1... | Features: All Enhanced
+  </div>
+  <div id="graphiql"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/graphiql@3.0.6/graphiql.min.js"></script>
+
+  <script>
+    const fetcher = (graphQLParams) => {
+      return fetch('/graphql', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add Authorization header if you have a token
+          // 'Authorization': 'Bearer YOUR_TOKEN_HERE'
+        },
+        body: JSON.stringify(graphQLParams),
+      }).then(response => response.json());
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('graphiql'));
+    root.render(
+      React.createElement(GraphiQL, {
+        fetcher: fetcher,
+        defaultQuery: `# 🚀 Enhanced LunarCrush Universal API
+# Request ID: f7416587-5da8-43d4-a0ac-ccc7d8b066b8
+
+# Basic queries
+{
+  hello
+  health {
+    status
+    timestamp
+    service
+    version
+    requestId
+    uptime
+    features
+  }
+}
+
+# With authentication (add Authorization header):
+# {
+#   user {
+#     id
+#     type
+#     lastSeen
+#   }
+#   getUserPreferences {
+#     theme
+#     currency
+#     notifications
+#     favoriteTopics
+#   }
+# }
+
+# Create demo token:
+# mutation {
+#   generateDemoToken {
+#     token
+#     user { id type }
+#     expiresIn
+#   }
+# }
+
+# Enhanced topic query:
+# {
+#   getTopic(topic: "bitcoin") {
+#     symbol
+#     name
+#     price
+#     sentiment
+#     socialScore
+#     raw
+#   }
+# }`
+      })
+    );
+  </script>
+</body>
+</html>
