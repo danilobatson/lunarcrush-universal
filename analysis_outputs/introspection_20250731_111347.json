@@ -1,0 +1,51 @@
+{
+  "data": {
+    "__schema": {
+      "queryType": {
+        "fields": [
+          {
+            "name": "hello",
+            "type": {
+              "name": null
+            }
+          },
+          {
+            "name": "health",
+            "type": {
+              "name": null
+            }
+          },
+          {
+            "name": "user",
+            "type": {
+              "name": "User"
+            }
+          },
+          {
+            "name": "getTopic",
+            "type": {
+              "name": null
+            }
+          },
+          {
+            "name": "getTopicsList",
+            "type": {
+              "name": null
+            }
+          },
+          {
+            "name": "getUserPreferences",
+            "type": {
+              "name": "UserPreferences"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "extensions": {
+    "timing": {
+      "responseTime": 12
+    }
+  }
+}

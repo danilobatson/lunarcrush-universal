@@ -1,0 +1,36 @@
+{
+  "errors": [
+    {
+      "message": "Cannot query field \"topic\" on type \"TopicData\".",
+      "locations": [
+        {
+          "line": 1,
+          "column": 39
+        }
+      ]
+    },
+    {
+      "message": "Cannot query field \"title\" on type \"TopicData\".",
+      "locations": [
+        {
+          "line": 1,
+          "column": 45
+        }
+      ]
+    },
+    {
+      "message": "Cannot query field \"topic_rank\" on type \"TopicData\".",
+      "locations": [
+        {
+          "line": 1,
+          "column": 51
+        }
+      ]
+    }
+  ],
+  "extensions": {
+    "timing": {
+      "responseTime": 10
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "errors": [
+    {
+      "message": "Cannot query field \"topic\" on type \"TopicData\".",
+      "locations": [
+        {
+          "line": 1,
+          "column": 39
+        }
+      ]
+    }
+  ],
+  "extensions": {
+    "timing": {
+      "responseTime": 27
+    }
+  }
+}
