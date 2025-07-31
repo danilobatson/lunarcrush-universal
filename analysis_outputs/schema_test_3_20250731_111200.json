@@ -1,0 +1,27 @@
+{
+  "errors": [
+    {
+      "message": "Cannot query field \"close\" on type \"TopicData\".",
+      "locations": [
+        {
+          "line": 1,
+          "column": 44
+        }
+      ]
+    },
+    {
+      "message": "Cannot query field \"social_score\" on type \"TopicData\". Did you mean \"socialScore\"?",
+      "locations": [
+        {
+          "line": 1,
+          "column": 60
+        }
+      ]
+    }
+  ],
+  "extensions": {
+    "timing": {
+      "responseTime": 9
+    }
+  }
+}
