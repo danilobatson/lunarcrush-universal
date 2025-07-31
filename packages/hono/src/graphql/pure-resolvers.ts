@@ -61,7 +61,6 @@ getTopic: async (args: any, context: any) => {
       console.error('❌ getTopic error:', error)
       throw error // Let GraphQL handle error responses
     }
-  }
   },
 
   getTopicsList: () => {

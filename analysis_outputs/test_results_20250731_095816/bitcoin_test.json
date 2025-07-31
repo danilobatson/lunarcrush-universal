@@ -1,0 +1,36 @@
+{
+  "errors": [
+    {
+      "message": "Cannot query field \"topic\" on type \"TopicData\".",
+      "locations": [
+        {
+          "line": 1,
+          "column": 32
+        }
+      ]
+    },
+    {
+      "message": "Cannot query field \"title\" on type \"TopicData\".",
+      "locations": [
+        {
+          "line": 1,
+          "column": 38
+        }
+      ]
+    },
+    {
+      "message": "Cannot query field \"trend\" on type \"TopicData\".",
+      "locations": [
+        {
+          "line": 1,
+          "column": 44
+        }
+      ]
+    }
+  ],
+  "extensions": {
+    "timing": {
+      "responseTime": 31
+    }
+  }
+}
