@@ -1,6 +1,0 @@
-{
-  "public_endpoint": 200,
-  "authenticated_endpoint": 200,
-  "invalid_token_endpoint": 401,
-  "demo_token_present": true
-}
