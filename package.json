@@ -3,9 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "apps/*",
-    "tools/*"
+    "packages/*"
   ],
   "scripts": {
     "build": "turbo run build",
@@ -17,18 +15,10 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build --filter=./packages/* && changeset publish",
-    "types:verify": "node scripts/verify-types.js",
     "build:all": "npm run build --workspaces",
-    "codegen:backend": "node scripts/generate-backend-schema.js",
-    "codegen:all": "npm run types:generate && npm run codegen:backend",
-    "codegen:full": "npm run codegen && npm run codegen:verify",
     "codegen": "graphql-codegen --config codegen.yml",
-    "codegen:verify": "node scripts/verify-types.js",
     "codegen:watch": "graphql-codegen --config codegen.yml --watch",
     "codegen:check": "graphql-codegen --config codegen.yml --check",
-    "types:generate": "yarn codegen",
-    "types:watch": "yarn codegen:watch",
-    "types:check": "yarn codegen:check",
     "types:audit": "find packages -name '*.ts' | xargs grep -l 'interface\\|type.*=' | grep -v generated || echo 'No manual types found'",
     "types:clean": "find packages -name 'generated.ts' -delete && find packages -name '*types.ts' -path '*/graphql/*' -delete"
   },
@@ -48,9 +38,7 @@
     "node": ">=18"
   },
   "dependencies": {
-    "@envelop/core": "^5.3.0",
-    "graphql": "^16.11.0",
-    "unenv": "2.0.0-rc.17"
+    "graphql": "^16.11.0"
   },
   "resolutions": {
     "graphql": "^16.11.0",
