@@ -1,0 +1,31 @@
+{
+  "timestamp": "2025-07-31T07:22:02Z",
+  "issue": "GraphQL resolvers returning null instead of expected data",
+  "symptoms": [
+    "All GraphQL queries return null data",
+    "Server responds with 200 status",
+    "Response structure is correct but data is null",
+    "No apparent errors in response"
+  ],
+  "likely_causes": [
+    "Resolvers not properly connected to GraphQL schema",
+    "Import/export issues in resolver files",
+    "GraphQL server not configured to use resolvers",
+    "Unhandled errors in resolver functions",
+    "Schema/resolver type mismatches"
+  ],
+  "debugging_actions_taken": [
+    "Checked file structure and resolver definitions",
+    "Examined server setup and GraphQL configuration",
+    "Tested simple health query",
+    "Created test resolver file for isolation testing"
+  ],
+  "next_actions": [
+    "Check server terminal for error messages",
+    "Verify GraphQL server setup connects schema + resolvers",
+    "Test with simplified resolver functions",
+    "Check import/export statements in all GraphQL files",
+    "Verify schema and resolver field names match exactly"
+  ],
+  "status": "debugging_in_progress"
+}

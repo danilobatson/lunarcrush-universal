@@ -1,0 +1,22 @@
+{
+  "timestamp": "REPLACE_WITH_CURRENT_TIME",
+  "resolver_test_results": {
+    "health_resolver": {
+      "console_log_appeared": "YES/NO",
+      "response_data": "null/actual_data",
+      "notes": "any_observations"
+    },
+    "topics_resolver": {
+      "console_log_appeared": "YES/NO",
+      "response_data": "null/actual_data",
+      "notes": "any_observations"
+    },
+    "comprehensive_query": {
+      "console_log_appeared": "YES/NO",
+      "response_data": "null/actual_data",
+      "notes": "any_observations"
+    }
+  },
+  "diagnosis": "resolvers_working/resolvers_not_called/mixed_results",
+  "next_action": "fix_logic/fix_configuration/investigate_further"
+}

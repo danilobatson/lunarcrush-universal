@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-07-31T07:27:48Z",
+  "issue": "GraphQL resolvers returning null instead of mock/real data",
+  "server_type": "GraphQL Yoga on Cloudflare Workers",
+  "server_package": "packages/hono",
+  "files_created": [
+    "src/graphql/resolver-test.ts - Simple test resolvers with console.log",
+    "src/test-server.ts - Isolated test server configuration",
+    "src/index.tsx.debug - Main server with added logging"
+  ],
+  "debugging_approach": [
+    "Created isolated test resolvers with console.log statements",
+    "Created separate test server to isolate GraphQL setup",
+    "Added debug logging to existing resolvers"
+  ],
+  "next_steps": [
+    "Check terminal output for console.log messages when making GraphQL requests",
+    "If no console.log messages appear, resolvers aren't being called",
+    "If console.log appears but data is still null, issue is in resolver logic",
+    "Test with simple resolver file first, then debug main server"
+  ],
+  "test_queries": {
+    "health": "{ health }",
+    "hello": "{ hello }",
+    "topics": "{ getTopicsList { topic title } }",
+    "bitcoin": "{ getTopic(topic: \"bitcoin\") { topic title } }"
+  },
+  "status": "debug_files_created"
+}

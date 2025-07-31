@@ -1,0 +1,45 @@
+import { Hono } from 'hono'
+import { testClient } from 'hono/testing'
+
+// Import types
+import type { AppContext } from '../types/generated'
+
+// Import middleware
+import { setupCoreMiddleware } from './middleware/core'
+import { enhancedRateLimit } from './middleware/rateLimit'
+import { setupErrorHandlers } from './middleware/errorHandlers'
+
+// Import route handlers
+import { setupHealthRoutes } from './routes/health'
+import { setupAuthRoutes } from './routes/auth'
+import { setupCookieRoutes } from './routes/cookies'
+import { setupStreamingRoutes } from './routes/streaming'
+import { setupValidationRoutes } from './routes/validation'
+import { setupAdminRoutes } from './routes/admin'
+import { setupGraphQLRoutes } from './routes/graphql'
+
+// Create the main Hono app
+const app = new Hono<AppContext>()
+
+// Setup core middleware stack
+setupCoreMiddleware(app)
+
+// Apply rate limiting to API routes
+app.use('/api/*', enhancedRateLimit)
+
+// Setup all route handlers
+setupHealthRoutes(app)
+setupAuthRoutes(app)
+setupCookieRoutes(app)
+setupStreamingRoutes(app)
+setupValidationRoutes(app)
+setupAdminRoutes(app)
+setupGraphQLRoutes(app)
+
+// Setup error handlers (must be last)
+setupErrorHandlers(app)
+
+// Export for testing and deployment
+export const client = testClient(app)
+export type AppType = typeof app
+export default app

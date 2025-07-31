@@ -1,212 +1,180 @@
 # 🔄 LunarCrush Universal - CodeGen Guide (Updated)
 
-> **Quick Reference:** When LunarCrush API changes, run `npm run codegen:full`
+> **Quick Reference:** `yarn codegen` generates all types from `schema/schema.graphql`
 
-## 📚 How It Works (New Architecture)
+## 📚 How It Works
 
-Your type system follows this **simplified flow**:
+Your type system follows this **single source of truth** flow:
 ```
-schema/schema.graphql → scripts/generate-all-types.js → packages/*/src/generated/types.ts
+schema/schema.graphql → codegen.yml → Generated Types in ALL Packages
 ```
 
-**🎯 Single Source of Truth:** `schema/schema.graphql` (673 lines) defining all LunarCrush API types
+**🎯 Single Source:** `schema/schema.graphql` defines ALL types
+**🔄 Standard Tool:** Uses GraphQL Code Generator (not custom scripts)
+**✅ Full Coverage:** Generates types for hono, sdk, cli packages
 
-**🔄 Direct Package CodeGen:** Each package generates its own types directly from the schema
+## 🚀 Commands
 
-**✅ No Shared Dependencies:** Eliminated shared-types directory for cleaner architecture
-
-## 🚀 Updated Workflows
-
-### When LunarCrush API Changes
 ```bash
-# Complete workflow (recommended)
-npm run codegen:full
+# Generate all types from schema
+yarn codegen
+
+# Watch for schema changes and regenerate
+yarn codegen:watch
+
+# Check schema validity without generating
+yarn codegen:check
 ```
-This will:
-1. Generate types directly in all packages from schema/schema.graphql
-2. Create backend schema for GraphQL Yoga
-3. Verify everything compiles and builds
-
-### Manual Schema Updates
-```bash
-# 1. Edit schema/schema.graphql manually
-# 2. Regenerate all types
-npm run codegen
-# 3. Verify everything works
-npm run codegen:verify
-```
-
-### Adding Types to New Package
-1. Add package to `scripts/generate-all-types.js`
-2. Run `npm run codegen`
-3. Import types: `import { TopicListItem } from './generated/types'`
-
-## 🛠️ Available Commands
-
-### NPM Scripts (Easy to Remember)
-| Command | What It Does |
-|---------|-------------|
-| `npm run codegen` | Generate types in all packages |
-| `npm run codegen:verify` | Test types compile and packages build |
-| `npm run codegen:full` | Complete workflow: generate + verify |
-| `npm run codegen:backend` | Generate backend schema only |
 
 ## 📊 What Gets Generated
 
-From your 673-line GraphQL schema, each package gets:
-- **32 TypeScript interfaces** (TopicListItem, CreatorDetails, etc.)
-- **3 TypeScript enums** (TimeInterval, SortDirection, etc.)
-- **480 lines** of clean TypeScript per package
-- **Auto-generated warnings** to prevent manual editing
+From your GraphQL schema, each package gets TypeScript types:
 
-### Generated File Structure
+### Generated Files Structure
 ```
 packages/
-├── backend-yoga/
-│   ├── src/schema.ts                 # GraphQL schema for Yoga (692 lines)
-│   └── src/generated/types.ts        # TypeScript types (480 lines)
-├── sdk/
-│   └── src/generated/types.ts        # TypeScript types (480 lines)
-└── cli/
-    └── src/generated/types.ts        # TypeScript types (480 lines)
+├── hono/src/
+│   ├── types/generated.ts           # 🚨 All TypeScript interfaces
+│   └── graphql/
+│       ├── resolvers-types.ts       # 🚨 GraphQL resolver types
+│       └── schema.ts                # 🚨 Schema export for Hono
+├── sdk/src/
+│   └── types/generated.ts           # 🚨 SDK-specific types
+├── cli/src/
+│   └── types/generated.ts           # 🚨 CLI-specific types
+└── docs/
+    ├── api-schema.graphql           # 🚨 Schema documentation
+    └── api-schema.md                # 🚨 Formatted docs
 ```
 
-### Example Generated Interface
+All files marked 🚨 have warning headers and are auto-generated.
+
+## 🎯 Usage Examples
+
+### Hono Backend
 ```typescript
-export interface TopicListItem {
-  topic?: string | null;
-  title?: string | null;
-  topic_rank?: number | null;
-  interactions_24h?: number | null;
-  // ... more fields
+// Import generated types
+import type { TopicListItem, CoinListItem } from '../types/generated'
+import type { Resolvers } from '../graphql/resolvers-types'
+import { typeDefs } from '../graphql/schema'
+
+// Use in resolvers
+export const resolvers: Resolvers = {
+  Query: {
+    getTopicsList: async (): Promise<TopicListItem[]> => {
+      // Fully typed from schema!
+    }
+  }
 }
 ```
 
-## 🎯 Real-World Scenarios
-
-### Scenario 1: LunarCrush adds new cryptocurrency fields
-```bash
-# 1. Update schema/schema.graphql with new fields
-# 2. Regenerate all packages
-npm run codegen:full
-# ✅ All packages updated with new types
-```
-
-### Scenario 2: Building a new package
-```bash
-# 1. Create package directory
-mkdir packages/my-new-package
-# 2. Add to scripts/generate-all-types.js packages array
-# 3. Generate types
-npm run codegen
-```
-
-### Scenario 3: Types seem wrong after API changes
-```bash
-# Check current schema
-cat schema/schema.graphql | head -20
-# Regenerate and verify
-npm run codegen:full
-```
-
-## 🚨 Troubleshooting
-
-### "Cannot find module './generated/types'" error
-```bash
-# Types not generated - run codegen
-npm run codegen
-# Check if file was created
-ls packages/your-package/src/generated/types.ts
-```
-
-### Build errors after type changes
-```bash
-# Clean regeneration
-npm run codegen:full
-# Test individual packages
-cd packages/backend-yoga && npm run build
-```
-
-### Manual type files causing conflicts
-```bash
-# Remove manual types, use generated instead
-rm packages/your-package/src/types.ts
-# Update imports to use generated types
-# import { TopicListItem } from './generated/types'
-npm run codegen
-```
-
-## 💡 Best Practices
-
-### 1. Always use generated types
+### SDK Package
 ```typescript
-// ✅ Good - use generated types
-import { TopicListItem } from './generated/types';
+import type { TopicListItem, CoinListItem } from './types/generated'
 
-// ❌ Avoid - manual type definitions
-interface TopicListItem { ... }
+const topics: TopicListItem[] = await client.getTopics()
 ```
 
-### 2. Keep schema and packages in sync
-- Schema changes → Always run `npm run codegen`
-- Never edit generated files manually
-- Use semantic commits for schema changes
-
-### 3. Test imports in actual usage
+### CLI Package
 ```typescript
-import { TopicListItem, CoinDetails } from './generated/types';
+import type { TopicListItem } from './types/generated'
 
-const topics: TopicListItem[] = [];
-const coin: CoinDetails = await getCoin('bitcoin');
+function displayTopics(topics: TopicListItem[]) {
+  // Fully typed CLI operations
+}
 ```
 
-## 📁 Updated File Structure
+## 🔧 Adding New Types
 
+1. **Edit the schema:**
+   ```bash
+   # Edit schema/schema.graphql
+   vim schema/schema.graphql
+   ```
+
+2. **Add your new type:**
+   ```graphql
+   type NewType {
+     id: String
+     name: String
+     value: Float
+   }
+   ```
+
+3. **Regenerate types:**
+   ```bash
+   yarn codegen
+   ```
+
+4. **Use in your code:**
+   ```typescript
+   import type { NewType } from './types/generated'
+   ```
+
+## 🚨 Warning Headers
+
+Every generated file starts with:
+```typescript
+/* eslint-disable */
+// ================================================================
+// 🚨 AUTO-GENERATED - DO NOT EDIT MANUALLY! 🚨
+// ================================================================
+// Generated from: schema/schema.graphql
+// Command: yarn codegen
+//
+// To make changes:
+// 1. Edit schema/schema.graphql
+// 2. Run: yarn codegen
+// 3. NEVER edit this file directly!
+// ================================================================
 ```
-lunarcrush-universal/
-├── schema/
-│   └── schema.graphql              # Single source of truth (673 lines)
-├── scripts/
-│   ├── generate-all-types.js       # Enhanced package generator
-│   ├── generate-backend-schema.js  # Backend-specific generator
-│   └── verify-types.js             # Type verification
-├── packages/
-│   ├── backend-yoga/
-│   │   ├── src/schema.ts           # Auto-generated GraphQL schema
-│   │   └── src/generated/types.ts  # Auto-generated TypeScript types
-│   ├── sdk/
-│   │   └── src/generated/types.ts  # Auto-generated TypeScript types
-│   └── cli/
-│       └── src/generated/types.ts  # Auto-generated TypeScript types
-└── CODEGEN.md                      # This updated guide
-```
 
-## ✅ Architecture Benefits
+## 🎯 Benefits
 
-**🎯 Simplified:** Direct package generation (no shared dependencies)
-**🔄 Consistent:** Same types across all packages from single source
-**🚀 Fast:** No workspace dependency resolution overhead
-**🧹 Clean:** Eliminated shared-types directory complexity
-**📝 Maintainable:** Auto-generated files with edit warnings
+- ✅ **Single Source of Truth:** One schema file controls all types
+- ✅ **Type Safety:** Full TypeScript coverage across all packages
+- ✅ **Consistency:** Same types everywhere, no drift
+- ✅ **Professional:** Industry-standard GraphQL Code Generator
+- ✅ **Maintainable:** Clear warnings, proper organization
 
-## 📞 Quick Help
+## 🔍 Troubleshooting
 
-**Most common command:** `npm run codegen:full`
-
-**Emergency reset:**
+### Types seem outdated
 ```bash
-rm -rf packages/*/src/generated/
-npm run codegen
+yarn codegen  # Regenerate from schema
 ```
 
-**Check everything is working:**
+### Build errors after schema changes
 ```bash
-npm run codegen:verify
+yarn codegen  # Regenerate types
+yarn build    # Test compilation
 ```
 
-**Add new package:**
-Edit `scripts/generate-all-types.js` and add to packages array
+### Import errors
+Make sure you're importing from generated files:
+```typescript
+// ✅ Correct
+import type { TopicListItem } from './types/generated'
+
+// ❌ Wrong
+import type { TopicListItem } from './types/manual'
+```
+
+## 📁 File Organization
+
+- `schema/schema.graphql` - **Master schema** (edit this)
+- `codegen.yml` - **Generator config** (rarely changed)
+- `packages/*/types/generated.ts` - **Generated types** (never edit)
+- `scripts/backup/` - **Old files** (reference only)
+
+## 🚀 Deployment Ready
+
+This setup is:
+- ✅ **Production tested**
+- ✅ **Interview ready** (shows modern practices)
+- ✅ **Team friendly** (clear warnings, good docs)
+- ✅ **Scalable** (easy to add new packages)
 
 ---
 
-🎉 **Updated for direct package codegen architecture!** No more shared-types complexity.
+**💡 Remember:** Always run `yarn codegen` after editing `schema/schema.graphql`

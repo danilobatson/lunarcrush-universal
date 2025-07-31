@@ -22,12 +22,24 @@
     "codegen:backend": "node scripts/generate-backend-schema.js",
     "codegen:all": "npm run types:generate && npm run codegen:backend",
     "codegen:full": "npm run codegen && npm run codegen:verify",
-    "codegen": "node scripts/generate-all-types.js",
-    "codegen:verify": "node scripts/verify-types.js"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "codegen:verify": "node scripts/verify-types.js",
+    "codegen:watch": "graphql-codegen --config codegen.yml --watch",
+    "codegen:check": "graphql-codegen --config codegen.yml --check",
+    "types:generate": "yarn codegen",
+    "types:watch": "yarn codegen:watch",
+    "types:check": "yarn codegen:check",
+    "types:audit": "find packages -name '*.ts' | xargs grep -l 'interface\\|type.*=' | grep -v generated || echo 'No manual types found'",
+    "types:clean": "find packages -name 'generated.ts' -delete && find packages -name '*types.ts' -path '*/graphql/*' -delete"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
-    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/add": "^5.0.0",
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/introspection": "^4.0.0",
+    "@graphql-codegen/schema-ast": "^4.0.0",
+    "@graphql-codegen/typescript": "^4.0.0",
+    "@graphql-codegen/typescript-resolvers": "^4.0.0",
     "prettier": "^3.1.0",
     "turbo": "^1.11.2"
   },
@@ -37,7 +49,6 @@
   },
   "dependencies": {
     "@envelop/core": "^5.3.0",
-    "@graphql-codegen/typescript-resolvers": "^4.5.1",
     "graphql": "^16.11.0",
     "unenv": "2.0.0-rc.17"
   },
