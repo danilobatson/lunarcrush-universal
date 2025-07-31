@@ -1,4 +1,3 @@
-cat > phase2b_implement_single_resolver.sh << 'EOF'
 #!/bin/bash
 
 # Phase 2B: Implement Single Resolver Migration - getTopic with Real Data
@@ -382,4 +381,3 @@ echo "✅ Changes committed to git"
 echo ""
 echo "🚀 Ready to test real data integration!"
 
-EOF

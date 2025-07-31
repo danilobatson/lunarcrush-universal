@@ -1,0 +1,85 @@
+{
+  "phase": "Phase 1 - Deep Source Analysis",
+  "timestamp": "2025-07-31T16:33:12Z",
+  "git_backup_created": true,
+  "hono_source_analysis": {
+    "source_structure": [
+      "src/auth/middleware.ts",
+      "src/graphql/pure-resolvers.ts",
+      "src/graphql/pure-schema.ts",
+      "src/graphql/resolvers-types.ts",
+      "src/middleware/core.ts",
+      "src/middleware/errorHandlers.ts",
+      "src/middleware/rateLimit.ts",
+      "src/routes/admin.ts",
+      "src/routes/auth.ts",
+      "src/routes/cookies.ts",
+      "src/routes/graphql.ts",
+      "src/routes/health.ts",
+      "src/routes/streaming.ts",
+      "src/routes/validation.ts",
+      "src/test-server.ts",
+      "src/types/generated.ts",
+      "src/utils/cache.ts",
+      "src/utils/validation.ts"
+    ],
+    "graphql_files": [
+      "src/graphql",
+      "src/graphql/schema.graphql",
+      "src/graphql/pure-schema.ts",
+      "src/graphql/resolvers-types.ts",
+      "src/graphql/pure-resolvers.ts",
+      "src/routes/graphql.ts"
+    ],
+    "main_entry_preview": "null",
+    "resolvers_preview": "import { HTTPException } from 'hono/http-exception'\n\n// Pure GraphQL resolvers (same format as your working backup)\nexport const resolvers = {\n  hello: () => {\n    console.log('\ud83d\udfe2 Hello resolver called!')\n    return 'Hello from Enhanced LunarCrush Universal Hono! \ud83d\ude80'\n  },\n\n  health: (args: any, context: any) => {\n    console.log('\ud83d\udfe2 Health resolver called!')\n    return {\n      status: 'healthy',\n      timestamp: new Date().toISOString(),\n      service: 'lunarcrush-universal-hono-enhanced',\n      version: '2.0.0',\n      requestId: context.requestId || 'unknown',\n      uptime: process.uptime ? process.uptime() : 0,\n      features: [\n        'GraphQL', 'REST', 'Streaming', 'SSE', 'Cookies', 'JWT',\n        'Rate Limiting', 'Caching', 'Validation', 'JSX', 'Testing'\n      ]\n    }\n  },\n\n  user: (args: any, context: any) => {\n    console.log('\ud83d\udfe2 User resolver called!')\n    if (!context.user) {\n      throw new HTTPException(401, { message: 'Authentication required' })\n    }\n    return {\n      id: context.user.sub,\n      type: context.user.type,\n      lastSeen: new Date().toISOString()\n    }\n  },\n\n  getTopic: async (args: any, context: any) => {\n    console.log('\ud83d\udfe2 getTopic resolver called with:', args.topic)\n    const { topic } = args\n    // Simulate enhanced topic data\n    return {\n      symbol: topic.toUpperCase(),\n      name: topic.charAt(0).toUpperCase() + topic.slice(1),\n      price: Math.random() * 50000,\n      sentiment: Math.random() * 100,\n      socialScore: Math.random() * 1000,\n      raw: JSON.stringify({\n        enhanced: true,\n        topic,\n",
+    "schema_preview": "null",
+    "mock_data_instances": [
+      "src/graphql/pure-resolvers.ts:45:      price: Math.random() * 50000,",
+      "src/graphql/pure-resolvers.ts:46:      sentiment: Math.random() * 100,",
+      "src/graphql/pure-resolvers.ts:47:      socialScore: Math.random() * 1000,",
+      "src/graphql/pure-resolvers.ts:71:    // Return mock preferences (in real app, fetch from DB)",
+      "src/routes/streaming.ts:12:        await stream.writeln(`\ud83d\udcca Data packet ${i}: BTC Price: ${(Math.random() * 50000 + 30000).toFixed(2)}`)",
+      "src/routes/streaming.ts:31:        const price = Math.random() * 50000 + 30000",
+      "src/routes/streaming.ts:32:        const sentiment = Math.random() * 100",
+      "src/routes/streaming.ts:33:        const volume = Math.random() * 1000000",
+      "src/routes/streaming.ts:42:            change24h: ((Math.random() - 0.5) * 20).toFixed(2)",
+      "src/routes/admin.ts:14:        totalRequests: Math.floor(Math.random() * 10000),",
+      "src/routes/admin.ts:15:        activeUsers: Math.floor(Math.random() * 100),",
+      "src/routes/admin.ts:16:        cacheHits: Math.floor(Math.random() * 5000)"
+    ]
+  },
+  "backend_yoga_source_analysis": {
+    "source_structure": [
+      "src/generated/types.ts",
+      "src/index.ts",
+      "src/schema.ts",
+      "src/services/lunarcrush-fixes.ts",
+      "src/services/lunarcrush.ts",
+      "src/utils/health.ts"
+    ],
+    "lunarcrush_service_preview": "// Complete LunarCrush service matching EXACT API documentation\n\nexport interface LunarCrushConfig {\n\tapiKey: string;\n\tbaseUrl?: string;\n}\n\nexport class LunarCrushError extends Error {\n\tconstructor(\n\t\tmessage: string,\n\t\tpublic statusCode: number,\n\t\tpublic statusText: string\n\t) {\n\t\tsuper(message);\n\t\tthis.name = 'LunarCrushError';\n\t}\n}\n\n// Core API request function\nconst makeRequest = async <T>(\n\tconfig: LunarCrushConfig,\n\tendpoint: string,\n\tparams?: Record<string, any>\n): Promise<T> => {\n\tconst baseUrl = config.baseUrl || 'https://lunarcrush.com/api4/public';\n\tconst url = new URL(`${baseUrl}${endpoint}`);\n\n\tif (params) {\n\t\tObject.entries(params)\n\t\t\t.filter(([_, value]) => value !== undefined && value !== null)\n\t\t\t.forEach(([key, value]) => url.searchParams.append(key, String(value)));\n\t}\n\n\tconsole.log(`\ud83c\udf19 LunarCrush API Request: ${url.toString()}`);\n\n\tconst response = await fetch(url.toString(), {\n\t\tmethod: 'GET',\n\t\theaders: {\n\t\t\tAuthorization: `Bearer ${config.apiKey}`,\n\t\t\t'Content-Type': 'application/json',\n\t\t\tAccept: 'application/json',\n\t\t},\n\t});\n\n\tif (!response.ok) {\n\t\tthrow new LunarCrushError(\n\t\t\t`LunarCrush API error: ${response.status} ${response.statusText}`,\n\t\t\tresponse.status,\n\t\t\tresponse.statusText\n\t\t);\n\t}\n\n\tconst responseData = (await response.json()) as T;\n\tconsole.log(`\u2705 LunarCrush response received`);\n\treturn responseData;\n};\n\n// ===== TOPICS ENDPOINTS (EXACT FROM API DOCS) =====\n\nexport const getTopicsList = async (config: LunarCrushConfig): Promise<any> => {\n\ttry {\n\t\tconst response = await makeRequest<any>(config, '/topics/list/v1');\n\t\treturn response.data;\n\t} catch (error) {\n\t\tconsole.error('\u274c getTopicsList error:', error);\n\t\tif (error instanceof LunarCrushError) {\n\t\t\tthrow new Error(\n\t\t\t\t`${error.statusCode} ${error.statusText}: ${error.message}`\n\t\t\t);\n\t\t}\n\t\tthrow error;\n\t}\n};\n\nexport const getTopic = async (\n\tconfig: LunarCrushConfig,\n\ttopic: string\n): Promise<any> => {\n\ttry {\n\t\tconst response = await makeRequest<any>(\n\t\t\tconfig,\n\t\t\t`/topic/${topic.toLowerCase()}/v1`\n\t\t);\n\t\treturn response.data;\n\t} catch (error) {\n\t\tconsole.error('\u274c getTopic error:', error);\n\t\tif (error instanceof LunarCrushError) {\n\t\t\tthrow new Error(\n\t\t\t\t`${error.statusCode} ${error.statusText}: ${error.message}`\n\t\t\t);\n\t\t}\n\t\tthrow error;\n\t}\n};\n\nexport const getTopicWhatsup = async (\n\tconfig: LunarCrushConfig,\n\ttopic: string\n): Promise<any> => {\n\ttry {\n",
+    "lunarcrush_fixes_preview": "// \ud83d\udee0\ufe0f LunarCrush Service Fixes\n// Fixes for failing resolvers to handle missing/changed endpoints gracefully\n\nimport { LunarCrushConfig } from './lunarcrush'\n\n// Fixed getNftTimeSeriesV1 - return empty array if no data\nexport async function getNftTimeSeriesV1Fixed(config: LunarCrushConfig, id: string, interval?: string, start?: number, end?: number): Promise<any[]> {\n  try {\n    const params = new URLSearchParams({\n      id,\n      ...(interval && { interval }),\n      ...(start && { start: start.toString() }),\n      ...(end && { end: end.toString() })\n    })\n\n    const response = await fetch(`${config.baseUrl}/nfts/${id}/time-series?${params}`, {\n      headers: {\n        'Authorization': `Bearer ${config.apiKey}`,\n        'Content-Type': 'application/json'\n      }\n    })\n\n    if (!response.ok) {\n      console.warn(`getNftTimeSeriesV1 API error: ${response.status}`)\n      return [] // Return empty array instead of throwing\n    }\n\n    const data = await response.json()\n    return Array.isArray(data.data) ? data.data : []\n  } catch (error) {\n    console.warn('getNftTimeSeriesV1 error:', error)\n    return [] // Return empty array on any error\n  }\n}\n\n// Fixed getSearch - handle missing endpoint gracefully\nexport async function getSearchFixed(config: LunarCrushConfig, id: string): Promise<any> {\n  try {\n    const response = await fetch(`${config.baseUrl}/search/${id}`, {\n      headers: {\n        'Authorization': `Bearer ${config.apiKey}`,\n        'Content-Type': 'application/json'\n      }\n    })\n\n    if (!response.ok) {\n      return {\n        id,\n        query: id,\n        results: [],\n",
+    "main_entry_preview": "import { createYoga, createSchema } from 'graphql-yoga';\nimport { typeDefs } from './schema';\nimport {\n\tperformHealthCheck,\n\thealthResponses,\n\tHealthCheckConfig,\n} from './utils/health';\nimport {\n\tLunarCrushConfig,\n\tgetTopicsList,\n\tgetTopic,\n\tgetTopicWhatsup,\n\tgetTopicTimeSeries,\n\tgetTopicTimeSeriesV2,\n\tgetTopicPosts,\n\tgetTopicNews,\n\tgetTopicCreators,\n\tgetCategoriesList,\n\tgetCategory,\n\tgetCategoryTopics,\n\tgetCategoryTimeSeries,\n\tgetCategoryPosts,\n\tgetCategoryNews,\n\tgetCategoryCreators,\n\tgetCreatorsList,\n\tgetCreator,\n\tgetCreatorTimeSeries,\n\tgetCreatorPosts,\n\tgetCoinsList,\n\tgetCoinsListV2,\n\tgetCoin,\n\tgetCoinTimeSeries,\n\tgetCoinMeta,\n\tgetStocksList,\n\tgetStocksListV2,\n\tgetStock,\n\tgetStockTimeSeries,\n\tgetNftsList,\n\tgetNftsListV2,\n\tgetNft,\n\tgetNftTimeSeries,\n\tgetSystemChanges,\n\tgetSearchesList,\n} from './services/lunarcrush';\n\n// Import the fixed functions\nimport {\n\tgetNftTimeSeriesV1Fixed,\n\tgetSearchFixed,\n\tsearchPostsFixed,\n",
+    "schema_preview": "// ===================================================================\n// \ud83d\udea8 AUTO-GENERATED FILE - DO NOT EDIT MANUALLY! \ud83d\udea8\n// ===================================================================\n// This file is automatically generated from schema/schema.graphql\n// To make changes:\n// 1. Edit schema/schema.graphql\n// 2. Run: npm run codegen:all\n// ===================================================================\n\n/**\n * LunarCrush GraphQL Schema - Auto-Generated\n * Source: schema/schema.graphql (596 lines)\n * Generated: 2025-07-29T21:40:01.102Z\n */\n\nexport const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema\n# Fixed to match actual LunarCrush API v4 responses\n# https://lunarcrush.com/developers/api/endpoints\n# Single source of truth for all LunarCrush API types\n\nscalar Date\nscalar JSON\n\n# ===== ENUMS =====\n\nenum TimeInterval {\n  ONE_HOUR\n  FOUR_HOURS\n  ONE_DAY\n  ONE_WEEK\n  ONE_MONTH\n}\n\nenum SortDirection {\n  ASC\n  DESC\n}\n\n# ===== QUERY ROOT =====\n\ntype Query {\n  error: String\n  # Health check\n  health: String\n  healthSimple: String\n\n  # ===== TOPICS ENDPOINTS =====\n  getTopicsList: [TopicListItem]\n  getTopic(topic: String): TopicDetails\n  getTopicWhatsup(topic: String): TopicWhatsup\n"
+  },
+  "schema_codegen_setup": {
+    "schema_file_exists": true,
+    "schema_preview": "# LunarCrush Universal Backend - CORRECTED API Schema\n# Fixed to match actual LunarCrush API v4 responses\n# https://lunarcrush.com/developers/api/endpoints\n# Single source of truth for all LunarCrush API types\n\nscalar Date\nscalar JSON\n\n# ===== ENUMS =====\n\nenum TimeInterval {\n  ONE_HOUR\n  FOUR_HOURS\n  ONE_DAY\n  ONE_WEEK\n  ONE_MONTH\n}\n\nenum SortDirection {\n  ASC\n  DESC\n}\n\n# ===== QUERY ROOT =====\n\ntype Query {\n  # Health check\n  health: String\n  hello: String\n\n  # ===== TOPICS ENDPOINTS =====\n  getTopicsList: [TopicListItem]\n  getTopic(topic: String): TopicDetails\n  getTopicWhatsup(topic: String): TopicWhatsup\n  getTopicTimeSeries(topic: String, bucket: String, interval: String, start: String, end: String): [TopicTimeSeriesItem]\n  getTopicTimeSeriesV2(topic: String, bucket: String): [TopicTimeSeriesItem]\n  getTopicPosts(topic: String, start: String, end: String): [TopicPost]\n  getTopicNews(topic: String): [TopicNews]\n  getTopicCreators(topic: String): [TopicCreator]\n\n  # ===== CATEGORIES ENDPOINTS =====\n  getCategoriesList: [CategoryListItem]\n  getCategory(category: String): CategoryDetails\n  getCategoryTopics(category: String): [CategoryTopic]\n  getCategoryTimeSeries(category: String, bucket: String, interval: String, start: String, end: String): [CategoryTimeSeriesItem]\n  getCategoryPosts(category: String, start: String, end: String): [CategoryPost]\n  getCategoryNews(category: String): [CategoryNews]\n  getCategoryCreators(category: String): [CategoryCreator]\n\n  # ===== CREATORS ENDPOINTS =====\n",
+    "codegen_exists": true,
+    "codegen_config": "schema: \"./schema/schema.graphql\"\noverwrite: true\n\nconfig:\n  scalars:\n    Date: string\n    JSON: any\n  enumsAsTypes: false\n  optionalType: undefined | null\n\ngenerates:\n  # HONO BACKEND - Workers Runtime Compatible\n  ./packages/hono/src/types/generated.ts:\n    plugins:\n      - add:\n          content: |\n            /* eslint-disable */\n            // ================================================================\n            // \ud83d\udea8 AUTO-GENERATED - DO NOT EDIT MANUALLY! \ud83d\udea8\n            // ================================================================\n"
+  },
+  "migration_plan": {
+    "step_1": "Port LunarCrush service layer from backend-yoga to Hono",
+    "step_2": "Replace all Math.random() mock data with real API calls",
+    "step_3": "Set up schema/codegen as single source of truth",
+    "step_4": "Configure environment variables",
+    "step_5": "Test real data integration"
+  },
+  "next_actions": [
+    "Create environment setup script",
+    "Port LunarCrush service from backend-yoga",
+    "Replace mock resolvers with real data",
+    "Set up codegen workflow"
+  ]
+}

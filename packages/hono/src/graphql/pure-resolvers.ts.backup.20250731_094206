@@ -36,48 +36,22 @@ export const resolvers = {
   },
 
   getTopic: async (args: any, context: any) => {
-    console.log('🌙 getTopic resolver called with:', args.topic)
+    console.log('🟢 getTopic resolver called with:', args.topic)
     const { topic } = args
-
-    try {
-      // Get API key from Cloudflare Workers secret binding
-      const apiKey = await context.env.LUNARCRUSH_API_KEY.get()
-      if (!apiKey) {
-        throw new Error('LUNARCRUSH_API_KEY not configured')
-      }
-
-      // Import LunarCrush service
-      const { getTopic: getLunarCrushTopic } = await import('../services/lunarcrush')
-
-      // Get real data from LunarCrush API
-      const realData = await getLunarCrushTopic({ apiKey }, topic)
-
-      console.log('✅ Real LunarCrush data retrieved for:', topic)
-
-      // Return real data in expected format
-      return {
-        symbol: realData.symbol || topic.toUpperCase(),
-        name: realData.name || topic,
-        price: realData.close || realData.price || 0,
-        sentiment: realData.sentiment || 0,
-        socialScore: realData.social_score || realData.socialScore || 0,
-        raw: JSON.stringify(realData)
-      }
-
-    } catch (error) {
-      console.error('❌ getTopic error:', error)
-
-      // Fallback to prevent resolver crashes (temporary)
-      return {
-        symbol: topic.toUpperCase(),
-        name: topic,
-        price: 0,
-        sentiment: 0,
-        socialScore: 0,
-        raw: JSON.stringify({ error: error.message })
-      }
+    // Simulate enhanced topic data
+    return {
+      symbol: topic.toUpperCase(),
+      name: topic.charAt(0).toUpperCase() + topic.slice(1),
+      price: Math.random() * 50000,
+      sentiment: Math.random() * 100,
+      socialScore: Math.random() * 1000,
+      raw: JSON.stringify({
+        enhanced: true,
+        topic,
+        timestamp: new Date().toISOString(),
+        requestId: context.requestId
+      })
     }
-  }
   },
 
   getTopicsList: () => {

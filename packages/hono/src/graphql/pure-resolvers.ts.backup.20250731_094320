@@ -77,7 +77,6 @@ export const resolvers = {
         raw: JSON.stringify({ error: error.message })
       }
     }
-  }
   },
 
   getTopicsList: () => {
