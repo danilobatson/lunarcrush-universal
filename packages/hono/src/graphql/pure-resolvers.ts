@@ -38,25 +38,25 @@ export const resolvers = {
 getTopic: async (args: any, context: any) => {
     console.log('🌙 getTopic resolver called with:', args.topic)
     const { topic } = args
-    
+
     try {
       // Get API key from Cloudflare Workers secret binding
       const apiKey = await context.env.LUNARCRUSH_API_KEY.get()
       if (!apiKey) {
         throw new Error('LUNARCRUSH_API_KEY not configured')
       }
-      
+
       // Import LunarCrush service
       const { getTopic: getLunarCrushTopic } = await import('../services/lunarcrush')
-      
+
       // Get real data from LunarCrush API - return raw data just like backend-yoga
       const rawData = await getLunarCrushTopic({ apiKey }, topic)
-      
+
       console.log('✅ Real LunarCrush data retrieved for:', topic)
-      
+
       // Return raw data - let GraphQL schema handle field resolution
       return rawData
-      
+
     } catch (error) {
       console.error('❌ getTopic error:', error)
       throw error // Let GraphQL handle error responses
