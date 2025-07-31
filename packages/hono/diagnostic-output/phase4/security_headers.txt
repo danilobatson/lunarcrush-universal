@@ -1,0 +1,19 @@
+HTTP/1.1 200 OK
+Content-Type: application/json
+ETag: "61d00eb4d51a1a293887566587bc39b3e6ce76aa"
+Strict-Transport-Security: max-age=15552000; includeSubDomains
+Vary: Origin
+Access-Control-Allow-Credentials: true
+Cross-Origin-Opener-Policy: same-origin
+Cross-Origin-Resource-Policy: same-origin
+Origin-Agent-Cluster: ?1
+Referrer-Policy: no-referrer
+Server-Timing: total;dur=1.0;desc="Total Response Time"
+X-Content-Type-Options: nosniff
+X-DNS-Prefetch-Control: off
+X-Download-Options: noopen
+X-Frame-Options: SAMEORIGIN
+X-Permitted-Cross-Domain-Policies: none
+X-Request-Id: 658deb6a-a7b4-43c1-88b5-9f9b2ff3cf3d
+X-XSS-Protection: 0
+
