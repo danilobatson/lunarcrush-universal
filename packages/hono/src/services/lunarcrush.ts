@@ -1,5 +1,5 @@
-// Minimal LunarCrush service for Hono - Single Resolver Migration
-// Ported from backend-yoga for getTopic functionality only
+// LunarCrush service for Hono - Simplified to match backend-yoga pattern
+// Returns raw response.data - let GraphQL schema handle field resolution
 
 export interface LunarCrushConfig {
   apiKey: string;
@@ -17,7 +17,7 @@ export class LunarCrushError extends Error {
   }
 }
 
-// Core API request function (minimal version)
+// Core API request function - matches backend-yoga exactly
 const makeRequest = async <T>(
   config: LunarCrushConfig,
   endpoint: string,
@@ -56,7 +56,7 @@ const makeRequest = async <T>(
   return responseData;
 };
 
-// getTopic function (ported from backend-yoga)
+// getTopic function - EXACTLY like backend-yoga, returns response.data
 export const getTopic = async (
   config: LunarCrushConfig,
   topic: string
@@ -66,6 +66,7 @@ export const getTopic = async (
       config,
       `/topic/${topic.toLowerCase()}/v1`
     );
+    // Return response.data just like backend-yoga - let GraphQL handle field mapping
     return response.data;
   } catch (error) {
     console.error('❌ getTopic error:', error);

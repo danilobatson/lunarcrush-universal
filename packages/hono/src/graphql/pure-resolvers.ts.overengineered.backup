@@ -35,31 +35,47 @@ export const resolvers = {
     }
   },
 
-getTopic: async (args: any, context: any) => {
+  getTopic: async (args: any, context: any) => {
     console.log('🌙 getTopic resolver called with:', args.topic)
     const { topic } = args
-    
+
     try {
       // Get API key from Cloudflare Workers secret binding
       const apiKey = await context.env.LUNARCRUSH_API_KEY.get()
       if (!apiKey) {
         throw new Error('LUNARCRUSH_API_KEY not configured')
       }
-      
+
       // Import LunarCrush service
       const { getTopic: getLunarCrushTopic } = await import('../services/lunarcrush')
-      
-      // Get real data from LunarCrush API - return raw data just like backend-yoga
-      const rawData = await getLunarCrushTopic({ apiKey }, topic)
-      
+
+      // Get real data from LunarCrush API
+      const realData = await getLunarCrushTopic({ apiKey }, topic)
+
       console.log('✅ Real LunarCrush data retrieved for:', topic)
-      
-      // Return raw data - let GraphQL schema handle field resolution
-      return rawData
-      
+
+      // Return real data in expected format
+      return {
+        symbol: realData.symbol || topic.toUpperCase(),
+        name: realData.name || topic,
+        price: realData.close || realData.price || 0,
+        sentiment: realData.sentiment || 0,
+        socialScore: realData.social_score || realData.socialScore || 0,
+        raw: JSON.stringify(realData)
+      }
+
     } catch (error) {
       console.error('❌ getTopic error:', error)
-      throw error // Let GraphQL handle error responses
+
+      // Fallback to prevent resolver crashes (temporary)
+      return {
+        symbol: topic.toUpperCase(),
+        name: topic,
+        price: 0,
+        sentiment: 0,
+        socialScore: 0,
+        raw: JSON.stringify({ error: error.message })
+      }
     }
   }
   },
