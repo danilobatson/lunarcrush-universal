@@ -1,1 +1,0 @@
-{"error":"Not Found","message":"The requested endpoint does not exist","path":"/nonexistent-endpoint-test","method":"GET","suggestions":["Check the API documentation at /graphql","Try the demo UI at /ui/demo","View available endpoints in GraphiQL"],"requestId":"1fa73763-4c5a-41ba-8294-3e3a08d2fa0e","timestamp":"2025-07-31T04:31:58.398Z","responseTime":1}
