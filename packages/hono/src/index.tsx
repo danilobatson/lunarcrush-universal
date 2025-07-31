@@ -9,6 +9,9 @@ import { HTTPException } from 'hono/http-exception'
 
 import { schema } from './graphql/pure-schema'
 import { resolvers } from './graphql/pure-resolvers'
+import { buildSchema } from 'graphql';
+import {typeDefs} from '../../backend-yoga/src/schema'
+
 
 type Bindings = {
   JWT_SECRET: string
@@ -94,7 +97,7 @@ app.post('/graphql', async (c) => {
 
     // This is the working approach from your backup!
     const result = await graphql({
-      schema,
+      schema: buildSchema(typeDefs),
       source: query,
       rootValue: resolvers,  // ← This is the key difference!
       contextValue: context,

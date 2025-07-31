@@ -36,14 +36,15 @@ export const resolvers = {
   },
 
 getTopic: async (args: any, context: any) => {
-    console.log('🌙 getTopic resolver called with:', args.topic)
+  console.log('🌙 getTopic resolver called with:', args.topic, context)
     const { topic } = args
 
     try {
       // Get API key from Cloudflare Workers secret binding
       const apiKey = await context.env.LUNARCRUSH_API_KEY.get()
       if (!apiKey) {
-        throw new Error('LUNARCRUSH_API_KEY not configured')
+        console.error('❌ LUNARCRUSH_API_KEY secret not found')
+        throw new Error('LUNARCRUSH_API_KEY not configured in Cloudflare Workers secrets')
       }
 
       // Import LunarCrush service

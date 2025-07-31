@@ -1,4 +1,12 @@
 import { graphql } from 'graphql'
+// Cloudflare Workers Environment Interface
+interface Env {
+  LUNARCRUSH_API_KEY: { get(): Promise<string> };
+  LUNARCRUSH_CACHE?: KVNamespace;
+  ENVIRONMENT?: string;
+}
+
+
 import { buildSchema } from 'graphql'
 import { HTTPException } from 'hono/http-exception'
 import { typeDefs } from "../graphql/schema"../graphql/resolvers'
