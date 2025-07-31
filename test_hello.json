@@ -1,0 +1,18 @@
+{
+  "errors": [
+    {
+      "message": "Cannot query field \"hello\" on type \"Query\". Did you mean \"health\"?",
+      "locations": [
+        {
+          "line": 1,
+          "column": 3
+        }
+      ]
+    }
+  ],
+  "extensions": {
+    "timing": {
+      "responseTime": 35
+    }
+  }
+}

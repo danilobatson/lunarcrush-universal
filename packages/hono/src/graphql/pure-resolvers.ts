@@ -36,8 +36,34 @@ export const resolvers = {
   },
 
 getTopic: async (args: any, context: any) => {
-  console.log('🌙 getTopic resolver called with:', args.topic, context)
+    console.log('🌙 getTopic resolver called with:', args.topic)
     const { topic } = args
+
+    try {
+      // Get config from context (passed from main entry)
+      const { config } = context
+      if (!config || !config.apiKey) {
+        throw new Error('LunarCrush config not available in context')
+      }
+
+      console.log('✅ Using LunarCrush config from context')
+
+      // Import LunarCrush service
+      const { getTopic: getLunarCrushTopic } = await import('../services/lunarcrush')
+
+      // Get real data from LunarCrush API using config
+      const rawData = await getLunarCrushTopic(config, topic)
+
+      console.log('✅ Real LunarCrush data retrieved for:', topic)
+
+      // Return raw data - let GraphQL schema handle field resolution
+      return rawData
+
+    } catch (error) {
+      console.error('❌ getTopic error:', error)
+      throw error // Let GraphQL handle error responses
+    }
+  } = args
 
     try {
       // Get API key from Cloudflare Workers secret binding

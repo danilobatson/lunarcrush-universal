@@ -1,4 +1,3 @@
-cat > debug_environment_context.sh << 'EOF'
 #!/bin/bash
 
 # Debug Environment Context - Trace env from Workers to GraphQL resolvers
@@ -339,4 +338,3 @@ echo "✅ Environment context fix committed"
 echo ""
 echo "🚀 Ready to test with proper environment flow!"
 
-EOF

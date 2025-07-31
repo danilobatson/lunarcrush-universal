@@ -25,7 +25,7 @@ echo ""
 echo "📡 Testing getTopic with secret access..."
 curl -X POST http://localhost:8787/graphql \
   -H "Content-Type: application/json" \
-  -d '{"query": "{ getTopic(topic: \"bitcoin\") { symbol name } }"}' \
+  -d '{"query": "{ getTopic(topic: \"bitcoin\") { topic title } }"}' \
   -s | jq . > test_secret_access.json
 
 echo "📊 Secret access test result:"
