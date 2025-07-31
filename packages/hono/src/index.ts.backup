@@ -1,0 +1,171 @@
+import { Hono } from 'hono'
+import { jwt } from 'hono/jwt'
+import { cors } from 'hono/cors'
+import { WorkersKVStore } from '@hono-rate-limiter/cloudflare'
+import { rateLimiter } from 'hono-rate-limiter'
+
+// Environment bindings type
+type Bindings = {
+  JWT_SECRET: string
+  LUNARCRUSH_API_KEY: string
+  LUNARCRUSH_CACHE: KVNamespace
+}
+
+// Create Hono app with typed bindings
+const app = new Hono<{ Bindings: Bindings }>()
+
+// 🌐 CORS Middleware - Built-in, much simpler than GraphQL Yoga
+app.use('/*', cors({
+  origin: ['http://localhost:3000', 'https://yourdomain.com'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+  allowMethods: ['GET', 'POST', 'OPTIONS'],
+  credentials: true,
+}))
+
+// 🚦 Rate Limiting Middleware - Simple KV-based implementation
+app.use('/api/*', async (c, next) => {
+  const rateLimit = rateLimiter({
+    windowMs: 1 * 60 * 1000, // 1 minute window
+    limit: 5, // 5 requests per minute (matches your current requirement)
+    standardHeaders: 'draft-6',
+    keyGenerator: (c) => {
+      // Extract user ID from JWT or use IP
+      const authHeader = c.req.header('Authorization')
+      if (authHeader?.startsWith('Bearer ')) {
+        const token = authHeader.slice(7)
+        try {
+          // Simple user extraction - we'll improve this with proper JWT
+          const payload = JSON.parse(atob(token.split('.')[1]))
+          return `user_${payload.sub || payload.userId || 'anonymous'}`
+        } catch {
+          return c.req.header('cf-connecting-ip') || 'anonymous'
+        }
+      }
+      return c.req.header('cf-connecting-ip') || 'anonymous'
+    },
+    store: new WorkersKVStore({ 
+      namespace: c.env.LUNARCRUSH_CACHE 
+    }),
+  })
+  
+  return rateLimit(c, next)
+})
+
+// 🔐 JWT Middleware - 90% less code than GraphQL Yoga!
+app.use('/api/*', async (c, next) => {
+  const jwtMiddleware = jwt({
+    secret: c.env.JWT_SECRET,
+    cookie: false, // Use Authorization header
+  })
+  return jwtMiddleware(c, next)
+})
+
+// 🏥 Health Endpoints
+app.get('/health', (c) => {
+  return c.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    service: 'lunarcrush-universal-hono',
+    version: '1.0.0'
+  })
+})
+
+app.get('/ping', (c) => c.text('pong'))
+
+// 🧪 Test Protected Endpoint
+app.get('/api/test', (c) => {
+  const payload = c.get('jwtPayload')
+  return c.json({
+    message: 'JWT Authentication working!',
+    user: payload,
+    rateLimit: 'Rate limiting working!'
+  })
+})
+
+// 🚀 LunarCrush Test Endpoint
+app.get('/api/topic/:topic', async (c) => {
+  const topic = c.req.param('topic')
+  const apiKey = c.env.LUNARCRUSH_API_KEY
+  
+  try {
+    const response = await fetch(`https://lunarcrush.com/api4/public/topic/${topic}`, {
+      headers: {
+        'Authorization': `Bearer ${apiKey}`
+      }
+    })
+    
+    if (!response.ok) {
+      throw new Error(`LunarCrush API error: ${response.status}`)
+    }
+    
+    const data = await response.json()
+    return c.json(data)
+  } catch (error) {
+    return c.json({
+      error: 'Failed to fetch topic data',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    }, 500)
+  }
+})
+
+// 🎫 JWT Token Generation Endpoints
+app.post('/auth/demo-token', async (c) => {
+  const { sign } = await import('hono/jwt')
+  
+  const payload = {
+    sub: `demo_${Date.now()}`,
+    type: 'demo',
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + (7 * 24 * 60 * 60), // 7 days
+  }
+  
+  const token = await sign(payload, c.env.JWT_SECRET)
+  
+  return c.json({
+    token,
+    user: {
+      id: payload.sub,
+      type: payload.type,
+    },
+    expiresIn: '7 days'
+  })
+})
+
+app.post('/auth/personal-token', async (c) => {
+  const { sign } = await import('hono/jwt')
+  const { lunarcrushApiKey } = await c.req.json()
+  
+  // Validate LunarCrush API key
+  try {
+    const testResponse = await fetch('https://lunarcrush.com/api4/public/topics/list', {
+      headers: { 'Authorization': `Bearer ${lunarcrushApiKey}` }
+    })
+    
+    if (!testResponse.ok) {
+      return c.json({ error: 'Invalid LunarCrush API key' }, 400)
+    }
+  } catch {
+    return c.json({ error: 'Failed to validate API key' }, 400)
+  }
+  
+  const payload = {
+    sub: `personal_${Date.now()}`,
+    type: 'personal',
+    apiKey: lunarcrushApiKey,
+    iat: Math.floor(Date.now() / 1000),
+    exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30 days
+  }
+  
+  const token = await sign(payload, c.env.JWT_SECRET)
+  
+  return c.json({
+    token,
+    user: {
+      id: payload.sub,
+      type: payload.type,
+    },
+    expiresIn: '30 days'
+  })
+})
+
+export default app

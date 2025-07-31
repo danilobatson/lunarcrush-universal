@@ -1,0 +1,30 @@
+name = "lunarcrush"
+main = "src/index.ts"
+compatibility_date = "2024-10-15"
+compatibility_flags = ["nodejs_compat"]
+
+# Secrets (secure storage)
+secrets_store_secrets = [
+  { binding = "LUNARCRUSH_API_KEY", store_id= "2593c430bd90424a886728435dd57004", secret_name = "LUNARCRUSH_API_KEY" }
+]
+
+# KV Storage
+kv_namespaces = [
+  { binding = "LUNARCRUSH_CACHE", id = "6bf88b7f2bac40e9888dc565db7e8faf" }
+]
+
+# Database
+[[d1_databases]]
+binding = "DB"
+database_name = "lunarcrush-universal-db"
+database_id = "8eb77518-7262-429c-954b-ee5e9ca67213"
+
+# Environment Variables
+[vars]
+ENVIRONMENT = "production"
+JWT_SECRET = "your-super-secret-jwt-key-change-in-production-asap"
+
+# Monitoring
+[observability]
+enabled = true
+head_sampling_rate = 1
