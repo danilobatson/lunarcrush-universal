@@ -1894,6 +1894,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hono/graphql-server@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "@hono/graphql-server@npm:0.6.2"
+  dependencies:
+    graphql: "npm:^16.5.0"
+  peerDependencies:
+    hono: ">=3.0.0"
+  checksum: 5885c655edeb4357b1433eededa28e29a3b756330799839974ba9e77dd4c735f40a29a42fd34f41b23388e6f62d3904b8a7be2f112960323fb9b69ec889a707a
+  languageName: node
+  linkType: hard
+
 "@hono/zod-validator@npm:^0.7.2":
   version: 0.7.2
   resolution: "@hono/zod-validator@npm:0.7.2"
@@ -2383,10 +2394,12 @@ __metadata:
   dependencies:
     "@cloudflare/workers-types": "npm:^4.20250730.0"
     "@hono-rate-limiter/cloudflare": "npm:^0.2.2"
+    "@hono/graphql-server": "npm:^0.6.2"
     "@hono/zod-validator": "npm:^0.7.2"
     "@types/node": "npm:^22.10.2"
     graphql: "npm:^16.11.0"
     graphql-http: "npm:^1.22.4"
+    graphql-yoga: "npm:^5.15.1"
     hono: "npm:^4.8.10"
     hono-rate-limiter: "npm:^0.4.2"
     typescript: "npm:^5.8.3"
@@ -4534,7 +4547,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-yoga@npm:^5.10.4":
+"graphql-yoga@npm:^5.10.4, graphql-yoga@npm:^5.15.1":
   version: 5.15.1
   resolution: "graphql-yoga@npm:5.15.1"
   dependencies:

@@ -1,8 +1,8 @@
 // ===================================================================
-// 🚀 LUNARCRUSH UNIVERSAL - ENTERPRISE HONO IMPLEMENTATION
+// 🚀 LUNARCRUSH UNIVERSAL - NATIVE HONO + PURE GRAPHQL
 // ===================================================================
-// Production-ready API showcasing comprehensive Hono features
-// Perfect for AI Developer & Product Engineer interviews
+// Using native Hono features with pure GraphQL (no Yoga dependency)
+// Based on Hono best practices and working resolver patterns
 // ===================================================================
 
 import { Hono } from 'hono'
@@ -11,21 +11,8 @@ import { logger } from 'hono/logger'
 import { requestId } from 'hono/request-id'
 import { secureHeaders } from 'hono/secure-headers'
 import { prettyJSON } from 'hono/pretty-json'
-import { compress } from 'hono/compress'
-import { etag } from 'hono/etag'
-import { cache } from 'hono/cache'
-import { timeout } from 'hono/timeout'
-import { bodyLimit } from 'hono/body-limit'
-import { bearerAuth } from 'hono/bearer-auth'
-import { jwt } from 'hono/jwt'
 import { HTTPException } from 'hono/http-exception'
 import { graphql, buildSchema } from 'graphql'
-import { rateLimiter } from 'hono-rate-limiter'
-import { CloudflareStore } from '@hono-rate-limiter/cloudflare'
-import { zValidator } from '@hono/zod-validator'
-import { z } from 'zod'
-import { swaggerUI } from '@hono/swagger-ui'
-import { prometheus } from '@hono/prometheus'
 
 import { typeDefs } from './schema'
 import {
@@ -79,74 +66,45 @@ import {
 	getPostTimeSeriesFixed,
 } from './services/lunarcrush-fixes'
 
-// ===== ENHANCED TYPES FOR ENTERPRISE FEATURES =====
+// Enhanced Bindings for Hono
 type Bindings = {
 	LUNARCRUSH_API_KEY: { get(): Promise<string> };
-	JWT_SECRET: string;
 	DB?: any;
 	ENVIRONMENT?: string;
 	CUSTOM_CORS?: string;
 	LUNARCRUSH_CACHE: KVNamespace;
-	RATE_LIMIT_STORE: KVNamespace;
 }
 
+// Enhanced Variables for request context
 type Variables = {
 	requestId: string;
 	startTime: number;
 	userAgent?: string;
 	clientIP?: string;
 	user?: any;
-	jwtPayload?: any;
-	rateLimitInfo?: {
-		limit: number;
-		remaining: number;
-		resetTime: Date;
-	};
 }
 
-console.log('🚀 Creating enterprise Hono app with comprehensive features...')
+console.log('🚀 Creating native Hono app with pure GraphQL...')
 
-// Create enterprise-grade Hono app
+// Create Hono app with enhanced typing
 const app = new Hono<{
 	Bindings: Bindings;
 	Variables: Variables;
 }>()
 
-// ===== COMPREHENSIVE MIDDLEWARE STACK =====
+// ===== NATIVE HONO MIDDLEWARE STACK =====
 
-// 1. Basic Infrastructure
-app.use('*', requestId())
-app.use('*', logger())
-app.use('*', secureHeaders())
+// Essential middleware (Hono native)
+app.use(logger())
+app.use(requestId())
+app.use(secureHeaders())
+app.use(prettyJSON())
 
-// 2. Performance & Caching
-app.use('*', compress())
-app.use('*', etag())
-app.use('*', prettyJSON())
-
-// 3. Request/Response Limits & Timeouts
-app.use('*', bodyLimit({ maxSize: 1024 * 1024 })) // 1MB limit
-app.use('*', timeout(30000)) // 30s timeout
-
-// 4. Metrics & Observability
-const { printMetrics, registerMetrics } = prometheus()
-app.use('*', registerMetrics)
-
-// 5. Enhanced CORS with security
+// Enhanced CORS (Hono native)
 app.use('/*', cors({
 	origin: (origin) => {
 		console.log('🌐 CORS origin check:', origin);
-		// Production CORS logic
-		const allowedOrigins = [
-			'http://localhost:3000',
-			'https://lunarcrush.com',
-			'https://*.vercel.app',
-			'https://*.workers.dev'
-		];
-		if (!origin) return '*'; // Allow server-to-server
-		return allowedOrigins.some(allowed =>
-			origin.match(new RegExp(allowed.replace('*', '.*')))
-		) ? origin : false;
+		return origin || '*';
 	},
 	allowMethods: ['GET', 'POST', 'OPTIONS'],
 	allowHeaders: [
@@ -156,291 +114,83 @@ app.use('/*', cors({
 		'Origin',
 		'X-Requested-With',
 		'x-cache-ttl',
-		'x-api-key',
-		'x-client-version'
 	],
 	credentials: true,
-	maxAge: 86400, // 24 hours
 }))
 
-// 6. Enhanced Request Context
+// Request context middleware (Hono pattern)
 app.use('*', async (c, next) => {
 	c.set('startTime', Date.now())
 	c.set('userAgent', c.req.header('User-Agent') || 'unknown')
-	c.set('clientIP', c.req.header('CF-Connecting-IP') || c.req.header('X-Forwarded-For') || 'unknown')
-
-	// Add request tracing
-	console.log(`📥 ${c.req.method} ${c.req.path}`, {
-		requestId: c.get('requestId'),
-		clientIP: c.get('clientIP'),
-		userAgent: c.get('userAgent')?.substring(0, 50)
-	});
-
+	c.set('clientIP', c.req.header('CF-Connecting-IP') || 'unknown')
 	await next()
-
-	// Add response tracing
-	const responseTime = Date.now() - c.get('startTime');
-	console.log(`📤 ${c.req.method} ${c.req.path} - ${responseTime}ms`, {
-		requestId: c.get('requestId'),
-		status: c.res.status
-	});
 })
 
-// ===== AUTHENTICATION & AUTHORIZATION =====
+// ===== HEALTH ENDPOINTS (HONO NATIVE) =====
 
-// JWT Authentication for protected routes
-app.use('/api/protected/*', async (c, next) => {
-	const jwtMiddleware = jwt({
-		secret: c.env.JWT_SECRET || 'fallback-secret-key',
-		cookie: 'auth-token', // Also check cookies
-	})
-	return jwtMiddleware(c, next)
-})
+app.get('/health', async (c) => {
+	try {
+		const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
 
-// API Key Authentication for GraphQL
-app.use('/graphql', async (c, next) => {
-	const authHeader = c.req.header('Authorization')
-	const apiKeyHeader = c.req.header('x-api-key')
-
-	// Allow demo access for GraphiQL interface
-	if (c.req.method === 'GET') {
-		return next()
-	}
-
-	// For POST requests, check for API key or demo mode
-	if (!authHeader && !apiKeyHeader) {
-		// Allow demo queries without auth (limited functionality)
-		c.set('user', { type: 'demo', limits: { rateLimit: 10 } })
-		return next()
-	}
-
-	// Validate API key if provided
-	if (apiKeyHeader) {
-		try {
-			const storedKey = await c.env.LUNARCRUSH_API_KEY.get()
-			if (apiKeyHeader === storedKey) {
-				c.set('user', { type: 'authenticated', limits: { rateLimit: 1000 } })
-				return next()
-			}
-		} catch (error) {
-			console.error('API key validation error:', error)
-		}
-	}
-
-	// Continue with demo access
-	c.set('user', { type: 'demo', limits: { rateLimit: 10 } })
-	return next()
-})
-
-// ===== INTELLIGENT RATE LIMITING =====
-
-// Create rate limiter with Cloudflare KV store
-const createRateLimiter = (options: {
-	windowMs: number;
-	limit: number;
-	message?: string;
-}) => rateLimiter({
-	...options,
-	standardHeaders: 'draft-6',
-	keyGenerator: (c) => {
-		const user = c.get('user')
-		const ip = c.get('clientIP')
-		return user?.type === 'authenticated' ? `auth:${user.id || ip}` : `demo:${ip}`
-	},
-	store: new CloudflareStore({
-		namespace: (c) => c.env.RATE_LIMIT_STORE || c.env.LUNARCRUSH_CACHE,
-	}),
-	onExceeded: (c, limit, current) => {
-		c.set('rateLimitInfo', {
-			limit,
-			remaining: Math.max(0, limit - current),
-			resetTime: new Date(Date.now() + options.windowMs)
-		})
-	}
-})
-
-// Different rate limits for different user types
-app.use('/graphql', async (c, next) => {
-	const user = c.get('user')
-	const isDemo = !user || user.type === 'demo'
-
-	const rateLimitMiddleware = createRateLimiter({
-		windowMs: 15 * 60 * 1000, // 15 minutes
-		limit: isDemo ? 10 : 1000, // Demo: 10 req/15min, Auth: 1000 req/15min
-		message: isDemo
-			? 'Demo rate limit exceeded. Sign up for higher limits!'
-			: 'Rate limit exceeded. Please slow down.'
-	})
-
-	return rateLimitMiddleware(c, next)
-})
-
-// ===== HEALTH & METRICS ENDPOINTS =====
-
-app.get('/health',
-	cache({
-		cacheName: 'health-cache',
-		cacheControl: 'max-age=30', // Cache for 30 seconds
-		vary: ['User-Agent']
-	}),
-	async (c) => {
-		try {
-			const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
-
-			if (!apiKey) {
-				return c.json({
-					status: 'degraded',
-					timestamp: new Date().toISOString(),
-					error: 'API key not configured',
-					requestId: c.get('requestId'),
-					responseTime: Date.now() - c.get('startTime'),
-					features: ['rate-limiting', 'caching', 'compression', 'jwt-auth', 'metrics']
-				}, 200);
-			}
-
-			const healthConfig: HealthCheckConfig = {
-				apiKey,
-				database: c.env.DB,
-				environment: c.env.ENVIRONMENT || 'production',
-			};
-
-			const healthResult = await performHealthCheck(healthConfig);
-
+		if (!apiKey) {
 			return c.json({
-				...healthResult,
-				requestId: c.get('requestId'),
-				responseTime: Date.now() - c.get('startTime'),
-				client: {
-					ip: c.get('clientIP'),
-					userAgent: c.get('userAgent')
-				},
-				features: [
-					'enterprise-hono',
-					'pure-graphql',
-					'rate-limiting',
-					'jwt-authentication',
-					'http-caching',
-					'compression',
-					'metrics',
-					'request-tracing',
-					'api-documentation'
-				],
-				performance: {
-					cacheHitRatio: '~85%',
-					avgResponseTime: '12ms',
-					uptime: '99.9%'
-				}
-			}, 200);
-		} catch (error) {
-			return c.json({
-				status: 'error',
+				status: 'degraded',
 				timestamp: new Date().toISOString(),
-				error: error instanceof Error ? error.message : 'Health check error',
+				error: 'API key not configured',
 				requestId: c.get('requestId'),
 				responseTime: Date.now() - c.get('startTime')
 			}, 200);
 		}
-	}
-);
 
-// Metrics endpoint (Prometheus format)
-app.get('/metrics', printMetrics)
+		const healthConfig: HealthCheckConfig = {
+			apiKey,
+			database: c.env.DB,
+			environment: c.env.ENVIRONMENT || 'production',
+		};
 
-// Enhanced readiness probe
-app.get('/ready', async (c) => {
-	try {
-		const checks = await Promise.allSettled([
-			c.env.LUNARCRUSH_API_KEY.get(),
-			c.env.LUNARCRUSH_CACHE.get('health-check'),
-		])
+		const healthResult = await performHealthCheck(healthConfig);
 
-		const isReady = checks.every(check => check.status === 'fulfilled')
-
+		// Enhanced health response with Hono context
 		return c.json({
-			status: isReady ? 'ready' : 'not-ready',
-			timestamp: new Date().toISOString(),
-			checks: {
-				apiKey: checks[0].status === 'fulfilled',
-				cache: checks[1].status === 'fulfilled'
+			...healthResult,
+			requestId: c.get('requestId'),
+			responseTime: Date.now() - c.get('startTime'),
+			client: {
+				ip: c.get('clientIP'),
+				userAgent: c.get('userAgent')
 			},
-			requestId: c.get('requestId')
-		}, isReady ? 200 : 503);
-	} catch {
-		return c.json(healthResponses.readiness(false), 503);
+			features: [
+				'native-hono',
+				'pure-graphql',
+				'cloudflare-workers',
+				'kv-caching',
+				'enhanced-middleware'
+			]
+		}, 200);
+	} catch (error) {
+		return c.json({
+			status: 'error',
+			timestamp: new Date().toISOString(),
+			error: error instanceof Error ? error.message : 'Health check error',
+			requestId: c.get('requestId'),
+			responseTime: Date.now() - c.get('startTime')
+		}, 200);
 	}
 });
 
 app.get('/healthz', (c) => c.json(healthResponses.liveness()));
+app.get('/ready', async (c) => {
+	try {
+		const testApiKey = await c.env.LUNARCRUSH_API_KEY.get();
+		const isReady = Boolean(testApiKey);
+		return c.json(healthResponses.readiness(isReady), isReady ? 200 : 503);
+	} catch {
+		return c.json(healthResponses.readiness(false), 503);
+	}
+});
 app.get('/ping', (c) => c.text(healthResponses.basic()));
 
-// ===== API DOCUMENTATION =====
-app.get('/docs', swaggerUI({
-	url: '/api-spec.json',
-	title: 'LunarCrush Universal API',
-	description: 'Enterprise-grade social intelligence API'
-}))
-
-app.get('/api-spec.json', (c) => {
-	return c.json({
-		openapi: '3.0.0',
-		info: {
-			title: 'LunarCrush Universal API',
-			version: '2.0.0',
-			description: 'Social intelligence data for crypto, stocks, and NFTs',
-			contact: {
-				name: 'Danilo Batson',
-				email: 'djbatson19@gmail.com',
-				url: 'https://danilobatson.github.io'
-			}
-		},
-		servers: [
-			{ url: 'https://lunarcrush.cryptoguard-api.workers.dev', description: 'Production' },
-			{ url: 'http://localhost:8787', description: 'Development' }
-		],
-		paths: {
-			'/graphql': {
-				post: {
-					summary: 'GraphQL endpoint',
-					description: 'Query social intelligence data',
-					tags: ['GraphQL'],
-					security: [{ ApiKey: [] }, { Demo: [] }],
-					responses: {
-						200: { description: 'GraphQL response' }
-					}
-				},
-				get: {
-					summary: 'GraphiQL interface',
-					description: 'Interactive GraphQL playground',
-					tags: ['Documentation']
-				}
-			},
-			'/health': {
-				get: {
-					summary: 'Health check',
-					description: 'Comprehensive health status',
-					tags: ['Monitoring']
-				}
-			}
-		},
-		components: {
-			securitySchemes: {
-				ApiKey: {
-					type: 'apiKey',
-					in: 'header',
-					name: 'x-api-key'
-				},
-				Demo: {
-					type: 'apiKey',
-					in: 'header',
-					name: 'x-demo-access',
-					description: 'Demo access (limited rate limits)'
-				}
-			}
-		}
-	})
-})
-
-// ===== ENHANCED CACHING FUNCTION =====
+// ===== SAME CACHING FUNCTION (PRESERVED FROM WORKING VERSION) =====
 const getCachedOrFetch = async (
 	kv: KVNamespace,
 	cacheKey: string,
@@ -465,15 +215,15 @@ const getCachedOrFetch = async (
 			}
 		}
 
-		const fullCacheKey = `v2:${cacheKey}`;
+		const fullCacheKey = `demo:${cacheKey}`;
 		const cached = await kv.get(fullCacheKey);
 
 		if (cached) {
-			console.log(`📖 Cache HIT: ${fullCacheKey}`);
+			console.log(`📖 Demo cache HIT: ${fullCacheKey}`);
 			return JSON.parse(cached);
 		}
 
-		console.log(`📖 Cache MISS: ${fullCacheKey}`);
+		console.log(`📖 Demo cache MISS: ${fullCacheKey}`);
 		const freshData = await fetchFn();
 
 		await kv.put(fullCacheKey, JSON.stringify(freshData), {
@@ -487,9 +237,9 @@ const getCachedOrFetch = async (
 	}
 };
 
-// ===== ENTERPRISE GRAPHQL RESOLVERS =====
+// ===== PURE GRAPHQL RESOLVERS (HONO PATTERN) =====
 const createResolvers = (env: Bindings) => ({
-	// Enhanced health resolvers
+	// Health resolvers (preserved exactly)
 	health: async () => {
 		try {
 			const apiKey = await env.LUNARCRUSH_API_KEY.get();
@@ -508,103 +258,94 @@ const createResolvers = (env: Bindings) => ({
 		}
 	},
 
-	healthSimple: () => 'LunarCrush Universal API - Enterprise Ready 🚀',
+	healthSimple: () => 'LunarCrush API Active - Enhanced & Fixed',
 
-	// Core resolvers with enhanced error handling
+	// All working resolvers (preserved with native Hono context)
 	getTopicsList: async (args, context) => {
-		try {
-			const apiKey = await env.LUNARCRUSH_API_KEY.get();
-			const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
-			return getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				'topics:list:v2',
-				() => getTopicsList(config),
-				context?.request
-			);
-		} catch (error) {
-			console.error('getTopicsList error:', error);
-			throw new Error(`Failed to fetch topics: ${error.message}`);
-		}
+		const apiKey = await env.LUNARCRUSH_API_KEY.get();
+		const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
+		return getCachedOrFetch(
+			env.LUNARCRUSH_CACHE,
+			'topics:list',
+			() => getTopicsList(config),
+			context?.request
+		);
 	},
 
 	getTopic: async (args, context) => {
-		try {
-			const apiKey = await env.LUNARCRUSH_API_KEY.get();
-			const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
-			return getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				`topic:${args.topic}:v2`,
-				() => getTopic(config, args.topic),
-				context?.request
-			);
-		} catch (error) {
-			console.error('getTopic error:', error);
-			throw new Error(`Failed to fetch topic ${args.topic}: ${error.message}`);
-		}
+		const apiKey = await env.LUNARCRUSH_API_KEY.get();
+		const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
+		return getCachedOrFetch(
+			env.LUNARCRUSH_CACHE,
+			`topic:${args.topic}`,
+			() => getTopic(config, args.topic),
+			context?.request
+		);
 	},
 
+	getTopicWhatsup: async (args, context) => {
+		const apiKey = await env.LUNARCRUSH_API_KEY.get();
+		const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
+		return getCachedOrFetch(
+			env.LUNARCRUSH_CACHE,
+			`topic:${args.topic}:whatsup`,
+			() => getTopicWhatsup(config, args.topic),
+			context?.request
+		);
+	},
+
+	// Adding key resolvers (I'll add more after testing)
 	getCoin: async (args, context) => {
-		try {
-			const apiKey = await env.LUNARCRUSH_API_KEY.get();
-			const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
-			return getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				`coin:${args.symbol}:v2`,
-				() => getCoin(config, args.symbol),
-				context?.request
-			);
-		} catch (error) {
-			console.error('getCoin error:', error);
-			throw new Error(`Failed to fetch coin ${args.symbol}: ${error.message}`);
-		}
+		const apiKey = await env.LUNARCRUSH_API_KEY.get();
+		const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
+		return getCachedOrFetch(
+			env.LUNARCRUSH_CACHE,
+			`coin:${args.symbol}`,
+			() => getCoin(config, args.symbol),
+			context?.request
+		);
 	},
 
 	getCoinsList: async (args, context) => {
-		try {
-			const apiKey = await env.LUNARCRUSH_API_KEY.get();
-			const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
-			return getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				'coins:list:v2',
-				() => getCoinsList(config),
-				context?.request
-			);
-		} catch (error) {
-			console.error('getCoinsList error:', error);
-			throw new Error(`Failed to fetch coins list: ${error.message}`);
-		}
+		const apiKey = await env.LUNARCRUSH_API_KEY.get();
+		const config: LunarCrushConfig = { apiKey, baseUrl: 'https://lunarcrush.com/api4/public' };
+		return getCachedOrFetch(
+			env.LUNARCRUSH_CACHE,
+			'coins:list',
+			() => getCoinsList(config),
+			context?.request
+		);
 	},
 });
 
-// Build GraphQL schema
+// Build GraphQL schema (pure GraphQL, no Yoga)
 const schema = buildSchema(typeDefs);
 
-// ===== ENTERPRISE GRAPHQL ENDPOINT =====
+// ===== NATIVE HONO GRAPHQL ENDPOINT =====
 app.post('/graphql', async (c) => {
 	try {
 		const body = await c.req.json();
 		const { query, variables = {}, operationName } = body;
 
-		console.log('🔍 Enterprise GraphQL request:', {
+		console.log('🔍 Native Hono GraphQL request:', {
 			query: query?.substring(0, 100) + '...',
 			variables,
-			requestId: c.get('requestId'),
-			user: c.get('user')?.type
+			requestId: c.get('requestId')
 		});
 
-		// Enhanced context with full enterprise features
+		// Enhanced context with Hono features
 		const context = {
 			env: c.env,
-			user: c.get('user'),
 			request: c.req,
 			requestId: c.get('requestId'),
 			clientIP: c.get('clientIP'),
 			userAgent: c.get('userAgent'),
-			startTime: c.get('startTime'),
-			rateLimitInfo: c.get('rateLimitInfo')
+			startTime: c.get('startTime')
 		};
 
-		// Execute GraphQL with comprehensive error handling
+		console.log('🏗️ Executing with pure graphql() and native Hono...');
+
+		// Pure GraphQL execution (no Yoga dependency)
 		const result = await graphql({
 			schema,
 			source: query,
@@ -614,39 +355,22 @@ app.post('/graphql', async (c) => {
 			operationName
 		});
 
-		// Enhanced response with enterprise metadata
+		// Add Hono performance timing
 		const responseTime = Date.now() - c.get('startTime');
-		const rateLimitInfo = c.get('rateLimitInfo');
-
 		if (result.extensions) {
-			result.extensions.performance = { responseTime };
-			result.extensions.enterprise = {
-				requestId: c.get('requestId'),
-				cached: true,
-				rateLimit: rateLimitInfo
-			};
+			result.extensions.timing = { responseTime };
+			result.extensions.hono = { native: true, requestId: c.get('requestId') };
 		} else {
 			result.extensions = {
-				performance: { responseTime },
-				enterprise: {
-					requestId: c.get('requestId'),
-					cached: true,
-					rateLimit: rateLimitInfo
-				}
+				timing: { responseTime },
+				hono: { native: true, requestId: c.get('requestId') }
 			};
 		}
 
-		// Add rate limit headers
-		if (rateLimitInfo) {
-			c.header('X-RateLimit-Limit', rateLimitInfo.limit.toString());
-			c.header('X-RateLimit-Remaining', rateLimitInfo.remaining.toString());
-			c.header('X-RateLimit-Reset', rateLimitInfo.resetTime.toISOString());
-		}
-
-		console.log('✅ Enterprise GraphQL executed successfully');
+		console.log('✅ Native Hono GraphQL query executed successfully');
 		return c.json(result);
 	} catch (error) {
-		console.error('❌ Enterprise GraphQL error:', error);
+		console.error('❌ Native Hono GraphQL error:', error);
 		if (error instanceof HTTPException) {
 			return error.getResponse();
 		}
@@ -657,53 +381,30 @@ app.post('/graphql', async (c) => {
 	}
 });
 
-// ===== ENHANCED GRAPHIQL INTERFACE =====
+// ===== NATIVE HONO GRAPHIQL INTERFACE =====
 app.get('/graphql', (c) => {
-	const user = c.get('user');
-	const requestId = c.get('requestId');
-
 	return c.html(`
 <!DOCTYPE html>
 <html>
 <head>
-	<title>GraphiQL - Enterprise LunarCrush API</title>
+	<title>GraphiQL - Native Hono + Pure GraphQL</title>
 	<link href="https://unpkg.com/graphiql@3.0.6/graphiql.min.css" rel="stylesheet" />
 	<style>
 		body { margin: 0; font-family: system-ui; }
-		.header {
-			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-			color: #fff; padding: 15px; display: flex; justify-content: space-between; align-items: center;
-		}
-		.badge {
-			background: rgba(255,255,255,0.2);
-			color: #fff; padding: 4px 12px; border-radius: 12px; font-size: 12px; margin-left: 8px;
-			backdrop-filter: blur(10px);
-		}
-		.badge.enterprise { background: #10b981; color: #000; }
-		.info { background: #f8fafc; padding: 10px; font-size: 12px; color: #64748b; }
+		.header { background: #1a1a1a; color: #fff; padding: 10px; display: flex; justify-content: space-between; align-items: center; }
+		.badge { background: #4ade80; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 11px; }
 	</style>
 </head>
 <body>
 	<div class="header">
+		<span>🚀 LunarCrush Universal - Native Hono + Pure GraphQL</span>
 		<div>
-			<span>🚀 LunarCrush Universal API</span>
-			<span style="font-size: 14px; opacity: 0.8;">Enterprise GraphQL Platform</span>
-		</div>
-		<div>
-			<span class="badge enterprise">Enterprise</span>
-			<span class="badge">Rate Limited</span>
-			<span class="badge">Cached</span>
-			<span class="badge">Monitored</span>
+			<span class="badge">Native Hono</span>
+			<span class="badge">Pure GraphQL</span>
+			<span class="badge">Working</span>
 		</div>
 	</div>
-	<div class="info">
-		🔑 User: ${user?.type || 'demo'} |
-		📊 Rate Limit: ${user?.type === 'demo' ? '10/15min' : '1000/15min'} |
-		🎯 Request ID: ${requestId} |
-		📚 <a href="/docs" target="_blank">API Documentation</a> |
-		📈 <a href="/metrics" target="_blank">Metrics</a>
-	</div>
-	<div id="graphiql" style="height: calc(100vh - 110px);"></div>
+	<div id="graphiql" style="height: calc(100vh - 50px);"></div>
 	<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 	<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 	<script src="https://unpkg.com/graphiql@3.0.6/graphiql.min.js"></script>
@@ -711,10 +412,7 @@ app.get('/graphql', (c) => {
 		const fetcher = (graphQLParams) => {
 			return fetch('/graphql', {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-					'x-client-version': '2.0.0'
-				},
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(graphQLParams),
 			}).then(response => response.json());
 		};
@@ -723,8 +421,7 @@ app.get('/graphql', (c) => {
 		root.render(
 			React.createElement(GraphiQL, {
 				fetcher: fetcher,
-				defaultQuery: \`# 🚀 Enterprise LunarCrush Universal API
-# Full-featured social intelligence platform
+				defaultQuery: \`# 🚀 Native Hono + Pure GraphQL - Working!
 
 {
 	healthSimple
@@ -734,13 +431,11 @@ app.get('/graphql', (c) => {
 		price
 		market_cap
 		alt_rank
-		galaxy_score
 	}
-	getTopicsList {
-		topic
-		title
-		topic_rank
-		interactions_24h
+	getCoinsList {
+		name
+		symbol
+		price
 	}
 }\`
 			})
@@ -750,9 +445,9 @@ app.get('/graphql', (c) => {
 </html>`);
 });
 
-// ===== ENTERPRISE ERROR HANDLING =====
+// ===== NATIVE HONO ERROR HANDLING =====
 app.onError((err, c) => {
-	console.error('❌ Enterprise error:', err);
+	console.error('❌ Native Hono error:', err);
 	const requestId = c.get('requestId') || 'unknown';
 	const responseTime = Date.now() - (c.get('startTime') || Date.now());
 
@@ -761,46 +456,32 @@ app.onError((err, c) => {
 	}
 
 	return c.json({
-		error: {
-			type: 'INTERNAL_SERVER_ERROR',
-			message: 'An unexpected error occurred',
-			code: 'E500',
-			requestId,
-			timestamp: new Date().toISOString(),
-			responseTime,
-			support: 'Contact support with request ID for assistance'
-		},
-		meta: {
-			framework: 'hono-enterprise',
-			version: '2.0.0',
-			environment: process.env.NODE_ENV || 'development'
-		}
+		error: 'Internal Server Error',
+		message: 'An unexpected error occurred',
+		requestId,
+		timestamp: new Date().toISOString(),
+		responseTime,
+		framework: 'native-hono'
 	}, 500);
 });
 
 app.notFound((c) => {
 	return c.json({
-		error: {
-			type: 'NOT_FOUND',
-			message: 'The requested endpoint does not exist',
-			code: 'E404',
-			path: c.req.path,
-			method: c.req.method
-		},
+		error: 'Not Found',
+		message: 'The requested endpoint does not exist',
+		path: c.req.path,
+		method: c.req.method,
 		suggestions: [
-			{ endpoint: '/graphql', description: 'GraphQL API endpoint' },
-			{ endpoint: '/health', description: 'Health check and system status' },
-			{ endpoint: '/docs', description: 'Interactive API documentation' },
-			{ endpoint: '/metrics', description: 'System metrics (Prometheus format)' }
+			'Try /graphql for GraphQL endpoint',
+			'Try /health for health check',
+			'Visit /graphql in browser for GraphiQL'
 		],
-		meta: {
-			requestId: c.get('requestId'),
-			timestamp: new Date().toISOString(),
-			responseTime: Date.now() - (c.get('startTime') || Date.now())
-		}
+		requestId: c.get('requestId'),
+		timestamp: new Date().toISOString(),
+		responseTime: Date.now() - (c.get('startTime') || Date.now())
 	}, 404);
 });
 
-console.log('✅ Enterprise Hono app configured with comprehensive features');
+console.log('✅ Native Hono app configured with pure GraphQL');
 
 export default app;
