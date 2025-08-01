@@ -5,14 +5,14 @@
 // Based on Hono best practices and working resolver patterns
 // ===================================================================
 
-import { Hono } from 'hono'
-import { cors } from 'hono/cors'
-import { logger } from 'hono/logger'
-import { requestId } from 'hono/request-id'
-import { secureHeaders } from 'hono/secure-headers'
-import { prettyJSON } from 'hono/pretty-json'
-import { HTTPException } from 'hono/http-exception'
-import { graphql, buildSchema } from 'graphql'
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { logger } from 'hono/logger';
+import { requestId } from 'hono/request-id';
+import { secureHeaders } from 'hono/secure-headers';
+import { prettyJSON } from 'hono/pretty-json';
+import { HTTPException } from 'hono/http-exception';
+import { graphql, buildSchema } from 'graphql';
 import { timeout } from 'hono/timeout';
 import { bodyLimit } from 'hono/body-limit';
 import { showRoutes } from 'hono/dev';
@@ -20,15 +20,19 @@ import { showRoutes } from 'hono/dev';
 import { getCookie, setCookie } from 'hono/cookie';
 import { apiReference } from '@scalar/hono-api-reference';
 
-import { zValidator } from '@hono/zod-validator'
-import { z } from 'zod'
+import { zValidator } from '@hono/zod-validator';
+import { z } from 'zod';
+import { sha256 } from '@noble/hashes/sha256';
+import { bytesToHex } from '@noble/hashes/utils';
+import sanitizeHtml from 'sanitize-html';
+import { AnalyticsEngine } from '@cloudflare/workers-analytics-engine';
 
-import { typeDefs } from './schema'
+import { typeDefs } from './schema';
 import {
 	performHealthCheck,
 	healthResponses,
 	HealthCheckConfig,
-} from './utils/health'
+} from './utils/health';
 import {
 	LunarCrushConfig,
 	getTopicsList,
@@ -65,7 +69,7 @@ import {
 	getNftTimeSeries,
 	getSystemChanges,
 	getSearchesList,
-} from './services/lunarcrush'
+} from './services/lunarcrush';
 
 import {
 	getNftTimeSeriesV1Fixed,
@@ -73,7 +77,7 @@ import {
 	searchPostsFixed,
 	getPostDetailsFixed,
 	getPostTimeSeriesFixed,
-} from './services/lunarcrush-fixes'
+} from './services/lunarcrush-fixes';
 
 const graphqlSchema = z.object({
 	query: z.string().min(1, 'Query is required').max(10000, 'Query too long'),
@@ -88,7 +92,7 @@ type Bindings = {
 	ENVIRONMENT?: string;
 	CUSTOM_CORS?: string;
 	LUNARCRUSH_CACHE: KVNamespace;
-}
+};
 
 // Enhanced Variables for request context
 type Variables = {
@@ -97,138 +101,129 @@ type Variables = {
 	userAgent?: string;
 	clientIP?: string;
 	user?: any;
-	userApiKey?: string;
+	userApiKeyHash?: string;
+	getApiKey?: () => string | null;
 	metrics?: any;
 };
 
-console.log('🚀 Creating native Hono app with pure GraphQL...')
+function simpleHashApiKey(apiKey: string): string {
+	const hash = sha256(new TextEncoder().encode(apiKey));
+	return bytesToHex(hash).substring(0, 8); // First 8 chars
+}
+
+console.log('🚀 Creating native Hono app with pure GraphQL...');
 
 // Create Hono app with enhanced typing
 const app = new Hono<{
 	Bindings: Bindings;
 	Variables: Variables;
-}>()
+}>();
 
 // ===== NATIVE HONO MIDDLEWARE STACK =====
 
 // Essential middleware (Hono native)
-app.use(logger())
-app.use(requestId())
-app.use(secureHeaders())
+app.use(logger());
+app.use(requestId());
+app.use(secureHeaders());
 app.use('*', timeout(30000));
 app.use(
 	'*',
 	bodyLimit({
 		maxSize: 1024 * 1024, // 1MB limit
 		onError: (c) => {
-			return c.json({
-        error: 'Request body too large',
-        message: 'Maximum allowed size is 1MB',
-        requestId: c.get('requestId'),
-      }, 413);
-		}
+			return c.json(
+				{
+					error: 'Request body too large',
+					message: 'Maximum allowed size is 1MB',
+					requestId: c.get('requestId'),
+				},
+				413
+			);
+		},
 	})
 ); // 1MB limit
-app.use(prettyJSON())
+app.use(prettyJSON());
+
+// Sanitization middleware
+app.use('*', async (c, next) => {
+	const originalConsole = { ...console };
+
+	const sanitizeValue = (value: any): any => {
+		if (typeof value === 'string') {
+			return (
+				value
+					// Remove API key patterns (common formats)
+					.replace(/\b[a-zA-Z0-9_-]{20,}\b/g, '[REDACTED_KEY]')
+					.replace(/Bearer\s+[a-zA-Z0-9_-]+/gi, 'Bearer [REDACTED]')
+					.replace(
+						/Authorization:\s*Bearer\s+[a-zA-Z0-9_-]+/gi,
+						'Authorization: Bearer [REDACTED]'
+					)
+					// Remove any potential secrets
+					.replace(
+						/(api[_-]?key|token|secret|password)[:=]\s*[a-zA-Z0-9_-]+/gi,
+						'$1: [REDACTED]'
+					)
+			);
+		}
+
+		if (typeof value === 'object' && value !== null) {
+			const sanitized = Array.isArray(value) ? [] : {};
+			for (const [key, val] of Object.entries(value)) {
+				if (
+					/api[_-]?key|authorization|token|secret|password|bearer/i.test(key)
+				) {
+					sanitized[key] = '[REDACTED]';
+				} else {
+					sanitized[key] = sanitizeValue(val);
+				}
+			}
+			return sanitized;
+		}
+
+		return value;
+	};
+
+	// Override console methods with sanitization
+	['log', 'error', 'warn', 'info', 'debug'].forEach((method) => {
+		console[method] = (...args) => {
+			const sanitizedArgs = args.map(sanitizeValue);
+			originalConsole[method](...sanitizedArgs);
+		};
+	});
+
+	await next();
+
+	// Restore console
+	Object.assign(console, originalConsole);
+});
 
 // Enhanced CORS (Hono native)
-app.use('/*', cors({
-	origin: (origin) => {
-		return origin || '*';
-	},
-	allowMethods: ['GET', 'POST', 'OPTIONS'],
-	allowHeaders: [
-		'Content-Type',
-		'Authorization',
-		'Accept',
-		'Origin',
-		'X-Requested-With',
-		'x-cache-ttl',
-	],
-	credentials: true,
-}))
+app.use(
+	'/*',
+	cors({
+		origin: (origin) => {
+			return origin || '*';
+		},
+		allowMethods: ['GET', 'POST', 'OPTIONS'],
+		allowHeaders: [
+			'Content-Type',
+			'Authorization',
+			'Accept',
+			'Origin',
+			'X-Requested-With',
+			'x-cache-ttl',
+		],
+		credentials: true,
+	})
+);
 
 // Request context middleware (Hono pattern)
 app.use('*', async (c, next) => {
-	c.set('startTime', Date.now())
-	c.set('userAgent', c.req.header('User-Agent') || 'unknown')
-	c.set('clientIP', c.req.header('CF-Connecting-IP') || 'unknown')
-	await next()
-})
-
-// Error middleware
-app.onError((err, c) => {
-	console.error('❌ Hono Error Handler:', err);
-	const requestId = c.get('requestId') || 'unknown';
-	const responseTime = Date.now() - (c.get('startTime') || Date.now());
-	const isDev = (c.env.ENVIRONMENT || 'development') === 'development';
-
-	// Handle different error types
-	if (err instanceof HTTPException) {
-		const status = err.status;
-		return c.json(
-			{
-				error: {
-					type: getErrorType(status),
-					message: err.message,
-					status,
-					requestId,
-					timestamp: new Date().toISOString(),
-					...(isDev && { stack: err.stack?.substring(0, 200) }),
-				},
-			},
-			status
-		);
-	}
-
-	// Zod validation errors
-	if (err.name === 'ZodError') {
-		return c.json(
-			{
-				error: {
-					type: 'VALIDATION_ERROR',
-					message: 'Request validation failed',
-					details: err.issues?.map((issue) => ({
-						field: issue.path.join('.'),
-						message: issue.message,
-					})),
-					requestId,
-					timestamp: new Date().toISOString(),
-				},
-			},
-			400
-		);
-	}
-
-	// GraphQL errors (handled in GraphQL endpoint)
-	if (err.message?.includes('GraphQL')) {
-		return c.json(
-			{
-				error: {
-					type: 'GRAPHQL_ERROR',
-					message: 'GraphQL execution failed',
-					requestId,
-					timestamp: new Date().toISOString(),
-				},
-			},
-			400
-		);
-	}
-
-	// Generic server errors
-	return c.json(
-		{
-			error: {
-				type: 'INTERNAL_ERROR',
-				message: isDev ? err.message : 'An unexpected error occurred',
-				requestId,
-				timestamp: new Date().toISOString(),
-				responseTime,
-				...(isDev && { stack: err.stack?.substring(0, 200) }),
-			},
-		},
-		500
-	);
+	c.set('startTime', Date.now());
+	c.set('userAgent', c.req.header('User-Agent') || 'unknown');
+	c.set('clientIP', c.req.header('CF-Connecting-IP') || 'unknown');
+	await next();
 });
 
 // Helper function
@@ -262,15 +257,20 @@ app.use('*', async (c, next) => {
 	const method = c.req.method;
 	const status = c.res.status;
 
+	const apiKeyHash = c.get('userApiKeyHash');
+
 	// Log metrics (you could also store in KV for persistence)
 	console.log('📊 API Metrics:', {
 		endpoint,
 		method,
 		status,
 		responseTime,
-		userAgent: c.get('userAgent'),
-		hasApiKey: !!c.get('userApiKey'),
+		userAgent: c.get('userAgent')?.substring(0, 50),
+		apiKeyHash: apiKeyHash || 'none',
 	});
+
+	c.header('X-Response-Time', `${responseTime}ms`);
+	c.header('X-Request-ID', c.get('requestId'));
 });
 
 // Professional headers middleware
@@ -278,9 +278,13 @@ app.use('*', async (c, next) => {
 	await next();
 
 	// Keep only the useful ones
-  c.header('X-Response-Time', `${Date.now() - c.get('startTime')}ms`);
-  c.header('X-Powered-By', 'LunarCrush');
+	c.header('X-Response-Time', `${Date.now() - c.get('startTime')}ms`);
+	c.header('X-Content-Type-Options', 'nosniff');
+	c.header('X-Frame-Options', 'DENY');
+	c.header('X-XSS-Protection', '1; mode=block');
+	c.header('Referrer-Policy', 'strict-origin-when-cross-origin');
 
+	c.header('X-Powered-By', 'LunarCrush');
 
 	// Cache headers (these are actually useful)
 	const path = c.req.path;
@@ -299,19 +303,21 @@ app.use('*', async (c, next) => {
 	await next();
 });
 
-
 app.get('/health', async (c) => {
 	try {
 		const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
 
 		if (!apiKey) {
-			return c.json({
-				status: 'degraded',
-				timestamp: new Date().toISOString(),
-				error: 'API key not configured',
-				requestId: c.get('requestId'),
-				responseTime: Date.now() - c.get('startTime')
-			}, 200);
+			return c.json(
+				{
+					status: 'degraded',
+					timestamp: new Date().toISOString(),
+					error: 'API key not configured',
+					requestId: c.get('requestId'),
+					responseTime: Date.now() - c.get('startTime'),
+				},
+				200
+			);
 		}
 
 		const healthConfig: HealthCheckConfig = {
@@ -323,62 +329,66 @@ app.get('/health', async (c) => {
 		const healthResult = await performHealthCheck(healthConfig);
 
 		// Enhanced health response with Hono context
-		return c.json({
-			...healthResult,
-			requestId: c.get('requestId'),
-			responseTime: Date.now() - c.get('startTime'),
-			client: {
-				ip: c.get('clientIP'),
-				userAgent: c.get('userAgent')
+		return c.json(
+			{
+				...healthResult,
+				requestId: c.get('requestId'),
+				responseTime: Date.now() - c.get('startTime'),
+				client: {
+					ip: c.get('clientIP'),
+					userAgent: c.get('userAgent'),
+				},
+				features: [
+					'native-hono',
+					'pure-graphql',
+					'cloudflare-workers',
+					'kv-caching',
+					'enhanced-middleware',
+				],
 			},
-			features: [
-				'native-hono',
-				'pure-graphql',
-				'cloudflare-workers',
-				'kv-caching',
-				'enhanced-middleware'
-			]
-		}, 200);
+			200
+		);
 	} catch (error) {
-		return c.json({
-			status: 'error',
-			timestamp: new Date().toISOString(),
-			error: error instanceof Error ? error.message : 'Health check error',
-			requestId: c.get('requestId'),
-			responseTime: Date.now() - c.get('startTime')
-		}, 200);
+		return c.json(
+			{
+				status: 'error',
+				timestamp: new Date().toISOString(),
+				error: error instanceof Error ? error.message : 'Health check error',
+				requestId: c.get('requestId'),
+				responseTime: Date.now() - c.get('startTime'),
+			},
+			200
+		);
 	}
 });
 
-app.get('/ping', (c) => c.text('pong'))
+app.get('/ping', (c) => c.text('pong'));
 
 app.get('/metrics', (c) => {
-  return c.json({
-    service: 'lunarcrush-universal-api',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime ? process.uptime() : 'unknown',
-    features: [
-      'native-hono',
-      'user-api-keys',
-      'custom-metrics',
-      'scalar-docs',
-      'enhanced-errors'
-    ],
-    endpoints: {
-      '/health': 'Health check',
-      '/graphql': 'GraphQL API',
-      '/docs': 'API documentation',
-      '/metrics': 'Performance metrics'
-    },
-    performance: {
-      framework: 'hono',
-      runtime: 'cloudflare-workers',
-      caching: 'kv-storage'
-    }
-  })
-})
-
-
+	return c.json({
+		service: 'lunarcrush-universal-api',
+		timestamp: new Date().toISOString(),
+		uptime: process.uptime ? process.uptime() : 'unknown',
+		features: [
+			'native-hono',
+			'user-api-keys',
+			'custom-metrics',
+			'scalar-docs',
+			'enhanced-errors',
+		],
+		endpoints: {
+			'/health': 'Health check',
+			'/graphql': 'GraphQL API',
+			'/docs': 'API documentation',
+			'/metrics': 'Performance metrics',
+		},
+		performance: {
+			framework: 'hono',
+			runtime: 'cloudflare-workers',
+			caching: 'kv-storage',
+		},
+	});
+});
 
 const getCachedOrFetch = async (
 	kv: KVNamespace,
@@ -439,13 +449,14 @@ const getCachedOrFetch = async (
 const createResolvers = (env: Bindings) => ({
 	health: async () => {
 		try {
-			const apiKey = await env.LUNARCRUSH_API_KEY.get();
+			const apiKey = context.getApiKey?.();
 			const healthConfig: HealthCheckConfig = {
 				apiKey,
 				database: env.DB,
 				environment: env.ENVIRONMENT || 'production',
 			};
 			const healthResult = await performHealthCheck(healthConfig);
+			healthConfig.apiKey = '[REDACTED]';
 			return JSON.stringify(healthResult);
 		} catch (error) {
 			return JSON.stringify({
@@ -457,92 +468,159 @@ const createResolvers = (env: Bindings) => ({
 
 	healthSimple: () => 'LunarCrush API Active - Enhanced & Fixed',
 
-  getTopicsList: async (args, context) => {
-    	if (!context.apiKey) {
-				throw new Error(
-					'API key not found. Please provide your LunarCrush API key in Authorization header.'
-				);
-			}
-		return getCachedOrFetch(
-			env.LUNARCRUSH_CACHE,
-			'topics:list',
-			() => getTopicsList(context),
-			context?.request
-		);
+	getTopicsList: async (args, context) => {
+		const apiKey = context.getApiKey?.();
+
+		if (!apiKey) {
+			throw new Error(
+				'API key not found. Please provide your LunarCrush API key in Authorization header.'
+			);
+		}
+
+		const config: LunarCrushConfig = {
+			apiKey,
+			baseUrl: context.baseUrl,
+		};
+
+		try {
+			const result = await getCachedOrFetch(
+				env.LUNARCRUSH_CACHE,
+				'topics:list',
+				() => getTopicsList(config),
+				context?.request
+			);
+
+			return result;
+		} finally {
+			config.apiKey = null;
+		}
 	},
 
-  getTopic: async (args, context) => {
-    	if (!context.apiKey) {
-				throw new Error(
-					'API key not found. Please provide your LunarCrush API key in Authorization header.'
-				);
-			}
-		return getCachedOrFetch(
-			env.LUNARCRUSH_CACHE,
-			`topic:${args.topic}:${context.apiKey.substring(0, 8)}`,
-			() => getTopic(context, args.topic),
-			context?.request
-		);
+	getTopic: async (args, context) => {
+		const apiKey = context.getApiKey?.();
+		if (!apiKey) {
+			throw new Error(
+				'API key not found. Please provide your LunarCrush API key in Authorization header.'
+			);
+		}
+
+		const config: LunarCrushConfig = {
+			apiKey,
+			baseUrl: context.baseUrl,
+		};
+
+		try {
+			const result = await getCachedOrFetch(
+				env.LUNARCRUSH_CACHE,
+				`topic:${args.topic}:${context.apiKeyHash}`,
+				() => getTopic(config, args.topic),
+				context?.request
+			);
+
+			return result;
+		} finally {
+			config.apiKey = null;
+		}
 	},
 
-  getTopicWhatsup: async (args, context) => {
-    	if (!context.apiKey) {
-				throw new Error(
-					'API key not found. Please provide your LunarCrush API key in Authorization header.'
-				);
-			}
-		return getCachedOrFetch(
-			env.LUNARCRUSH_CACHE,
-			`topic:${args.topic}:whatsup:${context.apiKey.substring(0, 8)}`,
-			() => getTopicWhatsup(context, args.topic),
-			context?.request
-		);
+	getTopicWhatsup: async (args, context) => {
+		const apiKey = context.getApiKey?.();
+
+		if (!apiKey) {
+			throw new Error(
+				'API key not found. Please provide your LunarCrush API key in Authorization header.'
+			);
+		}
+
+		const config: LunarCrushConfig = {
+			apiKey,
+			baseUrl: context.baseUrl,
+		};
+		try {
+			const result = getCachedOrFetch(
+				env.LUNARCRUSH_CACHE,
+				`topic:${args.topic}:whatsup:${context.apiKeyHash}`,
+				() => getTopicWhatsup(config, args.topic),
+				context?.request
+			);
+
+			return result;
+		} finally {
+			config.apiKey = null;
+		}
 	},
 
-  getCoin: async (args, context) => {
-			if (!context.apiKey) {
-				throw new Error(
-					'API key not found. Please provide your LunarCrush API key in Authorization header.'
-				);
-			}
-		return getCachedOrFetch(
-			env.LUNARCRUSH_CACHE,
-			`coin:${args.symbol}:${context.apiKey.substring(0, 8)}`,
-			() => getCoin(context, args.symbol),
-			context?.request
-		);
+	getCoin: async (args, context) => {
+		const apiKey = context.getApiKey?.();
+
+		if (!apiKey) {
+			throw new Error(
+				'API key not found. Please provide your LunarCrush API key in Authorization header.'
+			);
+		}
+
+		const config: LunarCrushConfig = {
+			apiKey,
+			baseUrl: context.baseUrl,
+		};
+
+		try {
+			const result = await getCachedOrFetch(
+				env.LUNARCRUSH_CACHE,
+				`coin:${args.symbol}:${context.apiKeyHash}`,
+				() => getCoin(config, args.symbol),
+				context?.request
+			);
+
+			return result;
+		} finally {
+			config.apiKey = null;
+		}
 	},
 
 	getCoinsList: async (args, context) => {
-	if (!context.apiKey) {
-		throw new Error(
-			'API key not found. Please provide your LunarCrush API key in Authorization header.'
-		);
-	}
-	return getCachedOrFetch(
-		env.LUNARCRUSH_CACHE,
-		'coins:list',
-		() => getCoinsList(context),
-		context?.request
-	);
+		const apiKey = context.getApiKey?.();
+		if (!apiKey) {
+			throw new Error(
+				'API key not found. Please provide your LunarCrush API key in Authorization header.'
+			);
+		}
+
+		const config: LunarCrushConfig = {
+			apiKey,
+			baseUrl: context.baseUrl,
+		};
+		try {
+			const result = getCachedOrFetch(
+				env.LUNARCRUSH_CACHE,
+				'coins:list',
+				() => getCoinsList(config),
+				context?.request
+			);
+
+			return result;
+		} finally {
+			config.apiKey = null;
+		}
 	},
 });
 
-app.get('/docs',
-  apiReference({
-    theme: 'kepler', // Modern purple theme
-    spec: {
-      url: '/api-spec.json'
-    },
-    metaData: {
-      title: 'LunarCrush Universal API',
-      description: 'Beautiful, modern API documentation'
-    }
-  })
-)
+app.get(
+	'/docs',
+	apiReference({
+		theme: 'kepler', // Modern purple theme
+		spec: {
+			url: '/api-spec.json',
+		},
+		metaData: {
+			title: 'LunarCrush Universal API',
+			description: 'Beautiful, modern API documentation',
+		},
+	})
+);
 
 app.get('/api-spec.json', (c) => {
-    const baseUrl = new URL(c.req.url).origin;
+	const baseUrl = new URL(c.req.url).origin;
 
 	return c.json({
 		openapi: '3.0.0',
@@ -1402,7 +1480,7 @@ Built with ❤️ using Hono + Cloudflare Workers | Powered by LunarCrush Data`)
 
 // Add these SEO endpoints
 app.get('/robots.txt', (c) => {
-  return c.text(`User-agent: *
+	return c.text(`User-agent: *
 Allow: /
 Allow: /docs
 Allow: /health
@@ -1423,8 +1501,9 @@ Allow: /api-spec.json`);
 });
 
 app.get('/sitemap.xml', (c) => {
-  const baseUrl = new URL(c.req.url).origin;
-  return c.text(`<?xml version="1.0" encoding="UTF-8"?>
+	const baseUrl = new URL(c.req.url).origin;
+	return c.text(
+		`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>${baseUrl}/</loc>
@@ -1444,169 +1523,226 @@ app.get('/sitemap.xml', (c) => {
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-</urlset>`, 200, {
-    'Content-Type': 'application/xml'
-  });
+</urlset>`,
+		200,
+		{
+			'Content-Type': 'application/xml',
+		}
+	);
 });
 
 app.use('/graphql', async (c, next) => {
 	const authHeader = c.req.header('Authorization');
 
 	if (authHeader) {
-		const userApiKey = authHeader.startsWith('Bearer ') ? authHeader.replace('Bearer ', '') : authHeader;
+		let userApiKey = authHeader.startsWith('Bearer ')
+			? authHeader.replace('Bearer ', '')
+			: authHeader;
 
-		c.set('userApiKey', userApiKey);
-  } else {
+		// Create hash for logging/caching (no raw key exposure)
+		const keyHash = simpleHashApiKey(userApiKey);
+
+		// Store ONLY hash and secure accessor
+		c.set('userApiKeyHash', keyHash);
+
+		// Secure key accessor - key only exists during function execution
+		c.set('getApiKey', () => {
+			// Key is returned but not stored anywhere permanently
+			return userApiKey;
+		});
+
+		// SECURITY: Clear the original variable
+		userApiKey = null;
+
+		console.log('🔑 API key secured (hash):', keyHash);
+	} else {
 		console.log('🔑 No Authorization header found');
+		c.set('getApiKey', () => null);
 	}
 
-	return next();
+	await next();
+
+	// SECURITY: Clear accessor after request
+	c.set('getApiKey', () => null);
 });
 
 // Add this after your app.use('/graphql') middleware
 function extractOperationName(query: string): string {
-  const match = query.match(/(?:query|mutation)\s+(\w+)/)
-  return match ? match[1] : 'anonymous'
+	const match = query.match(/(?:query|mutation)\s+(\w+)/);
+	return match ? match[1] : 'anonymous';
 }
-
 
 // Build GraphQL schema (pure GraphQL, no Yoga)
 const schema = buildSchema(typeDefs);
 
 // ===== NATIVE HONO GRAPHQL ENDPOINT =====
-app.post(
-	'/graphql',
-	zValidator('json', graphqlSchema),
-	async (c) => {
-		try {
-			const body = await c.req.json();
-			const { query, variables = {}, operationName } = body;
+app.post('/graphql', zValidator('json', graphqlSchema), async (c) => {
+	try {
+		const body = await c.req.json();
+		const { query, variables = {}, operationName } = body;
 
-			if (query) {
-				const operationType = query.trim().startsWith('mutation')
-					? 'mutation'
-					: 'query';
-				const extractedOpName = operationName || extractOperationName(query);
+		if (query) {
+			const operationType = query.trim().startsWith('mutation')
+				? 'mutation'
+				: 'query';
+			const extractedOpName = operationName || extractOperationName(query);
 
+			// Safe: Add headers without request manipulation
+			c.header('X-GraphQL-Operation', operationType);
+			if (extractedOpName) {
+				c.header('X-GraphQL-Operation-Name', extractedOpName);
+			}
+		}
 
+		// Enhanced context with Hono features
+		const context = {
+			env: c.env,
+			request: c.req,
+			requestId: c.get('requestId'),
+			clientIP: c.get('clientIP'),
+			userAgent: c.get('userAgent'),
+			startTime: c.get('startTime'),
+			baseUrl: 'https://lunarcrush.com/api4/public',
+			apiKeyHash: c.get('userApiKeyHash'),
+			getApiKey: c.get('getApiKey'),
+		};
 
-				// Safe: Add headers without request manipulation
-				c.header('X-GraphQL-Operation', operationType);
-				if (extractedOpName) {
-					c.header('X-GraphQL-Operation-Name', extractedOpName);
-				}
+		console.log('🏗️ Executing with pure graphql() and native Hono...');
+
+		// Pure GraphQL execution (no Yoga dependency)
+		const result = await graphql({
+			schema,
+			source: query,
+			rootValue: createResolvers(c.env),
+			contextValue: context,
+			variableValues: variables,
+			operationName,
+		});
+
+		context.getApiKey = () => '[REDACTED]';
+
+		if (result.errors) {
+			console.error('❌ GraphQL execution errors:', result.errors);
+
+			// Enhanced GraphQL error response
+			if (!result.extensions) {
+				result.extensions = {};
 			}
 
-
-
-			// Enhanced context with Hono features
-			const context = {
-				env: c.env,
-				request: c.req,
+			result.extensions.errorDetails = {
 				requestId: c.get('requestId'),
-				clientIP: c.get('clientIP'),
-				userAgent: c.get('userAgent'),
-				startTime: c.get('startTime'),
-				apiKey: c.get('userApiKey'),
-				baseUrl: 'https://lunarcrush.com/api4/public',
+				timestamp: new Date().toISOString(),
+				suggestions: result.errors.map((err) => {
+					if (err.message.includes('API key')) {
+						return 'Add Authorization: Bearer YOUR_LUNARCRUSH_API_KEY header';
+					}
+					if (err.message.includes('Syntax Error')) {
+						return 'Check GraphQL query syntax';
+					}
+					return 'Check request format and try again';
+				}),
 			};
+		}
 
-			console.log('🏗️ Executing with pure graphql() and native Hono...');
+		// Add Hono performance timing
+		const responseTime = Date.now() - c.get('startTime');
+		if (result.extensions) {
+			result.extensions.timing = { responseTime };
+			result.extensions.hono = {
+				native: true,
+				requestId: c.get('requestId'),
+			};
+		} else {
+			result.extensions = {
+				timing: { responseTime },
+				hono: { native: true, requestId: c.get('requestId') },
+			};
+		}
 
-			// Pure GraphQL execution (no Yoga dependency)
-			const result = await graphql({
-				schema,
-				source: query,
-				rootValue: createResolvers(c.env),
-				contextValue: context,
-				variableValues: variables,
-				operationName,
-			});
-
-			if (result.errors) {
-				console.error('❌ GraphQL execution errors:', result.errors);
-
-				// Enhanced GraphQL error response
-				if (!result.extensions) {
-					result.extensions = {};
-				}
-
-				result.extensions.errorDetails = {
-					requestId: c.get('requestId'),
-					timestamp: new Date().toISOString(),
-					suggestions: result.errors.map((err) => {
-						if (err.message.includes('API key')) {
-							return 'Add Authorization: Bearer YOUR_LUNARCRUSH_API_KEY header';
-						}
-						if (err.message.includes('Syntax Error')) {
-							return 'Check GraphQL query syntax';
-						}
-						return 'Check request format and try again';
-					}),
-				};
-			}
-
-			// Add Hono performance timing
-			const responseTime = Date.now() - c.get('startTime');
-			if (result.extensions) {
-				result.extensions.timing = { responseTime };
-				result.extensions.hono = {
-					native: true,
-					requestId: c.get('requestId'),
-				};
-			} else {
-				result.extensions = {
-					timing: { responseTime },
-					hono: { native: true, requestId: c.get('requestId') },
-				};
-			}
-
-			return c.json(result);
-		} catch (error) {
-			console.error('❌ Native Hono GraphQL error:', error);
-			if (error instanceof HTTPException) {
-				return error.getResponse();
-			}
-			throw new HTTPException(500, {
-				message: 'GraphQL execution failed',
-				cause: error,
-			});
+		return c.json(result);
+	} catch (error) {
+		console.error('❌ GraphQL error (sanitized):', {
+			message: error.message,
+			requestId: c.get('requestId'),
+		});
+		if (error instanceof HTTPException) {
+			return error.getResponse();
+		}
+		throw new HTTPException(500, {
+			message: 'GraphQL execution failed',
+			// Don't include cause which might contain sensitive data
+		});
+	} finally {
+		if (context.getApiKey) {
+			context.getApiKey = () => null;
 		}
 	}
-);
-
+});
 
 // Replace your current app.get('/graphql') with:
 app.get('/graphql', (c) => {
-  // Get the current host and protocol dynamically
-  const url = new URL(c.req.url);
-  const endpoint = `${url.protocol}//${url.host}/graphql`;
+	// Get the current host and protocol dynamically
+	const url = new URL(c.req.url);
+	const endpoint = `${url.protocol}//${url.host}/graphql`;
 
-  // Simple Apollo Studio URL with just the endpoint
-  const apolloUrl = `https://studio.apollographql.com/sandbox/explorer?endpoint=${encodeURIComponent(endpoint)}`;
+	// Simple Apollo Studio URL with just the endpoint
+	const apolloUrl = `https://studio.apollographql.com/sandbox/explorer?endpoint=${encodeURIComponent(endpoint)}`;
 
-  return c.redirect(apolloUrl);
+	return c.redirect(apolloUrl);
 });
 // ===== NATIVE HONO ERROR HANDLING =====
 app.onError((err, c) => {
-	console.error('❌ Native Hono error:', err);
 	const requestId = c.get('requestId') || 'unknown';
-	const responseTime = Date.now() - (c.get('startTime') || Date.now());
+	const isDev = (c.env.ENVIRONMENT || 'development') === 'development';
+
+	const sanitizedMessage = err.message
+		?.replace(/\b[a-zA-Z0-9_-]{20,}\b/g, '[REDACTED_KEY]')
+		?.replace(/Bearer\s+[a-zA-Z0-9_-]+/gi, 'Bearer [REDACTED]')
+		?.replace(/api[_-]?key[:=]\s*[a-zA-Z0-9_-]+/gi, 'api_key: [REDACTED]');
+
+	const sanitizedStack =
+		isDev && err.stack
+			? err.stack
+					.replace(/\b[a-zA-Z0-9_-]{20,}\b/g, '[REDACTED_KEY]')
+					.replace(/Bearer\s+[a-zA-Z0-9_-]+/gi, 'Bearer [REDACTED]')
+					.substring(0, 200)
+			: undefined;
+
+	console.error('❌ Sanitized Error:', {
+		message: sanitizedMessage,
+		type: err.name,
+		requestId,
+		path: c.req.path,
+	});
 
 	if (err instanceof HTTPException) {
-		return err.getResponse();
+		return c.json(
+			{
+				error: {
+					type: getErrorType(err.status),
+					message: sanitizedMessage,
+					status: err.status,
+					requestId,
+					timestamp: new Date().toISOString(),
+					...(isDev && { stack: sanitizedStack }),
+				},
+			},
+			err.status
+		);
 	}
 
-	return c.json({
-		error: 'Internal Server Error',
-		message: 'An unexpected error occurred',
-		requestId,
-		timestamp: new Date().toISOString(),
-		responseTime,
-		framework: 'native-hono'
-	}, 500);
+	return c.json(
+		{
+			error: {
+				type: 'INTERNAL_ERROR',
+				message: isDev ? sanitizedMessage : 'An unexpected error occurred',
+				requestId,
+				timestamp: new Date().toISOString(),
+			},
+		},
+		500
+	);
 });
-
 app.notFound((c) => {
 	return c.json(
 		{

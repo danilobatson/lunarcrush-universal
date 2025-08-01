@@ -539,7 +539,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cloudflare/workers-types@npm:^4.20250722.0, @cloudflare/workers-types@npm:^4.20250730.0":
+"@cloudflare/workers-types@npm:^4.20250722.0":
   version: 4.20250731.0
   resolution: "@cloudflare/workers-types@npm:4.20250731.0"
   checksum: 62b818cfa236350ecfe0de03a79e288991f8079fdfa9b12cb48f1aab276be07932b0cfc58248359fd390b47d085b52b4e6d3a099c77acb852011559e1410df7b
@@ -2426,12 +2426,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@lunarcrush-universal/backend-hono@workspace:packages/hono"
   dependencies:
-    "@cloudflare/workers-types": "npm:^4.20250730.0"
     "@hono-rate-limiter/cloudflare": "npm:^0.2.2"
     "@hono/graphql-server": "npm:^0.6.2"
     "@hono/swagger-ui": "npm:^0.5.2"
     "@hono/zod-openapi": "npm:^1.0.2"
     "@hono/zod-validator": "npm:^0.7.2"
+    "@noble/hashes": "npm:^1.8.0"
     "@scalar/hono-api-reference": "npm:^0.9.13"
     "@types/node": "npm:^22.10.2"
     graphql: "npm:^16.11.0"
@@ -2523,6 +2523,13 @@ __metadata:
   peerDependencies:
     graphql: ^15.4.0 || ^16.0.0
   checksum: c2b4c1c09fa68ac7bd776166a86d361ac6e2659028391e7c3cca25943e966d1d035271141e28d0a519d50409cc07728df163d01ee26cacf403f59a6dcf2d4243
+  languageName: node
+  linkType: hard
+
+"@noble/hashes@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "@noble/hashes@npm:1.8.0"
+  checksum: 06a0b52c81a6fa7f04d67762e08b2c476a00285858150caeaaff4037356dd5e119f45b2a530f638b77a5eeca013168ec1b655db41bae3236cb2e9d511484fc77
   languageName: node
   linkType: hard
 
