@@ -20,9 +20,20 @@ database_name = "lunarcrush-universal-db"
 database_id = "8eb77518-7262-429c-954b-ee5e9ca67213"
 
 # Environment Variables
-[vars]
-ENVIRONMENT = "production"
-JWT_SECRET = "your-super-secret-jwt-key-change-in-production-asap"
+[env.dev]
+name = "lunarcrush-dev"
+vars = { ENVIRONMENT = "development" }
+
+# Staging environment
+[env.staging]
+name = "lunarcrush-staging"
+vars = { ENVIRONMENT = "staging" }
+
+# Production environment
+[env.production]
+name = "lunarcrush"
+vars = { ENVIRONMENT = "production" }
+
 
 # Monitoring
 [observability]

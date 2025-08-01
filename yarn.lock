@@ -37,6 +37,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@asteasolutions/zod-to-openapi@npm:^8.0.0":
+  version: 8.0.0
+  resolution: "@asteasolutions/zod-to-openapi@npm:8.0.0"
+  dependencies:
+    openapi3-ts: "npm:^4.1.2"
+  peerDependencies:
+    zod: ^4.0.0
+  checksum: b522d074832fb137dca724c8bd4bb134c7b4d4cad12c247ed3c864f993923b3475fc06580e6e1cbc4fd8641cd361679bbe1dd87c9bb42e142bc056d96d59fbc8
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0, @babel/code-frame@npm:^7.27.1":
   version: 7.27.1
   resolution: "@babel/code-frame@npm:7.27.1"
@@ -1905,6 +1916,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@hono/swagger-ui@npm:^0.5.2":
+  version: 0.5.2
+  resolution: "@hono/swagger-ui@npm:0.5.2"
+  peerDependencies:
+    hono: "*"
+  checksum: f2b3b495e0d323c02f79b718ed26cfa48c1e47ac26f6dcc4fcc7c8e4106f73e68542e87e7d0c351ece7435040c689c482f19dab88be1a97b21bb3871a2cc63a8
+  languageName: node
+  linkType: hard
+
+"@hono/zod-openapi@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@hono/zod-openapi@npm:1.0.2"
+  dependencies:
+    "@asteasolutions/zod-to-openapi": "npm:^8.0.0"
+    "@hono/zod-validator": "npm:^0.7.2"
+    openapi3-ts: "npm:^4.5.0"
+  peerDependencies:
+    hono: ">=4.3.6"
+    zod: ^4.0.0
+  checksum: 3126795184931ccf1aa6daf68b5321f4ec7b9fed3fae8b3e76b72a4b641741633652f0293c2ef95d0117c5a53a0fd5fd232e23e770ec20661d30fa7c2d04bfad
+  languageName: node
+  linkType: hard
+
 "@hono/zod-validator@npm:^0.7.2":
   version: 0.7.2
   resolution: "@hono/zod-validator@npm:0.7.2"
@@ -2395,16 +2429,18 @@ __metadata:
     "@cloudflare/workers-types": "npm:^4.20250730.0"
     "@hono-rate-limiter/cloudflare": "npm:^0.2.2"
     "@hono/graphql-server": "npm:^0.6.2"
+    "@hono/swagger-ui": "npm:^0.5.2"
+    "@hono/zod-openapi": "npm:^1.0.2"
     "@hono/zod-validator": "npm:^0.7.2"
+    "@scalar/hono-api-reference": "npm:^0.9.13"
     "@types/node": "npm:^22.10.2"
     graphql: "npm:^16.11.0"
     graphql-http: "npm:^1.22.4"
     graphql-yoga: "npm:^5.15.1"
     hono: "npm:^4.8.10"
-    hono-rate-limiter: "npm:^0.4.2"
     typescript: "npm:^5.8.3"
     wrangler: "npm:^4.26.1"
-    zod: "npm:^3.22.4"
+    zod: "npm:^4.0.14"
   languageName: unknown
   linkType: soft
 
@@ -2717,6 +2753,46 @@ __metadata:
   version: 4.46.2
   resolution: "@rollup/rollup-win32-x64-msvc@npm:4.46.2"
   conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@scalar/core@npm:0.3.11":
+  version: 0.3.11
+  resolution: "@scalar/core@npm:0.3.11"
+  dependencies:
+    "@scalar/types": "npm:0.2.11"
+  checksum: b78ef57fad054f3e4ae30b3764d3b71eba059f332fc5e530c23eec14fecb199bad90620bdd916496dae9a6bed6e4bf8543c2524ec2f328678376b93d6b4062fc
+  languageName: node
+  linkType: hard
+
+"@scalar/hono-api-reference@npm:^0.9.13":
+  version: 0.9.13
+  resolution: "@scalar/hono-api-reference@npm:0.9.13"
+  dependencies:
+    "@scalar/core": "npm:0.3.11"
+  peerDependencies:
+    hono: ^4.0.0
+  checksum: 4908d0a83b2d1cc64905cf9ebe4cbd8b820a10552d5a13c72c9b67f87383f774f1bb444f9e12ac8bf8b2b9a5d649a3bccba3ec50eb81c6250ae41b629df9969a
+  languageName: node
+  linkType: hard
+
+"@scalar/openapi-types@npm:0.3.7":
+  version: 0.3.7
+  resolution: "@scalar/openapi-types@npm:0.3.7"
+  dependencies:
+    zod: "npm:3.24.1"
+  checksum: 1ade1dd298ad33dfded43d06e704bd281ebd160d156f1c7fc162b2bb44a6107eb983b208c9ce871f6c973a2a555c399424e0ac71cc4b05c7e1b3efd2d4183b2b
+  languageName: node
+  linkType: hard
+
+"@scalar/types@npm:0.2.11":
+  version: 0.2.11
+  resolution: "@scalar/types@npm:0.2.11"
+  dependencies:
+    "@scalar/openapi-types": "npm:0.3.7"
+    nanoid: "npm:5.1.5"
+    zod: "npm:3.24.1"
+  checksum: 30e8db5caa4b14a3dcffe17f8dc20c94e11744405ce6fbae1c612b8fffe4270a238611511496037b8d57c21161ea729d8a08b2c982d358b0ea03bd627dbd1297
   languageName: node
   linkType: hard
 
@@ -4594,15 +4670,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hono-rate-limiter@npm:^0.4.2":
-  version: 0.4.2
-  resolution: "hono-rate-limiter@npm:0.4.2"
-  peerDependencies:
-    hono: ^4.1.1
-  checksum: fd6c2d484a3112cdf97759c6afe9d457d20029471c9ae2ab2fce4ae75e1cd629a7947988b3f8026fceeaab5b7fcf0e208b7b51d3618a16c4a7181d93a32ee51e
-  languageName: node
-  linkType: hard
-
 "hono@npm:^4.8.10, hono@npm:^4.8.9":
   version: 4.8.10
   resolution: "hono@npm:4.8.10"
@@ -5570,6 +5637,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:5.1.5":
+  version: 5.1.5
+  resolution: "nanoid@npm:5.1.5"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: e6004f1ad6c7123eeb037062c4441d44982037dc043aabb162457ef6986e99964ba98c63c975f96c547403beb0bf95bc537bd7bf9a09baf381656acdc2975c3c
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^3.3.11":
   version: 3.3.11
   resolution: "nanoid@npm:3.3.11"
@@ -5727,6 +5803,15 @@ __metadata:
   dependencies:
     mimic-fn: "npm:^4.0.0"
   checksum: 4eef7c6abfef697dd4479345a4100c382d73c149d2d56170a54a07418c50816937ad09500e1ed1e79d235989d073a9bade8557122aee24f0576ecde0f392bb6c
+  languageName: node
+  linkType: hard
+
+"openapi3-ts@npm:^4.1.2, openapi3-ts@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "openapi3-ts@npm:4.5.0"
+  dependencies:
+    yaml: "npm:^2.8.0"
+  checksum: 97de2d24e9ceffb89e1388e137e4a6e17ee57a02dce0c938a5e98b1338ac72b31e8b2ce8dd28945ad43fae8bee2a145892cb548ba5ae60b0930f1b6b79b0747d
   languageName: node
   linkType: hard
 
@@ -7707,7 +7792,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yaml@npm:^2.3.1":
+"yaml@npm:^2.3.1, yaml@npm:^2.8.0":
   version: 2.8.0
   resolution: "yaml@npm:2.8.0"
   bin:
@@ -7789,9 +7874,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.22.4":
-  version: 3.25.76
-  resolution: "zod@npm:3.25.76"
-  checksum: 5718ec35e3c40b600316c5b4c5e4976f7fee68151bc8f8d90ec18a469be9571f072e1bbaace10f1e85cf8892ea12d90821b200e980ab46916a6166a4260a983c
+"zod@npm:3.24.1":
+  version: 3.24.1
+  resolution: "zod@npm:3.24.1"
+  checksum: 0223d21dbaa15d8928fe0da3b54696391d8e3e1e2d0283a1a070b5980a1dbba945ce631c2d1eccc088fdbad0f2dfa40155590bf83732d3ac4fcca2cc9237591b
+  languageName: node
+  linkType: hard
+
+"zod@npm:^4.0.14":
+  version: 4.0.14
+  resolution: "zod@npm:4.0.14"
+  checksum: ec8681050d393f3be1c2c8f30d7dd4f56bec3746855fb17288be856185a0fe65e68d1b24aec657bbf956f64c05e69332d3751eafd6c103d19385bcc46075612b
   languageName: node
   linkType: hard
