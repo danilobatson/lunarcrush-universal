@@ -12,7 +12,7 @@ import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
 import { prettyJSON } from 'hono/pretty-json';
 import { HTTPException } from 'hono/http-exception';
-import { graphql, buildSchema } from 'graphql';
+import { graphql, buildSchema, validate } from 'graphql';
 import { timeout } from 'hono/timeout';
 import { bodyLimit } from 'hono/body-limit';
 import { showRoutes } from 'hono/dev';
@@ -110,6 +110,37 @@ function simpleHashApiKey(apiKey: string): string {
 	const hash = sha256(new TextEncoder().encode(apiKey));
 	return bytesToHex(hash).substring(0, 8); // First 8 chars
 }
+
+const validateKey = (apiKey: string) => {
+	if (!apiKey) {
+		throw new Error(
+			'API key not found. Please provide your LunarCrush API key in Authorization header.'
+		);
+	}
+	return apiKey;
+};
+
+const useResolver = async (context, kv, endpoint, fn, args) => {
+	const apiKey = validateKey(context.getApiKey?.());
+
+	const config: LunarCrushConfig = {
+		apiKey,
+		baseUrl: context.baseUrl,
+	};
+
+	try {
+		const result = await getCachedOrFetch(
+			kv,
+			endpoint,
+			() => fn(config, args),
+			context?.request
+		);
+
+		return result;
+	} finally {
+		config.apiKey = null;
+	}
+};
 
 console.log('🚀 Creating native Hono app with pure GraphQL...');
 
@@ -467,141 +498,204 @@ const createResolvers = (env: Bindings) => ({
 
 	healthSimple: () => 'LunarCrush API Active - Enhanced & Fixed',
 
-	getTopicsList: async (args, context) => {
-		const apiKey = context.getApiKey?.();
+	// === TOPICS ===
 
-		if (!apiKey) {
-			throw new Error(
-				'API key not found. Please provide your LunarCrush API key in Authorization header.'
-			);
-		}
+	getTopicsList: (args, context) =>
+		useResolver(context, env.LUNARCRUSH_CACHE, 'topics:list', getTopicsList),
 
-		const config: LunarCrushConfig = {
-			apiKey,
-			baseUrl: context.baseUrl,
-		};
+	getTopic: ({ topic }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`topic:${topic}:${context.apiKeyHash}`,
+			getTopic,
+			topic
+		),
 
-		try {
-			const result = await getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				'topics:list',
-				() => getTopicsList(config),
-				context?.request
-			);
+	getTopicWhatsup: ({ topic }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`topic:${topic}:whatsup:${context.apiKeyHash}`,
+			getTopicWhatsup,
+			topic
+		),
 
-			return result;
-		} finally {
-			config.apiKey = null;
-		}
-	},
+	getTopicTimeSeries: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`topic:${args.topic}:timeseries:${args.bucket}:${args.interval}:${args.start}:${args.end}`,
+			getTopicTimeSeries,
+			args
+		),
+	getTopicTimeSeriesV2: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`topic:${args.topic}:timeseriesv2:${args.bucket}`,
+			getTopicTimeSeriesV2,
+			args
+		),
 
-	getTopic: async (args, context) => {
-		const apiKey = context.getApiKey?.();
-		if (!apiKey) {
-			throw new Error(
-				'API key not found. Please provide your LunarCrush API key in Authorization header.'
-			);
-		}
+	getTopicPosts: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`topic:${args.topic}:posts:${args.start}:${args.end}`,
+			getTopicPosts,
+			args
+		),
 
-		const config: LunarCrushConfig = {
-			apiKey,
-			baseUrl: context.baseUrl,
-		};
+	getTopicNews: ({ topic }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`topic:${topic}:news:${context.apiKeyHash}`,
+			getTopicNews,
+			topic
+		),
 
-		try {
-			const result = await getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				`topic:${args.topic}:${context.apiKeyHash}`,
-				() => getTopic(config, args.topic),
-				context?.request
-			);
+	getTopicCreators: ({ topic }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`topic:${topic}:creators:${context.apiKeyHash}`,
+			getTopicCreators,
+			topic
+		),
 
-			return result;
-		} finally {
-			config.apiKey = null;
-		}
-	},
+	// === CATEGORIES - All Cached ===
+	getCategoriesList: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			'categories:list',
+			getCategoriesList
+		),
 
-	getTopicWhatsup: async (args, context) => {
-		const apiKey = context.getApiKey?.();
+	getCategory: ({ category }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`category:${category}:${context.apiKeyHash}`,
+			getCategory,
+			category
+		),
 
-		if (!apiKey) {
-			throw new Error(
-				'API key not found. Please provide your LunarCrush API key in Authorization header.'
-			);
-		}
+	getCategoryTopics: ({ category }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`category:${category}:topics`,
+			getCategoryTopics,
+			category
+		),
 
-		const config: LunarCrushConfig = {
-			apiKey,
-			baseUrl: context.baseUrl,
-		};
-		try {
-			const result = getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				`topic:${args.topic}:whatsup:${context.apiKeyHash}`,
-				() => getTopicWhatsup(config, args.topic),
-				context?.request
-			);
+	getCategoryTimeSeries: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`category:${args.category}:timeseries:${args.bucket}:${args.interval}:${args.start}:${args.end}`,
+			getCategoryTimeSeries,
+			args
+		),
 
-			return result;
-		} finally {
-			config.apiKey = null;
-		}
-	},
+	getCategoryPosts: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`category:${args.category}:posts:${args.start}:${args.end}`,
+			getCategoryPosts,
+			args
+		),
+	getCategoryNews: ({ category }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`category:${category}:news`,
+			getCategoryNews,
+			category
+		),
+	getCategoryCreators: ({ category }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`category:${category}:creators`,
+			getCategoryCreators,
+			category
+		),
 
-	getCoin: async (args, context) => {
-		const apiKey = context.getApiKey?.();
+	// === CREATORS ===
 
-		if (!apiKey) {
-			throw new Error(
-				'API key not found. Please provide your LunarCrush API key in Authorization header.'
-			);
-		}
+	getCreatorsList: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			'creators:list',
+			getCreatorsList
+		),
 
-		const config: LunarCrushConfig = {
-			apiKey,
-			baseUrl: context.baseUrl,
-		};
+	getCreator: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`creator:${args.network}:${args.id}`,
+			getCreator,
+			args
+		),
 
-		try {
-			const result = await getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				`coin:${args.symbol}:${context.apiKeyHash}`,
-				() => getCoin(config, args.symbol),
-				context?.request
-			);
+	getCreatorTimeSeries: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`creator:${args.network}:${args.id}:timeseries:${args.bucket}:${args.interval}:${args.start}:${args.end}`,
+			getCreatorTimeSeries,
+			args
+		),
 
-			return result;
-		} finally {
-			config.apiKey = null;
-		}
-	},
+	getCreatorPosts: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`creator:${args.network}:${args.id}:posts:${args.start}:${args.end}`,
+			getCreatorPosts,
+			args
+		),
 
-	getCoinsList: async (args, context) => {
-		const apiKey = context.getApiKey?.();
-		if (!apiKey) {
-			throw new Error(
-				'API key not found. Please provide your LunarCrush API key in Authorization header.'
-			);
-		}
+	// === COINS ===
+	getCoinsList: (args, context) =>
+		useResolver(context, env.LUNARCRUSH_CACHE, 'coins:list', getCoinsList),
 
-		const config: LunarCrushConfig = {
-			apiKey,
-			baseUrl: context.baseUrl,
-		};
-		try {
-			const result = getCachedOrFetch(
-				env.LUNARCRUSH_CACHE,
-				'coins:list',
-				() => getCoinsList(config),
-				context?.request
-			);
+	getCoinsListV2: (args, context) =>
+		useResolver(context, env.LUNARCRUSH_CACHE, 'coins:list', getCoinsListV2),
 
-			return result;
-		} finally {
-			config.apiKey = null;
-		}
-	},
+	getCoin: ({ symbol }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`coin:${symbol}:${context.apiKeyHash}`,
+			getCoin,
+			symbol
+		),
+
+	getCoinTimeSeries: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`coin:${args.symbol}:timeseries:${args.interval}:${args.start}:${args.end}`,
+			getCoinTimeSeries,
+			args
+		),
+
+	getCoinMeta: ({ symbol }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`coin:${symbol}:meta`,
+			getCoinMeta,
+			symbol
+		),
 });
 
 app.get(
@@ -1587,7 +1681,7 @@ app.post('/graphql', zValidator('json', graphqlSchema), async (c) => {
 			if (extractedOpName) {
 				c.header('X-GraphQL-Operation-Name', extractedOpName);
 			}
-    }
+		}
 		// Create context ONCE and don't modify it
 		const graphqlContext = {
 			env: c.env,

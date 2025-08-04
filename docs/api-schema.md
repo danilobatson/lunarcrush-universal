@@ -6,6 +6,13 @@
 
 ## GraphQL Schema
 
+type Blockchain {
+  address: String
+  decimals: Int
+  network: String
+  type: String
+}
+
 type CategoryCreator {
   creator_avatar: String
   creator_followers: Float
@@ -153,7 +160,7 @@ type CoinListItem {
 }
 
 type CoinMeta {
-  blockchain: String
+  blockchain: [Blockchain]
   coingecko_link: String
   coinmarketcap_link: String
   description: String
@@ -162,16 +169,15 @@ type CoinMeta {
   header_image: String
   header_text: String
   id: Int
-  market_categories: [String]
+  market_categories: String
   name: String
   overview_promotion: String
-  sections_order: [String]
   short_summary: String
   symbol: String
   telegram_link: String
   twitter_link: String
   updated: Int
-  videos: [JSON]
+  videos: String
   website_link: String
   whitepaper_link: String
   wikipedia_link: String

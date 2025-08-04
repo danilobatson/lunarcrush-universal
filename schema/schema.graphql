@@ -455,26 +455,32 @@ type CoinTimeSeriesItem {
   spam: Int
 }
 
+type Blockchain {
+  type: String
+  network: String
+  address: String
+  decimals: Int
+}
+
 type CoinMeta {
   id: Int
   name: String
   symbol: String
   description: String
-  blockchain: String
+  blockchain: [Blockchain]
   coingecko_link: String
   coinmarketcap_link: String
   forum_link: String
   github_link: String
   header_image: String
   header_text: String
-  market_categories: [String]
+  market_categories: String
   overview_promotion: String
-  sections_order: [String]
   short_summary: String
   telegram_link: String
   twitter_link: String
   updated: Int
-  videos: [JSON]
+  videos: String
   website_link: String
   whitepaper_link: String
   wikipedia_link: String

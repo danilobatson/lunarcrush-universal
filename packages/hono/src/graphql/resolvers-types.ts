@@ -28,6 +28,14 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type Blockchain = {
+  __typename?: 'Blockchain';
+  address?: Maybe<Scalars['String']['output']>;
+  decimals?: Maybe<Scalars['Int']['output']>;
+  network?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+};
+
 export type CategoryCreator = {
   __typename?: 'CategoryCreator';
   creator_avatar?: Maybe<Scalars['String']['output']>;
@@ -185,7 +193,7 @@ export type CoinListItem = {
 
 export type CoinMeta = {
   __typename?: 'CoinMeta';
-  blockchain?: Maybe<Scalars['String']['output']>;
+  blockchain?: Maybe<Array<Maybe<Blockchain>>>;
   coingecko_link?: Maybe<Scalars['String']['output']>;
   coinmarketcap_link?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
@@ -194,16 +202,15 @@ export type CoinMeta = {
   header_image?: Maybe<Scalars['String']['output']>;
   header_text?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
-  market_categories?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  market_categories?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   overview_promotion?: Maybe<Scalars['String']['output']>;
-  sections_order?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   short_summary?: Maybe<Scalars['String']['output']>;
   symbol?: Maybe<Scalars['String']['output']>;
   telegram_link?: Maybe<Scalars['String']['output']>;
   twitter_link?: Maybe<Scalars['String']['output']>;
   updated?: Maybe<Scalars['Int']['output']>;
-  videos?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
+  videos?: Maybe<Scalars['String']['output']>;
   website_link?: Maybe<Scalars['String']['output']>;
   whitepaper_link?: Maybe<Scalars['String']['output']>;
   wikipedia_link?: Maybe<Scalars['String']['output']>;
@@ -910,6 +917,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Blockchain: ResolverTypeWrapper<Blockchain>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CategoryCreator: ResolverTypeWrapper<CategoryCreator>;
   CategoryDetails: ResolverTypeWrapper<CategoryDetails>;
@@ -965,6 +973,7 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Blockchain: Blockchain;
   Boolean: Scalars['Boolean']['output'];
   CategoryCreator: CategoryCreator;
   CategoryDetails: CategoryDetails;
@@ -1014,6 +1023,14 @@ export type ResolversParentTypes = {
   User: User;
   UserPreferences: UserPreferences;
   UserPreferencesInput: UserPreferencesInput;
+};
+
+export type BlockchainResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['Blockchain'] = ResolversParentTypes['Blockchain']> = {
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  decimals?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  network?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type CategoryCreatorResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['CategoryCreator'] = ResolversParentTypes['CategoryCreator']> = {
@@ -1172,7 +1189,7 @@ export type CoinListItemResolvers<ContextType = AppContext, ParentType extends R
 };
 
 export type CoinMetaResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['CoinMeta'] = ResolversParentTypes['CoinMeta']> = {
-  blockchain?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  blockchain?: Resolver<Maybe<Array<Maybe<ResolversTypes['Blockchain']>>>, ParentType, ContextType>;
   coingecko_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   coinmarketcap_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1181,16 +1198,15 @@ export type CoinMetaResolvers<ContextType = AppContext, ParentType extends Resol
   header_image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   header_text?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  market_categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  market_categories?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   overview_promotion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  sections_order?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   short_summary?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   symbol?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   telegram_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   twitter_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updated?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  videos?: Resolver<Maybe<Array<Maybe<ResolversTypes['JSON']>>>, ParentType, ContextType>;
+  videos?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   website_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   whitepaper_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   wikipedia_link?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1625,6 +1641,7 @@ export type UserPreferencesResolvers<ContextType = AppContext, ParentType extend
 };
 
 export type Resolvers<ContextType = AppContext> = {
+  Blockchain?: BlockchainResolvers<ContextType>;
   CategoryCreator?: CategoryCreatorResolvers<ContextType>;
   CategoryDetails?: CategoryDetailsResolvers<ContextType>;
   CategoryListItem?: CategoryListItemResolvers<ContextType>;

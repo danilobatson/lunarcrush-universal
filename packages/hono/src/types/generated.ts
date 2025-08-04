@@ -29,6 +29,14 @@ export interface Scalars {
   JSON: { input: any; output: any; }
 }
 
+export interface Blockchain {
+  __typename?: 'Blockchain';
+  address?: Maybe<Scalars['String']['output']>;
+  decimals?: Maybe<Scalars['Int']['output']>;
+  network?: Maybe<Scalars['String']['output']>;
+  type?: Maybe<Scalars['String']['output']>;
+}
+
 export interface CategoryCreator {
   __typename?: 'CategoryCreator';
   creator_avatar?: Maybe<Scalars['String']['output']>;
@@ -186,7 +194,7 @@ export interface CoinListItem {
 
 export interface CoinMeta {
   __typename?: 'CoinMeta';
-  blockchain?: Maybe<Scalars['String']['output']>;
+  blockchain?: Maybe<Array<Maybe<Blockchain>>>;
   coingecko_link?: Maybe<Scalars['String']['output']>;
   coinmarketcap_link?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
@@ -195,16 +203,15 @@ export interface CoinMeta {
   header_image?: Maybe<Scalars['String']['output']>;
   header_text?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
-  market_categories?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  market_categories?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   overview_promotion?: Maybe<Scalars['String']['output']>;
-  sections_order?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   short_summary?: Maybe<Scalars['String']['output']>;
   symbol?: Maybe<Scalars['String']['output']>;
   telegram_link?: Maybe<Scalars['String']['output']>;
   twitter_link?: Maybe<Scalars['String']['output']>;
   updated?: Maybe<Scalars['Int']['output']>;
-  videos?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
+  videos?: Maybe<Scalars['String']['output']>;
   website_link?: Maybe<Scalars['String']['output']>;
   whitepaper_link?: Maybe<Scalars['String']['output']>;
   wikipedia_link?: Maybe<Scalars['String']['output']>;

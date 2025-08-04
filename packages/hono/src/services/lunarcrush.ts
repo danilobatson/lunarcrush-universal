@@ -120,12 +120,15 @@ export const getTopicWhatsup = async (
 
 export const getTopicTimeSeries = async (
 	config: LunarCrushConfig,
-	topic: string,
-	bucket?: string,
-	interval?: string,
-	start?: string,
-	end?: string
+	args: {
+		topic: string;
+		bucket?: string;
+		interval?: string;
+		start?: string;
+		end?: string;
+	}
 ): Promise<any[]> => {
+	const { topic, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -152,9 +155,12 @@ export const getTopicTimeSeries = async (
 
 export const getTopicTimeSeriesV2 = async (
 	config: LunarCrushConfig,
-	topic: string,
-	bucket?: string
+	args: {
+		topic: string;
+		bucket?: string;
+	}
 ): Promise<any[]> => {
+	const { topic, bucket } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -178,10 +184,9 @@ export const getTopicTimeSeriesV2 = async (
 
 export const getTopicPosts = async (
 	config: LunarCrushConfig,
-	topic: string,
-	start?: string,
-	end?: string
+	args: { topic: string; start?: string; end?: string }
 ): Promise<any[]> => {
+	const { topic, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (start) params.start = start;
@@ -306,12 +311,15 @@ export const getCategoryTopics = async (
 
 export const getCategoryTimeSeries = async (
 	config: LunarCrushConfig,
-	category: string,
-	bucket?: string,
-	interval?: string,
-	start?: string,
-	end?: string
+	args: {
+		category: string;
+		bucket?: string;
+		interval?: string;
+		start?: string;
+		end?: string;
+	}
 ): Promise<any[]> => {
+	const { category, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -338,10 +346,13 @@ export const getCategoryTimeSeries = async (
 
 export const getCategoryPosts = async (
 	config: LunarCrushConfig,
-	category: string,
-	start?: string,
-	end?: string
+	args: {
+		category: string;
+		start?: string;
+		end?: string;
+	}
 ): Promise<any[]> => {
+	const { category, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (start) params.start = start;
@@ -427,9 +438,12 @@ export const getCreatorsList = async (
 
 export const getCreator = async (
 	config: LunarCrushConfig,
-	network: string,
-	id: string
+	args: {
+		network: string;
+		id: string;
+	}
 ): Promise<any> => {
+	const { network, id } = args;
 	try {
 		const response = await makeRequest<any>(
 			config,
@@ -449,13 +463,16 @@ export const getCreator = async (
 
 export const getCreatorTimeSeries = async (
 	config: LunarCrushConfig,
-	network: string,
-	id: string,
-	bucket?: string,
-	interval?: string,
-	start?: string,
-	end?: string
+	args: {
+		network: string;
+		id: string;
+		bucket?: string;
+		interval?: string;
+		start?: string;
+		end?: string;
+	}
 ): Promise<any[]> => {
+	const { network, id, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -482,10 +499,12 @@ export const getCreatorTimeSeries = async (
 
 export const getCreatorPosts = async (
 	config: LunarCrushConfig,
-	network: string,
-	id: string,
-	start?: string,
-	end?: string
+	args: {
+		network: string;
+		id: string;
+		start?: string;
+		end?: string;
+	}
 ): Promise<any[]> => {
 	try {
 		const params: Record<string, any> = {};
@@ -589,12 +608,15 @@ export const getCoin = async (
 
 export const getCoinTimeSeries = async (
 	config: LunarCrushConfig,
-	coin: string,
-	bucket?: string,
-	interval?: string,
-	start?: string,
-	end?: string
+	args: {
+		coin: string;
+		bucket?: string;
+		interval?: string;
+		start?: string;
+		end?: string;
+	}
 ): Promise<any[]> => {
+  const { coin, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -1077,7 +1099,8 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 	getNftTimeSeriesV1: (nft: string) => getNftTimeSeriesV1(config, nft),
 
 	// SYSTEM ENDPOINTS
-	getSystemChanges: (start?: string, end?: string) => getSystemChanges(config, start, end),
+	getSystemChanges: (start?: string, end?: string) =>
+		getSystemChanges(config, start, end),
 
 	// SEARCHES ENDPOINTS
 	getSearchesList: () => getSearchesList(config),
