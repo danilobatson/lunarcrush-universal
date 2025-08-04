@@ -735,12 +735,15 @@ export const getStock = async (
 
 export const getStockTimeSeries = async (
 	config: LunarCrushConfig,
-	stock: string,
-	bucket?: string,
-	interval?: string,
-	start?: string,
-	end?: string
+  args: {
+    stock: string,
+    bucket?: string,
+    interval?: string,
+    start?: string,
+    end?: string
+  }
 ): Promise<any[]> => {
+  const { stock, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -841,12 +844,15 @@ export const getNft = async (
 
 export const getNftTimeSeries = async (
 	config: LunarCrushConfig,
-	nft: string,
-	bucket?: string,
-	interval?: string,
-	start?: string,
-	end?: string
+	args: {
+		nft: string,
+		bucket?: string,
+		interval?: string,
+		start?: string,
+		end?: string
+	}
 ): Promise<any[]> => {
+  const { nft, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -896,9 +902,9 @@ export const getNftTimeSeriesV1 = async (
 
 export const getSystemChanges = async (
 	config: LunarCrushConfig,
-	start?: string,
-	end?: string
+	args: { start?: string; end?: string }
 ): Promise<any[]> => {
+  const { start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (start) params.start = start;

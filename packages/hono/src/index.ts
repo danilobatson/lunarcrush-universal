@@ -565,7 +565,7 @@ const createResolvers = (env: Bindings) => ({
 			topic
 		),
 
-	// === CATEGORIES - All Cached ===
+	// === CATEGORIES  ===
 	getCategoriesList: (args, context) =>
 		useResolver(
 			context,
@@ -695,6 +695,118 @@ const createResolvers = (env: Bindings) => ({
 			`coin:${symbol}:meta`,
 			getCoinMeta,
 			symbol
+		),
+
+	// === STOCKS  ===
+	getStocksList: (args, context) =>
+		useResolver(context, env.LUNARCRUSH_CACHE, 'stocks:list', getStocksList),
+
+	getStocksListV2: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			'stocks:listv2',
+			getStocksListV2
+		),
+
+	getStock: ({ symbol }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`stock:${symbol}`,
+			getStock,
+			symbol
+		),
+
+	getStockTimeSeries: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`stock:${args.symbol}:timeseries:${args.interval}:${args.start}:${args.end}`,
+			getStockTimeSeries,
+			args
+		),
+
+	// === NFTS  ===
+	getNftsList: (args, context) =>
+		useResolver(context, env.LUNARCRUSH_CACHE, 'nfts:list', getNftsList),
+
+	getNftsListV2: (args, context) =>
+		useResolver(context, env.LUNARCRUSH_CACHE, 'nfts:listv2', getNftsListV2),
+
+	getNft: ({ id }, context) =>
+		useResolver(context, env.LUNARCRUSH_CACHE, `nft:${id}`, getNft, id),
+
+	getNftTimeSeries: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`nft:${args.id}:timeseries:${args.interval}:${args.start}:${args.end}`,
+			getNftTimeSeries,
+			args
+		),
+
+	// === FIXED RESOLVERS  ===
+	getNftTimeSeriesV1: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`nft:${args.id}:timeseriesv1:${args.interval}:${args.start}:${args.end}`,
+			getNftTimeSeriesV1Fixed,
+			args
+		),
+
+	getSystemChanges: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`system:changes:${args.start}:${args.end}`,
+			getSystemChanges,
+			args
+		),
+
+	getSearchesList: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			'searches:list',
+			getSearchesList
+		),
+
+	getSearch: ({ id }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`search:${id}`,
+			getSearchFixed,
+			id
+		),
+
+	searchPosts: ({ term }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`search:posts:${term}`,
+			searchPostsFixed,
+			term
+		),
+
+	getPostDetails: ({ id }, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`post:${id}:details`,
+			getPostDetailsFixed,
+			id
+		),
+
+	getPostTimeSeries: (args, context) =>
+		useResolver(
+			context,
+			env.LUNARCRUSH_CACHE,
+			`post:${args.id}:timeseries:${args.bucket}:${args.interval}:${args.start}:${args.end}`,
+			getPostTimeSeriesFixed,
+			args
 		),
 });
 
