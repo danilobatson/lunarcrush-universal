@@ -19,6 +19,10 @@ database_id = "8eb77518-7262-429c-954b-ee5e9ca67213"
 [env.dev]
 name = "lunarcrush-dev"
 vars = { ENVIRONMENT = "development" }
+kv_namespaces = [
+  { binding = "LUNARCRUSH_CACHE", id = "6bf88b7f2bac40e9888dc565db7e8faf" }
+]
+
 
 # Staging environment
 [env.staging]

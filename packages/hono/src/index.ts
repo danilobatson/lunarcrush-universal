@@ -87,7 +87,7 @@ const graphqlSchema = z.object({
 
 // Enhanced Bindings for Hono
 type Bindings = {
-	LUNARCRUSH_API_KEY: { get(): Promise<string> };
+	LUNARCRUSH_API_KEY: string;
 	DB?: any;
 	ENVIRONMENT?: string;
 	CUSTOM_CORS?: string;
@@ -266,7 +266,6 @@ app.use('*', async (c, next) => {
 		status,
 		responseTime,
 		userAgent: c.get('userAgent')?.substring(0, 50),
-		apiKeyHash: apiKeyHash || 'none',
 	});
 
 	c.header('X-Response-Time', `${responseTime}ms`);
@@ -305,7 +304,7 @@ app.use('*', async (c, next) => {
 
 app.get('/health', async (c) => {
 	try {
-		const apiKey = await c.env.LUNARCRUSH_API_KEY.get();
+		const apiKey = env.LUNARCRUSH_API_KEY;
 
 		if (!apiKey) {
 			return c.json(
@@ -449,7 +448,7 @@ const getCachedOrFetch = async (
 const createResolvers = (env: Bindings) => ({
 	health: async () => {
 		try {
-			const apiKey = context.getApiKey?.();
+			const apiKey = env.LUNARCRUSH_API_KEY;
 			const healthConfig: HealthCheckConfig = {
 				apiKey,
 				database: env.DB,
@@ -1551,9 +1550,6 @@ app.use('/graphql', async (c, next) => {
 			return userApiKey;
 		});
 
-		// SECURITY: Clear the original variable
-		userApiKey = null;
-
 		console.log('🔑 API key secured (hash):', keyHash);
 	} else {
 		console.log('🔑 No Authorization header found');
@@ -1575,7 +1571,7 @@ function extractOperationName(query: string): string {
 // Build GraphQL schema (pure GraphQL, no Yoga)
 const schema = buildSchema(typeDefs);
 
-// ===== NATIVE HONO GRAPHQL ENDPOINT =====
+// Replace your entire app.post('/graphql') with this clean version:
 app.post('/graphql', zValidator('json', graphqlSchema), async (c) => {
 	try {
 		const body = await c.req.json();
@@ -1587,15 +1583,13 @@ app.post('/graphql', zValidator('json', graphqlSchema), async (c) => {
 				: 'query';
 			const extractedOpName = operationName || extractOperationName(query);
 
-			// Safe: Add headers without request manipulation
 			c.header('X-GraphQL-Operation', operationType);
 			if (extractedOpName) {
 				c.header('X-GraphQL-Operation-Name', extractedOpName);
 			}
-		}
-
-		// Enhanced context with Hono features
-		const context = {
+    }
+		// Create context ONCE and don't modify it
+		const graphqlContext = {
 			env: c.env,
 			request: c.req,
 			requestId: c.get('requestId'),
@@ -1604,27 +1598,25 @@ app.post('/graphql', zValidator('json', graphqlSchema), async (c) => {
 			startTime: c.get('startTime'),
 			baseUrl: 'https://lunarcrush.com/api4/public',
 			apiKeyHash: c.get('userApiKeyHash'),
-			getApiKey: c.get('getApiKey'),
+			getApiKey: () => c.get('getApiKey')(),
 		};
 
-		console.log('🏗️ Executing with pure graphql() and native Hono...');
+		console.log('🏗️ Executing GraphQL with clean context...');
 
-		// Pure GraphQL execution (no Yoga dependency)
+		// Execute GraphQL
 		const result = await graphql({
 			schema,
 			source: query,
 			rootValue: createResolvers(c.env),
-			contextValue: context,
+			contextValue: graphqlContext,
 			variableValues: variables,
 			operationName,
 		});
 
-		context.getApiKey = () => '[REDACTED]';
-
+		// Handle errors
 		if (result.errors) {
 			console.error('❌ GraphQL execution errors:', result.errors);
 
-			// Enhanced GraphQL error response
 			if (!result.extensions) {
 				result.extensions = {};
 			}
@@ -1644,7 +1636,7 @@ app.post('/graphql', zValidator('json', graphqlSchema), async (c) => {
 			};
 		}
 
-		// Add Hono performance timing
+		// Add performance timing
 		const responseTime = Date.now() - c.get('startTime');
 		if (result.extensions) {
 			result.extensions.timing = { responseTime };
@@ -1661,7 +1653,7 @@ app.post('/graphql', zValidator('json', graphqlSchema), async (c) => {
 
 		return c.json(result);
 	} catch (error) {
-		console.error('❌ GraphQL error (sanitized):', {
+		console.error('❌ GraphQL error:', {
 			message: error.message,
 			requestId: c.get('requestId'),
 		});
@@ -1670,12 +1662,7 @@ app.post('/graphql', zValidator('json', graphqlSchema), async (c) => {
 		}
 		throw new HTTPException(500, {
 			message: 'GraphQL execution failed',
-			// Don't include cause which might contain sensitive data
 		});
-	} finally {
-		if (context.getApiKey) {
-			context.getApiKey = () => null;
-		}
 	}
 });
 
