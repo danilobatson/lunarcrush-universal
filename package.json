@@ -17,7 +17,7 @@
     "version-packages": "changeset version",
     "release": "turbo run build --filter=./packages/* && changeset publish",
     "build:all": "npm run build --workspaces",
-    "codegen": "graphql-codegen --config codegen.yml",
+    "codegen": "graphql-codegen --config codegen.yml && node scripts/generate-schema.js",
     "codegen:watch": "graphql-codegen --config codegen.yml --watch",
     "codegen:check": "graphql-codegen --config codegen.yml --check",
     "types:audit": "find packages -name '*.ts' | xargs grep -l 'interface\\|type.*=' | grep -v generated || echo 'No manual types found'",

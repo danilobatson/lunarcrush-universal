@@ -1,14 +1,20 @@
-// ===================================================================
-// 🚨 IMPORTED FROM WORKING YOGA BACKEND - DO NOT EDIT MANUALLY! 🚨
-// ===================================================================
-// This file was imported from the working GraphQL Yoga backend
-// All resolvers and functionality verified working
-// ===================================================================
+/* eslint-disable */
+// ================================================================
+// 🚨 AUTO-GENERATED SCHEMA - DO NOT EDIT MANUALLY! 🚨
+// ================================================================
+// Generated from: schema/schema.graphql
+// Command: yarn codegen
+//
+// To make changes:
+// 1. Edit schema/schema.graphql
+// 2. Run: yarn codegen
+// 3. NEVER edit this file directly!
+// ================================================================
 
 /**
- * LunarCrush GraphQL Schema - Imported from Working Backend
- * Source: Working Yoga implementation
- * Generated: 2025-07-31T19:48:31.000Z
+ * LunarCrush GraphQL Schema - Auto-Generated from Single Source of Truth
+ * Source: schema/schema.graphql
+ * Generated: 2025-08-04T19:58:30.147Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -37,10 +43,9 @@ enum SortDirection {
 # ===== QUERY ROOT =====
 
 type Query {
-  error: String
   # Health check
   health: String
-  healthSimple: String
+  hello: String
 
   # ===== TOPICS ENDPOINTS =====
   getTopicsList: [TopicListItem]
@@ -67,38 +72,93 @@ type Query {
   getCreatorTimeSeries(network: String, id: String, bucket: String, interval: String, start: String, end: String): [CreatorTimeSeriesItem]
   getCreatorPosts(network: String, id: String, start: String, end: String): [CreatorPost]
 
-  # ===== COINS ENDPOINTS (Fixed argument names) =====
+  # ===== COINS ENDPOINTS =====
   getCoinsList: [CoinListItem]
   getCoinsListV2: [CoinListItem]
-  getCoin(symbol: String): CoinDetails  # Fixed: coin not symbol
-  getCoinTimeSeries(symbol: String, bucket: String, interval: String, start: String, end: String): [CoinTimeSeriesItem]  # Fixed: coin not symbol
-  getCoinMeta(symbol: String): CoinMeta  # Fixed: coin not symbol
+  getCoin(symbol: String): CoinDetails
+  getCoinTimeSeries(symbol: String, bucket: String, interval: String, start: String, end: String): [CoinTimeSeriesItem]
+  getCoinMeta(symbol: String): CoinMeta
 
-  # ===== STOCKS ENDPOINTS (Fixed argument names) =====
+  # ===== STOCKS ENDPOINTS =====
   getStocksList: [StockListItem]
   getStocksListV2: [StockListItem]
-  getStock(symbol: String): StockDetails  # Fixed: stock not symbol
-  getStockTimeSeries(symbol: String, bucket: String, interval: String, start: String, end: String): [StockTimeSeriesItem]  # Fixed: stock not symbol
+  getStock(symbol: String): StockDetails
+  getStockTimeSeries(symbol: String, bucket: String, interval: String, start: String, end: String): [StockTimeSeriesItem]
 
-  # ===== NFTS ENDPOINTS (Fixed argument names) =====
+  # ===== NFTS ENDPOINTS =====
   getNftsList: [NftListItem]
   getNftsListV2: [NftListItem]
-  getNft(id: String): NftDetails  # Fixed: collection not id
-  getNftTimeSeries(id: String, bucket: String, interval: String, start: String, end: String): [NftTimeSeriesItem]  # Fixed: collection not id
-  getNftTimeSeriesV1(id: String, bucket: String, interval: String, start: String, end: String): [NftTimeSeriesItem]  # Fixed: returns JSON scalar
+  getNft(id: String): NftDetails
+  getNftTimeSeries(id: String, bucket: String, interval: String, start: String, end: String): [NftTimeSeriesItem]
 
-  # ===== SYSTEM ENDPOINTS (Fixed return types and arguments) =====
+  # ===== SYSTEM ENDPOINTS =====
   getSystemChanges: [SystemChange]
-  getSearchesList: [SearchItem]  # Fixed: SearchItem not SearchList
-  getSearch(id: String): SearchResult  # Fixed: returns JSON scalar, argument name
-  searchPosts(term: String): [SearchPost]  # Fixed: returns JSON scalar
-  getPostDetails(id: String): PostDetails  # Fixed: post_id not id
-  getPostTimeSeries(id: String, bucket: String, interval: String, start: String, end: String): [PostTimeSeriesItem]  # Fixed: post_id not id
+  getSearchesList: [SearchItem]
+  getSearch(id: String): SearchResult
+  searchPosts(term: String): [SearchPost]
+  getPostDetails(id: String): PostDetails
+  getPostTimeSeries(id: String, bucket: String, interval: String, start: String, end: String): [PostTimeSeriesItem]
 }
 
-# ===== CORRECTED TYPE DEFINITIONS =====
+type Mutation {
+  generateDemoToken: TokenResponse!
+  updateUserPreferences(input: UserPreferencesInput!): UserPreferences!
+  createTopic(input: CreateTopicInput!): Topic!
+}
 
-# Topics Types (mostly correct)
+# ===== HONO BACKEND TYPES =====
+
+type HealthStatus {
+  status: String!
+  timestamp: String!
+  service: String!
+  version: String!
+  requestId: String!
+  uptime: Float!
+  features: [String!]!
+}
+
+type User {
+  id: String!
+  type: String!
+  lastSeen: String!
+}
+
+type UserPreferences {
+  theme: String
+  currency: String
+  notifications: Boolean
+  favoriteTopics: [String!]
+}
+
+type TokenResponse {
+  token: String!
+  user: User!
+  expiresIn: String!
+}
+
+type Topic {
+  topic: String!
+  category: String!
+  description: String
+  createdAt: String!
+}
+
+input UserPreferencesInput {
+  theme: String
+  currency: String
+  notifications: Boolean
+  favoriteTopics: [String!]
+}
+
+input CreateTopicInput {
+  topic: String!
+  category: String!
+  description: String
+}
+
+# ===== LUNARCRUSH API TYPES =====
+
 type TopicListItem {
   topic: String
   title: String
@@ -178,32 +238,29 @@ type TopicNews {
   post_created: Int
   post_sentiment: Float
   creator_id: String
-  creator_name: String           # ADDED: Missing from API analysis
-  creator_display_name: String   # ADDED: Missing from API analysis
-  creator_followers: Float       # ADDED: Missing from API analysis
-  creator_avatar: String         # ADDED: Missing from API analysis
-  interactions_24h: Float        # ADDED: Missing from API analysis
-  interactions_total: Float      # ADDED: Missing from API analysis
+  creator_name: String
+  creator_display_name: String
+  creator_followers: Float
+  creator_avatar: String
+  interactions_24h: Float
+  interactions_total: Float
 }
 
-# Fixed TopicCreator with correct field names
 type TopicCreator {
-  creator_id: String  # Fixed: was 'id'
-  creator_name: String  # Fixed: was 'name'
-    name: String
-  creator_display_name: String  # Fixed: was 'display_name'
-  creator_followers: Float  # Fixed: was 'followers'
-    followers: Float
-  creator_avatar: String  # Fixed: was 'avatar'
+  creator_id: String
+  creator_name: String
+  creator_display_name: String
+  creator_followers: Float
+  creator_avatar: String
   interactions_24h: Float
   id: String
+  name: String
+  followers: Float
 }
 
-# Fixed Category types
 type CategoryListItem {
   category: String
   title: String
-  # ADDED: Missing fields from API analysis
   category_rank: Int
   category_rank_1h_previous: Int
   category_rank_24h_previous: Int
@@ -216,7 +273,6 @@ type CategoryListItem {
 type CategoryDetails {
   category: String
   title: String
-  # ADDED: Missing fields from API analysis
   topic: String
   interactions_24h: Float
   num_contributors: Int
@@ -231,7 +287,6 @@ type CategoryDetails {
 type CategoryTopic {
   topic: String
   title: String
-  # ADDED: Missing fields from API analysis
   topic_rank: Int
   topic_rank_1h_previous: Int
   topic_rank_24h_previous: Int
@@ -244,7 +299,6 @@ type CategoryTopic {
 type CategoryTimeSeriesItem {
   time: Int
   interactions: Float
-  # ADDED: Missing fields from API analysis
   contributors_active: Int
   contributors_created: Int
   posts_active: Int
@@ -257,7 +311,6 @@ type CategoryPost {
   id: String
   post_title: String
   post_type: String
-  # ADDED: Missing fields from API analysis
   post_link: String
   post_image: String
   post_created: Int
@@ -275,7 +328,6 @@ type CategoryNews {
   id: String
   post_title: String
   post_type: String
-  # ADDED: Missing fields from API analysis
   post_link: String
   post_image: String
   post_created: Int
@@ -298,17 +350,16 @@ type CategoryCreator {
   interactions_24h: Float
 }
 
-# Fixed Creator types - 100% API coverage
 type CreatorListItem {
   creator_id: String
   creator_name: String
   creator_display_name: String
   creator_followers: Float
-  creator_avatar: String        # ADDED: Missing from API analysis
-  creator_network: String       # FIXED: Was 'network', API returns 'creator_network'
-  creator_posts: Int            # ADDED: Missing from API analysis
-  creator_rank: Int             # ADDED: Missing from API analysis
-  interactions_24h: Float       # ADDED: Missing from API analysis
+  creator_avatar: String
+  creator_network: String
+  creator_posts: Int
+  creator_rank: Int
+  interactions_24h: Float
 }
 
 type CreatorDetails {
@@ -317,92 +368,88 @@ type CreatorDetails {
   creator_display_name: String
   creator_followers: Float
   creator_avatar: String
-  creator_rank: Int             # ADDED: Missing from API analysis
-  interactions_24h: Float       # ADDED: Missing from API analysis
-  topic_influence: JSON         # ADDED: CRITICAL social trading data!
+  creator_rank: Int
+  interactions_24h: Float
+  topic_influence: JSON
 }
 
 type CreatorTimeSeriesItem {
   time: Int
   interactions: Float
-  creator_rank: Int             # ADDED: Missing from API analysis
-  followers: Float              # ADDED: Missing from API analysis
-  posts_active: Int             # ADDED: Missing from API analysis
+  creator_rank: Int
+  followers: Float
+  posts_active: Int
 }
 
 type CreatorPost {
   id: String
-  post_type: String             # ADDED: Missing from API analysis
+  post_type: String
   post_title: String
-  post_link: String             # ADDED: Missing from API analysis
-  post_image: String            # ADDED: Missing from API analysis
-  post_created: Int             # ADDED: Missing from API analysis
-  post_sentiment: Float         # ADDED: Missing from API analysis
-  creator_id: String            # ADDED: Missing from API analysis
-  creator_name: String          # ADDED: Missing from API analysis
-  creator_display_name: String  # ADDED: Missing from API analysis
-  creator_followers: Float      # ADDED: Missing from API analysis
-  creator_avatar: String        # ADDED: Missing from API analysis
-  interactions_24h: Float       # ADDED: Missing from API analysis
-  interactions_total: Float     # ADDED: Missing from API analysis
+  post_link: String
+  post_image: String
+  post_created: Int
+  post_sentiment: Float
+  creator_id: String
+  creator_name: String
+  creator_display_name: String
+  creator_followers: Float
+  creator_avatar: String
+  interactions_24h: Float
+  interactions_total: Float
 }
 
-# Fixed Coin types
 type CoinListItem {
-  id: Int                          # CHANGED: Use API id as primary
+  id: Int
   name: String
   symbol: String
   logo: String
   price: Float
   market_cap: Float
   alt_rank: Int
-  # ADDED 23 MISSING FIELDS FROM API:
-  alt_rank_previous: Int           # Previous AltRank position
-  blockchains: [JSON]              # Blockchain information array
-  categories: [String]             # Categories this coin belongs to
-  circulating_supply: Float        # Circulating supply amount
-  galaxy_score: Float              # LunarCrush Galaxy Score
-  galaxy_score_previous: Float     # Previous Galaxy Score
-  interactions_24h: Float          # 24h social interactions
-  last_updated_price: Int          # Price last update timestamp
-  last_updated_price_by: String    # Price update source
-  market_cap_rank: Int             # Market cap ranking
-  market_dominance: Float          # Market dominance percentage
-  market_dominance_prev: Float     # Previous market dominance
-  max_supply: Float                # Maximum supply
-  percent_change_1h: Float         # 1 hour price change %
-  percent_change_24h: Float        # 24 hour price change %
-  percent_change_30d: Float        # 30 day price change %
-  percent_change_7d: Float         # 7 day price change %
-  price_btc: Float                 # Price in BTC
-  sentiment: Float                 # Social sentiment score
-  social_dominance: Float          # Social dominance percentage
-  social_volume_24h: Float         # 24h social volume
-  topic: String                    # Associated social topic
-  volatility: Float                # Price volatility metric
-  volume_24h: Float                # 24h trading volume
+  alt_rank_previous: Int
+  blockchains: [JSON]
+  categories: [String]
+  circulating_supply: Float
+  galaxy_score: Float
+  galaxy_score_previous: Float
+  interactions_24h: Float
+  last_updated_price: Int
+  last_updated_price_by: String
+  market_cap_rank: Int
+  market_dominance: Float
+  market_dominance_prev: Float
+  max_supply: Float
+  percent_change_1h: Float
+  percent_change_24h: Float
+  percent_change_30d: Float
+  percent_change_7d: Float
+  price_btc: Float
+  sentiment: Float
+  social_dominance: Float
+  social_volume_24h: Float
+  topic: String
+  volatility: Float
+  volume_24h: Float
 }
 
 type CoinDetails {
-  id: Int                          # CHANGED: Use API id as primary
+  id: Int
   name: String
   symbol: String
   price: Float
   market_cap: Float
   alt_rank: Int
-  close: Float                     # Keep - exists in API
-  # ADDED 12 MISSING FIELDS FROM API:
-  circulating_supply: Float        # Circulating supply amount
-  galaxy_score: Float              # LunarCrush Galaxy Score
-  market_cap_rank: Int             # Market cap ranking
-  max_supply: Float                # Maximum supply
-  percent_change_24h: Float        # 24 hour price change %
-  percent_change_30d: Float        # 30 day price change %
-  percent_change_7d: Float         # 7 day price change %
-  price_btc: Float                 # Price in BTC
-  volatility: Float                # Price volatility metric
-  volume_24h: Float                # 24h trading volume
-  # REMOVED: logo (not in this API), interactions_24h (wrong endpoint)
+  close: Float
+  circulating_supply: Float
+  galaxy_score: Float
+  market_cap_rank: Int
+  max_supply: Float
+  percent_change_24h: Float
+  percent_change_30d: Float
+  percent_change_7d: Float
+  price_btc: Float
+  volatility: Float
+  volume_24h: Float
 }
 
 type CoinTimeSeriesItem {
@@ -411,166 +458,156 @@ type CoinTimeSeriesItem {
   high: Float
   low: Float
   volume_24h: Float
-  # ADDED 14 MISSING FIELDS FROM API:
-  alt_rank: Int                    # AltRank at this time
-  circulating_supply: Float        # Supply at this time
-  contributors_active: Int         # Active contributors count
-  contributors_created: Int        # New contributors count
-  galaxy_score: Float              # Galaxy Score at this time
-  interactions: Float              # Social interactions
-  market_cap: Float                # Market cap at this time
-  market_dominance: Float          # Market dominance at this time
-  open: Float                      # Opening price
-  posts_active: Int                # Active posts count
-  posts_created: Int               # New posts count
-  sentiment: Float                 # Sentiment score
-  social_dominance: Float          # Social dominance percentage
-  spam: Int                        # Spam posts count
+  alt_rank: Int
+  circulating_supply: Float
+  contributors_active: Int
+  contributors_created: Int
+  galaxy_score: Float
+  interactions: Float
+  market_cap: Float
+  market_dominance: Float
+  open: Float
+  posts_active: Int
+  posts_created: Int
+  sentiment: Float
+  social_dominance: Float
+  spam: Int
+}
+
+type Blockchain {
+  type: String
+  network: String
+  address: String
+  decimals: Int
 }
 
 type CoinMeta {
-  id: Int                          # CHANGED: Use API id as primary
+  id: Int
   name: String
-  symbol: String                   # ADDED: Missing symbol field
+  symbol: String
   description: String
-  # ADDED 19 MISSING METADATA FIELDS FROM API:
-  blockchain: String               # Blockchain platform
-  coingecko_link: String           # CoinGecko URL
-  coinmarketcap_link: String       # CoinMarketCap URL
-  forum_link: String               # Forum discussion URL
-  github_link: String              # GitHub repository URL
-  header_image: String             # Header image URL
-  header_text: String              # Header text content
-  market_categories: [String]      # Market category classifications
-  overview_promotion: String       # Promotional overview text
-  sections_order: [String]         # Content sections order
-  short_summary: String            # Brief summary description
-  telegram_link: String            # Telegram group URL
-  twitter_link: String             # Twitter profile URL
-  updated: Int                     # Last update timestamp
-  videos: [JSON]                   # Video content array
-  website_link: String             # Official website URL
-  whitepaper_link: String          # Whitepaper document URL
-  wikipedia_link: String           # Wikipedia page URL
+  blockchain: [Blockchain]
+  coingecko_link: String
+  coinmarketcap_link: String
+  forum_link: String
+  github_link: String
+  header_image: String
+  header_text: String
+  market_categories: String
+  overview_promotion: String
+  short_summary: String
+  telegram_link: String
+  twitter_link: String
+  updated: Int
+  videos: String
+  website_link: String
+  whitepaper_link: String
+  wikipedia_link: String
 }
 
-# Fixed Stock types
 type StockListItem {
-  id: Int                      # Primary identifier from API
-  symbol: String               # Stock symbol
-  name: String                 # Company name
-  logo: String                 # Company logo URL
-  price: Float                 # Current price
-  alt_rank: Int                # ADDED: AltRank
-  alt_rank_previous: Int       # ADDED: Previous AltRank
-  categories: [String]         # ADDED: Stock categories
-  galaxy_score: Float          # ADDED: Galaxy Score
-  galaxy_score_previous: Float # ADDED: Previous Galaxy Score
-  interactions_24h: Float      # ADDED: 24h interactions
-  market_cap: Float            # ADDED: Market cap
-  market_cap_rank: Int         # ADDED: Market cap rank
-  market_dominance: Float      # ADDED: Market dominance
-  market_dominance_prev: Float # ADDED: Previous market dominance
-  percent_change_24h: Float    # ADDED: 24h price change
-  sentiment: Float             # ADDED: Social sentiment
-  social_dominance: Float      # ADDED: Social dominance
-  social_volume_24h: Float     # ADDED: 24h social volume
-  topic: String                # ADDED: Associated topic
-  volume_24h: Float            # ADDED: 24h trading volume
+  id: Int
+  symbol: String
+  name: String
+  logo: String
+  price: Float
+  alt_rank: Int
+  alt_rank_previous: Int
+  categories: [String]
+  galaxy_score: Float
+  galaxy_score_previous: Float
+  interactions_24h: Float
+  market_cap: Float
+  market_cap_rank: Int
+  market_dominance: Float
+  market_dominance_prev: Float
+  percent_change_24h: Float
+  sentiment: Float
+  social_dominance: Float
+  social_volume_24h: Float
+  topic: String
+  volume_24h: Float
 }
 
 type StockDetails {
-  id: Int                      # Primary identifier from API
-  symbol: String               # Stock symbol
-  name: String                 # Company name
-  close: Float                 # Closing price
-  price: Float                 # Current price
-  market_cap: Float            # ADDED: Market cap
-  market_cap_rank: Int         # ADDED: Market cap rank
-  percent_change_24h: Float    # ADDED: 24h price change
-  volume_24h: Float            # ADDED: 24h trading volume
+  id: Int
+  symbol: String
+  name: String
+  close: Float
+  price: Float
+  market_cap: Float
+  market_cap_rank: Int
+  percent_change_24h: Float
+  volume_24h: Float
 }
 
 type StockTimeSeriesItem {
-  time: Int                    # Timestamp
-  close: Float                 # Closing price
-  alt_rank: Int                # ADDED: AltRank
-  contributors_active: Int     # ADDED: Active contributors
-  contributors_created: Int    # ADDED: New contributors
-  galaxy_score: Float          # ADDED: Galaxy Score
-  high: Float                  # ADDED: High price
-  interactions: Float          # ADDED: Social interactions
-  low: Float                   # ADDED: Low price
-  market_cap: Float            # ADDED: Market cap
-  market_dominance: Float      # ADDED: Market dominance
-  open: Float                  # ADDED: Opening price
-  posts_active: Int            # ADDED: Active posts
-  posts_created: Int           # ADDED: New posts
-  sentiment: Float             # ADDED: Social sentiment
-  social_dominance: Float      # ADDED: Social dominance
-  spam: Int                    # ADDED: Spam count
+  time: Int
+  close: Float
+  alt_rank: Int
+  contributors_active: Int
+  contributors_created: Int
+  galaxy_score: Float
+  high: Float
+  interactions: Float
+  low: Float
+  market_cap: Float
+  market_dominance: Float
+  open: Float
+  posts_active: Int
+  posts_created: Int
+  sentiment: Float
+  social_dominance: Float
+  spam: Int
 }
 
-# Fixed NFT types
 type NftListItem {
   id: String
   name: String
   logo: String
   floor_price: Float
-  # ADDED: 11 missing fields from API analysis
-  alt_rank: Int                 # ADDED: AltRank for NFT collections
-  base_crypto: String           # ADDED: Base cryptocurrency
-  galaxy_score: Float           # ADDED: Galaxy Score metric
-  interactions_24h: Float       # ADDED: Social interactions
-  lunar_id: String              # ADDED: LunarCrush internal ID
-  market_cap: Float             # ADDED: Market capitalization
-  percent_change_24h: Float     # ADDED: 24h price change
-  social_contributors: Int      # ADDED: Number of social contributors
-  social_dominance: Float       # ADDED: Social dominance metric
-  social_volume_24h: Float      # ADDED: Social volume
-  volume_24h: Float             # ADDED: Trading volume
+  alt_rank: Int
+  base_crypto: String
+  galaxy_score: Float
+  interactions_24h: Float
+  lunar_id: String
+  market_cap: Float
+  percent_change_24h: Float
+  social_contributors: Int
+  social_dominance: Float
+  social_volume_24h: Float
+  volume_24h: Float
 }
 
 type NftDetails {
   id: String
   name: String
   floor_price: Float
-  # ADDED: 3 missing fields from API analysis
-  market_cap: Float             # ADDED: Market capitalization
-  percent_change_24h: Float     # ADDED: 24h price change
-  volume_24h: Float             # ADDED: Trading volume
-  # REMOVED: logo, interactions_24h (not in API details response)
+  market_cap: Float
+  percent_change_24h: Float
+  volume_24h: Float
 }
 
 type NftTimeSeriesItem {
   time: Int
-  # REPLACED: floor_price, volume with 9 actual API fields
-  alt_rank: Int                 # ADDED: AltRank over time
-  contributors_active: Int      # ADDED: Active social contributors
-  contributors_created: Int     # ADDED: New contributors created
-  interactions: Float           # ADDED: Social interactions
-  market_cap: Float             # ADDED: Market cap over time
-  posts_active: Int             # ADDED: Active posts
-  posts_created: Int            # ADDED: New posts created
-  sentiment: Float              # ADDED: Social sentiment score
-  social_dominance: Float       # ADDED: Social dominance metric
+  alt_rank: Int
+  contributors_active: Int
+  contributors_created: Int
+  interactions: Float
+  market_cap: Float
+  posts_active: Int
+  posts_created: Int
+  sentiment: Float
+  social_dominance: Float
 }
 
-# Fixed System types
 type SystemChange {
-  asset_id: String           # ADDED: Missing asset identifier from API
-  asset_name: String         # ADDED: Missing asset name from API
-  asset_type: String         # ADDED: Missing asset type (coins, nfts, stocks, etc)
-  change: String            # KEEP: Change description
-  description: String       # KEEP: Change details
-  time: Int                 # RENAMED: from 'timestamp' to match API exactly
-  # REMOVED: id field (not in API response)
-  # REMOVED: type field (renamed to asset_type for clarity)
-}
-
-type SearchList {
-  id: String
-  query: String
+  asset_id: String
+  asset_name: String
+  asset_type: String
+  change: String
+  description: String
+  time: Int
 }
 
 type SearchItem {
@@ -578,19 +615,6 @@ type SearchItem {
   query: String
 }
 
-type PostDetails {
-  id: String
-    title: String
-  content: String
-  post_title: String  # Fixed: was 'title'
-}
-
-type PostTimeSeriesItem {
-  time: Int
-  interactions: Float
-}
-
-# Additional types for fixed JSON returns
 type SearchResult {
   id: String
   query: String
@@ -598,15 +622,24 @@ type SearchResult {
 }
 
 type SearchPost {
-  id: String                # KEEP: Post identifier
-  post_created: Int         # ADDED: When post was created (timestamp)
-  post_link: String         # ADDED: Link to original post
-  post_type: String         # ADDED: Post type (twitter, youtube, tiktok, etc)
-  text: String              # ADDED: Post content text
-  text_highlight: String    # ADDED: Highlighted search terms
-  # REMOVED: title field (not in API response)
+  id: String
+  post_created: Int
+  post_link: String
+  post_type: String
+  text: String
+  text_highlight: String
+}
+
+type PostDetails {
+  id: String
+  post_title: String
+  content: String
+}
+
+type PostTimeSeriesItem {
+  time: Int
+  interactions: Float
 }
 `;
 
-// Re-export for compatibility
 export default typeDefs;
