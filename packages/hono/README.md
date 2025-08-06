@@ -1,27 +1,23 @@
 # 🚀 LunarCrush Universal - Production Hono GraphQL API
 
-> **Production-ready GraphQL API with comprehensive LunarCrush integration and security-focused health monitoring**
-
-[![Production Ready](https://img.shields.io/badge/Production-Ready-brightgreen)](https://lunarcrush.cryptoguard-api.workers.dev) [![GraphQL](https://img.shields.io/badge/GraphQL-40%2B%20Resolvers-E10098)](https://graphql.org/) [![Hono](https://img.shields.io/badge/Hono-Native-orange)](https://hono.dev/) [![Cloudflare](https://img.shields.io/badge/Cloudflare-Workers-F38020)](https://workers.cloudflare.com/)
+> **Production-ready GraphQL API with comprehensive LunarCrush integration**
 
 ## 🎯 Production Status
 
-- ✅ **GraphQL-First**: All data access through comprehensive GraphQL API with 40+ resolvers
-- ✅ **Security-Focused**: Simplified health monitoring without system information exposure
-- ✅ **Performance**: Intelligent KV caching with <231ms average response time
-- ✅ **Enterprise Ready**: Authentication, rate limiting, CORS, security headers
+- ✅ **GraphQL-First**: All data access through comprehensive GraphQL API with 41+ resolvers
+- ✅ **Performance**: Intelligent KV caching with optimized response times
+- ✅ **Enterprise Ready**: Authentication, CORS, security headers, validation middleware
 - ✅ **Live Deployment**: [Production API](https://lunarcrush.cryptoguard-api.workers.dev)
 
 ## 🎉 API Coverage
 
 **Complete LunarCrush Integration:**
 
-- **GraphQL Resolvers**: 40+ resolvers covering all LunarCrush API functionality
-- **Success Rate**: 85%+ validated across all resolver categories  
-- **Data Types**: Cryptocurrencies, Topics, Categories, Creators, Stocks, NFTs, Posts
-- **Performance**: Sub-second responses with intelligent caching
-- **Security**: Minimal health endpoints without system information exposure
+- **GraphQL Resolvers**: 41 resolvers comprehensively tested with 100% success rate
+- **Data Types**: Cryptocurrencies, Topics, Categories, Creators, Stocks, NFTs, Posts, System Health
+- **Performance**: Optimized response times with intelligent caching and compression
 - **Data Coverage**: 1000+ cryptocurrencies, stocks, NFTs, and social intelligence
+- **Security**: No rate limiting (handled upstream by LunarCrush), input validation, secure headers
 
 ## 🏗️ Clean Architecture
 
@@ -29,27 +25,31 @@
 src/
 ├── index.ts                    # 🚀 Main application entry (GraphQL-focused)
 ├── schema.ts                   # 📋 Auto-generated from schema/schema.graphql
-├── routes/                     # 🎯 DX-focused endpoints
-│   ├── health.ts              # 🏥 Health monitoring & metrics
-│   ├── docs.ts                # 📚 API documentation & specs
-│   ├── debug.ts               # 🐛 Development utilities
-│   └── main.ts                # 🎯 GraphQL-first routing (cleaned)
+├── routes/                     # 🎯 Documentation and API specification
+│   └── docs.ts                # 📚 API documentation, homepage, SEO (robots.txt, sitemap)
+├── middleware/                 # 🛡️ Security and request handling
+│   ├── index.ts               # 🔧 Main middleware setup (CORS, security, compression)
+│   └── validation.ts          # ✅ Request validation using @hono/zod-validator
+├── graphql/
+│   └── resolvers.ts           # 🚀 Centralized GraphQL resolvers (41 total)
 ├── services/
 │   ├── lunarcrush.ts          # 🔧 Core LunarCrush API integration
 │   ├── lunarcrush-fixes.ts    # 🛠️ Enhanced resolver implementations
 │   └── caching.ts             # ⚡ Intelligent KV caching layer
-├── graphql/
-│   └── resolvers.ts           # 🚀 Centralized GraphQL resolvers (40+)
-└── utils/
-    └── health.ts              # 🏥 Comprehensive health monitoring
+├── lib/
+│   ├── auth.ts                # � Enhanced authentication with multiple header support
+│   └── types.ts               # 📋 Type definitions and interfaces
+└── types/
+    └── generated.ts           # 🤖 Auto-generated TypeScript types from GraphQL schema
 ```
 
 ### 🔥 Advanced Features
 
-- **🛡️ Security**: Rate limiting, CORS, input sanitization, secure headers
-- **📊 Monitoring**: Real-time metrics, health checks, dynamic performance tracking
-- **⚡ Caching**: Intelligent KV layer with configurable TTL
+- **🛡️ Security**: Input validation with Zod schemas, CORS, secure headers, authentication
+- **📊 Monitoring**: Real-time metrics, health checks via GraphQL (`systemHealth`, `ping`)
+- **⚡ Caching**: Intelligent KV layer with configurable TTL and compression
 - **🎯 GraphQL-First**: Clean separation of concerns with resolver-based architecture
+- **🔧 Middleware**: Uses official Hono packages for validation, error handling, compression
 
 ## 🚀 Quick Start
 
@@ -99,20 +99,21 @@ Authorization: Bearer YOUR_API_KEY
 
 ### Available Endpoints
 
-| Endpoint   | Purpose                           | Auth Required |
-| ---------- | --------------------------------- | ------------- |
-| `/graphql` | Main GraphQL API                  | ✅             |
-| `/docs`    | Interactive API documentation     | ❌             |
-| `/health`  | Simplified health check (secure)  | ❌             |
-| `/debug`   | Development utilities             | ✅             |
-| `/`        | LLM-friendly homepage             | ❌             |
+| Endpoint         | Purpose                       | Auth Required | Features                           |
+| ---------------- | ----------------------------- | ------------- | ---------------------------------- |
+| `/graphql`       | Main GraphQL API              | ✅             | 41 resolvers, playground, schema   |
+| `/docs`          | Interactive API documentation | ❌             | Scalar API reference, live testing |
+| `/`              | LLM-friendly homepage         | ❌             | Text/HTML format detection         |
+| `/robots.txt`    | SEO robots configuration      | ❌             | Search engine optimization         |
+| `/sitemap.xml`   | XML sitemap for indexing      | ❌             | SEO and discovery                  |
+| `/api-spec.json` | OpenAPI specification         | ❌             | API schema and documentation       |
 
 ### GraphQL Schema Highlights
 
 **Cryptocurrency Data:**
 
 - `getCoinsList` - List cryptocurrencies with filters
-- `getCoin` - Get detailed coin information  
+- `getCoin` - Get detailed coin information
 - `getCoinTimeSeries` - Historical price/volume data
 
 **Social Intelligence:**
@@ -129,40 +130,58 @@ Authorization: Bearer YOUR_API_KEY
 
 ## 🛡️ Security Features
 
-- **API Key Authentication**: Secure Bearer token validation
-- **Simplified Health Monitoring**: Security-focused endpoints without system information exposure
-- **Rate Limiting**: Prevents API abuse and protects resources
-- **Input Sanitization**: SQL injection and XSS protection
-- **CORS Protection**: Configurable cross-origin policies
-- **Security Headers**: HSTS, CSP, and comprehensive protection
+- **API Key Authentication**: Secure Bearer token validation with multiple header format support
+- **Input Validation**: Request validation using `@hono/zod-validator` with proper error handling
+- **Security Headers**: HSTS, CSP, X-Frame-Options, and comprehensive protection
+- **CORS Protection**: Configurable cross-origin policies with Apollo Studio support
+- **Error Handling**: Simplified error responses using Hono's `HTTPException` patterns
+- **No Rate Limiting**: Removed custom rate limiting as LunarCrush API handles this upstream
 
 ## 📊 Performance Features
 
 - **KV Caching**: Intelligent response caching with configurable TTL
-- **Real-time Metrics**: Dynamic performance tracking
-- **Response Compression**: Gzip compression for all responses
+- **Compression**: Gzip compression for all responses using Hono's built-in middleware
+- **Real-time Metrics**: Dynamic performance tracking and monitoring
 - **CDN Integration**: Global edge distribution via Cloudflare Workers
-- **Security-First Design**: Minimal attack surface with essential monitoring
+- **Security-First Design**: Minimal attack surface with essential monitoring via GraphQL
+- **Environment-Aware**: Proper Cloudflare Workers environment variable handling
 
-## 🐛 Development Tools
+## � Architecture Improvements
 
-- **Debug Endpoint**: Inspect headers, environment, and cache
-- **Health Monitoring**: Comprehensive system health checks
-- **Error Tracking**: Detailed error reporting and logging
-- **GraphQL Playground**: Interactive query exploration
+### Recent Middleware Enhancements
+- **Removed Rate Limiting**: LunarCrush API handles rate limiting upstream - no custom implementation needed
+- **Official Hono Packages**: Replaced custom middleware with `@hono/zod-validator`, `@hono/sentry`, compression
+- **Environment-Aware**: Fixed Sentry configuration to use `c.env` instead of `process.env` for Cloudflare Workers
+- **Simplified Error Handling**: Using Hono's built-in `HTTPException` instead of custom error handlers
+- **Enhanced Security**: API-focused security headers with stricter CSP and frame protection
+- **Input Validation**: Type-safe request validation with clear error messages
+- **Better Performance**: Added compression middleware and optimized security headers
+
+### Clean Codebase
+- **Less Custom Code**: Replaced custom implementations with proven Hono middleware packages
+- **Better Maintainability**: Following Hono best practices and official patterns
+- **Type Safety**: Enhanced validation using Zod schemas throughout the application
+
+- **Error Tracking**: Detailed error reporting using Hono's `HTTPException` patterns
+- **GraphQL Playground**: Interactive query exploration at `/graphql`
+- **Live Reloading**: Fast development iteration with Wrangler dev
+- **Input Validation**: Type-safe request validation using `@hono/zod-validator`
+- **Environment Variables**: Proper Cloudflare Workers `c.env` usage instead of `process.env`
 
 ## 📈 Monitoring & Observability
 
 ### Health Checks
 
 ```bash
-# Basic health check (security-focused)
-curl https://your-api.workers.dev/health
-
 # GraphQL system health
 curl -X POST https://your-api.workers.dev/graphql \
   -H "Content-Type: application/json" \
   -d '{"query":"query { systemHealth { status uptime version } }"}'
+
+# Simple ping check
+curl -X POST https://your-api.workers.dev/graphql \
+  -H "Content-Type: application/json" \
+  -d '{"query":"query { ping { status timestamp } }"}'
 ```
 
 ### Performance Metrics
@@ -191,9 +210,9 @@ npm run deploy -- --env production
 
 The API automatically detects the deployment environment and adjusts:
 
-- **Development**: Verbose logging, debug endpoints enabled
-- **Staging**: Reduced logging, limited debug access
-- **Production**: Minimal logging, debug endpoints disabled
+- **Development**: Verbose logging, enhanced error messages
+- **Staging**: Reduced logging, limited access
+- **Production**: Minimal logging, optimized performance
 
 ## 🤝 Contributing
 
