@@ -55,12 +55,33 @@ generates:
       contextType: '../types#AppContext'
       resolverTypeWrapperSignature: 'Promise<T> | T'
 
-  # 🔧 Generate GraphQL schema file for hono package
-  ./packages/hono/src/graphql/schema.graphql:
+  # 🔧 Generate schema string for hono package (main schema import)
+  ./packages/hono/src/schema.ts:
     plugins:
-      - 'schema-ast'
+      - add:
+          content: |
+            /* eslint-disable */
+            // ================================================================
+            // 🚨 AUTO-GENERATED SCHEMA - DO NOT EDIT MANUALLY! 🚨
+            // ================================================================
+            // Generated from: schema/schema.graphql
+            // Command: yarn codegen
+            //
+            // To make changes:
+            // 1. Edit schema/schema.graphql
+            // 2. Run: yarn codegen
+            // 3. NEVER edit this file directly!
+            // ================================================================
 
-  # NOTE: schema.ts is manually generated with a script to avoid codegen issues
+            /**
+             * LunarCrush GraphQL Schema - Auto-Generated from Single Source of Truth
+             * Source: schema/schema.graphql
+             * Generated: ${new Date().toISOString()}
+             */
+
+      - 'schema-ast'
+    config:
+      includeDirectives: false
 
   # SDK PACKAGE
   ./packages/sdk/src/types/generated.ts:
@@ -110,8 +131,14 @@ generates:
             # LunarCrush Universal API Schema
 
             > 🚨 **AUTO-GENERATED** - Do not edit manually!
+            >
+            > **Single Source of Truth:** `schema/schema.graphql`
+            >
             > Generated from: `schema/schema.graphql`
             > Command: `yarn codegen`
+            >
+            > All code generation, type definitions, and schema references
+            > should use `schema/schema.graphql` as the canonical source.
 
             ## GraphQL Schema
 

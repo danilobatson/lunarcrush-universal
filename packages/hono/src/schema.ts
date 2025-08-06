@@ -14,7 +14,7 @@
 /**
  * LunarCrush GraphQL Schema - Auto-Generated from Single Source of Truth
  * Source: schema/schema.graphql
- * Generated: 2025-08-06T07:19:43.745Z
+ * Generated: 2025-08-06T16:18:21.082Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -50,15 +50,6 @@ type Query {
 	# Simplified system monitoring (security-focused)
 	systemHealth: SystemHealthResponse
 	ping: PingResponse
-
-	# ===== CHART GENERATION =====
-	chartTypes: JSON
-	generateChart(
-		symbol: String!
-		chartType: String!
-		timeframe: String
-	): ChartResponse
-	generateChartBatch(requests: [ChartRequestInput!]!): [ChartBatchResponse!]!
 
 	# ===== TOPICS ENDPOINTS =====
 	getTopicsList: [TopicListItem]
@@ -231,36 +222,6 @@ type SystemHealthResponse {
 type PingResponse {
 	status: String!
 	timestamp: String!
-}
-
-# ===== CHART GENERATION TYPES =====
-
-type ChartResponse {
-	symbol: String!
-	chartType: String!
-	timeframe: String!
-	chartUrl: String
-	dataPoints: Int!
-	generatedAt: String!
-	metadata: JSON!
-}
-
-type ChartBatchResponse {
-	symbol: String!
-	chartType: String!
-	timeframe: String!
-	chartUrl: String
-	dataPoints: Int!
-	generatedAt: String!
-	metadata: JSON!
-	success: Boolean!
-	error: String
-}
-
-input ChartRequestInput {
-	symbol: String!
-	chartType: String!
-	timeframe: String
 }
 
 # ===== LUNARCRUSH API TYPES =====

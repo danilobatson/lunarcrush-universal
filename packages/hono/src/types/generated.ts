@@ -136,36 +136,6 @@ export interface CategoryTopic {
   topic_rank_24h_previous?: Maybe<Scalars['Int']['output']>;
 }
 
-export interface ChartBatchResponse {
-  __typename?: 'ChartBatchResponse';
-  chartType: Scalars['String']['output'];
-  chartUrl?: Maybe<Scalars['String']['output']>;
-  dataPoints: Scalars['Int']['output'];
-  error?: Maybe<Scalars['String']['output']>;
-  generatedAt: Scalars['String']['output'];
-  metadata: Scalars['JSON']['output'];
-  success: Scalars['Boolean']['output'];
-  symbol: Scalars['String']['output'];
-  timeframe: Scalars['String']['output'];
-}
-
-export interface ChartRequestInput {
-  chartType: Scalars['String']['input'];
-  symbol: Scalars['String']['input'];
-  timeframe?: InputMaybe<Scalars['String']['input']>;
-}
-
-export interface ChartResponse {
-  __typename?: 'ChartResponse';
-  chartType: Scalars['String']['output'];
-  chartUrl?: Maybe<Scalars['String']['output']>;
-  dataPoints: Scalars['Int']['output'];
-  generatedAt: Scalars['String']['output'];
-  metadata: Scalars['JSON']['output'];
-  symbol: Scalars['String']['output'];
-  timeframe: Scalars['String']['output'];
-}
-
 export interface CoinDetails {
   __typename?: 'CoinDetails';
   alt_rank?: Maybe<Scalars['Int']['output']>;
@@ -448,9 +418,6 @@ export interface PostTimeSeriesItem {
 
 export interface Query {
   __typename?: 'Query';
-  chartTypes?: Maybe<Scalars['JSON']['output']>;
-  generateChart?: Maybe<ChartResponse>;
-  generateChartBatch: Array<ChartBatchResponse>;
   getCategoriesList?: Maybe<Array<Maybe<CategoryListItem>>>;
   getCategory?: Maybe<CategoryDetails>;
   getCategoryCreators?: Maybe<Array<Maybe<CategoryCreator>>>;
@@ -493,18 +460,6 @@ export interface Query {
   ping?: Maybe<PingResponse>;
   searchPosts?: Maybe<Array<Maybe<SearchPost>>>;
   systemHealth?: Maybe<SystemHealthResponse>;
-}
-
-
-export interface QueryGenerateChartArgs {
-  chartType: Scalars['String']['input'];
-  symbol: Scalars['String']['input'];
-  timeframe?: InputMaybe<Scalars['String']['input']>;
-}
-
-
-export interface QueryGenerateChartBatchArgs {
-  requests: Array<ChartRequestInput>;
 }
 
 

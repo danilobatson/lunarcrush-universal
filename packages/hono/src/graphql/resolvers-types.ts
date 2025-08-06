@@ -135,36 +135,6 @@ export type CategoryTopic = {
   topic_rank_24h_previous?: Maybe<Scalars['Int']['output']>;
 };
 
-export type ChartBatchResponse = {
-  __typename?: 'ChartBatchResponse';
-  chartType: Scalars['String']['output'];
-  chartUrl?: Maybe<Scalars['String']['output']>;
-  dataPoints: Scalars['Int']['output'];
-  error?: Maybe<Scalars['String']['output']>;
-  generatedAt: Scalars['String']['output'];
-  metadata: Scalars['JSON']['output'];
-  success: Scalars['Boolean']['output'];
-  symbol: Scalars['String']['output'];
-  timeframe: Scalars['String']['output'];
-};
-
-export type ChartRequestInput = {
-  chartType: Scalars['String']['input'];
-  symbol: Scalars['String']['input'];
-  timeframe?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type ChartResponse = {
-  __typename?: 'ChartResponse';
-  chartType: Scalars['String']['output'];
-  chartUrl?: Maybe<Scalars['String']['output']>;
-  dataPoints: Scalars['Int']['output'];
-  generatedAt: Scalars['String']['output'];
-  metadata: Scalars['JSON']['output'];
-  symbol: Scalars['String']['output'];
-  timeframe: Scalars['String']['output'];
-};
-
 export type CoinDetails = {
   __typename?: 'CoinDetails';
   alt_rank?: Maybe<Scalars['Int']['output']>;
@@ -447,9 +417,6 @@ export type PostTimeSeriesItem = {
 
 export type Query = {
   __typename?: 'Query';
-  chartTypes?: Maybe<Scalars['JSON']['output']>;
-  generateChart?: Maybe<ChartResponse>;
-  generateChartBatch: Array<ChartBatchResponse>;
   getCategoriesList?: Maybe<Array<Maybe<CategoryListItem>>>;
   getCategory?: Maybe<CategoryDetails>;
   getCategoryCreators?: Maybe<Array<Maybe<CategoryCreator>>>;
@@ -492,18 +459,6 @@ export type Query = {
   ping?: Maybe<PingResponse>;
   searchPosts?: Maybe<Array<Maybe<SearchPost>>>;
   systemHealth?: Maybe<SystemHealthResponse>;
-};
-
-
-export type QueryGenerateChartArgs = {
-  chartType: Scalars['String']['input'];
-  symbol: Scalars['String']['input'];
-  timeframe?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type QueryGenerateChartBatchArgs = {
-  requests: Array<ChartRequestInput>;
 };
 
 
@@ -1017,9 +972,6 @@ export type ResolversTypes = {
   CategoryPost: ResolverTypeWrapper<CategoryPost>;
   CategoryTimeSeriesItem: ResolverTypeWrapper<CategoryTimeSeriesItem>;
   CategoryTopic: ResolverTypeWrapper<CategoryTopic>;
-  ChartBatchResponse: ResolverTypeWrapper<ChartBatchResponse>;
-  ChartRequestInput: ChartRequestInput;
-  ChartResponse: ResolverTypeWrapper<ChartResponse>;
   CoinDetails: ResolverTypeWrapper<CoinDetails>;
   CoinListItem: ResolverTypeWrapper<CoinListItem>;
   CoinMeta: ResolverTypeWrapper<CoinMeta>;
@@ -1080,9 +1032,6 @@ export type ResolversParentTypes = {
   CategoryPost: CategoryPost;
   CategoryTimeSeriesItem: CategoryTimeSeriesItem;
   CategoryTopic: CategoryTopic;
-  ChartBatchResponse: ChartBatchResponse;
-  ChartRequestInput: ChartRequestInput;
-  ChartResponse: ChartResponse;
   CoinDetails: CoinDetails;
   CoinListItem: CoinListItem;
   CoinMeta: CoinMeta;
@@ -1234,30 +1183,6 @@ export type CategoryTopicResolvers<ContextType = AppContext, ParentType extends 
   topic_rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   topic_rank_1h_previous?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   topic_rank_24h_previous?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ChartBatchResponseResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['ChartBatchResponse'] = ResolversParentTypes['ChartBatchResponse']> = {
-  chartType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  chartUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dataPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  generatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  metadata?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
-  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  timeframe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type ChartResponseResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['ChartResponse'] = ResolversParentTypes['ChartResponse']> = {
-  chartType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  chartUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  dataPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  generatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  metadata?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
-  symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  timeframe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1533,9 +1458,6 @@ export type PostTimeSeriesItemResolvers<ContextType = AppContext, ParentType ext
 };
 
 export type QueryResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  chartTypes?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
-  generateChart?: Resolver<Maybe<ResolversTypes['ChartResponse']>, ParentType, ContextType, RequireFields<QueryGenerateChartArgs, 'chartType' | 'symbol'>>;
-  generateChartBatch?: Resolver<Array<ResolversTypes['ChartBatchResponse']>, ParentType, ContextType, RequireFields<QueryGenerateChartBatchArgs, 'requests'>>;
   getCategoriesList?: Resolver<Maybe<Array<Maybe<ResolversTypes['CategoryListItem']>>>, ParentType, ContextType>;
   getCategory?: Resolver<Maybe<ResolversTypes['CategoryDetails']>, ParentType, ContextType, Partial<QueryGetCategoryArgs>>;
   getCategoryCreators?: Resolver<Maybe<Array<Maybe<ResolversTypes['CategoryCreator']>>>, ParentType, ContextType, Partial<QueryGetCategoryCreatorsArgs>>;
@@ -1825,8 +1747,6 @@ export type Resolvers<ContextType = AppContext> = {
   CategoryPost?: CategoryPostResolvers<ContextType>;
   CategoryTimeSeriesItem?: CategoryTimeSeriesItemResolvers<ContextType>;
   CategoryTopic?: CategoryTopicResolvers<ContextType>;
-  ChartBatchResponse?: ChartBatchResponseResolvers<ContextType>;
-  ChartResponse?: ChartResponseResolvers<ContextType>;
   CoinDetails?: CoinDetailsResolvers<ContextType>;
   CoinListItem?: CoinListItemResolvers<ContextType>;
   CoinMeta?: CoinMetaResolvers<ContextType>;

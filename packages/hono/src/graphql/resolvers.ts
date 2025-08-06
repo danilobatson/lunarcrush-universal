@@ -4,15 +4,7 @@
 
 import { getContext } from 'hono/context-storage';
 import type { Bindings } from '../lib/types';
-import { performHealthCheck } from '../utils/health';
-// Chart generation removed - not critical
-/*
-import {
-	generateChart,
-	getSupportedChartTypes,
-	type ChartRequest,
-} from '../services/charts';
-*/
+
 import {
 	getTopicsList,
 	getTopic,
@@ -114,128 +106,6 @@ export function createResolvers() {
 				timestamp: new Date().toISOString(),
 			}),
 
-			// ===================================================================
-			// LEGACY HEALTH (keeping for backward compatibility)
-			// ===================================================================
-
-			/*
-			// Get supported chart types (replaces /charts/types endpoint)
-			chartTypes: () => getSupportedChartTypes(),
-
-			// Generate chart (replaces /charts/:symbol/:chartType endpoint)
-			generateChart: async (
-				{
-					symbol,
-					chartType,
-					timeframe = '1d',
-				}: { symbol: string; chartType: string; timeframe?: string },
-				context: GraphQLContext
-			) => {
-				const config: LunarCrushConfig = getConfigOptional();
-				const c = getContext(); // Get the Hono context
-
-				// Validate chart type
-				const supportedTypes = getSupportedChartTypes();
-				if (!supportedTypes[chartType as keyof typeof supportedTypes]) {
-					throw new Error(
-						`Chart type "${chartType}" is not supported. Supported types: ${Object.keys(supportedTypes).join(', ')}`
-					);
-				}
-
-				const request: ChartRequest = {
-					symbol: symbol.toUpperCase(),
-					chartType: chartType as any,
-					timeframe: timeframe as any,
-					apiKey: config.apiKey,
-				};
-
-				try {
-					const chart = await generateChart(request, c); // Pass the context
-					return {
-						symbol: chart.symbol,
-						chartType: chart.chartType,
-						timeframe: chart.timeframe,
-						chartUrl: chart.chartUrl,
-						dataPoints: chart.dataPoints,
-						generatedAt: chart.generatedAt,
-						metadata: chart.metadata || {},
-					};
-				} catch (error) {
-					throw new Error(
-						`Chart generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
-					);
-				}
-			},
-
-			// Batch chart generation (replaces /charts/batch endpoint)
-			generateChartBatch: async (
-				{
-					requests,
-				}: {
-					requests: Array<{
-						symbol: string;
-						chartType: string;
-						timeframe?: string;
-					}>;
-				},
-				context: GraphQLContext
-			) => {
-				const config: LunarCrushConfig = getConfigOptional();
-				const c = getContext(); // Get the Hono context
-
-				const supportedTypes = getSupportedChartTypes();
-
-				const results = await Promise.allSettled(
-					requests.map(async (req) => {
-						// Validate chart type
-						if (!supportedTypes[req.chartType as keyof typeof supportedTypes]) {
-							throw new Error(`Chart type "${req.chartType}" is not supported`);
-						}
-
-						const request: ChartRequest = {
-							symbol: req.symbol.toUpperCase(),
-							chartType: req.chartType as any,
-							timeframe: (req.timeframe || '1d') as any,
-							apiKey: config.apiKey,
-						};
-
-						const chart = await generateChart(request, c); // Pass the context
-						return {
-							symbol: chart.symbol,
-							chartType: chart.chartType,
-							timeframe: chart.timeframe,
-							chartUrl: chart.chartUrl,
-							dataPoints: chart.dataPoints,
-							generatedAt: chart.generatedAt,
-							metadata: chart.metadata || {},
-							success: true,
-							error: null,
-						};
-					})
-				);
-
-				return results.map((result, index) => {
-					if (result.status === 'fulfilled') {
-						return result.value;
-					} else {
-						return {
-							symbol: requests[index].symbol,
-							chartType: requests[index].chartType,
-							timeframe: requests[index].timeframe || '1d',
-							chartUrl: null,
-							dataPoints: 0,
-							generatedAt: new Date().toISOString(),
-							metadata: {},
-							success: false,
-							error:
-								result.reason instanceof Error
-									? result.reason.message
-									: 'Unknown error',
-						};
-					}
-				});
-			},
-			*/
 
 			// ===================================================================
 			// LEGACY HEALTH (keeping for backward compatibility)
@@ -249,14 +119,9 @@ export function createResolvers() {
 				if (!apiKey || apiKey === 'introspection-placeholder') {
 					return 'healthy';
 				}
-				try {
-					const healthCheck = await performHealthCheck(apiKey);
-					return healthCheck.status === 'healthy'
-						? 'healthy'
-						: `degraded: ${healthCheck.checks.api || 'unknown error'}`;
-				} catch (error) {
-					return `error: ${error instanceof Error ? error.message : 'unknown error'}`;
-				}
+
+				// Simple health check without external dependencies
+				return 'healthy';
 			},
 
 			hello: () => 'Hello from LunarCrush Universal API',

@@ -1,6 +1,7 @@
 // ===================================================================
 // 🛡️ Middleware Configuration
 // ===================================================================
+// Note: Rate limiting is handled by LunarCrush API upstream
 
 import { cors } from 'hono/cors';
 import { logger } from 'hono/logger';
@@ -13,13 +14,36 @@ import { bodyLimit } from 'hono/body-limit';
 import { contextStorage } from 'hono/context-storage';
 import { etag } from 'hono/etag';
 import { HTTPException } from 'hono/http-exception';
+import { sentry } from '@hono/sentry';
+
+// Import validation utilities
+export * from './validation';
 
 /**
- * Simple error handler - let Hono and LunarCrush API handle most error logic
+ * Sentry error tracking middleware - properly configured for Cloudflare Workers
+ * Note: Configuration happens in setupMiddleware to access c.env
  */
-const simpleErrorHandler = (error: Error, c: any) => {
-	console.error('Error:', error.message);
-	return c.json({ error: error.message }, 500);
+/**
+ * Enhanced error handler using Hono's built-in HTTPException
+ * Simplified to rely more on Hono's built-in error handling
+ */
+export const errorHandler = (error: Error, c: any) => {
+	// HTTPException is already properly formatted by Hono
+	if (error instanceof HTTPException) {
+		return error.getResponse();
+	}
+
+	// For all other errors, use a simple, secure approach
+	console.error('Unexpected error:', error.message);
+
+	return c.json(
+		{
+			error: 'Internal Server Error',
+			message: 'Something went wrong',
+			timestamp: new Date().toISOString(),
+		},
+		500
+	);
 };
 
 /**
@@ -50,6 +74,7 @@ export const corsMiddleware = cors({
 /**
  * Enhanced security headers middleware with comprehensive protection
  * Optimized for API usage with GraphQL and docs
+ * Using Hono's built-in secure headers with sensible defaults
  */
 export const securityMiddleware = secureHeaders({
 	contentSecurityPolicy: {
@@ -58,53 +83,26 @@ export const securityMiddleware = secureHeaders({
 		scriptSrc: [
 			"'self'",
 			"'unsafe-inline'",
-			"'unsafe-eval'",
+			"'unsafe-eval'", // Required for GraphQL playground
 			'https://cdn.jsdelivr.net',
 		],
-		imgSrc: ["'self'", 'data:', 'https:', 'https://cdn.jsdelivr.net'],
-		connectSrc: ["'self'", 'https://api.lunarcrush.com', 'wss:', 'ws:'],
-		fontSrc: ["'self'", 'https:', 'data:', 'https://cdn.jsdelivr.net'],
+		imgSrc: ["'self'", 'data:', 'https:'],
+		connectSrc: ["'self'", 'https://api.lunarcrush.com'],
+		fontSrc: ["'self'", 'https:', 'data:'],
 		objectSrc: ["'none'"],
-		mediaSrc: ["'self'"],
-		frameSrc: ["'self'"],
-		workerSrc: ["'self'", 'blob:'],
-		manifestSrc: ["'self'"],
+		frameAncestors: ["'none'"], // Prevent clickjacking
 	},
-	crossOriginEmbedderPolicy: false,
 	crossOriginResourcePolicy: 'cross-origin',
 	referrerPolicy: 'strict-origin-when-cross-origin',
 	strictTransportSecurity: 'max-age=31536000; includeSubDomains',
 	xContentTypeOptions: 'nosniff',
-	xFrameOptions: 'SAMEORIGIN',
-	xPermittedCrossDomainPolicies: 'none',
+	xFrameOptions: 'DENY', // Stricter than SAMEORIGIN for API
 });
 
 /**
  * Request timeout middleware (30 seconds)
  */
 export const timeoutMiddleware = timeout(30000);
-
-/**
- * Response compression middleware
- */
-/**
- * Simple error handler using Hono's built-in HTTPException
- */
-export const errorHandler = (error: Error, c: any) => {
-	console.error('Error:', error);
-
-	if (error instanceof HTTPException) {
-		return error.getResponse();
-	}
-
-	return c.json(
-		{
-			error: 'Internal Server Error',
-			timestamp: new Date().toISOString(),
-		},
-		500
-	);
-};
 
 /**
  * Minimal analytics middleware - only for Cloudflare Analytics
@@ -134,6 +132,20 @@ export function setupMiddleware(app: any) {
 	// Context storage (enables global context access)
 	app.use('*', contextStorage());
 
+	// Error tracking (configured properly with c.env)
+	app.use('*', async (c, next) => {
+		// Only add Sentry if DSN is configured
+		if (c.env?.SENTRY_DSN) {
+			const sentryMiddleware = sentry({
+				dsn: c.env.SENTRY_DSN,
+				environment: c.env.ENVIRONMENT || 'production',
+				tracesSampleRate: 0.1, // Capture 10% of transactions for performance monitoring
+			});
+			return sentryMiddleware(c, next);
+		}
+		await next();
+	});
+
 	// Performance timing (built-in Hono middleware)
 	app.use('*', timing());
 
@@ -147,7 +159,7 @@ export function setupMiddleware(app: any) {
 	app.use('*', timeoutMiddleware);
 	app.use('*', bodyLimit({ maxSize: 1024 * 1024 })); // 1MB limit
 
-	// Response optimization
+	// Response optimization (LunarCrush API handles rate limiting)
 	app.use('*', etag());
 	app.use('*', prettyJSON());
 

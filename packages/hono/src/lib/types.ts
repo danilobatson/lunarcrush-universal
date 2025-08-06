@@ -1,10 +1,3 @@
-// =======================================export const healthCheckSchema = z.object({
-	status: z.string(),
-	timestamp: z.string(),
-	version: z.string().optional(),
-});=====================
-// 🔧 Type Definitions
-// ===================================================================
 
 import { z } from 'zod';
 

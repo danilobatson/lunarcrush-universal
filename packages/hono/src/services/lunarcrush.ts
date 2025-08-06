@@ -1,8 +1,3 @@
-// ===================================================================
-// 🚨 IMPORTED FROM WORKING YOGA BACKEND - COMPLETE API SERVICE
-// ===================================================================
-// Complete LunarCrush service matching EXACT API documentation
-// All functions verified working in Yoga backend
 
 export interface LunarCrushConfig {
 	apiKey: string;
