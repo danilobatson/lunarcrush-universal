@@ -2,13 +2,91 @@
 // 🚀 GraphQL Resolvers
 // ===================================================================
 
+import { getContext } from 'hono/context-storage';
 import type { Bindings } from '../lib/types';
+import { performHealthCheck } from '../utils/health';
+// Chart generation removed - not critical
+/*
+import {
+	generateChart,
+	getSupportedChartTypes,
+	type ChartRequest,
+} from '../services/charts';
+*/
+import {
+	getTopicsList,
+	getTopic,
+	getTopicWhatsup,
+	getTopicTimeSeries,
+	getTopicTimeSeriesV2,
+	getTopicPosts,
+	getTopicNews,
+	getTopicCreators,
+	getCategoriesList,
+	getCategory,
+	getCategoryTopics,
+	getCategoryTimeSeries,
+	getCategoryPosts,
+	getCategoryNews,
+	getCategoryCreators,
+	getCreatorsList,
+	getCreator,
+	getCreatorTimeSeries,
+	getCreatorPosts,
+	getCoinsList,
+	getCoinsListV2,
+	getCoin,
+	getCoinMeta,
+	getCoinTimeSeries,
+	getStocksList,
+	getStocksListV2,
+	getStock,
+	getStockTimeSeries,
+	getNftsList,
+	getNftsListV2,
+	getNft,
+	getNftTimeSeries,
+	searchPosts,
+	getSystemChanges,
+	getSearchesList,
+	getSearch,
+	getPostDetails,
+	getPostTimeSeries,
+} from '../services/lunarcrush';
+
+import { LunarCrushConfig } from '../services/lunarcrush';
 
 export interface GraphQLContext {
 	bindings: Bindings;
 	requestId: string;
-	apiKey?: string;
+	lunarcrushApiKey?: string;
+	request?: Request;
+	headers?: Headers;
 }
+
+// Server start time for uptime calculation
+const serverStartTime = Date.now();
+
+const getConfig = (): LunarCrushConfig | undefined => {
+	const c = getContext();
+	const config = {
+		apiKey: c.get('apiKey'),
+		baseUrl: c.get('baseUrl') || 'https://lunarcrush.com/api4/public',
+	};
+
+	if (!config.apiKey || config.apiKey === 'introspection-placeholder') {
+		throw new Error('API key required for data queries');
+	}
+	return config;
+};
+
+const getConfigOptional = (): LunarCrushConfig => {
+	const c = getContext();
+	return {
+		apiKey: c.get('apiKey') || '',
+		baseUrl: c.get('baseUrl') || 'https://lunarcrush.com/api4/public',
+	};
+};
 
 /**
  * Creates GraphQL resolvers with proper context
@@ -16,154 +94,549 @@ export interface GraphQLContext {
 export function createResolvers() {
 	return {
 		Query: {
-			// Health check
-			health: () => ({
-				status: 'ok',
+			// ===================================================================
+			// HEALTH & SYSTEM MONITORING
+			// ===================================================================
+
+			// Simple health check - just confirms API is responding
+			systemHealth: async () => {
+				return {
+					status: 'healthy',
+					timestamp: new Date().toISOString(),
+					uptime: Math.floor((Date.now() - serverStartTime) / 1000),
+					version: '1.0.0',
+				};
+			},
+
+			// Ping check - minimal response
+			ping: () => ({
+				status: 'pong',
 				timestamp: new Date().toISOString(),
-				service: 'lunarcrush-universal-hono',
 			}),
 
-			// Cryptocurrency endpoints
-			coins: async (_: any, args: any, context: GraphQLContext) => {
-				const { limit = 50 } = args;
-				return fetchFromLunarCrush('/coins', { limit }, context);
+			// ===================================================================
+			// LEGACY HEALTH (keeping for backward compatibility)
+			// ===================================================================
+
+			/*
+			// Get supported chart types (replaces /charts/types endpoint)
+			chartTypes: () => getSupportedChartTypes(),
+
+			// Generate chart (replaces /charts/:symbol/:chartType endpoint)
+			generateChart: async (
+				{
+					symbol,
+					chartType,
+					timeframe = '1d',
+				}: { symbol: string; chartType: string; timeframe?: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfigOptional();
+				const c = getContext(); // Get the Hono context
+
+				// Validate chart type
+				const supportedTypes = getSupportedChartTypes();
+				if (!supportedTypes[chartType as keyof typeof supportedTypes]) {
+					throw new Error(
+						`Chart type "${chartType}" is not supported. Supported types: ${Object.keys(supportedTypes).join(', ')}`
+					);
+				}
+
+				const request: ChartRequest = {
+					symbol: symbol.toUpperCase(),
+					chartType: chartType as any,
+					timeframe: timeframe as any,
+					apiKey: config.apiKey,
+				};
+
+				try {
+					const chart = await generateChart(request, c); // Pass the context
+					return {
+						symbol: chart.symbol,
+						chartType: chart.chartType,
+						timeframe: chart.timeframe,
+						chartUrl: chart.chartUrl,
+						dataPoints: chart.dataPoints,
+						generatedAt: chart.generatedAt,
+						metadata: chart.metadata || {},
+					};
+				} catch (error) {
+					throw new Error(
+						`Chart generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+					);
+				}
 			},
 
-			cryptoFeed: async (_: any, args: any, context: GraphQLContext) => {
-				const { limit = 20, page = 1 } = args;
-				return fetchFromLunarCrush('/feeds', { limit, page }, context);
-			},
+			// Batch chart generation (replaces /charts/batch endpoint)
+			generateChartBatch: async (
+				{
+					requests,
+				}: {
+					requests: Array<{
+						symbol: string;
+						chartType: string;
+						timeframe?: string;
+					}>;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfigOptional();
+				const c = getContext(); // Get the Hono context
 
-			cryptoPrices: async (_: any, args: any, context: GraphQLContext) => {
-				const { symbol, interval = '1d', limit = 50 } = args;
-				return fetchFromLunarCrush(
-					'/coins',
-					{ symbol, interval, limit },
-					context
+				const supportedTypes = getSupportedChartTypes();
+
+				const results = await Promise.allSettled(
+					requests.map(async (req) => {
+						// Validate chart type
+						if (!supportedTypes[req.chartType as keyof typeof supportedTypes]) {
+							throw new Error(`Chart type "${req.chartType}" is not supported`);
+						}
+
+						const request: ChartRequest = {
+							symbol: req.symbol.toUpperCase(),
+							chartType: req.chartType as any,
+							timeframe: (req.timeframe || '1d') as any,
+							apiKey: config.apiKey,
+						};
+
+						const chart = await generateChart(request, c); // Pass the context
+						return {
+							symbol: chart.symbol,
+							chartType: chart.chartType,
+							timeframe: chart.timeframe,
+							chartUrl: chart.chartUrl,
+							dataPoints: chart.dataPoints,
+							generatedAt: chart.generatedAt,
+							metadata: chart.metadata || {},
+							success: true,
+							error: null,
+						};
+					})
 				);
+
+				return results.map((result, index) => {
+					if (result.status === 'fulfilled') {
+						return result.value;
+					} else {
+						return {
+							symbol: requests[index].symbol,
+							chartType: requests[index].chartType,
+							timeframe: requests[index].timeframe || '1d',
+							chartUrl: null,
+							dataPoints: 0,
+							generatedAt: new Date().toISOString(),
+							metadata: {},
+							success: false,
+							error:
+								result.reason instanceof Error
+									? result.reason.message
+									: 'Unknown error',
+						};
+					}
+				});
+			},
+			*/
+
+			// ===================================================================
+			// LEGACY HEALTH (keeping for backward compatibility)
+			// ===================================================================
+
+			// Health & System
+			health: async (context: GraphQLContext) => {
+				const c = getContext();
+				const apiKey = c.get('apiKey');
+
+				if (!apiKey || apiKey === 'introspection-placeholder') {
+					return 'healthy';
+				}
+				try {
+					const healthCheck = await performHealthCheck(apiKey);
+					return healthCheck.status === 'healthy'
+						? 'healthy'
+						: `degraded: ${healthCheck.checks.api || 'unknown error'}`;
+				} catch (error) {
+					return `error: ${error instanceof Error ? error.message : 'unknown error'}`;
+				}
 			},
 
-			cryptoMarketData: async (_: any, args: any, context: GraphQLContext) => {
-				const { limit = 50, sort = 'market_cap' } = args;
-				return fetchFromLunarCrush('/coins', { limit, sort }, context);
+			hello: () => 'Hello from LunarCrush Universal API',
+
+			// ===================================================================
+			// LUNARCRUSH DATA QUERIES
+			// ===================================================================
+
+			// Topics
+			getTopicsList: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getTopicsList(config, args);
 			},
 
-			// Stock endpoints
-			stockQuote: async (_: any, args: any, context: GraphQLContext) => {
-				const { symbol } = args;
-				return fetchFromLunarCrush('/stocks', { symbol }, context);
+			getTopic: async (
+				{ topic }: { topic: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getTopic(config, topic);
 			},
 
-			stockFeed: async (_: any, args: any, context: GraphQLContext) => {
-				const { limit = 20, page = 1 } = args;
-				return fetchFromLunarCrush('/stocks/feeds', { limit, page }, context);
+			getTopicWhatsup: async (
+				{ topic }: { topic: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getTopicWhatsup(config, topic);
 			},
 
-			// Topic and social endpoints
-			topics: async (_: any, args: any, context: GraphQLContext) => {
-				const { limit = 50 } = args;
-				return fetchFromLunarCrush('/topics', { limit }, context);
+			getTopicTimeSeries: async (
+				args: {
+					topic: string;
+					bucket?: string;
+					interval?: string;
+					start?: string;
+					end?: string;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getTopicTimeSeries(config, args);
 			},
 
-			topicDetails: async (_: any, args: any, context: GraphQLContext) => {
-				const { topic } = args;
-				return fetchFromLunarCrush(`/topics/${topic}`, {}, context);
+			getTopicTimeSeriesV2: async (
+				args: { topic: string; bucket?: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getTopicTimeSeriesV2(config, args);
 			},
 
-			socialPosts: async (_: any, args: any, context: GraphQLContext) => {
-				const { symbol, limit = 20, page = 1 } = args;
-				return fetchFromLunarCrush('/posts', { symbol, limit, page }, context);
+			getTopicPosts: async (
+				args: { topic: string; start?: string; end?: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getTopicPosts(config, args);
 			},
 
-			// Creator endpoints
-			creators: async (_: any, args: any, context: GraphQLContext) => {
-				const { limit = 50 } = args;
-				return fetchFromLunarCrush('/creators', { limit }, context);
+			getTopicNews: async (
+				{ topic }: { topic: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getTopicNews(config, topic);
 			},
 
-			creatorDetails: async (_: any, args: any, context: GraphQLContext) => {
-				const { creator } = args;
-				return fetchFromLunarCrush(`/creators/${creator}`, {}, context);
+			getTopicCreators: async (
+				{ topic }: { topic: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getTopicCreators(config, topic);
 			},
 
-			// Search
-			search: async (_: any, args: any, context: GraphQLContext) => {
-				const { query, type = 'all', limit = 20 } = args;
-				return fetchFromLunarCrush(
-					'/search',
-					{ q: query, type, limit },
-					context
-				);
+			// Categories
+			getCategoriesList: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCategoriesList(config, args);
 			},
 
-			// Time series data
-			timeSeries: async (_: any, args: any, context: GraphQLContext) => {
-				const { symbol, interval = '1d', start, end } = args;
-				return fetchFromLunarCrush(
-					'/time-series',
-					{ symbol, interval, start, end },
-					context
-				);
-			},
-		},
+			getCategory: async (
+				{ category }: { category: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
 
-		Mutation: {
-			// Placeholder for future mutations
-			placeholder: () => ({
-				success: false,
-				message: 'No mutations implemented yet',
-			}),
+				return await getCategory(config, category);
+			},
+
+			getCategoryTopics: async (
+				{ category }: { category: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCategoryTopics(config, category);
+			},
+
+			getCategoryTimeSeries: async (
+				args: {
+					category: string;
+					bucket?: string;
+					interval?: string;
+					start?: string;
+					end?: string;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCategoryTimeSeries(config, args);
+			},
+
+			getCategoryPosts: async (
+				args: { category: string; start?: string; end?: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCategoryPosts(config, args);
+			},
+
+			getCategoryNews: async (
+				{ category }: { category: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCategoryNews(config, category);
+			},
+
+			getCategoryCreators: async (
+				{ category }: { category: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCategoryCreators(config, category);
+			},
+
+			// Creators
+			getCreatorsList: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCreatorsList(config, args);
+			},
+
+			getCreator: async (
+				args: { network: string; id: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCreator(config, args);
+			},
+
+			getCreatorTimeSeries: async (
+				args: {
+					network: string;
+					id: string;
+					bucket?: string;
+					interval?: string;
+					start?: string;
+					end?: string;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCreatorTimeSeries(config, args);
+			},
+
+			getCreatorPosts: async (
+				args: { network: string; id: string; start?: string; end?: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCreatorPosts(config, args);
+			},
+
+			// Coins
+			getCoinsList: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCoinsList(config, args);
+			},
+
+			getCoinsListV2: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCoinsListV2(config, args);
+			},
+
+			getCoin: async (
+				{ symbol }: { symbol: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCoin(config, symbol);
+			},
+
+			getCoinMeta: async (
+				{ symbol }: { symbol: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCoinMeta(config, symbol);
+			},
+
+			getCoinTimeSeries: async (
+				args: {
+					symbol: string;
+					bucket?: string;
+					interval?: string;
+					start?: string;
+					end?: string;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getCoinTimeSeries(config, args);
+			},
+
+			// Stocks
+			getStocksList: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getStocksList(config, args);
+			},
+
+			getStocksListV2: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getStocksListV2(config, args);
+			},
+
+			getStock: async (
+				{ symbol }: { symbol: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getStock(config, symbol);
+			},
+
+			getStockTimeSeries: async (
+				args: {
+					symbol: string;
+					bucket?: string;
+					interval?: string;
+					start?: string;
+					end?: string;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getStockTimeSeries(config, args);
+			},
+
+			// NFTs
+			getNftsList: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getNftsList(config, args);
+			},
+
+			getNftsListV2: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getNftsListV2(config, args);
+			},
+
+			getNft: async ({ id }: { id: string }, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getNft(config, id);
+			},
+
+			getNftTimeSeries: async (
+				{
+					id,
+					bucket,
+					interval,
+					start,
+					end,
+				}: {
+					id: string;
+					bucket?: string;
+					interval?: string;
+					start?: string;
+					end?: string;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getNftTimeSeries(config, {
+					nft: id,
+					bucket,
+					interval,
+					start,
+					end,
+				});
+			},
+
+			// Search - COMMENTED OUT FOR NOW (not critical)
+			/*
+			searchPosts: async (
+				{ term, searchJson }: { term?: string; searchJson?: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await searchPosts(config, { term, searchJson });
+			},
+			*/
+
+			// System
+			getSystemChanges: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getSystemChanges(config, args);
+			},
+
+			// Search functionality - COMMENTED OUT FOR NOW (not critical)
+			/*
+			getSearchesList: async (args: any, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getSearchesList(config, args);
+			},
+
+			getSearch: async ({ id }: { id: string }, context: GraphQLContext) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getSearch(config, id);
+			},
+			*/
+
+			// Post functionality
+			getPostDetails: async (
+				args: { type: string; id: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getPostDetails(config, args);
+			},
+
+			getPostTimeSeries: async (
+				args: {
+					type: string;
+					id: string;
+					bucket?: string;
+					interval?: string;
+					start?: string;
+					end?: string;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getPostTimeSeries(config, args);
+			},
 		},
 	};
-}
-
-/**
- * Helper function to fetch data from LunarCrush API
- */
-async function fetchFromLunarCrush(
-	endpoint: string,
-	params: Record<string, any>,
-	context: GraphQLContext
-): Promise<any> {
-	try {
-		const { LUNARCRUSH_API_KEY } = context.bindings;
-
-		if (!LUNARCRUSH_API_KEY) {
-			throw new Error('LunarCrush API key not configured');
-		}
-
-		// Build query string
-		const queryParams = new URLSearchParams();
-		Object.entries(params).forEach(([key, value]) => {
-			if (value !== undefined && value !== null) {
-				queryParams.append(key, String(value));
-			}
-		});
-
-		const url = `https://lunarcrush.com/api4${endpoint}?${queryParams.toString()}`;
-
-		const response = await fetch(url, {
-			headers: {
-				Authorization: `Bearer ${LUNARCRUSH_API_KEY}`,
-				'Content-Type': 'application/json',
-				'User-Agent': 'LunarCrush-Universal-Hono/1.0',
-			},
-		});
-
-		if (!response.ok) {
-			throw new Error(
-				`LunarCrush API error: ${response.status} ${response.statusText}`
-			);
-		}
-
-		const data = await response.json();
-		return data;
-	} catch (error) {
-		console.error('LunarCrush API fetch error:', error);
-		return {
-			error: true,
-			message: error instanceof Error ? error.message : 'Unknown error',
-			requestId: context.requestId,
-		};
-	}
 }

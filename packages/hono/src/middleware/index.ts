@@ -8,15 +8,29 @@ import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
 import { prettyJSON } from 'hono/pretty-json';
 import { timeout } from 'hono/timeout';
+import { timing } from 'hono/timing';
 import { bodyLimit } from 'hono/body-limit';
-import { createErrorHandler } from '../lib/errors';
-import type { Bindings, Variables } from '../lib/types';
+import { contextStorage } from 'hono/context-storage';
+import { etag } from 'hono/etag';
+import { HTTPException } from 'hono/http-exception';
 
 /**
- * CORS configuration for API access
+ * Simple error handler - let Hono and LunarCrush API handle most error logic
+ */
+const simpleErrorHandler = (error: Error, c: any) => {
+	console.error('Error:', error.message);
+	return c.json({ error: error.message }, 500);
+};
+
+/**
+ * CORS configuration for API access with Apollo Studio support
  */
 export const corsMiddleware = cors({
-	origin: ['*'],
+	origin: [
+		'*', // Allow all origins for API access
+		'https://studio.apollographql.com', // Explicit Apollo Studio support
+		'https://sandbox.apollo.dev', // Apollo Sandbox
+	],
 	allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowHeaders: [
 		'Content-Type',
@@ -26,24 +40,43 @@ export const corsMiddleware = cors({
 		'Accept',
 		'Origin',
 		'User-Agent',
+		'Apollo-Require-Preflight', // Apollo Studio specific
 	],
 	exposeHeaders: ['X-Request-ID', 'X-Response-Time'],
-	credentials: false,
+	credentials: true, // Allow credentials for Apollo Studio
 	maxAge: 86400,
 });
 
 /**
- * Security headers middleware
+ * Enhanced security headers middleware with comprehensive protection
+ * Optimized for API usage with GraphQL and docs
  */
 export const securityMiddleware = secureHeaders({
 	contentSecurityPolicy: {
 		defaultSrc: ["'self'"],
-		styleSrc: ["'self'", "'unsafe-inline'"],
-		scriptSrc: ["'self'", "'unsafe-inline'"],
-		imgSrc: ["'self'", 'data:', 'https:'],
-		connectSrc: ["'self'", 'https://api.lunarcrush.com'],
+		styleSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+		scriptSrc: [
+			"'self'",
+			"'unsafe-inline'",
+			"'unsafe-eval'",
+			'https://cdn.jsdelivr.net',
+		],
+		imgSrc: ["'self'", 'data:', 'https:', 'https://cdn.jsdelivr.net'],
+		connectSrc: ["'self'", 'https://api.lunarcrush.com', 'wss:', 'ws:'],
+		fontSrc: ["'self'", 'https:', 'data:', 'https://cdn.jsdelivr.net'],
+		objectSrc: ["'none'"],
+		mediaSrc: ["'self'"],
+		frameSrc: ["'self'"],
+		workerSrc: ["'self'", 'blob:'],
+		manifestSrc: ["'self'"],
 	},
 	crossOriginEmbedderPolicy: false,
+	crossOriginResourcePolicy: 'cross-origin',
+	referrerPolicy: 'strict-origin-when-cross-origin',
+	strictTransportSecurity: 'max-age=31536000; includeSubDomains',
+	xContentTypeOptions: 'nosniff',
+	xFrameOptions: 'SAMEORIGIN',
+	xPermittedCrossDomainPolicies: 'none',
 });
 
 /**
@@ -52,64 +85,75 @@ export const securityMiddleware = secureHeaders({
 export const timeoutMiddleware = timeout(30000);
 
 /**
- * Body size limit (1MB)
+ * Response compression middleware
  */
-export const bodyLimitMiddleware = bodyLimit({
-	maxSize: 1024 * 1024, // 1MB
-});
+/**
+ * Simple error handler using Hono's built-in HTTPException
+ */
+export const errorHandler = (error: Error, c: any) => {
+	console.error('Error:', error);
+
+	if (error instanceof HTTPException) {
+		return error.getResponse();
+	}
+
+	return c.json(
+		{
+			error: 'Internal Server Error',
+			timestamp: new Date().toISOString(),
+		},
+		500
+	);
+};
 
 /**
- * Analytics and timing middleware
+ * Minimal analytics middleware - only for Cloudflare Analytics
  */
 export const analyticsMiddleware = async (
 	c: any,
 	next: () => Promise<void>
 ) => {
-	const startTime = Date.now();
-	c.set('startTime', startTime);
-
 	await next();
 
-	const endTime = Date.now();
-	const responseTime = endTime - startTime;
-
-	// Set response time header
-	c.header('X-Response-Time', `${responseTime}ms`);
-
-	// Log analytics data
-	const analytics = c.env?.ANALYTICS;
-	if (analytics && typeof analytics.writeDataPoint === 'function') {
-		try {
-			analytics.writeDataPoint({
-				blobs: [
-					c.req.method,
-					c.req.url,
-					c.res.status.toString(),
-					c.get('requestId') || 'unknown',
-				],
-				doubles: [responseTime],
-				indexes: [c.req.method],
-			});
-		} catch (error) {
-			console.warn('Analytics write failed:', error);
-		}
+	// Simple write to Cloudflare Analytics if available
+	try {
+		c.env?.ANALYTICS?.writeDataPoint?.({
+			blobs: [c.req.method, c.res.status.toString()],
+			indexes: [c.req.method],
+		});
+	} catch {
+		// Silent fail - don't break app for analytics
 	}
 };
 
 /**
  * Sets up all middleware for the Hono app
+ * Optimized for Cloudflare Workers
  */
 export function setupMiddleware(app: any) {
-	// Basic middleware stack
+	// Context storage (enables global context access)
+	app.use('*', contextStorage());
+
+	// Performance timing (built-in Hono middleware)
+	app.use('*', timing());
+
+	// Request identification and logging
 	app.use('*', requestId());
 	app.use('*', logger());
+
+	// Security and limits
 	app.use('*', corsMiddleware);
 	app.use('*', securityMiddleware);
 	app.use('*', timeoutMiddleware);
-	app.use('*', bodyLimitMiddleware);
+	app.use('*', bodyLimit({ maxSize: 1024 * 1024 })); // 1MB limit
+
+	// Response optimization
+	app.use('*', etag());
 	app.use('*', prettyJSON());
+
+	// Minimal analytics
 	app.use('*', analyticsMiddleware);
 
 	// Error handling (should be last)
-	app.onError(createErrorHandler());
+	app.onError(errorHandler);
 }

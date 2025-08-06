@@ -508,12 +508,12 @@ export const getCreatorPosts = async (
 ): Promise<any[]> => {
 	try {
 		const params: Record<string, any> = {};
-		if (start) params.start = start;
-		if (end) params.end = end;
+		if (args.start) params.start = args.start;
+		if (args.end) params.end = args.end;
 
 		const response = await makeRequest<any>(
 			config,
-			`/creator/${network}/${id}/posts/v1`,
+			`/creator/${args.network}/${args.id}/posts/v1`,
 			params
 		);
 		return response.data;
@@ -532,12 +532,15 @@ export const getCreatorPosts = async (
 
 export const getCoinsList = async (
 	config: LunarCrushConfig,
-	sort?: string,
-	filter?: string,
-	limit?: number,
-	desc?: string,
-	page?: number
+	args: {
+		sort?: string;
+		filter?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}
 ): Promise<any[]> => {
+	const { sort, filter, limit, desc, page } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (sort) params.sort = sort;
@@ -561,12 +564,15 @@ export const getCoinsList = async (
 
 export const getCoinsListV2 = async (
 	config: LunarCrushConfig,
-	sort?: string,
-	filter?: string,
-	limit?: number,
-	desc?: string,
-	page?: number
+	args: {
+		sort?: string;
+		filter?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}
 ): Promise<any[]> => {
+	const { sort, filter, limit, desc, page } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (sort) params.sort = sort;
@@ -616,7 +622,7 @@ export const getCoinTimeSeries = async (
 		end?: string;
 	}
 ): Promise<any[]> => {
-  const { coin, bucket, interval, start, end } = args;
+	const { coin, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -663,11 +669,14 @@ export const getCoinMeta = async (
 
 export const getStocksList = async (
 	config: LunarCrushConfig,
-	sort?: string,
-	limit?: number,
-	desc?: string,
-	page?: number
+	args: {
+		sort?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}
 ): Promise<any[]> => {
+	const { sort, limit, desc, page } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (sort) params.sort = sort;
@@ -690,11 +699,14 @@ export const getStocksList = async (
 
 export const getStocksListV2 = async (
 	config: LunarCrushConfig,
-	sort?: string,
-	limit?: number,
-	desc?: string,
-	page?: number
+	args: {
+		sort?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}
 ): Promise<any[]> => {
+	const { sort, limit, desc, page } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (sort) params.sort = sort;
@@ -735,15 +747,15 @@ export const getStock = async (
 
 export const getStockTimeSeries = async (
 	config: LunarCrushConfig,
-  args: {
-    stock: string,
-    bucket?: string,
-    interval?: string,
-    start?: string,
-    end?: string
-  }
+	args: {
+		stock: string;
+		bucket?: string;
+		interval?: string;
+		start?: string;
+		end?: string;
+	}
 ): Promise<any[]> => {
-  const { stock, bucket, interval, start, end } = args;
+	const { stock, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -772,11 +784,14 @@ export const getStockTimeSeries = async (
 
 export const getNftsList = async (
 	config: LunarCrushConfig,
-	sort?: string,
-	limit?: number,
-	desc?: string,
-	page?: number
+	args: {
+		sort?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}
 ): Promise<any[]> => {
+	const { sort, limit, desc, page } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (sort) params.sort = sort;
@@ -799,11 +814,14 @@ export const getNftsList = async (
 
 export const getNftsListV2 = async (
 	config: LunarCrushConfig,
-	sort?: string,
-	limit?: number,
-	desc?: string,
-	page?: number
+	args: {
+		sort?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}
 ): Promise<any[]> => {
+	const { sort, limit, desc, page } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (sort) params.sort = sort;
@@ -845,14 +863,14 @@ export const getNft = async (
 export const getNftTimeSeries = async (
 	config: LunarCrushConfig,
 	args: {
-		nft: string,
-		bucket?: string,
-		interval?: string,
-		start?: string,
-		end?: string
+		nft: string;
+		bucket?: string;
+		interval?: string;
+		start?: string;
+		end?: string;
 	}
 ): Promise<any[]> => {
-  const { nft, bucket, interval, start, end } = args;
+	const { nft, bucket, interval, start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (bucket) params.bucket = bucket;
@@ -904,7 +922,7 @@ export const getSystemChanges = async (
 	config: LunarCrushConfig,
 	args: { start?: string; end?: string }
 ): Promise<any[]> => {
-  const { start, end } = args;
+	const { start, end } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (start) params.start = start;
@@ -962,16 +980,28 @@ export const getSearch = async (
 
 export const searchPosts = async (
 	config: LunarCrushConfig,
-	term?: string,
-	searchJson?: string
+	args: {
+		term?: string;
+		searchJson?: string;
+	}
 ): Promise<any> => {
+	const { term, searchJson } = args;
 	try {
 		const params: Record<string, any> = {};
 		if (term) params.term = term;
 		if (searchJson) params.search_json = searchJson;
 
 		const response = await makeRequest<any>(config, '/searches/search', params);
-		return response;
+
+		// Ensure we return an array for GraphQL schema compatibility
+		if (response && response.data && Array.isArray(response.data)) {
+			return response.data;
+		} else if (Array.isArray(response)) {
+			return response;
+		} else {
+			// Return empty array if no proper data structure
+			return [];
+		}
 	} catch (error) {
 		console.error('❌ searchPosts error:', error);
 		if (error instanceof LunarCrushError) {
@@ -983,6 +1013,63 @@ export const searchPosts = async (
 	}
 };
 
+export const getPostDetails = async (
+	config: LunarCrushConfig,
+	args: {
+		type: string;
+		id: string;
+	}
+): Promise<any> => {
+	const { type, id } = args;
+	try {
+		const response = await makeRequest<any>(config, `/posts/${type}/${id}/v1`);
+		return response;
+	} catch (error) {
+		console.error('❌ getPostDetails error:', error);
+		if (error instanceof LunarCrushError) {
+			throw new Error(
+				`${error.statusCode} ${error.statusText}: ${error.message}`
+			);
+		}
+		throw error;
+	}
+};
+
+export const getPostTimeSeries = async (
+	config: LunarCrushConfig,
+	args: {
+		type: string;
+		id: string;
+		bucket?: string;
+		interval?: string;
+		start?: string;
+		end?: string;
+	}
+): Promise<any[]> => {
+	const { type, id, bucket, interval, start, end } = args;
+	try {
+		const params: Record<string, any> = {};
+		if (bucket) params.bucket = bucket;
+		if (interval) params.interval = interval;
+		if (start) params.start = start;
+		if (end) params.end = end;
+
+		const response = await makeRequest<any>(
+			config,
+			`/posts/${type}/${id}/time-series/v1`,
+			params
+		);
+		return response.data;
+	} catch (error) {
+		console.error('❌ getPostTimeSeries error:', error);
+		if (error instanceof LunarCrushError) {
+			throw new Error(
+				`${error.statusCode} ${error.statusText}: ${error.message}`
+			);
+		}
+		throw error;
+	}
+};
 // ===== CLIENT FACTORY WITH ALL EXACT ENDPOINTS =====
 export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 	// TOPICS ENDPOINTS
@@ -1112,7 +1199,19 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 	getSearchesList: () => getSearchesList(config),
 	getSearch: (slug: string) => getSearch(config, slug),
 	searchPosts: (term?: string, searchJson?: string) =>
-		searchPosts(config, term, searchJson),
+		searchPosts(config, { term, searchJson }),
+
+	//POSTS ENDPOINTS
+	getPostDetails: (type: string, id: string) =>
+		getPostDetails(config, { type, id }),
+	getPostTimeSeries: (
+		type: string,
+		id: string,
+		bucket?: string,
+		interval?: string,
+		start?: string,
+		end?: string
+	) => getPostTimeSeries(config, { type, id, bucket, interval, start, end }),
 });
 
 export type LunarCrushClient = ReturnType<typeof createLunarCrushClient>;

@@ -1,54 +1,54 @@
 // ===================================================================
-// 🔐 Authentication & Security Utilities
+// 🔐 Simple Authentication - Just Check API Key Presence
 // ===================================================================
 
-import { sha256 } from '@noble/hashes/sha256';
-import { bytesToHex } from '@noble/hashes/utils';
-
 /**
- * Simple hash function for API key validation
+ * Flexible authentication middleware that accepts API keys in multiple formats:
+ * - Authorization: Bearer <your-api-key>
+ * - Authorization: <your-api-key>
+ * LunarCrush API will handle actual validation and return 401 if invalid
  */
-export function simpleHashApiKey(apiKey: string): string {
-	const hash = sha256(new TextEncoder().encode(apiKey));
-	return bytesToHex(hash).slice(0, 16);
-}
-
-/**
- * Validates API key format and basic requirements
- */
-export const validateKey = (apiKey: string) => {
-	if (!apiKey || typeof apiKey !== 'string') {
-		return { valid: false, error: 'API key is required' };
-	}
-
-	if (apiKey.length < 10) {
-		return { valid: false, error: 'API key too short' };
-	}
-
-	return { valid: true };
-};
-
-/**
- * Extracts API key from various sources (header, query, body)
- */
-export const extractApiKey = (c: any): string | null => {
-	// Try Authorization header first
+export const apiKeyAuth = async (c: any, next: () => Promise<void>) => {
 	const authHeader = c.req.header('authorization');
-	if (authHeader?.startsWith('Bearer ')) {
-		return authHeader.slice(7);
+
+	if (!authHeader) {
+		return c.json(
+			{
+				error: 'missing_api_key',
+				message:
+					'API key required. Use Authorization: Bearer <your-api-key> or Authorization: <your-api-key>',
+				status: 401,
+			},
+			401
+		);
 	}
 
-	// Try X-API-Key header
-	const apiKeyHeader = c.req.header('x-api-key');
-	if (apiKeyHeader) {
-		return apiKeyHeader;
+	// Extract API key - handle both "Bearer <key>" and "<key>" formats
+	let apiKey: string;
+	if (authHeader.startsWith('Bearer ')) {
+		apiKey = authHeader.slice(7); // Remove "Bearer " prefix
+	} else {
+		apiKey = authHeader; // Use the header value directly
 	}
 
-	// Try query parameter
-	const queryApiKey = c.req.query('api_key');
-	if (queryApiKey) {
-		return queryApiKey;
+	// Validate API key length
+	if (!apiKey || apiKey.trim().length < 10) {
+		return c.json(
+			{
+				error: 'invalid_api_key',
+				message: 'API key appears to be invalid (too short)',
+				status: 401,
+			},
+			401
+		);
 	}
 
-	return null;
+	// Store API key for LunarCrush requests
+	console.log(
+		'Auth middleware - storing API key:',
+		apiKey.substring(0, 8) + '...'
+	);
+  c.set('apiKey', apiKey.trim());
+  c.set('baseUrl', 'https://lunarcrush.com/api4/public');
+	await next();
 };

@@ -136,6 +136,36 @@ export interface CategoryTopic {
   topic_rank_24h_previous?: Maybe<Scalars['Int']['output']>;
 }
 
+export interface ChartBatchResponse {
+  __typename?: 'ChartBatchResponse';
+  chartType: Scalars['String']['output'];
+  chartUrl?: Maybe<Scalars['String']['output']>;
+  dataPoints: Scalars['Int']['output'];
+  error?: Maybe<Scalars['String']['output']>;
+  generatedAt: Scalars['String']['output'];
+  metadata: Scalars['JSON']['output'];
+  success: Scalars['Boolean']['output'];
+  symbol: Scalars['String']['output'];
+  timeframe: Scalars['String']['output'];
+}
+
+export interface ChartRequestInput {
+  chartType: Scalars['String']['input'];
+  symbol: Scalars['String']['input'];
+  timeframe?: InputMaybe<Scalars['String']['input']>;
+}
+
+export interface ChartResponse {
+  __typename?: 'ChartResponse';
+  chartType: Scalars['String']['output'];
+  chartUrl?: Maybe<Scalars['String']['output']>;
+  dataPoints: Scalars['Int']['output'];
+  generatedAt: Scalars['String']['output'];
+  metadata: Scalars['JSON']['output'];
+  symbol: Scalars['String']['output'];
+  timeframe: Scalars['String']['output'];
+}
+
 export interface CoinDetails {
   __typename?: 'CoinDetails';
   alt_rank?: Maybe<Scalars['Int']['output']>;
@@ -162,7 +192,7 @@ export interface CoinListItem {
   alt_rank?: Maybe<Scalars['Int']['output']>;
   alt_rank_previous?: Maybe<Scalars['Int']['output']>;
   blockchains?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
-  categories?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  categories?: Maybe<Scalars['String']['output']>;
   circulating_supply?: Maybe<Scalars['Float']['output']>;
   galaxy_score?: Maybe<Scalars['Float']['output']>;
   galaxy_score_previous?: Maybe<Scalars['Float']['output']>;
@@ -369,21 +399,58 @@ export interface NftTimeSeriesItem {
   time?: Maybe<Scalars['Int']['output']>;
 }
 
+export interface PingResponse {
+  __typename?: 'PingResponse';
+  status: Scalars['String']['output'];
+  timestamp: Scalars['String']['output'];
+}
+
 export interface PostDetails {
   __typename?: 'PostDetails';
-  content?: Maybe<Scalars['String']['output']>;
+  categories?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  creator_avatar?: Maybe<Scalars['String']['output']>;
+  creator_display_name?: Maybe<Scalars['String']['output']>;
+  creator_id?: Maybe<Scalars['String']['output']>;
+  creator_name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  extraText?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  post_title?: Maybe<Scalars['String']['output']>;
+  image?: Maybe<PostImage>;
+  images?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  metrics?: Maybe<PostMetrics>;
+  title?: Maybe<Scalars['String']['output']>;
+  topics?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  type?: Maybe<Scalars['String']['output']>;
+  video?: Maybe<Scalars['String']['output']>;
+}
+
+export interface PostImage {
+  __typename?: 'PostImage';
+  height?: Maybe<Scalars['Int']['output']>;
+  src?: Maybe<Scalars['String']['output']>;
+  width?: Maybe<Scalars['Int']['output']>;
+}
+
+export interface PostMetrics {
+  __typename?: 'PostMetrics';
+  bookmarks?: Maybe<Scalars['Int']['output']>;
+  favorites?: Maybe<Scalars['Int']['output']>;
+  replies?: Maybe<Scalars['Int']['output']>;
+  retweets?: Maybe<Scalars['Int']['output']>;
+  views?: Maybe<Scalars['Int']['output']>;
 }
 
 export interface PostTimeSeriesItem {
   __typename?: 'PostTimeSeriesItem';
   interactions?: Maybe<Scalars['Float']['output']>;
-  time?: Maybe<Scalars['Int']['output']>;
+  time?: Maybe<Scalars['String']['output']>;
 }
 
 export interface Query {
   __typename?: 'Query';
+  chartTypes?: Maybe<Scalars['JSON']['output']>;
+  generateChart?: Maybe<ChartResponse>;
+  generateChartBatch: Array<ChartBatchResponse>;
   getCategoriesList?: Maybe<Array<Maybe<CategoryListItem>>>;
   getCategory?: Maybe<CategoryDetails>;
   getCategoryCreators?: Maybe<Array<Maybe<CategoryCreator>>>;
@@ -423,7 +490,21 @@ export interface Query {
   getTopicsList?: Maybe<Array<Maybe<TopicListItem>>>;
   health?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
+  ping?: Maybe<PingResponse>;
   searchPosts?: Maybe<Array<Maybe<SearchPost>>>;
+  systemHealth?: Maybe<SystemHealthResponse>;
+}
+
+
+export interface QueryGenerateChartArgs {
+  chartType: Scalars['String']['input'];
+  symbol: Scalars['String']['input'];
+  timeframe?: InputMaybe<Scalars['String']['input']>;
+}
+
+
+export interface QueryGenerateChartBatchArgs {
+  requests: Array<ChartRequestInput>;
 }
 
 
@@ -521,16 +602,18 @@ export interface QueryGetNftTimeSeriesArgs {
 
 
 export interface QueryGetPostDetailsArgs {
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  type: Scalars['String']['input'];
 }
 
 
 export interface QueryGetPostTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
   end?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
   interval?: InputMaybe<Scalars['String']['input']>;
   start?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 }
 
 
@@ -644,7 +727,7 @@ export interface StockListItem {
   __typename?: 'StockListItem';
   alt_rank?: Maybe<Scalars['Int']['output']>;
   alt_rank_previous?: Maybe<Scalars['Int']['output']>;
-  categories?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  categories?: Maybe<Scalars['String']['output']>;
   galaxy_score?: Maybe<Scalars['Float']['output']>;
   galaxy_score_previous?: Maybe<Scalars['Float']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
@@ -694,6 +777,14 @@ export interface SystemChange {
   change?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   time?: Maybe<Scalars['Int']['output']>;
+}
+
+export interface SystemHealthResponse {
+  __typename?: 'SystemHealthResponse';
+  status: Scalars['String']['output'];
+  timestamp: Scalars['String']['output'];
+  uptime: Scalars['Int']['output'];
+  version: Scalars['String']['output'];
 }
 
 export enum TimeInterval {

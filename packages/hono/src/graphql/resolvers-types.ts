@@ -135,6 +135,36 @@ export type CategoryTopic = {
   topic_rank_24h_previous?: Maybe<Scalars['Int']['output']>;
 };
 
+export type ChartBatchResponse = {
+  __typename?: 'ChartBatchResponse';
+  chartType: Scalars['String']['output'];
+  chartUrl?: Maybe<Scalars['String']['output']>;
+  dataPoints: Scalars['Int']['output'];
+  error?: Maybe<Scalars['String']['output']>;
+  generatedAt: Scalars['String']['output'];
+  metadata: Scalars['JSON']['output'];
+  success: Scalars['Boolean']['output'];
+  symbol: Scalars['String']['output'];
+  timeframe: Scalars['String']['output'];
+};
+
+export type ChartRequestInput = {
+  chartType: Scalars['String']['input'];
+  symbol: Scalars['String']['input'];
+  timeframe?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ChartResponse = {
+  __typename?: 'ChartResponse';
+  chartType: Scalars['String']['output'];
+  chartUrl?: Maybe<Scalars['String']['output']>;
+  dataPoints: Scalars['Int']['output'];
+  generatedAt: Scalars['String']['output'];
+  metadata: Scalars['JSON']['output'];
+  symbol: Scalars['String']['output'];
+  timeframe: Scalars['String']['output'];
+};
+
 export type CoinDetails = {
   __typename?: 'CoinDetails';
   alt_rank?: Maybe<Scalars['Int']['output']>;
@@ -161,7 +191,7 @@ export type CoinListItem = {
   alt_rank?: Maybe<Scalars['Int']['output']>;
   alt_rank_previous?: Maybe<Scalars['Int']['output']>;
   blockchains?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
-  categories?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  categories?: Maybe<Scalars['String']['output']>;
   circulating_supply?: Maybe<Scalars['Float']['output']>;
   galaxy_score?: Maybe<Scalars['Float']['output']>;
   galaxy_score_previous?: Maybe<Scalars['Float']['output']>;
@@ -368,21 +398,58 @@ export type NftTimeSeriesItem = {
   time?: Maybe<Scalars['Int']['output']>;
 };
 
+export type PingResponse = {
+  __typename?: 'PingResponse';
+  status: Scalars['String']['output'];
+  timestamp: Scalars['String']['output'];
+};
+
 export type PostDetails = {
   __typename?: 'PostDetails';
-  content?: Maybe<Scalars['String']['output']>;
+  categories?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  creator_avatar?: Maybe<Scalars['String']['output']>;
+  creator_display_name?: Maybe<Scalars['String']['output']>;
+  creator_id?: Maybe<Scalars['String']['output']>;
+  creator_name?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  extraText?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['String']['output']>;
-  post_title?: Maybe<Scalars['String']['output']>;
+  image?: Maybe<PostImage>;
+  images?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  metrics?: Maybe<PostMetrics>;
+  title?: Maybe<Scalars['String']['output']>;
+  topics?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  type?: Maybe<Scalars['String']['output']>;
+  video?: Maybe<Scalars['String']['output']>;
+};
+
+export type PostImage = {
+  __typename?: 'PostImage';
+  height?: Maybe<Scalars['Int']['output']>;
+  src?: Maybe<Scalars['String']['output']>;
+  width?: Maybe<Scalars['Int']['output']>;
+};
+
+export type PostMetrics = {
+  __typename?: 'PostMetrics';
+  bookmarks?: Maybe<Scalars['Int']['output']>;
+  favorites?: Maybe<Scalars['Int']['output']>;
+  replies?: Maybe<Scalars['Int']['output']>;
+  retweets?: Maybe<Scalars['Int']['output']>;
+  views?: Maybe<Scalars['Int']['output']>;
 };
 
 export type PostTimeSeriesItem = {
   __typename?: 'PostTimeSeriesItem';
   interactions?: Maybe<Scalars['Float']['output']>;
-  time?: Maybe<Scalars['Int']['output']>;
+  time?: Maybe<Scalars['String']['output']>;
 };
 
 export type Query = {
   __typename?: 'Query';
+  chartTypes?: Maybe<Scalars['JSON']['output']>;
+  generateChart?: Maybe<ChartResponse>;
+  generateChartBatch: Array<ChartBatchResponse>;
   getCategoriesList?: Maybe<Array<Maybe<CategoryListItem>>>;
   getCategory?: Maybe<CategoryDetails>;
   getCategoryCreators?: Maybe<Array<Maybe<CategoryCreator>>>;
@@ -422,7 +489,21 @@ export type Query = {
   getTopicsList?: Maybe<Array<Maybe<TopicListItem>>>;
   health?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
+  ping?: Maybe<PingResponse>;
   searchPosts?: Maybe<Array<Maybe<SearchPost>>>;
+  systemHealth?: Maybe<SystemHealthResponse>;
+};
+
+
+export type QueryGenerateChartArgs = {
+  chartType: Scalars['String']['input'];
+  symbol: Scalars['String']['input'];
+  timeframe?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryGenerateChartBatchArgs = {
+  requests: Array<ChartRequestInput>;
 };
 
 
@@ -520,16 +601,18 @@ export type QueryGetNftTimeSeriesArgs = {
 
 
 export type QueryGetPostDetailsArgs = {
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  type: Scalars['String']['input'];
 };
 
 
 export type QueryGetPostTimeSeriesArgs = {
   bucket?: InputMaybe<Scalars['String']['input']>;
   end?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
   interval?: InputMaybe<Scalars['String']['input']>;
   start?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
 };
 
 
@@ -643,7 +726,7 @@ export type StockListItem = {
   __typename?: 'StockListItem';
   alt_rank?: Maybe<Scalars['Int']['output']>;
   alt_rank_previous?: Maybe<Scalars['Int']['output']>;
-  categories?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  categories?: Maybe<Scalars['String']['output']>;
   galaxy_score?: Maybe<Scalars['Float']['output']>;
   galaxy_score_previous?: Maybe<Scalars['Float']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
@@ -693,6 +776,14 @@ export type SystemChange = {
   change?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   time?: Maybe<Scalars['Int']['output']>;
+};
+
+export type SystemHealthResponse = {
+  __typename?: 'SystemHealthResponse';
+  status: Scalars['String']['output'];
+  timestamp: Scalars['String']['output'];
+  uptime: Scalars['Int']['output'];
+  version: Scalars['String']['output'];
 };
 
 export enum TimeInterval {
@@ -926,6 +1017,9 @@ export type ResolversTypes = {
   CategoryPost: ResolverTypeWrapper<CategoryPost>;
   CategoryTimeSeriesItem: ResolverTypeWrapper<CategoryTimeSeriesItem>;
   CategoryTopic: ResolverTypeWrapper<CategoryTopic>;
+  ChartBatchResponse: ResolverTypeWrapper<ChartBatchResponse>;
+  ChartRequestInput: ChartRequestInput;
+  ChartResponse: ResolverTypeWrapper<ChartResponse>;
   CoinDetails: ResolverTypeWrapper<CoinDetails>;
   CoinListItem: ResolverTypeWrapper<CoinListItem>;
   CoinMeta: ResolverTypeWrapper<CoinMeta>;
@@ -944,7 +1038,10 @@ export type ResolversTypes = {
   NftDetails: ResolverTypeWrapper<NftDetails>;
   NftListItem: ResolverTypeWrapper<NftListItem>;
   NftTimeSeriesItem: ResolverTypeWrapper<NftTimeSeriesItem>;
+  PingResponse: ResolverTypeWrapper<PingResponse>;
   PostDetails: ResolverTypeWrapper<PostDetails>;
+  PostImage: ResolverTypeWrapper<PostImage>;
+  PostMetrics: ResolverTypeWrapper<PostMetrics>;
   PostTimeSeriesItem: ResolverTypeWrapper<PostTimeSeriesItem>;
   Query: ResolverTypeWrapper<{}>;
   SearchItem: ResolverTypeWrapper<SearchItem>;
@@ -956,6 +1053,7 @@ export type ResolversTypes = {
   StockTimeSeriesItem: ResolverTypeWrapper<StockTimeSeriesItem>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   SystemChange: ResolverTypeWrapper<SystemChange>;
+  SystemHealthResponse: ResolverTypeWrapper<SystemHealthResponse>;
   TimeInterval: TimeInterval;
   TokenResponse: ResolverTypeWrapper<TokenResponse>;
   Topic: ResolverTypeWrapper<Topic>;
@@ -982,6 +1080,9 @@ export type ResolversParentTypes = {
   CategoryPost: CategoryPost;
   CategoryTimeSeriesItem: CategoryTimeSeriesItem;
   CategoryTopic: CategoryTopic;
+  ChartBatchResponse: ChartBatchResponse;
+  ChartRequestInput: ChartRequestInput;
+  ChartResponse: ChartResponse;
   CoinDetails: CoinDetails;
   CoinListItem: CoinListItem;
   CoinMeta: CoinMeta;
@@ -1000,7 +1101,10 @@ export type ResolversParentTypes = {
   NftDetails: NftDetails;
   NftListItem: NftListItem;
   NftTimeSeriesItem: NftTimeSeriesItem;
+  PingResponse: PingResponse;
   PostDetails: PostDetails;
+  PostImage: PostImage;
+  PostMetrics: PostMetrics;
   PostTimeSeriesItem: PostTimeSeriesItem;
   Query: {};
   SearchItem: SearchItem;
@@ -1011,6 +1115,7 @@ export type ResolversParentTypes = {
   StockTimeSeriesItem: StockTimeSeriesItem;
   String: Scalars['String']['output'];
   SystemChange: SystemChange;
+  SystemHealthResponse: SystemHealthResponse;
   TokenResponse: TokenResponse;
   Topic: Topic;
   TopicCreator: TopicCreator;
@@ -1132,6 +1237,30 @@ export type CategoryTopicResolvers<ContextType = AppContext, ParentType extends 
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ChartBatchResponseResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['ChartBatchResponse'] = ResolversParentTypes['ChartBatchResponse']> = {
+  chartType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  chartUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dataPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  generatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  metadata?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
+  success?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timeframe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ChartResponseResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['ChartResponse'] = ResolversParentTypes['ChartResponse']> = {
+  chartType?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  chartUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  dataPoints?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  generatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  metadata?: Resolver<ResolversTypes['JSON'], ParentType, ContextType>;
+  symbol?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timeframe?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CoinDetailsResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['CoinDetails'] = ResolversParentTypes['CoinDetails']> = {
   alt_rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   circulating_supply?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -1157,7 +1286,7 @@ export type CoinListItemResolvers<ContextType = AppContext, ParentType extends R
   alt_rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   alt_rank_previous?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   blockchains?: Resolver<Maybe<Array<Maybe<ResolversTypes['JSON']>>>, ParentType, ContextType>;
-  categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  categories?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   circulating_supply?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   galaxy_score?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   galaxy_score_previous?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -1356,20 +1485,57 @@ export type NftTimeSeriesItemResolvers<ContextType = AppContext, ParentType exte
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PingResponseResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['PingResponse'] = ResolversParentTypes['PingResponse']> = {
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PostDetailsResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['PostDetails'] = ResolversParentTypes['PostDetails']> = {
-  content?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  creator_avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creator_display_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creator_id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  creator_name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  extraText?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  post_title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['PostImage']>, ParentType, ContextType>;
+  images?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  metrics?: Resolver<Maybe<ResolversTypes['PostMetrics']>, ParentType, ContextType>;
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  topics?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  video?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PostImageResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['PostImage'] = ResolversParentTypes['PostImage']> = {
+  height?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  src?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  width?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type PostMetricsResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['PostMetrics'] = ResolversParentTypes['PostMetrics']> = {
+  bookmarks?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  favorites?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  replies?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  retweets?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  views?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type PostTimeSeriesItemResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['PostTimeSeriesItem'] = ResolversParentTypes['PostTimeSeriesItem']> = {
   interactions?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  time?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  time?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  chartTypes?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
+  generateChart?: Resolver<Maybe<ResolversTypes['ChartResponse']>, ParentType, ContextType, RequireFields<QueryGenerateChartArgs, 'chartType' | 'symbol'>>;
+  generateChartBatch?: Resolver<Array<ResolversTypes['ChartBatchResponse']>, ParentType, ContextType, RequireFields<QueryGenerateChartBatchArgs, 'requests'>>;
   getCategoriesList?: Resolver<Maybe<Array<Maybe<ResolversTypes['CategoryListItem']>>>, ParentType, ContextType>;
   getCategory?: Resolver<Maybe<ResolversTypes['CategoryDetails']>, ParentType, ContextType, Partial<QueryGetCategoryArgs>>;
   getCategoryCreators?: Resolver<Maybe<Array<Maybe<ResolversTypes['CategoryCreator']>>>, ParentType, ContextType, Partial<QueryGetCategoryCreatorsArgs>>;
@@ -1390,8 +1556,8 @@ export type QueryResolvers<ContextType = AppContext, ParentType extends Resolver
   getNftTimeSeries?: Resolver<Maybe<Array<Maybe<ResolversTypes['NftTimeSeriesItem']>>>, ParentType, ContextType, Partial<QueryGetNftTimeSeriesArgs>>;
   getNftsList?: Resolver<Maybe<Array<Maybe<ResolversTypes['NftListItem']>>>, ParentType, ContextType>;
   getNftsListV2?: Resolver<Maybe<Array<Maybe<ResolversTypes['NftListItem']>>>, ParentType, ContextType>;
-  getPostDetails?: Resolver<Maybe<ResolversTypes['PostDetails']>, ParentType, ContextType, Partial<QueryGetPostDetailsArgs>>;
-  getPostTimeSeries?: Resolver<Maybe<Array<Maybe<ResolversTypes['PostTimeSeriesItem']>>>, ParentType, ContextType, Partial<QueryGetPostTimeSeriesArgs>>;
+  getPostDetails?: Resolver<Maybe<ResolversTypes['PostDetails']>, ParentType, ContextType, RequireFields<QueryGetPostDetailsArgs, 'id' | 'type'>>;
+  getPostTimeSeries?: Resolver<Maybe<Array<Maybe<ResolversTypes['PostTimeSeriesItem']>>>, ParentType, ContextType, RequireFields<QueryGetPostTimeSeriesArgs, 'id' | 'type'>>;
   getSearch?: Resolver<Maybe<ResolversTypes['SearchResult']>, ParentType, ContextType, Partial<QueryGetSearchArgs>>;
   getSearchesList?: Resolver<Maybe<Array<Maybe<ResolversTypes['SearchItem']>>>, ParentType, ContextType>;
   getStock?: Resolver<Maybe<ResolversTypes['StockDetails']>, ParentType, ContextType, Partial<QueryGetStockArgs>>;
@@ -1409,7 +1575,9 @@ export type QueryResolvers<ContextType = AppContext, ParentType extends Resolver
   getTopicsList?: Resolver<Maybe<Array<Maybe<ResolversTypes['TopicListItem']>>>, ParentType, ContextType>;
   health?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   hello?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ping?: Resolver<Maybe<ResolversTypes['PingResponse']>, ParentType, ContextType>;
   searchPosts?: Resolver<Maybe<Array<Maybe<ResolversTypes['SearchPost']>>>, ParentType, ContextType, Partial<QuerySearchPostsArgs>>;
+  systemHealth?: Resolver<Maybe<ResolversTypes['SystemHealthResponse']>, ParentType, ContextType>;
 };
 
 export type SearchItemResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['SearchItem'] = ResolversParentTypes['SearchItem']> = {
@@ -1451,7 +1619,7 @@ export type StockDetailsResolvers<ContextType = AppContext, ParentType extends R
 export type StockListItemResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['StockListItem'] = ResolversParentTypes['StockListItem']> = {
   alt_rank?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   alt_rank_previous?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  categories?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  categories?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   galaxy_score?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   galaxy_score_previous?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1501,6 +1669,14 @@ export type SystemChangeResolvers<ContextType = AppContext, ParentType extends R
   change?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   time?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SystemHealthResponseResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['SystemHealthResponse'] = ResolversParentTypes['SystemHealthResponse']> = {
+  status?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  timestamp?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  uptime?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  version?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1649,6 +1825,8 @@ export type Resolvers<ContextType = AppContext> = {
   CategoryPost?: CategoryPostResolvers<ContextType>;
   CategoryTimeSeriesItem?: CategoryTimeSeriesItemResolvers<ContextType>;
   CategoryTopic?: CategoryTopicResolvers<ContextType>;
+  ChartBatchResponse?: ChartBatchResponseResolvers<ContextType>;
+  ChartResponse?: ChartResponseResolvers<ContextType>;
   CoinDetails?: CoinDetailsResolvers<ContextType>;
   CoinListItem?: CoinListItemResolvers<ContextType>;
   CoinMeta?: CoinMetaResolvers<ContextType>;
@@ -1664,7 +1842,10 @@ export type Resolvers<ContextType = AppContext> = {
   NftDetails?: NftDetailsResolvers<ContextType>;
   NftListItem?: NftListItemResolvers<ContextType>;
   NftTimeSeriesItem?: NftTimeSeriesItemResolvers<ContextType>;
+  PingResponse?: PingResponseResolvers<ContextType>;
   PostDetails?: PostDetailsResolvers<ContextType>;
+  PostImage?: PostImageResolvers<ContextType>;
+  PostMetrics?: PostMetricsResolvers<ContextType>;
   PostTimeSeriesItem?: PostTimeSeriesItemResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   SearchItem?: SearchItemResolvers<ContextType>;
@@ -1674,6 +1855,7 @@ export type Resolvers<ContextType = AppContext> = {
   StockListItem?: StockListItemResolvers<ContextType>;
   StockTimeSeriesItem?: StockTimeSeriesItemResolvers<ContextType>;
   SystemChange?: SystemChangeResolvers<ContextType>;
+  SystemHealthResponse?: SystemHealthResponseResolvers<ContextType>;
   TokenResponse?: TokenResponseResolvers<ContextType>;
   Topic?: TopicResolvers<ContextType>;
   TopicCreator?: TopicCreatorResolvers<ContextType>;

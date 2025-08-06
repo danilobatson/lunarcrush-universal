@@ -1,4 +1,8 @@
-// ===================================================================
+// =======================================export const healthCheckSchema = z.object({
+	status: z.string(),
+	timestamp: z.string(),
+	version: z.string().optional(),
+});=====================
 // 🔧 Type Definitions
 // ===================================================================
 
@@ -6,15 +10,10 @@ import { z } from 'zod';
 
 // Cloudflare Worker bindings
 export interface Bindings {
+	ANALYTICS?: AnalyticsEngine;
 	LUNARCRUSH_API_KEY: string;
 	LUNARCRUSH_CACHE: KVNamespace;
-	LUNARCRUSH_MCP_TOOLS: KVNamespace;
-	KV_STORE: KVNamespace;
-	DB: D1Database;
-	ANALYTICS?: AnalyticsEngineDataset;
-	ENVIRONMENT?: string;
-	CUSTOM_CORS?: string;
-	CF_REGION?: string;
+	ENVIRONMENT: string;
 }
 
 // Hono context variables
@@ -44,11 +43,4 @@ export const graphqlRequestSchema = z.object({
 	operationName: z.string().optional(),
 });
 
-export const mcpRequestSchema = z.object({
-	method: z.string(),
-	params: z.record(z.string(), z.any()).optional(),
-	arguments: z.record(z.string(), z.any()).optional(),
-});
-
 export type GraphQLRequest = z.infer<typeof graphqlRequestSchema>;
-export type MCPRequest = z.infer<typeof mcpRequestSchema>;

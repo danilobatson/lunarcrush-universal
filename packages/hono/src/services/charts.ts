@@ -2,8 +2,8 @@
 // 📊 Auto-Generated Charts Service
 // ===================================================================
 
+import { HTTPException } from 'hono/http-exception';
 import { getCachedResponse, setCachedResponse } from '../services/caching';
-import { createSuccessResponse, createErrorResponse } from '../lib/errors';
 
 export interface ChartConfig {
 	type: 'line' | 'bar' | 'pie' | 'area';
@@ -20,6 +20,7 @@ export interface ChartRequest {
 	symbol: string;
 	chartType: 'price' | 'volume' | 'social' | 'sentiment';
 	timeframe: '1h' | '1d' | '1w' | '1m';
+	apiKey?: string;
 	config?: Partial<ChartConfig>;
 }
 
@@ -35,7 +36,7 @@ export async function generateChart(
 
 		// Check cache first
 		const cacheKey = `chart:${symbol}:${chartType}:${timeframe}`;
-		const cached = await getCachedResponse(c.env.KV_STORE, cacheKey);
+		const cached = await getCachedResponse(c.env.LUNARCRUSH_CACHE, cacheKey);
 		if (cached) {
 			return cached;
 		}
@@ -66,34 +67,41 @@ export async function generateChart(
 				break;
 
 			default:
-				throw new Error(`Unsupported chart type: ${chartType}`);
+				throw new HTTPException(400, {
+					message: `Unsupported chart type: ${chartType}`,
+				});
 		}
 
-		const result = createSuccessResponse({
-			chart: chartConfig,
-			metadata: {
-				symbol,
-				chartType,
-				timeframe,
-				generatedAt: new Date().toISOString(),
-				dataPoints: data?.length || 0,
+		const result = {
+			success: true,
+			data: {
+				chart: chartConfig,
+				metadata: {
+					symbol,
+					chartType,
+					timeframe,
+					generatedAt: new Date().toISOString(),
+					dataPoints: data?.length || 0,
+				},
 			},
-		});
+			timestamp: new Date().toISOString(),
+		};
 
 		// Cache for 5 minutes
 		if (result && !result.error) {
-			await setCachedResponse(c.env.KV_STORE, cacheKey, result, 300);
+			await setCachedResponse(c.env.LUNARCRUSH_CACHE, cacheKey, result, 300);
 		}
 
 		return result;
 	} catch (error) {
 		console.error('Chart generation error:', error);
-		return createErrorResponse(
-			c,
-			'chart_generation_error',
-			error instanceof Error ? error.message : 'Failed to generate chart',
-			500
-		);
+		if (error instanceof HTTPException) {
+			throw error;
+		}
+		throw new HTTPException(500, {
+			message:
+				error instanceof Error ? error.message : 'Failed to generate chart',
+		});
 	}
 }
 
@@ -113,7 +121,9 @@ async function fetchPriceData(symbol: string, timeframe: string, c: any) {
 	});
 
 	if (!response.ok) {
-		throw new Error(`Failed to fetch price data: ${response.statusText}`);
+		throw new HTTPException(500, {
+			message: `Failed to fetch price data: ${response.statusText}`,
+		});
 	}
 
 	const result = await response.json();
@@ -136,7 +146,9 @@ async function fetchVolumeData(symbol: string, timeframe: string, c: any) {
 	});
 
 	if (!response.ok) {
-		throw new Error(`Failed to fetch volume data: ${response.statusText}`);
+		throw new HTTPException(500, {
+			message: `Failed to fetch volume data: ${response.statusText}`,
+		});
 	}
 
 	const result = await response.json();
@@ -159,7 +171,9 @@ async function fetchSocialData(symbol: string, timeframe: string, c: any) {
 	});
 
 	if (!response.ok) {
-		throw new Error(`Failed to fetch social data: ${response.statusText}`);
+		throw new HTTPException(500, {
+			message: `Failed to fetch social data: ${response.statusText}`,
+		});
 	}
 
 	const result = await response.json();
