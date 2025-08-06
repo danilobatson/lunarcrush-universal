@@ -1,8 +1,0 @@
-Testing SDK build...
-Exit prior to config file resolving
-cause
-must not have multiple workspaces with the same name
-package '@lunarcrush/shared-types' has conflicts in the following paths:
-    /Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages/backup-shared-types-20250728
-    /Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages/shared-types
-⚠️  SDK TypeScript issues (check if imports need updating)
