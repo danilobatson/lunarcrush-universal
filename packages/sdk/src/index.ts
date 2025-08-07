@@ -79,10 +79,7 @@ export class LunarCrush {
 			};
 		}
 
-		const apiKey =
-			input?.apiKey ||
-			process.env.LUNARCRUSH_API_KEY ||
-			process.env.NEXT_PUBLIC_LUNARCRUSH_API_KEY;
+		const apiKey = input?.apiKey;
 
 		if (!apiKey) throw new LunarCrushError('API key required');
 
