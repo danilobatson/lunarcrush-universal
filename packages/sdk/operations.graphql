@@ -1,0 +1,337 @@
+# ================================================================
+# 🤖 AUTO-GENERATED FROM RESOLVERS.TS - DO NOT EDIT MANUALLY!
+# ================================================================
+# Generated from: packages/hono/src/graphql/resolvers.ts
+# Only includes operations that are actually implemented
+# Generated: 2025-08-07T03:52:26.827Z
+# ================================================================
+
+query SystemHealth {
+  systemHealth {
+    status
+    uptime
+    version
+    timestamp
+  }
+}
+
+query Ping {
+  ping {
+    status
+    timestamp
+  }
+}
+
+query Health {
+  health
+}
+
+query Hello {
+  hello
+}
+
+query GetTopicsList {
+  getTopicsList {
+    topic
+    title
+    topic_rank
+    interactions_24h
+  }
+}
+
+query GetTopic($topic: String!) {
+  getTopic(topic: $topic) {
+    topic
+    title
+    topic_rank
+    interactions_24h
+    related_topics
+  }
+}
+
+query GetTopicWhatsup($topic: String!) {
+  getTopicWhatsup(topic: $topic) {
+    summary
+  }
+}
+
+query GetTopicTimeSeries($topic: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getTopicTimeSeries(topic: $topic, bucket: $bucket, interval: $interval, start: $start, end: $end) {
+    time
+    interactions
+  }
+}
+
+query GetTopicTimeSeriesV2($topic: String!, $bucket: String) {
+  getTopicTimeSeriesV2(topic: $topic, bucket: $bucket) {
+    time
+    interactions
+  }
+}
+
+query GetTopicPosts($topic: String!, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getTopicPosts(topic: $topic, start: $start, end: $end) {
+    id
+    post_title
+    creator_name
+    interactions_24h
+  }
+}
+
+query GetTopicNews($topic: String!) {
+  getTopicNews(topic: $topic) {
+    id
+    post_title
+    post_link
+    creator_name
+  }
+}
+
+query GetTopicCreators($topic: String!) {
+  getTopicCreators(topic: $topic) {
+    creator_name
+    creator_followers
+    interactions_24h
+  }
+}
+
+query GetCategoriesList {
+  getCategoriesList {
+    category
+    title
+    category_rank
+    interactions_24h
+  }
+}
+
+query GetCategory($category: String!) {
+  getCategory(category: $category) {
+    category
+    title
+    interactions_24h
+  }
+}
+
+query GetCategoryTopics($category: String!) {
+  getCategoryTopics(category: $category) {
+    topic
+    title
+    topic_rank
+    interactions_24h
+  }
+}
+
+query GetCategoryTimeSeries($category: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getCategoryTimeSeries(category: $category, bucket: $bucket, interval: $interval, start: $start, end: $end) {
+    time
+    interactions
+  }
+}
+
+query GetCategoryPosts($category: String!, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getCategoryPosts(category: $category, start: $start, end: $end) {
+    id
+    post_title
+    creator_name
+    interactions_24h
+  }
+}
+
+query GetCategoryNews($category: String!) {
+  getCategoryNews(category: $category) {
+    id
+    post_title
+    post_link
+    creator_name
+  }
+}
+
+query GetCategoryCreators($category: String!) {
+  getCategoryCreators(category: $category) {
+    creator_name
+    creator_followers
+    interactions_24h
+  }
+}
+
+query GetCreatorsList {
+  getCreatorsList {
+    creator_name
+    creator_display_name
+    creator_followers
+    interactions_24h
+  }
+}
+
+query GetCreator($network: String!, $id: String!) {
+  getCreator(network: $network, id: $id) {
+    creator_name
+    creator_followers
+    interactions_24h
+  }
+}
+
+query GetCreatorTimeSeries($network: String!, $id: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getCreatorTimeSeries(network: $network, id: $id, bucket: $bucket, interval: $interval, start: $start, end: $end) {
+    time
+    interactions
+  }
+}
+
+query GetCreatorPosts($network: String!, $id: String!, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getCreatorPosts(network: $network, id: $id, start: $start, end: $end) {
+    id
+    post_title
+    creator_name
+    interactions_24h
+  }
+}
+
+query GetCoinsList {
+  getCoinsList {
+    symbol
+    name
+    price
+    market_cap
+    percent_change_24h
+    galaxy_score
+  }
+}
+
+query GetCoinsListV2 {
+  getCoinsListV2 {
+    symbol
+    name
+    price
+    market_cap
+    percent_change_24h
+    galaxy_score
+  }
+}
+
+query GetCoin($symbol: String!) {
+  getCoin(symbol: $symbol) {
+    symbol
+    name
+    price
+    market_cap
+    percent_change_24h
+    galaxy_score
+  }
+}
+
+query GetCoinMeta($symbol: String!) {
+  getCoinMeta(symbol: $symbol) {
+    symbol
+    name
+  }
+}
+
+query GetCoinTimeSeries($symbol: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getCoinTimeSeries(symbol: $symbol, bucket: $bucket, interval: $interval, start: $start, end: $end) {
+    time
+    close
+    market_cap
+    galaxy_score
+  }
+}
+
+query GetStocksList {
+  getStocksList {
+    symbol
+    name
+    price
+    market_cap
+    percent_change_24h
+  }
+}
+
+query GetStocksListV2 {
+  getStocksListV2 {
+    symbol
+    name
+    price
+    market_cap
+    percent_change_24h
+  }
+}
+
+query GetStock($symbol: String!) {
+  getStock(symbol: $symbol) {
+    symbol
+    name
+    price
+    market_cap
+    percent_change_24h
+  }
+}
+
+query GetStockTimeSeries($symbol: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getStockTimeSeries(symbol: $symbol, bucket: $bucket, interval: $interval, start: $start, end: $end) {
+    time
+    close
+  }
+}
+
+query GetNftsList {
+  getNftsList {
+    id
+    name
+    floor_price
+    market_cap
+    percent_change_24h
+  }
+}
+
+query GetNftsListV2 {
+  getNftsListV2 {
+    id
+    name
+    floor_price
+    market_cap
+    percent_change_24h
+  }
+}
+
+query GetNft($id: String!) {
+  getNft(id: $id) {
+    id
+    name
+    floor_price
+    market_cap
+    percent_change_24h
+  }
+}
+
+query GetNftTimeSeries($id: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getNftTimeSeries(id: $id, bucket: $bucket, interval: $interval, start: $start, end: $end) {
+    time
+    market_cap
+  }
+}
+
+query GetSystemChanges {
+  getSystemChanges {
+    asset_id
+    asset_name
+    change
+    description
+    time
+  }
+}
+
+query GetPostDetails($type: String!, $id: String!) {
+  getPostDetails(type: $type, id: $id) {
+    type
+    id
+    title
+    description
+  }
+}
+
+query GetPostTimeSeries($type: String!, $id: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getPostTimeSeries(type: $type, id: $id, bucket: $bucket, interval: $interval, start: $start, end: $end) {
+    time
+    interactions
+  }
+}

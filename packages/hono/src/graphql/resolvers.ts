@@ -3,7 +3,7 @@
 // ===================================================================
 
 import { getContext } from 'hono/context-storage';
-import type { Bindings } from '../lib/types';
+import type { Bindings, UnixTimestamp } from '../lib/types';
 
 import {
 	getTopicsList,
@@ -85,6 +85,13 @@ const getConfigOptional = (): LunarCrushConfig => {
  */
 export function createResolvers() {
 	return {
+		// Scalar resolvers
+		UnixTimestamp: {
+			serialize: (value: any) => String(value),
+			parseValue: (value: any) => String(value),
+			parseLiteral: (ast: any) => String(ast.value),
+		},
+		
 		Query: {
 			// ===================================================================
 			// HEALTH & SYSTEM MONITORING
@@ -105,7 +112,6 @@ export function createResolvers() {
 				status: 'pong',
 				timestamp: new Date().toISOString(),
 			}),
-
 
 			// ===================================================================
 			// LEGACY HEALTH (keeping for backward compatibility)
@@ -160,8 +166,8 @@ export function createResolvers() {
 					topic: string;
 					bucket?: string;
 					interval?: string;
-					start?: string;
-					end?: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
 				},
 				context: GraphQLContext
 			) => {
@@ -180,7 +186,7 @@ export function createResolvers() {
 			},
 
 			getTopicPosts: async (
-				args: { topic: string; start?: string; end?: string },
+				args: { topic: string; start?: UnixTimestamp; end?: UnixTimestamp },
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
@@ -236,8 +242,8 @@ export function createResolvers() {
 					category: string;
 					bucket?: string;
 					interval?: string;
-					start?: string;
-					end?: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
 				},
 				context: GraphQLContext
 			) => {
@@ -247,7 +253,7 @@ export function createResolvers() {
 			},
 
 			getCategoryPosts: async (
-				args: { category: string; start?: string; end?: string },
+				args: { category: string; start?: UnixTimestamp; end?: UnixTimestamp },
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
@@ -295,8 +301,8 @@ export function createResolvers() {
 					id: string;
 					bucket?: string;
 					interval?: string;
-					start?: string;
-					end?: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
 				},
 				context: GraphQLContext
 			) => {
@@ -306,7 +312,12 @@ export function createResolvers() {
 			},
 
 			getCreatorPosts: async (
-				args: { network: string; id: string; start?: string; end?: string },
+				args: {
+					network: string;
+					id: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
+				},
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
@@ -350,8 +361,8 @@ export function createResolvers() {
 					symbol: string;
 					bucket?: string;
 					interval?: string;
-					start?: string;
-					end?: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
 				},
 				context: GraphQLContext
 			) => {
@@ -387,8 +398,8 @@ export function createResolvers() {
 					symbol: string;
 					bucket?: string;
 					interval?: string;
-					start?: string;
-					end?: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
 				},
 				context: GraphQLContext
 			) => {
@@ -427,8 +438,8 @@ export function createResolvers() {
 					id: string;
 					bucket?: string;
 					interval?: string;
-					start?: string;
-					end?: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
 				},
 				context: GraphQLContext
 			) => {
@@ -493,8 +504,8 @@ export function createResolvers() {
 					id: string;
 					bucket?: string;
 					interval?: string;
-					start?: string;
-					end?: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
 				},
 				context: GraphQLContext
 			) => {

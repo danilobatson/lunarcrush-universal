@@ -1,5 +1,13 @@
-
 import { z } from 'zod';
+
+/**
+ * A branded string type representing a Unix timestamp.
+ * Unix timestamps are numeric values representing seconds since epoch (1970-01-01),
+ * but the API accepts them as strings.
+ *
+ * @example "1640995200" // January 1, 2022 00:00:00 UTC
+ */
+export type UnixTimestamp = string;
 
 // Cloudflare Worker bindings
 export interface Bindings {

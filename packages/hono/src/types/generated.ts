@@ -27,6 +27,7 @@ export interface Scalars {
   Float: { input: number; output: number; }
   Date: { input: string; output: string; }
   JSON: { input: any; output: any; }
+  UnixTimestamp: { input: string; output: string; }
 }
 
 export interface Blockchain {
@@ -480,17 +481,17 @@ export interface QueryGetCategoryNewsArgs {
 
 export interface QueryGetCategoryPostsArgs {
   category?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
 
 
 export interface QueryGetCategoryTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
   category?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
 
 
@@ -511,9 +512,9 @@ export interface QueryGetCoinMetaArgs {
 
 export interface QueryGetCoinTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   symbol?: InputMaybe<Scalars['String']['input']>;
 }
 
@@ -525,20 +526,20 @@ export interface QueryGetCreatorArgs {
 
 
 export interface QueryGetCreatorPostsArgs {
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   network?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
 
 
 export interface QueryGetCreatorTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
   network?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
 
 
@@ -549,10 +550,10 @@ export interface QueryGetNftArgs {
 
 export interface QueryGetNftTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
 
 
@@ -564,10 +565,10 @@ export interface QueryGetPostDetailsArgs {
 
 export interface QueryGetPostTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   id: Scalars['String']['input'];
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   type: Scalars['String']['input'];
 }
 
@@ -584,9 +585,9 @@ export interface QueryGetStockArgs {
 
 export interface QueryGetStockTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   symbol?: InputMaybe<Scalars['String']['input']>;
 }
 
@@ -607,17 +608,17 @@ export interface QueryGetTopicNewsArgs {
 
 
 export interface QueryGetTopicPostsArgs {
-  end?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   topic?: InputMaybe<Scalars['String']['input']>;
 }
 
 
 export interface QueryGetTopicTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   topic?: InputMaybe<Scalars['String']['input']>;
 }
 

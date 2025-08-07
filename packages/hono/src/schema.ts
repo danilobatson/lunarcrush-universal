@@ -14,7 +14,7 @@
 /**
  * LunarCrush GraphQL Schema - Auto-Generated from Single Source of Truth
  * Source: schema/schema.graphql
- * Generated: 2025-08-06T16:18:21.082Z
+ * Generated: 2025-08-07T03:52:28.367Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -24,6 +24,7 @@ export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
 
 scalar Date
 scalar JSON
+scalar UnixTimestamp
 
 # ===== ENUMS =====
 
@@ -59,11 +60,15 @@ type Query {
 		topic: String
 		bucket: String
 		interval: String
-		start: String
-		end: String
+		start: UnixTimestamp
+		end: UnixTimestamp
 	): [TopicTimeSeriesItem]
 	getTopicTimeSeriesV2(topic: String, bucket: String): [TopicTimeSeriesItem]
-	getTopicPosts(topic: String, start: String, end: String): [TopicPost]
+	getTopicPosts(
+		topic: String
+		start: UnixTimestamp
+		end: UnixTimestamp
+	): [TopicPost]
 	getTopicNews(topic: String): [TopicNews]
 	getTopicCreators(topic: String): [TopicCreator]
 
@@ -75,10 +80,14 @@ type Query {
 		category: String
 		bucket: String
 		interval: String
-		start: String
-		end: String
+		start: UnixTimestamp
+		end: UnixTimestamp
 	): [CategoryTimeSeriesItem]
-	getCategoryPosts(category: String, start: String, end: String): [CategoryPost]
+	getCategoryPosts(
+		category: String
+		start: UnixTimestamp
+		end: UnixTimestamp
+	): [CategoryPost]
 	getCategoryNews(category: String): [CategoryNews]
 	getCategoryCreators(category: String): [CategoryCreator]
 
@@ -90,14 +99,14 @@ type Query {
 		id: String
 		bucket: String
 		interval: String
-		start: String
-		end: String
+		start: UnixTimestamp
+		end: UnixTimestamp
 	): [CreatorTimeSeriesItem]
 	getCreatorPosts(
 		network: String
 		id: String
-		start: String
-		end: String
+		start: UnixTimestamp
+		end: UnixTimestamp
 	): [CreatorPost]
 
 	# ===== COINS ENDPOINTS =====
@@ -108,8 +117,8 @@ type Query {
 		symbol: String
 		bucket: String
 		interval: String
-		start: String
-		end: String
+		start: UnixTimestamp
+		end: UnixTimestamp
 	): [CoinTimeSeriesItem]
 	getCoinMeta(symbol: String): CoinMeta
 
@@ -121,8 +130,8 @@ type Query {
 		symbol: String
 		bucket: String
 		interval: String
-		start: String
-		end: String
+		start: UnixTimestamp
+		end: UnixTimestamp
 	): [StockTimeSeriesItem]
 
 	# ===== NFTS ENDPOINTS =====
@@ -133,8 +142,8 @@ type Query {
 		id: String
 		bucket: String
 		interval: String
-		start: String
-		end: String
+		start: UnixTimestamp
+		end: UnixTimestamp
 	): [NftTimeSeriesItem]
 
 	# ===== SYSTEM ENDPOINTS =====
@@ -148,8 +157,8 @@ type Query {
 		id: String!
 		bucket: String
 		interval: String
-		start: String
-		end: String
+		start: UnixTimestamp
+		end: UnixTimestamp
 	): [PostTimeSeriesItem]
 }
 

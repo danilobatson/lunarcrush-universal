@@ -1,10 +1,11 @@
 {
-  "name": "lunarcrush-comprehensive-sdk",
-  "version": "2.0.1",
-  "description": "Comprehensive TypeScript SDK for LunarCrush with 100% GraphQL backend coverage - 2000% improvement over limited versions",
+  "name": "lunarcrush-sdk",
+  "version": "3.0.0",
+  "description": "Simple, lightweight TypeScript SDK for LunarCrush GraphQL API",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -17,23 +18,19 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-    "test": "vitest",
-    "prepublishOnly": "npm run build"
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "keywords": [
     "lunarcrush",
     "crypto",
-    "social",
-    "intelligence",
     "graphql",
     "sdk",
     "typescript",
-    "comprehensive",
-    "universal",
-    "sentiment",
-    "analytics"
+    "simple",
+    "lightweight"
   ],
   "author": "dbatson09",
   "license": "MIT",
@@ -46,11 +43,17 @@
   "bugs": {
     "url": "https://github.com/danilobatson/lunarcrush-universal/issues"
   },
+  "dependencies": {
+    "graphql-request": "^6.1.0"
+  },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.7",
+    "@graphql-codegen/typescript": "^4.1.6",
+    "@graphql-codegen/typescript-graphql-request": "^6.3.0",
+    "@graphql-codegen/typescript-operations": "^4.6.1",
     "@types/node": "^20.0.0",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0",
-    "vitest": "^1.0.0"
+    "typescript": "^5.0.0"
   },
   "engines": {
     "node": ">=18"

@@ -1,3 +1,5 @@
+/** Unix timestamp as string (e.g., "1640995200") */
+export type UnixTimestamp = string;
 
 export interface LunarCrushConfig {
 	apiKey: string;
@@ -119,8 +121,8 @@ export const getTopicTimeSeries = async (
 		topic: string;
 		bucket?: string;
 		interval?: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	const { topic, bucket, interval, start, end } = args;
@@ -179,7 +181,7 @@ export const getTopicTimeSeriesV2 = async (
 
 export const getTopicPosts = async (
 	config: LunarCrushConfig,
-	args: { topic: string; start?: string; end?: string }
+	args: { topic: string; start?: UnixTimestamp; end?: UnixTimestamp }
 ): Promise<any[]> => {
 	const { topic, start, end } = args;
 	try {
@@ -310,8 +312,8 @@ export const getCategoryTimeSeries = async (
 		category: string;
 		bucket?: string;
 		interval?: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	const { category, bucket, interval, start, end } = args;
@@ -343,8 +345,8 @@ export const getCategoryPosts = async (
 	config: LunarCrushConfig,
 	args: {
 		category: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	const { category, start, end } = args;
@@ -463,8 +465,8 @@ export const getCreatorTimeSeries = async (
 		id: string;
 		bucket?: string;
 		interval?: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	const { network, id, bucket, interval, start, end } = args;
@@ -497,8 +499,8 @@ export const getCreatorPosts = async (
 	args: {
 		network: string;
 		id: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	try {
@@ -613,8 +615,8 @@ export const getCoinTimeSeries = async (
 		coin: string;
 		bucket?: string;
 		interval?: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	const { coin, bucket, interval, start, end } = args;
@@ -746,8 +748,8 @@ export const getStockTimeSeries = async (
 		stock: string;
 		bucket?: string;
 		interval?: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	const { stock, bucket, interval, start, end } = args;
@@ -861,8 +863,8 @@ export const getNftTimeSeries = async (
 		nft: string;
 		bucket?: string;
 		interval?: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	const { nft, bucket, interval, start, end } = args;
@@ -915,7 +917,7 @@ export const getNftTimeSeriesV1 = async (
 
 export const getSystemChanges = async (
 	config: LunarCrushConfig,
-	args: { start?: string; end?: string }
+	args: { start?: UnixTimestamp; end?: UnixTimestamp }
 ): Promise<any[]> => {
 	const { start, end } = args;
 	try {
@@ -1037,8 +1039,8 @@ export const getPostTimeSeries = async (
 		id: string;
 		bucket?: string;
 		interval?: string;
-		start?: string;
-		end?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
 	}
 ): Promise<any[]> => {
 	const { type, id, bucket, interval, start, end } = args;
@@ -1075,12 +1077,12 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 		topic: string,
 		bucket?: string,
 		interval?: string,
-		start?: string,
-		end?: string
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
 	) => getTopicTimeSeries(config, topic, bucket, interval, start, end),
 	getTopicTimeSeriesV2: (topic: string, bucket?: string) =>
 		getTopicTimeSeriesV2(config, topic, bucket),
-	getTopicPosts: (topic: string, start?: string, end?: string) =>
+	getTopicPosts: (topic: string, start?: UnixTimestamp, end?: UnixTimestamp) =>
 		getTopicPosts(config, topic, start, end),
 	getTopicNews: (topic: string) => getTopicNews(config, topic),
 	getTopicCreators: (topic: string) => getTopicCreators(config, topic),
@@ -1093,11 +1095,14 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 		category: string,
 		bucket?: string,
 		interval?: string,
-		start?: string,
-		end?: string
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
 	) => getCategoryTimeSeries(config, category, bucket, interval, start, end),
-	getCategoryPosts: (category: string, start?: string, end?: string) =>
-		getCategoryPosts(config, category, start, end),
+	getCategoryPosts: (
+		category: string,
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
+	) => getCategoryPosts(config, category, start, end),
 	getCategoryNews: (category: string) => getCategoryNews(config, category),
 	getCategoryCreators: (category: string) =>
 		getCategoryCreators(config, category),
@@ -1110,14 +1115,14 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 		id: string,
 		bucket?: string,
 		interval?: string,
-		start?: string,
-		end?: string
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
 	) => getCreatorTimeSeries(config, network, id, bucket, interval, start, end),
 	getCreatorPosts: (
 		network: string,
 		id: string,
-		start?: string,
-		end?: string
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
 	) => getCreatorPosts(config, network, id, start, end),
 
 	// COINS ENDPOINTS
@@ -1140,8 +1145,8 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 		coin: string,
 		bucket?: string,
 		interval?: string,
-		start?: string,
-		end?: string
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
 	) => getCoinTimeSeries(config, coin, bucket, interval, start, end),
 	getCoinMeta: (coin: string) => getCoinMeta(config, coin),
 
@@ -1163,8 +1168,8 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 		stock: string,
 		bucket?: string,
 		interval?: string,
-		start?: string,
-		end?: string
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
 	) => getStockTimeSeries(config, stock, bucket, interval, start, end),
 
 	// NFTS ENDPOINTS
@@ -1181,13 +1186,13 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 		nft: string,
 		bucket?: string,
 		interval?: string,
-		start?: string,
-		end?: string
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
 	) => getNftTimeSeries(config, nft, bucket, interval, start, end),
 	getNftTimeSeriesV1: (nft: string) => getNftTimeSeriesV1(config, nft),
 
 	// SYSTEM ENDPOINTS
-	getSystemChanges: (start?: string, end?: string) =>
+	getSystemChanges: (start?: UnixTimestamp, end?: UnixTimestamp) =>
 		getSystemChanges(config, start, end),
 
 	// SEARCHES ENDPOINTS
@@ -1204,8 +1209,8 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 		id: string,
 		bucket?: string,
 		interval?: string,
-		start?: string,
-		end?: string
+		start?: UnixTimestamp,
+		end?: UnixTimestamp
 	) => getPostTimeSeries(config, { type, id, bucket, interval, start, end }),
 });
 

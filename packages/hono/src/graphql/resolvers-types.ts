@@ -26,6 +26,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   Date: { input: string; output: string; }
   JSON: { input: any; output: any; }
+  UnixTimestamp: { input: string; output: string; }
 };
 
 export type Blockchain = {
@@ -479,17 +480,17 @@ export type QueryGetCategoryNewsArgs = {
 
 export type QueryGetCategoryPostsArgs = {
   category?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 };
 
 
 export type QueryGetCategoryTimeSeriesArgs = {
   bucket?: InputMaybe<Scalars['String']['input']>;
   category?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 };
 
 
@@ -510,9 +511,9 @@ export type QueryGetCoinMetaArgs = {
 
 export type QueryGetCoinTimeSeriesArgs = {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   symbol?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -524,20 +525,20 @@ export type QueryGetCreatorArgs = {
 
 
 export type QueryGetCreatorPostsArgs = {
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   network?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 };
 
 
 export type QueryGetCreatorTimeSeriesArgs = {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
   network?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 };
 
 
@@ -548,10 +549,10 @@ export type QueryGetNftArgs = {
 
 export type QueryGetNftTimeSeriesArgs = {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 };
 
 
@@ -563,10 +564,10 @@ export type QueryGetPostDetailsArgs = {
 
 export type QueryGetPostTimeSeriesArgs = {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   id: Scalars['String']['input'];
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   type: Scalars['String']['input'];
 };
 
@@ -583,9 +584,9 @@ export type QueryGetStockArgs = {
 
 export type QueryGetStockTimeSeriesArgs = {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   symbol?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -606,17 +607,17 @@ export type QueryGetTopicNewsArgs = {
 
 
 export type QueryGetTopicPostsArgs = {
-  end?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   topic?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryGetTopicTimeSeriesArgs = {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   topic?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1016,6 +1017,7 @@ export type ResolversTypes = {
   TopicPost: ResolverTypeWrapper<TopicPost>;
   TopicTimeSeriesItem: ResolverTypeWrapper<TopicTimeSeriesItem>;
   TopicWhatsup: ResolverTypeWrapper<TopicWhatsup>;
+  UnixTimestamp: ResolverTypeWrapper<Scalars['UnixTimestamp']['output']>;
   User: ResolverTypeWrapper<User>;
   UserPreferences: ResolverTypeWrapper<UserPreferences>;
   UserPreferencesInput: UserPreferencesInput;
@@ -1074,6 +1076,7 @@ export type ResolversParentTypes = {
   TopicPost: TopicPost;
   TopicTimeSeriesItem: TopicTimeSeriesItem;
   TopicWhatsup: TopicWhatsup;
+  UnixTimestamp: Scalars['UnixTimestamp']['output'];
   User: User;
   UserPreferences: UserPreferences;
   UserPreferencesInput: UserPreferencesInput;
@@ -1723,6 +1726,10 @@ export type TopicWhatsupResolvers<ContextType = AppContext, ParentType extends R
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export interface UnixTimestampScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['UnixTimestamp'], any> {
+  name: 'UnixTimestamp';
+}
+
 export type UserResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   lastSeen?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1785,6 +1792,7 @@ export type Resolvers<ContextType = AppContext> = {
   TopicPost?: TopicPostResolvers<ContextType>;
   TopicTimeSeriesItem?: TopicTimeSeriesItemResolvers<ContextType>;
   TopicWhatsup?: TopicWhatsupResolvers<ContextType>;
+  UnixTimestamp?: GraphQLScalarType;
   User?: UserResolvers<ContextType>;
   UserPreferences?: UserPreferencesResolvers<ContextType>;
 };
