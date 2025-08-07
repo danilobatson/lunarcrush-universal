@@ -5,6 +5,7 @@ config:
   scalars:
     Date: string
     JSON: any
+    UnixTimestamp: string
   enumsAsTypes: false
   optionalType: undefined | null
 
@@ -31,6 +32,7 @@ generates:
       scalars:
         Date: string
         JSON: any
+        UnixTimestamp: string
       enumsAsTypes: false
       declarationKind: interface
 
@@ -52,6 +54,7 @@ generates:
       scalars:
         Date: string
         JSON: any
+        UnixTimestamp: string
       contextType: '../types#AppContext'
       resolverTypeWrapperSignature: 'Promise<T> | T'
 
@@ -83,45 +86,33 @@ generates:
     config:
       includeDirectives: false
 
-  # SDK PACKAGE
-  ./packages/sdk/src/types/generated.ts:
+  # SDK OPERATIONS - Generated from implemented resolvers only
+  ./packages/sdk/src/generated/operations.ts:
+    documents: './packages/sdk/operations.graphql'
     plugins:
       - add:
           content: |
             /* eslint-disable */
             // ================================================================
-            // 🚨 AUTO-GENERATED SDK TYPES - DO NOT EDIT! 🚨
+            // 🚨 AUTO-GENERATED SDK OPERATIONS - DO NOT EDIT! 🚨
             // ================================================================
-            // Generated from: schema/schema.graphql
+            // Generated from: packages/sdk/operations.graphql (resolver-based)
             // Command: yarn codegen
-            // Use: import type { TopicListItem } from './types/generated'
+            //
+            // Contains ONLY operations implemented in resolvers.ts
+            // No manual queries - all generated from actual implementations
             // ================================================================
       - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-graphql-request'
     config:
       scalars:
         Date: string
-        JSON: Record<string, any> # SDK prefers Record
+        JSON: Record<string, any>
+        UnixTimestamp: string
       enumsAsTypes: true
-
-  # CLI PACKAGE
-  ./packages/cli/src/types/generated.ts:
-    plugins:
-      - add:
-          content: |
-            /* eslint-disable */
-            // ================================================================
-            // 🚨 AUTO-GENERATED CLI TYPES - DO NOT EDIT! 🚨
-            // ================================================================
-            // Generated from: schema/schema.graphql
-            // Command: yarn codegen
-            // Use: import type { TopicListItem } from './types/generated'
-            // ================================================================
-      - 'typescript'
-    config:
-      scalars:
-        Date: string
-        JSON: unknown # CLI prefers unknown for safety
-      enumsAsTypes: true
+      gqlImport: graphql-request#gql
+      documentMode: string
 
   # DOCUMENTATION (optional)
   ./docs/api-schema.md:
