@@ -1,236 +1,148 @@
 # 🌙 LunarCrush SDK
 
-**Production-ready TypeScript SDK** for the LunarCrush GraphQL API with **complete resolver coverage**
+[![npm version](https://img.shields.io/npm/v/lunarcrush-sdk.svg)](https://www.npmjs.com/package/lunarcrush-sdk)
+[![npm downloads](https://img.shields.io/npm/dm/lunarcrush-sdk.svg)](https://www.npmjs.com/package/lunarcrush-sdk)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-✅ **39 Resolvers** • 🎯 **100% API Coverage** • 🚀 **Live Data Tested** • 🤖 **Auto-Generated Types**
+**Get crypto data instantly. No setup required.**
 
-## Features
-
-- 🎯 **Complete**: All 39 backend resolvers implemented and tested
-- 🤖 **Smart**: Operations auto-generated from actual resolver implementations
-- 🔒 **Type Safe**: Full TypeScript support with zero `any` types
-- 📦 **Lightweight**: Minimal bundle size (ESM/CJS)
-- 🚀 **Fast**: Direct GraphQL operations, no unnecessary overhead
-- 🛡️ **Reliable**: Every method tested with live API data
-- ✅ **Production Ready**: Comprehensive error handling and validation
-
-## Install
+> **Keywords**: crypto API, cryptocurrency data, bitcoin API, social sentiment, trading data, GraphQL SDK, TypeScript crypto library, blockchain analytics, market intelligence
 
 ```bash
 npm install lunarcrush-sdk
 ```
 
-## API Coverage
-
-### Complete Resolver Implementation
-
-All **39 backend resolvers** are implemented and tested with live data:
-
-#### System & Health (4)
-
-- `ping()` - Test connection
-- `health()` - System health check
-- `hello()` - Hello message
-- `systemChanges()` - Recent system changes
-
-#### Topics (6)
-
-- `topics.list()` - Get trending topics (1000+ items)
-- `topics.get(topic)` - Get specific topic details
-- `topics.timeSeries(topic, options)` - Topic time series data
-- `topics.posts(topic)` - Topic-related posts
-- `topics.news(topic)` - Topic-related news
-- `topics.creators(topic)` - Topic creators
-
-#### Coins (3)
-
-- `coins.list()` - Get all coins (7000+ items)
-- `coins.get(symbol)` - Get specific coin details
-- `coins.timeSeries(symbol, options)` - Coin time series data
-
-#### Categories (2)
-
-- `categories.list()` - Get all categories (30+ items)
-- `categories.get(category)` - Get specific category
-
-#### Creators (2)
-
-- `creators.list()` - Get all creators (600+ items)
-- `creators.get(network, id)` - Get specific creator
-
-#### Stocks (2)
-
-- `stocks.list()` - Get all stocks (2200+ items)
-- `stocks.get(symbol)` - Get specific stock
-
-#### NFTs (2)
-
-- `nfts.list()` - Get all NFTs (400+ items)
-- `nfts.get(id)` - Get specific NFT
-
-#### Advanced (1)
-
-- `getPostDetails(type, id)` - Get social post details
-
-> **Note**: Additional resolvers like `getTopicWhatsup`, `getCoinMeta`, `getStockTimeSeries` and others are available in the backend but not yet exposed in the public API. They will be added as they become available.
-
-## Quick Start
-
-```typescript
+```javascript
 import LunarCrush from 'lunarcrush-sdk';
 
 const lc = new LunarCrush('your-api-key');
 
-// Get trending topics
-const topics = await lc.topics.list();
+// Get a general snapshot of LunarCrush metrics on the entire list of tracked coins
+const coinsList = await lc.coins.list();
+console.log(coinsList[0]); // Bitcoin data with price & sentiment
 
-// Get Bitcoin data
+// Get an individual coin
+const bitcoin = await lc.coins.get('BTC');
+console.log(`Bitcoin galaxy_score: ${bitcoin.galaxy_score}`);
+```
+
+## 🚀 Get Started (30 seconds)
+
+### Step 1: Get Your API Key
+
+**Important**: You need a LunarCrush subscription to get an API key.
+
+1. [Sign up for LunarCrush](https://lunarcrush.com/signup)
+2. Enter your email and verify it
+3. Complete onboarding (select categories, create profile)
+4. **Select a subscription plan** (required for API access)
+5. Generate your API key from the [authentication page](https://lunarcrush.com/developers/api/authentication)
+
+### Step 2: Install & Use
+
+```bash
+npm install lunarcrush-sdk
+```
+
+```javascript
+import LunarCrush from 'lunarcrush-sdk';
+
+const lc = new LunarCrush('your-api-key-here');
+const coinsList = await lc.coins.list();
+```
+
+**That's it!** You now have live crypto data.
+
+## 🔥 What You Get
+
+```javascript
+// List the cryptocurrencies we track
+const coinsList = await lc.coins.list();
+
+// Retrieve coin data
 const bitcoin = await lc.coins.get('BTC');
 
-// Get topic time series
-const data = await lc.topics.timeSeries('bitcoin', {
-  bucket: 'hour',
-  start: '2024-01-01'
+// Trending social topics
+const topicsList = await lc.topics.list();
+
+// Get stock data
+const appleStock = await lc.stocks.get('aapl');
+```
+
+## 💡 Copy-Paste Examples
+
+### Crypto Dashboard
+
+```javascript
+const top10 = await lc.coins.list();
+top10.slice(0, 10).forEach(coin => {
+  console.log(`${coin.symbol}: $${coin.price} (Galaxy Score: ${coin.galaxy_score}/100)`);
 });
 ```
 
-## Configuration
+### Supply Tracker
 
-```typescript
-// Simple API key
-const lc = new LunarCrush('your-api-key');
-
-// Advanced configuration
-const lc = new LunarCrush({
-  apiKey: 'your-api-key',
-  endpoint: 'https://custom-endpoint.com/graphql'
-});
-
-// Environment variables (auto-detected)
-// LUNARCRUSH_API_KEY=your_api_key
-// NEXT_PUBLIC_LUNARCRUSH_API_KEY=your_api_key
-const lc = new LunarCrush();
-```
-
-## API Reference
-
-All methods return **fully typed** responses based on the actual GraphQL schema.
-
-### Topics
-
-```typescript
-lc.topics.list()                              // Get trending topics
-lc.topics.get('bitcoin')                      // Get specific topic
-lc.topics.timeSeries('bitcoin', { bucket: 'hour' })  // Time series data
-lc.topics.posts('bitcoin')                    // Topic posts
-lc.topics.news('bitcoin')                     // Topic news
-lc.topics.creators('bitcoin')                 // Topic creators
-```
-
-### Coins
-
-```typescript
-lc.coins.list()                               // Get all coins
-lc.coins.get('BTC')                           // Get specific coin
-lc.coins.timeSeries('BTC', { bucket: 'day' }) // Coin time series
-```
-
-### Categories
-
-```typescript
-lc.categories.list()                          // Get all categories
-lc.categories.get('defi')                     // Get specific category
-```
-
-### Creators
-
-```typescript
-lc.creators.list()                            // Get all creators
-lc.creators.get('twitter', 'elonmusk')        // Get specific creator
-```
-
-### Stocks
-
-```typescript
-lc.stocks.list()                              // Get all stocks
-lc.stocks.get('TSLA')                         // Get specific stock
-```
-
-### NFTs
-
-```typescript
-lc.nfts.list()                                // Get all NFTs
-lc.nfts.get('cryptopunks')                    // Get specific NFT
-```
-
-### System
-
-```typescript
-lc.ping()                                     // Test connection
-lc.health()                                   // System health
-lc.hello()                                    // Hello message
-lc.systemChanges()                            // Recent changes
-lc.getPostDetails('twitter', '123')           // Post details
-```
-
-## Error Handling
-
-```typescript
-import { LunarCrushError } from 'lunarcrush-sdk';
-
-try {
-  const topics = await lc.topics.list();
-} catch (error) {
-  if (error instanceof LunarCrushError) {
-    console.log('API Error:', error.message);
-    console.log('Status Code:', error.statusCode);
-  }
+```javascript
+//Total number of coins or tokens
+//that are actively available
+const coins = ['btc', 'eth', 'sol'];
+for (const symbol of coins) {
+  const data = await lc.coins.get(symbol);
+  console.log(`${symbol}: ${data.circulating_supply}`);
 }
 ```
 
-## TypeScript Support
+### Next.js API Route
 
-The SDK is written in TypeScript and provides complete type definitions:
+```javascript
+// pages/api/crypto.js
+import LunarCrush from 'lunarcrush-sdk';
 
-```typescript
-import type { TopicListItem, CoinListItem } from 'lunarcrush-sdk';
+const lc = new LunarCrush(process.env.LUNARCRUSH_API_KEY);
 
-// All responses are fully typed
-const topics: TopicListItem[] = await lc.topics.list();
-const bitcoin: CoinListItem = await lc.coins.get('BTC');
+export default async function handler(req, res) {
+  const coinsList = await lc.coins.list();
+  res.json(coinsList.slice(0, 20));
+}
 ```
 
-## Environment Variables
+## 🆘 Need Help?
 
-```bash
-# Option 1: Standard
-LUNARCRUSH_API_KEY=your_api_key_here
+### Can't get data?
 
-# Option 2: Next.js compatible
-NEXT_PUBLIC_LUNARCRUSH_API_KEY=your_api_key_here
-```
+1. **Check your API key**: Make sure you have a LunarCrush subscription and valid API key
+2. **Test it live**: [Try in browser](https://lunarcrush.cryptoguard-api.workers.dev/graphql) to verify queries work
+3. **Copy working examples**: Use the code samples above as starting points
 
-## Architecture
+### Want more data?
 
-This SDK uses a **resolver-based generation** approach:
+- **Test queries**: [Interactive playground](https://lunarcrush.cryptoguard-api.workers.dev/graphql)
+- **Review our docs**: [Browse here](https://lunarcrush.cryptoguard-api.workers.dev/docs)
 
-1. **Analyzes** actual GraphQL resolver implementations
-2. **Generates** only operations that are truly implemented
-3. **Creates** typed SDK methods automatically
-4. **Ensures** every method works in production
 
-Result: **Zero broken methods** • **Maximum type safety** • **Minimal bundle size**
+## 🎯 Works Everywhere
 
-## License
+✅ Node.js
+✅ React
+✅ Next.js
+✅ Vite
+✅ Browser
+✅ TypeScript
+✅ And More
 
-MIT
+## 📞 Support
 
-## Support
+- **FAQ**: [LunarCrush Support](https://lunarcrush.com/faq)
+- **SDK Questions**: [GitHub Issues](https://github.com/danilobatson/lunarcrush-universal/issues)
+- **Test Your Setup**: [Live Playground](https://lunarcrush.cryptoguard-api.workers.dev/graphql)
+- **Docs**: [LunarCrush GraphQL Docs](https://lunarcrush.cryptoguard-api.workers.dev/docs)
+- **Community**: [GitHub Discussions](https://github.com/danilobatson/lunarcrush-universal/discussions)
 
-- 📖 [Documentation](https://github.com/danilobatson/lunarcrush-universal#readme)
-- 🐛 [Issues](https://github.com/danilobatson/lunarcrush-universal/issues)
-- 💬 [Discussions](https://github.com/danilobatson/lunarcrush-universal/discussions)
+## 🏷️ Keywords & Tags
+
+**For LLM Discovery**: `crypto-api`, `cryptocurrency-data`, `bitcoin-api`, `ethereum-api`, `social-sentiment`, `trading-api`, `blockchain-data`, `crypto-intelligence`, `typescript-sdk`, `graphql-client`, `lunarcrush-sdk`, `crypto-trading`, `market-data`, `social-analytics`
 
 ---
 
-Made with ❤️ for the crypto community
+**Ready to build?** [Subscribe to LunarCrush](https://lunarcrush.com/signup) and copy the examples above! 🚀
