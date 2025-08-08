@@ -116,9 +116,7 @@ type Query {
 	getCoinMeta(coin: String!): CoinMeta
 
 	# ===== STOCKS ENDPOINTS =====
-	getStocksList(
-
-	): [StockListItem]
+	getStocksList: [StockListItem]
 	getStocksListV2(
 		sort: String
 		limit: Int
@@ -156,6 +154,8 @@ type Query {
 
 	# ===== SEARCH ENDPOINTS =====
 	getSearchesList: [SearchItem]
+	# getSearch(slug: String!): SearchResult
+	# searchPosts(term: String, searchJson: String): [SearchPostItem]
 
 	# ===== POSTS ENDPOINTS =====
 	getPostDetails(post_type: String!, post_id: String!): PostDetails
@@ -544,6 +544,7 @@ type CoinTimeSeriesItem {
 	contributors_active: Int
 	contributors_created: Int
 	interactions: Float
+	posts_active: Int
 	posts_created: Int
 	sentiment: Float
 	spam: Int
@@ -608,8 +609,8 @@ type StockListItem {
 	alt_rank_previous: Int
 	sentiment: Float
 	categories: String
-  last_updated_price: Int
-  last_updated_price_by: String
+	last_updated_price: Int
+	last_updated_price_by: String
 	topic: String
 	logo: String
 }
@@ -647,7 +648,7 @@ type StockTimeSeriesItem {
 }
 
 type NftListItem {
-	id: String
+	id: Int
 	name: String
 	logo: String
 	floor_price: Float
