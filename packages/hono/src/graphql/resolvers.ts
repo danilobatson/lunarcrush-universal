@@ -38,10 +38,12 @@ import {
 	getNftsListV2,
 	getNft,
 	getNftTimeSeries,
-	searchPosts,
 	getSystemChanges,
 	getSearchesList,
 	getSearch,
+	createSearch,
+	updateSearch,
+	deleteSearch,
 	getPostDetails,
 	getPostTimeSeries,
 } from '../services/lunarcrush';
@@ -91,7 +93,7 @@ export function createResolvers() {
 			parseValue: (value: any) => String(value),
 			parseLiteral: (ast: any) => String(ast.value),
 		},
-		
+
 		Query: {
 			// ===================================================================
 			// HEALTH & SYSTEM MONITORING
@@ -325,40 +327,77 @@ export function createResolvers() {
 				return await getCreatorPosts(config, args);
 			},
 
+			// Post functionality
+			getPostDetails: async (
+				args: { post_type: string; post_id: string },
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getPostDetails(config, args);
+			},
+
+			getPostTimeSeries: async (
+				args: {
+					post_type: string;
+					post_id: string;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+
+				return await getPostTimeSeries(config, args);
+			},
+
 			// Coins
-			getCoinsList: async (args: any, context: GraphQLContext) => {
+			getCoinsList: async (
+				args: {
+					sort?: string;
+					filter?: string;
+					limit?: number;
+					desc?: string;
+					page?: number;
+				},
+				context: GraphQLContext
+			) => {
 				const config: LunarCrushConfig = getConfig();
 
 				return await getCoinsList(config, args);
 			},
 
-			getCoinsListV2: async (args: any, context: GraphQLContext) => {
+			getCoinsListV2: async (
+				args: {
+					sort?: string;
+					filter?: string;
+					limit?: number;
+					desc?: string;
+					page?: number;
+				},
+				context: GraphQLContext
+			) => {
 				const config: LunarCrushConfig = getConfig();
 
 				return await getCoinsListV2(config, args);
 			},
 
-			getCoin: async (
-				{ symbol }: { symbol: string },
-				context: GraphQLContext
-			) => {
+			getCoin: async ({ coin }: { coin: string }, context: GraphQLContext) => {
 				const config: LunarCrushConfig = getConfig();
 
-				return await getCoin(config, symbol);
+				return await getCoin(config, coin);
 			},
 
 			getCoinMeta: async (
-				{ symbol }: { symbol: string },
+				{ coin }: { coin: string },
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
 
-				return await getCoinMeta(config, symbol);
+				return await getCoinMeta(config, coin);
 			},
 
 			getCoinTimeSeries: async (
 				args: {
-					symbol: string;
+					coin: string;
 					bucket?: string;
 					interval?: string;
 					start?: UnixTimestamp;
@@ -378,24 +417,32 @@ export function createResolvers() {
 				return await getStocksList(config, args);
 			},
 
-			getStocksListV2: async (args: any, context: GraphQLContext) => {
+			getStocksListV2: async (
+				args: {
+					sort?: string;
+					limit?: number;
+					desc?: string;
+					page?: number;
+				},
+				context: GraphQLContext
+			) => {
 				const config: LunarCrushConfig = getConfig();
 
 				return await getStocksListV2(config, args);
 			},
 
 			getStock: async (
-				{ symbol }: { symbol: string },
+				{ stock }: { stock: string },
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
 
-				return await getStock(config, symbol);
+				return await getStock(config, stock);
 			},
 
 			getStockTimeSeries: async (
 				args: {
-					symbol: string;
+					stock: string;
 					bucket?: string;
 					interval?: string;
 					start?: UnixTimestamp;
@@ -409,13 +456,29 @@ export function createResolvers() {
 			},
 
 			// NFTs
-			getNftsList: async (args: any, context: GraphQLContext) => {
+			getNftsList: async (
+				args: {
+					sort?: string;
+					limit?: number;
+					desc?: string;
+					page?: number;
+				},
+				context: GraphQLContext
+			) => {
 				const config: LunarCrushConfig = getConfig();
 
 				return await getNftsList(config, args);
 			},
 
-			getNftsListV2: async (args: any, context: GraphQLContext) => {
+			getNftsListV2: async (
+				args: {
+					sort?: string;
+					limit?: number;
+					desc?: string;
+					page?: number;
+				},
+				context: GraphQLContext
+			) => {
 				const config: LunarCrushConfig = getConfig();
 
 				return await getNftsListV2(config, args);
@@ -454,56 +517,9 @@ export function createResolvers() {
 				});
 			},
 
-			// Search - COMMENTED OUT FOR NOW (not critical)
-			/*
-			searchPosts: async (
-				{ term, searchJson }: { term?: string; searchJson?: string },
-				context: GraphQLContext
-			) => {
-				const config: LunarCrushConfig = getConfig();
-
-				return await searchPosts(config, { term, searchJson });
-			},
-			*/
-
 			// System
-			getSystemChanges: async (args: any, context: GraphQLContext) => {
-				const config: LunarCrushConfig = getConfig();
-
-				return await getSystemChanges(config, args);
-			},
-
-			// Search functionality - COMMENTED OUT FOR NOW (not critical)
-			/*
-			getSearchesList: async (args: any, context: GraphQLContext) => {
-				const config: LunarCrushConfig = getConfig();
-
-				return await getSearchesList(config, args);
-			},
-
-			getSearch: async ({ id }: { id: string }, context: GraphQLContext) => {
-				const config: LunarCrushConfig = getConfig();
-
-				return await getSearch(config, id);
-			},
-			*/
-
-			// Post functionality
-			getPostDetails: async (
-				args: { type: string; id: string },
-				context: GraphQLContext
-			) => {
-				const config: LunarCrushConfig = getConfig();
-
-				return await getPostDetails(config, args);
-			},
-
-			getPostTimeSeries: async (
+			getSystemChanges: async (
 				args: {
-					type: string;
-					id: string;
-					bucket?: string;
-					interval?: string;
 					start?: UnixTimestamp;
 					end?: UnixTimestamp;
 				},
@@ -511,8 +527,64 @@ export function createResolvers() {
 			) => {
 				const config: LunarCrushConfig = getConfig();
 
-				return await getPostTimeSeries(config, args);
+				return await getSystemChanges(config, args);
 			},
+
+			// ===== SEARCH ENDPOINTS =====
+			// getSearchesList: async (args: any, context: GraphQLContext) => {
+			// 	const config: LunarCrushConfig = getConfig();
+
+			// 	return await getSearchesList(config, args);
+			// },
+
+			// getSearch: async (
+			// 	{ slug }: { slug: string },
+			// 	context: GraphQLContext
+			// ) => {
+			// 	const config: LunarCrushConfig = getConfig();
+
+			// 	return await getSearch(config, slug);
+			// },
 		},
+
+		// Mutation: {
+		// 	// ===== SEARCH MUTATIONS =====
+		// 	createSearch: async (
+		// 		args: {
+		// 			name: string;
+		// 			searchJson: string;
+		// 			priority?: boolean;
+		// 		},
+		// 		context: GraphQLContext
+		// 	) => {
+		// 		const config: LunarCrushConfig = getConfig();
+
+		// 		return await createSearch(config, args);
+		// 	},
+
+		// 	updateSearch: async (
+		// 		args: {
+		// 			slug: string;
+		// 			name?: string;
+		// 			searchJson?: string;
+		// 			priority?: boolean;
+		// 		},
+		// 		context: GraphQLContext
+		// 	) => {
+		// 		const config: LunarCrushConfig = getConfig();
+		// 		const { slug, ...updateArgs } = args;
+
+		// 		return await updateSearch(config, slug, updateArgs);
+		// 	},
+
+		// 	deleteSearch: async (
+		// 		{ slug }: { slug: string },
+		// 		context: GraphQLContext
+		// 	) => {
+		// 		const config: LunarCrushConfig = getConfig();
+
+		// 		return await deleteSearch(config, slug);
+		// 	},
+		// },
 	};
 }
