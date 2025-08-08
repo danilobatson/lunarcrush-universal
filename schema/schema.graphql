@@ -97,14 +97,14 @@ type Query {
 		limit: Int
 		desc: String
 		page: Int
-	): CoinsListResponse
+	): [CoinListItem]
 	getCoinsListV2(
 		sort: String
 		filter: String
 		limit: Int
 		desc: String
 		page: Int
-	): CoinsListResponse
+	): [CoinListItem]
 	getCoin(coin: String!): CoinDetails
 	getCoinTimeSeries(
 		coin: String!
@@ -112,17 +112,17 @@ type Query {
 		interval: String
 		start: UnixTimestamp
 		end: UnixTimestamp
-	): CoinTimeSeriesResponse
+	): [CoinTimeSeriesItem]
 	getCoinMeta(coin: String!): CoinMeta
 
 	# ===== STOCKS ENDPOINTS =====
-	getStocksList: StocksListResponse
+	getStocksList: [StockListItem]
 	getStocksListV2(
 		sort: String
 		limit: Int
 		desc: String
 		page: Int
-	): StocksListResponse
+	): [StockListItem]
 	getStock(stock: String!): StockDetails
 	getStockTimeSeries(
 		stock: String!
@@ -130,21 +130,16 @@ type Query {
 		interval: String
 		start: UnixTimestamp
 		end: UnixTimestamp
-	): StockTimeSeriesResponse
+	): [StockTimeSeriesItem]
 
 	# ===== NFTS ENDPOINTS =====
-	getNftsList(
-		sort: String
-		limit: Int
-		desc: String
-		page: Int
-	): NftsListResponse
+	getNftsList(sort: String, limit: Int, desc: String, page: Int): [NftListItem]
 	getNftsListV2(
 		sort: String
 		limit: Int
 		desc: String
 		page: Int
-	): NftsListResponse
+	): [NftListItem]
 	getNft(id: String!): NftDetails
 	getNftTimeSeries(
 		id: String!
@@ -152,14 +147,14 @@ type Query {
 		interval: String
 		start: UnixTimestamp
 		end: UnixTimestamp
-	): NftTimeSeriesResponse
+	): [NftTimeSeriesItem]
 	getNftTimeSeriesV2(
-		id: String!
+		nft: String!
 		bucket: String
 		interval: String
 		start: UnixTimestamp
 		end: UnixTimestamp
-	): NftTimeSeriesResponse
+	): [NftTimeSeriesItem]
 
 	# ===== SYSTEM ENDPOINTS =====
 	getSystemChanges(start: UnixTimestamp, end: UnixTimestamp): [SystemChange]
@@ -170,40 +165,31 @@ type Query {
 }
 
 type Mutation {
-	generateDemoToken: TokenResponse!
 	updateUserPreferences(input: UserPreferencesInput!): UserPreferences!
 	createTopic(input: CreateTopicInput!): Topic!
 }
 
-# ===== HONO BACKEND TYPES =====
+# ===== SYSTEM MONITORING TYPES =====
 
-type HealthStatus {
+type SystemHealthResponse {
 	status: String!
 	timestamp: String!
-	service: String!
+	uptime: Int!
 	version: String!
-	requestId: String!
-	uptime: Float!
-	features: [String!]!
 }
 
-type User {
-	id: String!
-	type: String!
-	lastSeen: String!
+type PingResponse {
+	status: String!
+	timestamp: String!
 }
+
+# ===== USER TYPES =====
 
 type UserPreferences {
 	theme: String
 	currency: String
 	notifications: Boolean
 	favoriteTopics: [String!]
-}
-
-type TokenResponse {
-	token: String!
-	user: User!
-	expiresIn: String!
 }
 
 type Topic {
@@ -224,74 +210,6 @@ input CreateTopicInput {
 	topic: String!
 	category: String!
 	description: String
-}
-
-# ===== SYSTEM MONITORING TYPES =====
-
-type SystemHealthResponse {
-	status: String!
-	timestamp: String!
-	uptime: Int!
-	version: String!
-}
-
-type PingResponse {
-	status: String!
-	timestamp: String!
-}
-
-# ===== RESPONSE WRAPPER TYPES =====
-
-type CoinsListResponse {
-	config: ResponseConfig
-	data: [CoinListItem]
-}
-
-type StocksListResponse {
-	config: ResponseConfig
-	data: [StockListItem]
-}
-
-type NftsListResponse {
-	config: ResponseConfig
-	data: [NftListItem]
-}
-
-type CoinTimeSeriesResponse {
-	config: TimeSeriesConfig
-	data: [CoinTimeSeriesItem]
-}
-
-type StockTimeSeriesResponse {
-	config: TimeSeriesConfig
-	data: [StockTimeSeriesItem]
-}
-
-type NftTimeSeriesResponse {
-	config: TimeSeriesConfig
-	data: [NftTimeSeriesItem]
-}
-
-type ResponseConfig {
-	sort: String
-	desc: Boolean
-	limit: Int
-	page: Int
-	total_rows: Int
-	generated: UnixTimestamp
-}
-
-type TimeSeriesConfig {
-	topic: String
-	id: String
-	name: String
-	symbol: String
-	interval: String
-	start: UnixTimestamp
-	end: UnixTimestamp
-	bucket: String
-	metrics: [String]
-	generated: UnixTimestamp
 }
 
 # ===== LUNARCRUSH API TYPES =====
@@ -324,17 +242,11 @@ type TopicDetails {
 }
 
 type TopicWhatsup {
-	config: TopicWhatsupConfig
 	summary: String
 }
 
-type TopicWhatsupConfig {
-	topic: String
-	generated: UnixTimestamp
-}
-
 type TopicTimeSeriesItem {
-	time: UnixTimestamp
+	time: Int
 	contributors_active: Int
 	contributors_created: Int
 	interactions: Float
@@ -361,7 +273,7 @@ type TopicPost {
 	post_title: String
 	post_link: String
 	post_image: String
-	post_created: UnixTimestamp
+	post_created: Int
 	post_sentiment: Float
 	creator_id: String
 	creator_name: String
@@ -378,7 +290,7 @@ type TopicNews {
 	post_title: String
 	post_link: String
 	post_image: String
-	post_created: UnixTimestamp
+	post_created: Float
 	post_sentiment: Float
 	creator_id: String
 	creator_name: String
@@ -394,7 +306,7 @@ type TopicCreator {
 	creator_name: String
 	creator_avatar: String
 	creator_followers: Float
-	creator_rank: Int
+	creator_rank: Float
 	interactions_24h: Float
 }
 
@@ -437,7 +349,7 @@ type CategoryTopic {
 }
 
 type CategoryTimeSeriesItem {
-	time: UnixTimestamp
+	time: Int
 	contributors_active: Int
 	contributors_created: Int
 	interactions: Float
@@ -453,7 +365,7 @@ type CategoryPost {
 	post_title: String
 	post_link: String
 	post_image: String
-	post_created: UnixTimestamp
+	post_created: Int
 	post_sentiment: Float
 	creator_id: String
 	creator_name: String
@@ -470,7 +382,7 @@ type CategoryNews {
 	post_type: String
 	post_link: String
 	post_image: String
-	post_created: UnixTimestamp
+	post_created: Int
 	post_sentiment: Float
 	creator_id: String
 	creator_name: String
@@ -521,7 +433,7 @@ type TopicInfluence {
 }
 
 type CreatorTimeSeriesItem {
-	time: UnixTimestamp
+	time: Float
 	followers: Float
 	interactions: Float
 	posts_active: Int
@@ -532,7 +444,7 @@ type CreatorPost {
 	id: String
 	post_type: String
 	post_title: String
-	post_created: UnixTimestamp
+	post_created: Float
 	post_sentiment: Float
 	post_link: String
 	post_image: String
@@ -573,7 +485,7 @@ type CoinListItem {
 	sentiment: Float
 	categories: String
 	blockchains: [Blockchain]
-	last_updated_price: UnixTimestamp
+	last_updated_price: Int
 	last_updated_price_by: String
 	topic: String
 	logo: String
@@ -600,7 +512,7 @@ type CoinDetails {
 }
 
 type CoinTimeSeriesItem {
-	time: UnixTimestamp
+	time: Int
 	contributors_active: Int
 	contributors_created: Int
 	interactions: Float
@@ -633,7 +545,7 @@ type CoinMeta {
 	name: String
 	symbol: String
 	market_categories: String
-	updated: UnixTimestamp
+	updated: Float
 	blockchain: [Blockchain]
 	short_summary: String
 	description: String
@@ -669,7 +581,7 @@ type StockListItem {
 	alt_rank_previous: Int
 	sentiment: Float
 	categories: String
-	last_updated_price: UnixTimestamp
+	last_updated_price: Int
 	last_updated_price_by: String
 	topic: String
 	logo: String
@@ -688,7 +600,7 @@ type StockDetails {
 }
 
 type StockTimeSeriesItem {
-	time: UnixTimestamp
+	time: Int
 	close: Float
 	alt_rank: Int
 	contributors_active: Int
@@ -735,7 +647,7 @@ type NftDetails {
 }
 
 type NftTimeSeriesItem {
-	time: UnixTimestamp
+	time: Int
 	alt_rank: Int
 	contributors_active: Int
 	contributors_created: Int
@@ -753,7 +665,7 @@ type SystemChange {
 	asset_type: String
 	change: String
 	description: String
-	time: UnixTimestamp
+	time: Int
 }
 
 type PostDetails {
