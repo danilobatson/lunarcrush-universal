@@ -97,14 +97,14 @@ type Query {
 		limit: Int
 		desc: String
 		page: Int
-	): [CoinListItem]
+	): CoinsListResponse
 	getCoinsListV2(
 		sort: String
 		filter: String
 		limit: Int
 		desc: String
 		page: Int
-	): [CoinListItem]
+	): CoinsListResponse
 	getCoin(coin: String!): CoinDetails
 	getCoinTimeSeries(
 		coin: String!
@@ -112,17 +112,17 @@ type Query {
 		interval: String
 		start: UnixTimestamp
 		end: UnixTimestamp
-	): [CoinTimeSeriesItem]
+	): CoinTimeSeriesResponse
 	getCoinMeta(coin: String!): CoinMeta
 
 	# ===== STOCKS ENDPOINTS =====
-	getStocksList: [StockListItem]
+	getStocksList: StocksListResponse
 	getStocksListV2(
 		sort: String
 		limit: Int
 		desc: String
 		page: Int
-	): [StockListItem]
+	): StocksListResponse
 	getStock(stock: String!): StockDetails
 	getStockTimeSeries(
 		stock: String!
@@ -130,16 +130,21 @@ type Query {
 		interval: String
 		start: UnixTimestamp
 		end: UnixTimestamp
-	): [StockTimeSeriesItem]
+	): StockTimeSeriesResponse
 
 	# ===== NFTS ENDPOINTS =====
-	getNftsList(sort: String, limit: Int, desc: String, page: Int): [NftListItem]
+	getNftsList(
+		sort: String
+		limit: Int
+		desc: String
+		page: Int
+	): NftsListResponse
 	getNftsListV2(
 		sort: String
 		limit: Int
 		desc: String
 		page: Int
-	): [NftListItem]
+	): NftsListResponse
 	getNft(id: String!): NftDetails
 	getNftTimeSeries(
 		id: String!
@@ -147,15 +152,17 @@ type Query {
 		interval: String
 		start: UnixTimestamp
 		end: UnixTimestamp
-	): [NftTimeSeriesItem]
+	): NftTimeSeriesResponse
+	getNftTimeSeriesV2(
+		id: String!
+		bucket: String
+		interval: String
+		start: UnixTimestamp
+		end: UnixTimestamp
+	): NftTimeSeriesResponse
 
 	# ===== SYSTEM ENDPOINTS =====
 	getSystemChanges(start: UnixTimestamp, end: UnixTimestamp): [SystemChange]
-
-	# ===== SEARCH ENDPOINTS =====
-	getSearchesList: [SearchItem]
-	# getSearch(slug: String!): SearchResult
-	# searchPosts(term: String, searchJson: String): [SearchPostItem]
 
 	# ===== POSTS ENDPOINTS =====
 	getPostDetails(post_type: String!, post_id: String!): PostDetails
@@ -166,20 +173,6 @@ type Mutation {
 	generateDemoToken: TokenResponse!
 	updateUserPreferences(input: UserPreferencesInput!): UserPreferences!
 	createTopic(input: CreateTopicInput!): Topic!
-
-	# ===== SEARCH MUTATIONS =====
-	createSearch(
-		name: String!
-		searchJson: String!
-		priority: Boolean
-	): CreateSearchResult
-	updateSearch(
-		slug: String!
-		name: String
-		searchJson: String
-		priority: Boolean
-	): UpdateSearchResult
-	deleteSearch(slug: String!): DeleteSearchResult
 }
 
 # ===== HONO BACKEND TYPES =====
@@ -247,6 +240,60 @@ type PingResponse {
 	timestamp: String!
 }
 
+# ===== RESPONSE WRAPPER TYPES =====
+
+type CoinsListResponse {
+	config: ResponseConfig
+	data: [CoinListItem]
+}
+
+type StocksListResponse {
+	config: ResponseConfig
+	data: [StockListItem]
+}
+
+type NftsListResponse {
+	config: ResponseConfig
+	data: [NftListItem]
+}
+
+type CoinTimeSeriesResponse {
+	config: TimeSeriesConfig
+	data: [CoinTimeSeriesItem]
+}
+
+type StockTimeSeriesResponse {
+	config: TimeSeriesConfig
+	data: [StockTimeSeriesItem]
+}
+
+type NftTimeSeriesResponse {
+	config: TimeSeriesConfig
+	data: [NftTimeSeriesItem]
+}
+
+type ResponseConfig {
+	sort: String
+	desc: Boolean
+	limit: Int
+	page: Int
+	total_rows: Int
+	generated: UnixTimestamp
+}
+
+type TimeSeriesConfig {
+	topic: String
+	id: String
+	name: String
+	symbol: String
+	interval: String
+	start: UnixTimestamp
+	end: UnixTimestamp
+	bucket: String
+	metrics: [String]
+	generated: UnixTimestamp
+}
+
 # ===== LUNARCRUSH API TYPES =====
 
 type TopicListItem {
@@ -277,11 +324,17 @@ type TopicDetails {
 }
 
 type TopicWhatsup {
+	config: TopicWhatsupConfig
 	summary: String
 }
 
+type TopicWhatsupConfig {
+	topic: String
+	generated: UnixTimestamp
+}
+
 type TopicTimeSeriesItem {
-	time: Int
+	time: UnixTimestamp
 	contributors_active: Int
 	contributors_created: Int
 	interactions: Float
@@ -308,7 +361,7 @@ type TopicPost {
 	post_title: String
 	post_link: String
 	post_image: String
-	post_created: Int
+	post_created: UnixTimestamp
 	post_sentiment: Float
 	creator_id: String
 	creator_name: String
@@ -325,7 +378,7 @@ type TopicNews {
 	post_title: String
 	post_link: String
 	post_image: String
-	post_created: Float
+	post_created: UnixTimestamp
 	post_sentiment: Float
 	creator_id: String
 	creator_name: String
@@ -341,7 +394,7 @@ type TopicCreator {
 	creator_name: String
 	creator_avatar: String
 	creator_followers: Float
-	creator_rank: Float
+	creator_rank: Int
 	interactions_24h: Float
 }
 
@@ -384,7 +437,7 @@ type CategoryTopic {
 }
 
 type CategoryTimeSeriesItem {
-	time: Int
+	time: UnixTimestamp
 	contributors_active: Int
 	contributors_created: Int
 	interactions: Float
@@ -400,7 +453,7 @@ type CategoryPost {
 	post_title: String
 	post_link: String
 	post_image: String
-	post_created: Int
+	post_created: UnixTimestamp
 	post_sentiment: Float
 	creator_id: String
 	creator_name: String
@@ -417,7 +470,7 @@ type CategoryNews {
 	post_type: String
 	post_link: String
 	post_image: String
-	post_created: Int
+	post_created: UnixTimestamp
 	post_sentiment: Float
 	creator_id: String
 	creator_name: String
@@ -455,13 +508,20 @@ type CreatorDetails {
 	creator_display_name: String
 	creator_avatar: String
 	creator_followers: Float
-	creator_rank: Int
+	creator_rank: String
 	interactions_24h: Float
-	topic_influence: [JSON]
+	topic_influence: [TopicInfluence]
+}
+
+type TopicInfluence {
+	topic: String
+	count: Int
+	percent: Float
+	rank: Int
 }
 
 type CreatorTimeSeriesItem {
-	time: Float
+	time: UnixTimestamp
 	followers: Float
 	interactions: Float
 	posts_active: Int
@@ -472,7 +532,7 @@ type CreatorPost {
 	id: String
 	post_type: String
 	post_title: String
-	post_created: Float
+	post_created: UnixTimestamp
 	post_sentiment: Float
 	post_link: String
 	post_image: String
@@ -512,8 +572,8 @@ type CoinListItem {
 	alt_rank_previous: Int
 	sentiment: Float
 	categories: String
-	blockchains: [JSON]
-	last_updated_price: Int
+	blockchains: [Blockchain]
+	last_updated_price: UnixTimestamp
 	last_updated_price_by: String
 	topic: String
 	logo: String
@@ -540,7 +600,7 @@ type CoinDetails {
 }
 
 type CoinTimeSeriesItem {
-	time: Int
+	time: UnixTimestamp
 	contributors_active: Int
 	contributors_created: Int
 	interactions: Float
@@ -573,7 +633,7 @@ type CoinMeta {
 	name: String
 	symbol: String
 	market_categories: String
-	updated: Float
+	updated: UnixTimestamp
 	blockchain: [Blockchain]
 	short_summary: String
 	description: String
@@ -596,7 +656,7 @@ type StockListItem {
 	price: Float
 	volume_24h: Float
 	percent_change_24h: Float
-	market_cap: Float
+	market_cap: String
 	market_cap_rank: Int
 	interactions_24h: Float
 	social_volume_24h: Float
@@ -609,7 +669,7 @@ type StockListItem {
 	alt_rank_previous: Int
 	sentiment: Float
 	categories: String
-	last_updated_price: Int
+	last_updated_price: UnixTimestamp
 	last_updated_price_by: String
 	topic: String
 	logo: String
@@ -628,7 +688,7 @@ type StockDetails {
 }
 
 type StockTimeSeriesItem {
-	time: Int
+	time: UnixTimestamp
 	close: Float
 	alt_rank: Int
 	contributors_active: Int
@@ -666,7 +726,7 @@ type NftListItem {
 }
 
 type NftDetails {
-	id: String
+	id: Int
 	name: String
 	floor_price: Float
 	market_cap: Float
@@ -675,7 +735,7 @@ type NftDetails {
 }
 
 type NftTimeSeriesItem {
-	time: Int
+	time: UnixTimestamp
 	alt_rank: Int
 	contributors_active: Int
 	contributors_created: Int
@@ -693,63 +753,7 @@ type SystemChange {
 	asset_type: String
 	change: String
 	description: String
-	time: Int
-}
-
-type SearchItem {
-	id: String
-	name: String
-	search_json: JSON
-	priority: Boolean
-	created: Int
-}
-
-type SearchResult {
-	id: String
-	name: String
-	search_json: JSON
-	priority: Boolean
-	created: Int
-	data: [SearchPostItem]
-}
-
-
-type SearchPostItem {
-	id: String
-	post_type: String
-	post_title: String
-	post_link: String
-	post_image: String
-	post_created: Int
-	post_sentiment: Float
-	creator_id: String
-	creator_name: String
-	creator_display_name: String
-	creator_followers: Float
-	creator_avatar: String
-	interactions_24h: Float
-	interactions_total: Float
-}
-
-type CreateSearchResult {
-	id: String
-	name: String
-	search_json: JSON
-	priority: Boolean
-	error: String
-}
-
-type UpdateSearchResult {
-	id: String
-	name: String
-	search_json: JSON
-	priority: Boolean
-	error: String
-}
-
-type DeleteSearchResult {
-	success: Boolean
-	error: String
+	time: UnixTimestamp
 }
 
 type PostDetails {
