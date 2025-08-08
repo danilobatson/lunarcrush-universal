@@ -21,26 +21,32 @@ export class LunarCrushError extends Error {
 const makeRequest = async <T>(
 	config: LunarCrushConfig,
 	endpoint: string,
-	params?: Record<string, any>
+	params?: Record<string, any>,
+	method: 'GET' | 'POST' | 'PUT' | 'DELETE' = 'GET'
 ): Promise<T> => {
 	const baseUrl = config.baseUrl || 'https://lunarcrush.com/api4/public';
 	const url = new URL(`${baseUrl}${endpoint}`);
 
-	if (params) {
+	let body: string | undefined;
+
+	if (method === 'GET' && params) {
 		Object.entries(params)
 			.filter(([_, value]) => value !== undefined && value !== null)
 			.forEach(([key, value]) => url.searchParams.append(key, String(value)));
+	} else if (params && method !== 'GET') {
+		body = JSON.stringify(params);
 	}
 
-	console.log(`🌙 LunarCrush API Request: ${url.toString()}`);
+	console.log(`🌙 LunarCrush API Request: ${method} ${url.toString()}`);
 
 	const response = await fetch(url.toString(), {
-		method: 'GET',
+		method,
 		headers: {
 			Authorization: `Bearer ${config.apiKey}`,
 			'Content-Type': 'application/json',
 			Accept: 'application/json',
 		},
+		...(body && { body }),
 	});
 
 	if (!response.ok) {
@@ -941,71 +947,111 @@ export const getSystemChanges = async (
 // ===== SEARCHES ENDPOINTS (EXACT FROM API DOCS) =====
 
 export const getSearchesList = async (
-	config: LunarCrushConfig
-): Promise<any[]> => {
+	config: LunarCrushConfig,
+	args?: any
+): Promise<any> => {
 	try {
 		const response = await makeRequest<any>(config, '/searches/list');
-		return response.data;
+		return response.data || response;
 	} catch (error) {
 		console.error('❌ getSearchesList error:', error);
-		if (error instanceof LunarCrushError) {
-			throw new Error(
-				`${error.statusCode} ${error.statusText}: ${error.message}`
-			);
-		}
 		throw error;
 	}
 };
 
+// Get individual search aggregation
 export const getSearch = async (
 	config: LunarCrushConfig,
 	slug: string
 ): Promise<any> => {
 	try {
 		const response = await makeRequest<any>(config, `/searches/${slug}`);
-		return response;
+		return response.data || response;
 	} catch (error) {
 		console.error('❌ getSearch error:', error);
-		if (error instanceof LunarCrushError) {
-			throw new Error(
-				`${error.statusCode} ${error.statusText}: ${error.message}`
-			);
-		}
 		throw error;
 	}
 };
 
-export const searchPosts = async (
+
+
+// Create custom search aggregation
+export const createSearch = async (
 	config: LunarCrushConfig,
 	args: {
-		term?: string;
-		searchJson?: string;
+		name: string;
+		searchJson: string;
+		priority?: boolean;
 	}
 ): Promise<any> => {
-	const { term, searchJson } = args;
+	const { name, searchJson, priority } = args;
+	const params: Record<string, any> = {
+		name,
+		search_json: searchJson,
+	};
+
+	if (priority !== undefined) params.priority = priority;
+
 	try {
-		const params: Record<string, any> = {};
-		if (term) params.term = term;
-		if (searchJson) params.search_json = searchJson;
-
-		const response = await makeRequest<any>(config, '/searches/search', params);
-
-		// Ensure we return an array for GraphQL schema compatibility
-		if (response && response.data && Array.isArray(response.data)) {
-			return response.data;
-		} else if (Array.isArray(response)) {
-			return response;
-		} else {
-			// Return empty array if no proper data structure
-			return [];
-		}
+		const response = await makeRequest<any>(
+			config,
+			'/searches/create',
+			params,
+			'POST'
+		);
+		return response.data || response;
 	} catch (error) {
-		console.error('❌ searchPosts error:', error);
-		if (error instanceof LunarCrushError) {
-			throw new Error(
-				`${error.statusCode} ${error.statusText}: ${error.message}`
-			);
-		}
+		console.error('❌ createSearch error:', error);
+		throw error;
+	}
+};
+
+// Update custom search aggregation
+export const updateSearch = async (
+	config: LunarCrushConfig,
+	slug: string,
+	args: {
+		name?: string;
+		searchJson?: string;
+		priority?: boolean;
+	}
+): Promise<any> => {
+	const { name, searchJson, priority } = args;
+	const params: Record<string, any> = {};
+
+	if (name !== undefined) params.name = name;
+	if (searchJson !== undefined) params.search_json = searchJson;
+	if (priority !== undefined) params.priority = priority;
+
+	try {
+		const response = await makeRequest<any>(
+			config,
+			`/searches/${slug}/update`,
+			params,
+			'POST'
+		);
+		return response.data || response;
+	} catch (error) {
+		console.error('❌ updateSearch error:', error);
+		throw error;
+	}
+};
+
+// Delete custom search aggregation
+export const deleteSearch = async (
+	config: LunarCrushConfig,
+	slug: string
+): Promise<any> => {
+	try {
+		const response = await makeRequest<any>(
+			config,
+			`/searches/${slug}/delete`,
+			{},
+			'DELETE'
+		);
+		return { success: true, ...response };
+	} catch (error) {
+		console.error('❌ deleteSearch error:', error);
 		throw error;
 	}
 };
@@ -1013,13 +1059,16 @@ export const searchPosts = async (
 export const getPostDetails = async (
 	config: LunarCrushConfig,
 	args: {
-		type: string;
-		id: string;
+		post_type: string;
+		post_id: string;
 	}
 ): Promise<any> => {
-	const { type, id } = args;
+	const { post_type, post_id } = args;
 	try {
-		const response = await makeRequest<any>(config, `/posts/${type}/${id}/v1`);
+		const response = await makeRequest<any>(
+			config,
+			`/posts/${post_type}/${post_id}/v1`
+		);
 		return response;
 	} catch (error) {
 		console.error('❌ getPostDetails error:', error);
@@ -1035,25 +1084,17 @@ export const getPostDetails = async (
 export const getPostTimeSeries = async (
 	config: LunarCrushConfig,
 	args: {
-		type: string;
-		id: string;
-		bucket?: string;
-		interval?: string;
-		start?: UnixTimestamp;
-		end?: UnixTimestamp;
+		post_type: string;
+		post_id: string;
 	}
 ): Promise<any[]> => {
-	const { type, id, bucket, interval, start, end } = args;
+	const { post_type, post_id } = args;
 	try {
 		const params: Record<string, any> = {};
-		if (bucket) params.bucket = bucket;
-		if (interval) params.interval = interval;
-		if (start) params.start = start;
-		if (end) params.end = end;
 
 		const response = await makeRequest<any>(
 			config,
-			`/posts/${type}/${id}/time-series/v1`,
+			`/posts/${post_type}/${post_id}/time-series/v1`,
 			params
 		);
 		return response.data;
@@ -1151,12 +1192,7 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 	getCoinMeta: (coin: string) => getCoinMeta(config, coin),
 
 	// STOCKS ENDPOINTS
-	getStocksList: (
-		sort?: string,
-		limit?: number,
-		desc?: string,
-		page?: number
-	) => getStocksList(config, sort, limit, desc, page),
+	getStocksList: () => getStocksList(config),
 	getStocksListV2: (
 		sort?: string,
 		limit?: number,
@@ -1196,22 +1232,18 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 		getSystemChanges(config, start, end),
 
 	// SEARCHES ENDPOINTS
-	getSearchesList: () => getSearchesList(config),
-	getSearch: (slug: string) => getSearch(config, slug),
-	searchPosts: (term?: string, searchJson?: string) =>
-		searchPosts(config, { term, searchJson }),
+	getSearchesList,
+	getSearch,
+	createSearch,
+	updateSearch,
+	deleteSearch,
+
 
 	//POSTS ENDPOINTS
-	getPostDetails: (type: string, id: string) =>
-		getPostDetails(config, { type, id }),
-	getPostTimeSeries: (
-		type: string,
-		id: string,
-		bucket?: string,
-		interval?: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getPostTimeSeries(config, { type, id, bucket, interval, start, end }),
+	getPostDetails: (post_type: string, post_id: string) =>
+		getPostDetails(config, { post_type, post_id }),
+	getPostTimeSeries: (post_type: string, post_id: string) =>
+		getPostTimeSeries(config, { post_type, post_id }),
 });
 
 export type LunarCrushClient = ReturnType<typeof createLunarCrushClient>;
