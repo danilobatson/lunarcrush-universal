@@ -162,7 +162,7 @@ export type CoinListItem = {
   __typename?: 'CoinListItem';
   alt_rank?: Maybe<Scalars['Int']['output']>;
   alt_rank_previous?: Maybe<Scalars['Int']['output']>;
-  blockchains?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
+  blockchains?: Maybe<Array<Maybe<Blockchain>>>;
   categories?: Maybe<Scalars['String']['output']>;
   circulating_supply?: Maybe<Scalars['Float']['output']>;
   galaxy_score?: Maybe<Scalars['Float']['output']>;
@@ -238,15 +238,6 @@ export type CoinTimeSeriesItem = {
   volume_24h?: Maybe<Scalars['Float']['output']>;
 };
 
-export type CreateSearchResult = {
-  __typename?: 'CreateSearchResult';
-  error?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  priority?: Maybe<Scalars['Boolean']['output']>;
-  search_json?: Maybe<Scalars['JSON']['output']>;
-};
-
 export type CreateTopicInput = {
   category: Scalars['String']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
@@ -260,9 +251,9 @@ export type CreatorDetails = {
   creator_followers?: Maybe<Scalars['Float']['output']>;
   creator_id?: Maybe<Scalars['String']['output']>;
   creator_name?: Maybe<Scalars['String']['output']>;
-  creator_rank?: Maybe<Scalars['Int']['output']>;
+  creator_rank?: Maybe<Scalars['String']['output']>;
   interactions_24h?: Maybe<Scalars['Float']['output']>;
-  topic_influence?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
+  topic_influence?: Maybe<Array<Maybe<TopicInfluence>>>;
 };
 
 export type CreatorListItem = {
@@ -305,56 +296,15 @@ export type CreatorTimeSeriesItem = {
   time?: Maybe<Scalars['Float']['output']>;
 };
 
-export type DeleteSearchResult = {
-  __typename?: 'DeleteSearchResult';
-  error?: Maybe<Scalars['String']['output']>;
-  success?: Maybe<Scalars['Boolean']['output']>;
-};
-
-export type HealthStatus = {
-  __typename?: 'HealthStatus';
-  features: Array<Scalars['String']['output']>;
-  requestId: Scalars['String']['output'];
-  service: Scalars['String']['output'];
-  status: Scalars['String']['output'];
-  timestamp: Scalars['String']['output'];
-  uptime: Scalars['Float']['output'];
-  version: Scalars['String']['output'];
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
-  createSearch?: Maybe<CreateSearchResult>;
   createTopic: Topic;
-  deleteSearch?: Maybe<DeleteSearchResult>;
-  generateDemoToken: TokenResponse;
-  updateSearch?: Maybe<UpdateSearchResult>;
   updateUserPreferences: UserPreferences;
-};
-
-
-export type MutationCreateSearchArgs = {
-  name: Scalars['String']['input'];
-  priority?: InputMaybe<Scalars['Boolean']['input']>;
-  searchJson: Scalars['String']['input'];
 };
 
 
 export type MutationCreateTopicArgs = {
   input: CreateTopicInput;
-};
-
-
-export type MutationDeleteSearchArgs = {
-  slug: Scalars['String']['input'];
-};
-
-
-export type MutationUpdateSearchArgs = {
-  name?: InputMaybe<Scalars['String']['input']>;
-  priority?: InputMaybe<Scalars['Boolean']['input']>;
-  searchJson?: InputMaybe<Scalars['String']['input']>;
-  slug: Scalars['String']['input'];
 };
 
 
@@ -365,7 +315,7 @@ export type MutationUpdateUserPreferencesArgs = {
 export type NftDetails = {
   __typename?: 'NftDetails';
   floor_price?: Maybe<Scalars['Float']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
   market_cap?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   percent_change_24h?: Maybe<Scalars['Float']['output']>;
@@ -472,12 +422,11 @@ export type Query = {
   getCreatorsList?: Maybe<Array<Maybe<CreatorListItem>>>;
   getNft?: Maybe<NftDetails>;
   getNftTimeSeries?: Maybe<Array<Maybe<NftTimeSeriesItem>>>;
+  getNftTimeSeriesV2?: Maybe<Array<Maybe<NftTimeSeriesItem>>>;
   getNftsList?: Maybe<Array<Maybe<NftListItem>>>;
   getNftsListV2?: Maybe<Array<Maybe<NftListItem>>>;
   getPostDetails?: Maybe<PostDetails>;
   getPostTimeSeries?: Maybe<Array<Maybe<PostTimeSeriesItem>>>;
-  getSearch?: Maybe<SearchResult>;
-  getSearchesList?: Maybe<Array<Maybe<SearchItem>>>;
   getStock?: Maybe<StockDetails>;
   getStockTimeSeries?: Maybe<Array<Maybe<StockTimeSeriesItem>>>;
   getStocksList?: Maybe<Array<Maybe<StockListItem>>>;
@@ -494,7 +443,6 @@ export type Query = {
   health?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
   ping?: Maybe<PingResponse>;
-  searchPosts?: Maybe<Array<Maybe<SearchPostItem>>>;
   systemHealth?: Maybe<SystemHealthResponse>;
 };
 
@@ -610,6 +558,15 @@ export type QueryGetNftTimeSeriesArgs = {
 };
 
 
+export type QueryGetNftTimeSeriesV2Args = {
+  bucket?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+  interval?: InputMaybe<Scalars['String']['input']>;
+  nft: Scalars['String']['input'];
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+};
+
+
 export type QueryGetNftsListArgs = {
   desc?: InputMaybe<Scalars['String']['input']>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -635,11 +592,6 @@ export type QueryGetPostDetailsArgs = {
 export type QueryGetPostTimeSeriesArgs = {
   post_id: Scalars['String']['input'];
   post_type: Scalars['String']['input'];
-};
-
-
-export type QueryGetSearchArgs = {
-  slug: Scalars['String']['input'];
 };
 
 
@@ -712,49 +664,6 @@ export type QueryGetTopicWhatsupArgs = {
   topic: Scalars['String']['input'];
 };
 
-
-export type QuerySearchPostsArgs = {
-  searchJson?: InputMaybe<Scalars['String']['input']>;
-  term?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type SearchItem = {
-  __typename?: 'SearchItem';
-  created?: Maybe<Scalars['Int']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  priority?: Maybe<Scalars['Boolean']['output']>;
-  search_json?: Maybe<Scalars['JSON']['output']>;
-};
-
-export type SearchPostItem = {
-  __typename?: 'SearchPostItem';
-  creator_avatar?: Maybe<Scalars['String']['output']>;
-  creator_display_name?: Maybe<Scalars['String']['output']>;
-  creator_followers?: Maybe<Scalars['Float']['output']>;
-  creator_id?: Maybe<Scalars['String']['output']>;
-  creator_name?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  interactions_24h?: Maybe<Scalars['Float']['output']>;
-  interactions_total?: Maybe<Scalars['Float']['output']>;
-  post_created?: Maybe<Scalars['Int']['output']>;
-  post_image?: Maybe<Scalars['String']['output']>;
-  post_link?: Maybe<Scalars['String']['output']>;
-  post_sentiment?: Maybe<Scalars['Float']['output']>;
-  post_title?: Maybe<Scalars['String']['output']>;
-  post_type?: Maybe<Scalars['String']['output']>;
-};
-
-export type SearchResult = {
-  __typename?: 'SearchResult';
-  created?: Maybe<Scalars['Int']['output']>;
-  data?: Maybe<Array<Maybe<SearchPostItem>>>;
-  id?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  priority?: Maybe<Scalars['Boolean']['output']>;
-  search_json?: Maybe<Scalars['JSON']['output']>;
-};
-
 export type SortDirection =
   | 'ASC'
   | 'DESC';
@@ -784,7 +693,7 @@ export type StockListItem = {
   last_updated_price?: Maybe<Scalars['Int']['output']>;
   last_updated_price_by?: Maybe<Scalars['String']['output']>;
   logo?: Maybe<Scalars['String']['output']>;
-  market_cap?: Maybe<Scalars['Float']['output']>;
+  market_cap?: Maybe<Scalars['String']['output']>;
   market_cap_rank?: Maybe<Scalars['Int']['output']>;
   market_dominance?: Maybe<Scalars['Float']['output']>;
   market_dominance_prev?: Maybe<Scalars['Float']['output']>;
@@ -845,13 +754,6 @@ export type TimeInterval =
   | 'ONE_MONTH'
   | 'ONE_WEEK';
 
-export type TokenResponse = {
-  __typename?: 'TokenResponse';
-  expiresIn: Scalars['String']['output'];
-  token: Scalars['String']['output'];
-  user: User;
-};
-
 export type Topic = {
   __typename?: 'Topic';
   category: Scalars['String']['output'];
@@ -885,6 +787,14 @@ export type TopicDetails = {
   types_interactions?: Maybe<Scalars['JSON']['output']>;
   types_sentiment?: Maybe<Scalars['JSON']['output']>;
   types_sentiment_detail?: Maybe<Scalars['JSON']['output']>;
+};
+
+export type TopicInfluence = {
+  __typename?: 'TopicInfluence';
+  count?: Maybe<Scalars['Int']['output']>;
+  percent?: Maybe<Scalars['Float']['output']>;
+  rank?: Maybe<Scalars['Int']['output']>;
+  topic?: Maybe<Scalars['String']['output']>;
 };
 
 export type TopicListItem = {
@@ -961,22 +871,6 @@ export type TopicTimeSeriesItem = {
 export type TopicWhatsup = {
   __typename?: 'TopicWhatsup';
   summary?: Maybe<Scalars['String']['output']>;
-};
-
-export type UpdateSearchResult = {
-  __typename?: 'UpdateSearchResult';
-  error?: Maybe<Scalars['String']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
-  priority?: Maybe<Scalars['Boolean']['output']>;
-  search_json?: Maybe<Scalars['JSON']['output']>;
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['String']['output'];
-  lastSeen: Scalars['String']['output'];
-  type: Scalars['String']['output'];
 };
 
 export type UserPreferences = {
@@ -1139,7 +1033,7 @@ export type GetCreatorQueryVariables = Exact<{
 }>;
 
 
-export type GetCreatorQuery = { __typename?: 'Query', getCreator?: { __typename?: 'CreatorDetails', creator_id?: string | null, creator_name?: string | null, creator_display_name?: string | null, creator_avatar?: string | null, creator_followers?: number | null, creator_rank?: number | null, interactions_24h?: number | null, topic_influence?: Array<Record<string, any> | null> | null } | null };
+export type GetCreatorQuery = { __typename?: 'Query', getCreator?: { __typename?: 'CreatorDetails', creator_id?: string | null, creator_name?: string | null, creator_display_name?: string | null, creator_avatar?: string | null, creator_followers?: number | null, creator_rank?: string | null, interactions_24h?: number | null, topic_influence?: Array<{ __typename?: 'TopicInfluence', topic?: string | null, count?: number | null, percent?: number | null, rank?: number | null } | null> | null } | null };
 
 export type GetCreatorTimeSeriesQueryVariables = Exact<{
   network: Scalars['String']['input'];
@@ -1172,7 +1066,7 @@ export type GetCoinsListQueryVariables = Exact<{
 }>;
 
 
-export type GetCoinsListQuery = { __typename?: 'Query', getCoinsList?: Array<{ __typename?: 'CoinListItem', id?: number | null, symbol?: string | null, name?: string | null, price?: number | null, price_btc?: number | null, volume_24h?: number | null, volatility?: number | null, circulating_supply?: number | null, max_supply?: number | null, percent_change_1h?: number | null, percent_change_24h?: number | null, percent_change_7d?: number | null, percent_change_30d?: number | null, market_cap?: number | null, market_cap_rank?: number | null, interactions_24h?: number | null, social_volume_24h?: number | null, social_dominance?: number | null, market_dominance?: number | null, market_dominance_prev?: number | null, galaxy_score?: number | null, galaxy_score_previous?: number | null, alt_rank?: number | null, alt_rank_previous?: number | null, sentiment?: number | null, categories?: string | null, blockchains?: Array<Record<string, any> | null> | null, last_updated_price?: number | null, last_updated_price_by?: string | null, topic?: string | null, logo?: string | null } | null> | null };
+export type GetCoinsListQuery = { __typename?: 'Query', getCoinsList?: Array<{ __typename?: 'CoinListItem', id?: number | null, symbol?: string | null, name?: string | null, price?: number | null, price_btc?: number | null, volume_24h?: number | null, volatility?: number | null, circulating_supply?: number | null, max_supply?: number | null, percent_change_1h?: number | null, percent_change_24h?: number | null, percent_change_7d?: number | null, percent_change_30d?: number | null, market_cap?: number | null, market_cap_rank?: number | null, interactions_24h?: number | null, social_volume_24h?: number | null, social_dominance?: number | null, market_dominance?: number | null, market_dominance_prev?: number | null, galaxy_score?: number | null, galaxy_score_previous?: number | null, alt_rank?: number | null, alt_rank_previous?: number | null, sentiment?: number | null, categories?: string | null, last_updated_price?: number | null, last_updated_price_by?: string | null, topic?: string | null, logo?: string | null, blockchains?: Array<{ __typename?: 'Blockchain', type?: string | null, network?: string | null, address?: string | null, decimals?: number | null } | null> | null } | null> | null };
 
 export type GetCoinsListV2QueryVariables = Exact<{
   sort?: InputMaybe<Scalars['String']['input']>;
@@ -1183,7 +1077,7 @@ export type GetCoinsListV2QueryVariables = Exact<{
 }>;
 
 
-export type GetCoinsListV2Query = { __typename?: 'Query', getCoinsListV2?: Array<{ __typename?: 'CoinListItem', id?: number | null, symbol?: string | null, name?: string | null, price?: number | null, price_btc?: number | null, volume_24h?: number | null, volatility?: number | null, circulating_supply?: number | null, max_supply?: number | null, percent_change_1h?: number | null, percent_change_24h?: number | null, percent_change_7d?: number | null, percent_change_30d?: number | null, market_cap?: number | null, market_cap_rank?: number | null, interactions_24h?: number | null, social_volume_24h?: number | null, social_dominance?: number | null, market_dominance?: number | null, market_dominance_prev?: number | null, galaxy_score?: number | null, galaxy_score_previous?: number | null, alt_rank?: number | null, alt_rank_previous?: number | null, sentiment?: number | null, categories?: string | null, blockchains?: Array<Record<string, any> | null> | null, last_updated_price?: number | null, last_updated_price_by?: string | null, topic?: string | null, logo?: string | null } | null> | null };
+export type GetCoinsListV2Query = { __typename?: 'Query', getCoinsListV2?: Array<{ __typename?: 'CoinListItem', id?: number | null, symbol?: string | null, name?: string | null, price?: number | null, price_btc?: number | null, volume_24h?: number | null, volatility?: number | null, circulating_supply?: number | null, max_supply?: number | null, percent_change_1h?: number | null, percent_change_24h?: number | null, percent_change_7d?: number | null, percent_change_30d?: number | null, market_cap?: number | null, market_cap_rank?: number | null, interactions_24h?: number | null, social_volume_24h?: number | null, social_dominance?: number | null, market_dominance?: number | null, market_dominance_prev?: number | null, galaxy_score?: number | null, galaxy_score_previous?: number | null, alt_rank?: number | null, alt_rank_previous?: number | null, sentiment?: number | null, categories?: string | null, last_updated_price?: number | null, last_updated_price_by?: string | null, topic?: string | null, logo?: string | null, blockchains?: Array<{ __typename?: 'Blockchain', type?: string | null, network?: string | null, address?: string | null, decimals?: number | null } | null> | null } | null> | null };
 
 export type GetCoinQueryVariables = Exact<{
   coin: Scalars['String']['input'];
@@ -1197,7 +1091,7 @@ export type GetCoinMetaQueryVariables = Exact<{
 }>;
 
 
-export type GetCoinMetaQuery = { __typename?: 'Query', getCoinMeta?: { __typename?: 'CoinMeta', id?: number | null, name?: string | null, symbol?: string | null, market_categories?: string | null, updated?: number | null, short_summary?: string | null, description?: string | null, github_link?: string | null, website_link?: string | null, whitepaper_link?: string | null, twitter_link?: string | null, reddit_link?: string | null, header_image?: string | null, header_text?: string | null, videos?: string | null, coingecko_link?: string | null, coinmarketcap_link?: string | null } | null };
+export type GetCoinMetaQuery = { __typename?: 'Query', getCoinMeta?: { __typename?: 'CoinMeta', id?: number | null, name?: string | null, symbol?: string | null, market_categories?: string | null, updated?: number | null, short_summary?: string | null, description?: string | null, github_link?: string | null, website_link?: string | null, whitepaper_link?: string | null, twitter_link?: string | null, reddit_link?: string | null, header_image?: string | null, header_text?: string | null, videos?: string | null, coingecko_link?: string | null, coinmarketcap_link?: string | null, blockchain?: Array<{ __typename?: 'Blockchain', type?: string | null, network?: string | null, address?: string | null, decimals?: number | null } | null> | null } | null };
 
 export type GetCoinTimeSeriesQueryVariables = Exact<{
   coin: Scalars['String']['input'];
@@ -1213,7 +1107,7 @@ export type GetCoinTimeSeriesQuery = { __typename?: 'Query', getCoinTimeSeries?:
 export type GetStocksListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetStocksListQuery = { __typename?: 'Query', getStocksList?: Array<{ __typename?: 'StockListItem', id?: number | null, symbol?: string | null, name?: string | null, price?: number | null, volume_24h?: number | null, percent_change_24h?: number | null, market_cap?: number | null, market_cap_rank?: number | null, interactions_24h?: number | null, social_volume_24h?: number | null, social_dominance?: number | null, market_dominance?: number | null, market_dominance_prev?: number | null, galaxy_score?: number | null, galaxy_score_previous?: number | null, alt_rank?: number | null, alt_rank_previous?: number | null, sentiment?: number | null, categories?: string | null, last_updated_price?: number | null, last_updated_price_by?: string | null, topic?: string | null, logo?: string | null } | null> | null };
+export type GetStocksListQuery = { __typename?: 'Query', getStocksList?: Array<{ __typename?: 'StockListItem', id?: number | null, symbol?: string | null, name?: string | null, price?: number | null, volume_24h?: number | null, percent_change_24h?: number | null, market_cap?: string | null, market_cap_rank?: number | null, interactions_24h?: number | null, social_volume_24h?: number | null, social_dominance?: number | null, market_dominance?: number | null, market_dominance_prev?: number | null, galaxy_score?: number | null, galaxy_score_previous?: number | null, alt_rank?: number | null, alt_rank_previous?: number | null, sentiment?: number | null, categories?: string | null, last_updated_price?: number | null, last_updated_price_by?: string | null, topic?: string | null, logo?: string | null } | null> | null };
 
 export type GetStocksListV2QueryVariables = Exact<{
   sort?: InputMaybe<Scalars['String']['input']>;
@@ -1223,7 +1117,7 @@ export type GetStocksListV2QueryVariables = Exact<{
 }>;
 
 
-export type GetStocksListV2Query = { __typename?: 'Query', getStocksListV2?: Array<{ __typename?: 'StockListItem', id?: number | null, symbol?: string | null, name?: string | null, price?: number | null, volume_24h?: number | null, percent_change_24h?: number | null, market_cap?: number | null, market_cap_rank?: number | null, interactions_24h?: number | null, social_volume_24h?: number | null, social_dominance?: number | null, market_dominance?: number | null, market_dominance_prev?: number | null, galaxy_score?: number | null, galaxy_score_previous?: number | null, alt_rank?: number | null, alt_rank_previous?: number | null, sentiment?: number | null, categories?: string | null, last_updated_price?: number | null, last_updated_price_by?: string | null, topic?: string | null, logo?: string | null } | null> | null };
+export type GetStocksListV2Query = { __typename?: 'Query', getStocksListV2?: Array<{ __typename?: 'StockListItem', id?: number | null, symbol?: string | null, name?: string | null, price?: number | null, volume_24h?: number | null, percent_change_24h?: number | null, market_cap?: string | null, market_cap_rank?: number | null, interactions_24h?: number | null, social_volume_24h?: number | null, social_dominance?: number | null, market_dominance?: number | null, market_dominance_prev?: number | null, galaxy_score?: number | null, galaxy_score_previous?: number | null, alt_rank?: number | null, alt_rank_previous?: number | null, sentiment?: number | null, categories?: string | null, last_updated_price?: number | null, last_updated_price_by?: string | null, topic?: string | null, logo?: string | null } | null> | null };
 
 export type GetStockQueryVariables = Exact<{
   stock: Scalars['String']['input'];
@@ -1268,7 +1162,7 @@ export type GetNftQueryVariables = Exact<{
 }>;
 
 
-export type GetNftQuery = { __typename?: 'Query', getNft?: { __typename?: 'NftDetails', id?: string | null, name?: string | null, floor_price?: number | null, market_cap?: number | null, percent_change_24h?: number | null, volume_24h?: number | null } | null };
+export type GetNftQuery = { __typename?: 'Query', getNft?: { __typename?: 'NftDetails', id?: number | null, name?: string | null, floor_price?: number | null, market_cap?: number | null, percent_change_24h?: number | null, volume_24h?: number | null } | null };
 
 export type GetNftTimeSeriesQueryVariables = Exact<{
   id: Scalars['String']['input'];
@@ -1280,6 +1174,17 @@ export type GetNftTimeSeriesQueryVariables = Exact<{
 
 
 export type GetNftTimeSeriesQuery = { __typename?: 'Query', getNftTimeSeries?: Array<{ __typename?: 'NftTimeSeriesItem', time?: number | null, alt_rank?: number | null, contributors_active?: number | null, contributors_created?: number | null, interactions?: number | null, market_cap?: number | null, posts_active?: number | null, posts_created?: number | null, sentiment?: number | null, social_dominance?: number | null } | null> | null };
+
+export type GetNftTimeSeriesV2QueryVariables = Exact<{
+  nft: Scalars['String']['input'];
+  bucket?: InputMaybe<Scalars['String']['input']>;
+  interval?: InputMaybe<Scalars['String']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+}>;
+
+
+export type GetNftTimeSeriesV2Query = { __typename?: 'Query', getNftTimeSeriesV2?: Array<{ __typename?: 'NftTimeSeriesItem', time?: number | null, alt_rank?: number | null, contributors_active?: number | null, contributors_created?: number | null, interactions?: number | null, market_cap?: number | null, posts_active?: number | null, posts_created?: number | null, sentiment?: number | null, social_dominance?: number | null } | null> | null };
 
 export type GetSystemChangesQueryVariables = Exact<{
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
@@ -1295,7 +1200,7 @@ export type GetPostDetailsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostDetailsQuery = { __typename?: 'Query', getPostDetails?: { __typename?: 'PostDetails', type?: string | null, id?: string | null, title?: string | null, description?: string | null, extraText?: string | null, video?: string | null, images?: Array<string | null> | null, creator_id?: string | null, creator_name?: string | null, creator_display_name?: string | null, creator_avatar?: string | null, topics?: Array<string | null> | null, categories?: Array<string | null> | null } | null };
+export type GetPostDetailsQuery = { __typename?: 'Query', getPostDetails?: { __typename?: 'PostDetails', type?: string | null, id?: string | null, title?: string | null, description?: string | null, extraText?: string | null, video?: string | null, images?: Array<string | null> | null, creator_id?: string | null, creator_name?: string | null, creator_display_name?: string | null, creator_avatar?: string | null, topics?: Array<string | null> | null, categories?: Array<string | null> | null, metrics?: { __typename?: 'PostMetrics', bookmarks?: number | null, favorites?: number | null, retweets?: number | null, replies?: number | null, views?: number | null } | null, image?: { __typename?: 'PostImage', src?: string | null, width?: number | null, height?: number | null } | null } | null };
 
 export type GetPostTimeSeriesQueryVariables = Exact<{
   post_type: Scalars['String']['input'];
@@ -1304,71 +1209,6 @@ export type GetPostTimeSeriesQueryVariables = Exact<{
 
 
 export type GetPostTimeSeriesQuery = { __typename?: 'Query', getPostTimeSeries?: Array<{ __typename?: 'PostTimeSeriesItem', time?: string | null, interactions?: number | null } | null> | null };
-
-export type GetSearchesListQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetSearchesListQuery = { __typename?: 'Query', getSearchesList?: Array<{ __typename?: 'SearchItem', id?: string | null, name?: string | null, search_json?: Record<string, any> | null, priority?: boolean | null, created?: number | null } | null> | null };
-
-export type GetSearchQueryVariables = Exact<{
-  slug: Scalars['String']['input'];
-}>;
-
-
-export type GetSearchQuery = { __typename?: 'Query', getSearch?: { __typename?: 'SearchResult', id?: string | null, name?: string | null, search_json?: Record<string, any> | null, priority?: boolean | null, created?: number | null, data?: Array<{ __typename?: 'SearchPostItem', id?: string | null, post_type?: string | null, post_title?: string | null, post_link?: string | null, post_image?: string | null, post_created?: number | null, post_sentiment?: number | null, creator_id?: string | null, creator_name?: string | null, creator_display_name?: string | null, creator_followers?: number | null, creator_avatar?: string | null, interactions_24h?: number | null, interactions_total?: number | null } | null> | null } | null };
-
-export type SearchPostsQueryVariables = Exact<{
-  term?: InputMaybe<Scalars['String']['input']>;
-  searchJson?: InputMaybe<Scalars['String']['input']>;
-}>;
-
-
-export type SearchPostsQuery = { __typename?: 'Query', searchPosts?: Array<{ __typename?: 'SearchPostItem', id?: string | null, post_type?: string | null, post_title?: string | null, post_link?: string | null, post_image?: string | null, post_created?: number | null, post_sentiment?: number | null, creator_id?: string | null, creator_name?: string | null, creator_display_name?: string | null, creator_followers?: number | null, creator_avatar?: string | null, interactions_24h?: number | null, interactions_total?: number | null } | null> | null };
-
-export type GenerateDemoTokenMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GenerateDemoTokenMutation = { __typename?: 'Mutation', generateDemoToken: { __typename?: 'TokenResponse', token: string, expiresIn: string, user: { __typename?: 'User', id: string, type: string, lastSeen: string } } };
-
-export type UpdateUserPreferencesMutationVariables = Exact<{
-  input: UserPreferencesInput;
-}>;
-
-
-export type UpdateUserPreferencesMutation = { __typename?: 'Mutation', updateUserPreferences: { __typename?: 'UserPreferences', theme?: string | null, currency?: string | null, notifications?: boolean | null, favoriteTopics?: Array<string> | null } };
-
-export type CreateTopicMutationVariables = Exact<{
-  input: CreateTopicInput;
-}>;
-
-
-export type CreateTopicMutation = { __typename?: 'Mutation', createTopic: { __typename?: 'Topic', topic: string, category: string, description?: string | null, createdAt: string } };
-
-export type CreateSearchMutationVariables = Exact<{
-  name: Scalars['String']['input'];
-  searchJson: Scalars['String']['input'];
-  priority?: InputMaybe<Scalars['Boolean']['input']>;
-}>;
-
-
-export type CreateSearchMutation = { __typename?: 'Mutation', createSearch?: { __typename?: 'CreateSearchResult', id?: string | null, name?: string | null, search_json?: Record<string, any> | null, priority?: boolean | null, error?: string | null } | null };
-
-export type UpdateSearchMutationVariables = Exact<{
-  slug: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  searchJson?: InputMaybe<Scalars['String']['input']>;
-  priority?: InputMaybe<Scalars['Boolean']['input']>;
-}>;
-
-
-export type UpdateSearchMutation = { __typename?: 'Mutation', updateSearch?: { __typename?: 'UpdateSearchResult', id?: string | null, name?: string | null, search_json?: Record<string, any> | null, priority?: boolean | null, error?: string | null } | null };
-
-export type DeleteSearchMutationVariables = Exact<{
-  slug: Scalars['String']['input'];
-}>;
-
-
-export type DeleteSearchMutation = { __typename?: 'Mutation', deleteSearch?: { __typename?: 'DeleteSearchResult', success?: boolean | null, error?: string | null } | null };
 
 
 export const SystemHealthDocument = `
@@ -1691,7 +1531,12 @@ export const GetCreatorDocument = `
     creator_followers
     creator_rank
     interactions_24h
-    topic_influence
+    topic_influence {
+      topic
+      count
+      percent
+      rank
+    }
   }
 }
     `;
@@ -1768,7 +1613,12 @@ export const GetCoinsListDocument = `
     alt_rank_previous
     sentiment
     categories
-    blockchains
+    blockchains {
+      type
+      network
+      address
+      decimals
+    }
     last_updated_price
     last_updated_price_by
     topic
@@ -1811,7 +1661,12 @@ export const GetCoinsListV2Document = `
     alt_rank_previous
     sentiment
     categories
-    blockchains
+    blockchains {
+      type
+      network
+      address
+      decimals
+    }
     last_updated_price
     last_updated_price_by
     topic
@@ -1850,6 +1705,12 @@ export const GetCoinMetaDocument = `
     symbol
     market_categories
     updated
+    blockchain {
+      type
+      network
+      address
+      decimals
+    }
     short_summary
     description
     github_link
@@ -2074,6 +1935,28 @@ export const GetNftTimeSeriesDocument = `
   }
 }
     `;
+export const GetNftTimeSeriesV2Document = `
+    query GetNftTimeSeriesV2($nft: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
+  getNftTimeSeriesV2(
+    nft: $nft
+    bucket: $bucket
+    interval: $interval
+    start: $start
+    end: $end
+  ) {
+    time
+    alt_rank
+    contributors_active
+    contributors_created
+    interactions
+    market_cap
+    posts_active
+    posts_created
+    sentiment
+    social_dominance
+  }
+}
+    `;
 export const GetSystemChangesDocument = `
     query GetSystemChanges($start: UnixTimestamp, $end: UnixTimestamp) {
   getSystemChanges(start: $start, end: $end) {
@@ -2094,6 +1977,18 @@ export const GetPostDetailsDocument = `
     title
     description
     extraText
+    metrics {
+      bookmarks
+      favorites
+      retweets
+      replies
+      views
+    }
+    image {
+      src
+      width
+      height
+    }
     video
     images
     creator_id
@@ -2110,132 +2005,6 @@ export const GetPostTimeSeriesDocument = `
   getPostTimeSeries(post_type: $post_type, post_id: $post_id) {
     time
     interactions
-  }
-}
-    `;
-export const GetSearchesListDocument = `
-    query GetSearchesList {
-  getSearchesList {
-    id
-    name
-    search_json
-    priority
-    created
-  }
-}
-    `;
-export const GetSearchDocument = `
-    query GetSearch($slug: String!) {
-  getSearch(slug: $slug) {
-    id
-    name
-    search_json
-    priority
-    created
-    data {
-      id
-      post_type
-      post_title
-      post_link
-      post_image
-      post_created
-      post_sentiment
-      creator_id
-      creator_name
-      creator_display_name
-      creator_followers
-      creator_avatar
-      interactions_24h
-      interactions_total
-    }
-  }
-}
-    `;
-export const SearchPostsDocument = `
-    query SearchPosts($term: String, $searchJson: String) {
-  searchPosts(term: $term, searchJson: $searchJson) {
-    id
-    post_type
-    post_title
-    post_link
-    post_image
-    post_created
-    post_sentiment
-    creator_id
-    creator_name
-    creator_display_name
-    creator_followers
-    creator_avatar
-    interactions_24h
-    interactions_total
-  }
-}
-    `;
-export const GenerateDemoTokenDocument = `
-    mutation GenerateDemoToken {
-  generateDemoToken {
-    token
-    user {
-      id
-      type
-      lastSeen
-    }
-    expiresIn
-  }
-}
-    `;
-export const UpdateUserPreferencesDocument = `
-    mutation UpdateUserPreferences($input: UserPreferencesInput!) {
-  updateUserPreferences(input: $input) {
-    theme
-    currency
-    notifications
-    favoriteTopics
-  }
-}
-    `;
-export const CreateTopicDocument = `
-    mutation CreateTopic($input: CreateTopicInput!) {
-  createTopic(input: $input) {
-    topic
-    category
-    description
-    createdAt
-  }
-}
-    `;
-export const CreateSearchDocument = `
-    mutation CreateSearch($name: String!, $searchJson: String!, $priority: Boolean) {
-  createSearch(name: $name, searchJson: $searchJson, priority: $priority) {
-    id
-    name
-    search_json
-    priority
-    error
-  }
-}
-    `;
-export const UpdateSearchDocument = `
-    mutation UpdateSearch($slug: String!, $name: String, $searchJson: String, $priority: Boolean) {
-  updateSearch(
-    slug: $slug
-    name: $name
-    searchJson: $searchJson
-    priority: $priority
-  ) {
-    id
-    name
-    search_json
-    priority
-    error
-  }
-}
-    `;
-export const DeleteSearchDocument = `
-    mutation DeleteSearch($slug: String!) {
-  deleteSearch(slug: $slug) {
-    success
-    error
   }
 }
     `;
@@ -2355,6 +2124,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     GetNftTimeSeries(variables: GetNftTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetNftTimeSeriesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetNftTimeSeriesQuery>({ document: GetNftTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetNftTimeSeries', 'query', variables);
     },
+    GetNftTimeSeriesV2(variables: GetNftTimeSeriesV2QueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetNftTimeSeriesV2Query> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetNftTimeSeriesV2Query>({ document: GetNftTimeSeriesV2Document, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetNftTimeSeriesV2', 'query', variables);
+    },
     GetSystemChanges(variables?: GetSystemChangesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetSystemChangesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetSystemChangesQuery>({ document: GetSystemChangesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetSystemChanges', 'query', variables);
     },
@@ -2363,33 +2135,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetPostTimeSeries(variables: GetPostTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetPostTimeSeriesQuery> {
       return withWrapper((wrappedRequestHeaders) => client.request<GetPostTimeSeriesQuery>({ document: GetPostTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetPostTimeSeries', 'query', variables);
-    },
-    GetSearchesList(variables?: GetSearchesListQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetSearchesListQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetSearchesListQuery>({ document: GetSearchesListDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetSearchesList', 'query', variables);
-    },
-    GetSearch(variables: GetSearchQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetSearchQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetSearchQuery>({ document: GetSearchDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetSearch', 'query', variables);
-    },
-    SearchPosts(variables?: SearchPostsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<SearchPostsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<SearchPostsQuery>({ document: SearchPostsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'SearchPosts', 'query', variables);
-    },
-    GenerateDemoToken(variables?: GenerateDemoTokenMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GenerateDemoTokenMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GenerateDemoTokenMutation>({ document: GenerateDemoTokenDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GenerateDemoToken', 'mutation', variables);
-    },
-    UpdateUserPreferences(variables: UpdateUserPreferencesMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<UpdateUserPreferencesMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UpdateUserPreferencesMutation>({ document: UpdateUserPreferencesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'UpdateUserPreferences', 'mutation', variables);
-    },
-    CreateTopic(variables: CreateTopicMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<CreateTopicMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<CreateTopicMutation>({ document: CreateTopicDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'CreateTopic', 'mutation', variables);
-    },
-    CreateSearch(variables: CreateSearchMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<CreateSearchMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<CreateSearchMutation>({ document: CreateSearchDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'CreateSearch', 'mutation', variables);
-    },
-    UpdateSearch(variables: UpdateSearchMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<UpdateSearchMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<UpdateSearchMutation>({ document: UpdateSearchDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'UpdateSearch', 'mutation', variables);
-    },
-    DeleteSearch(variables: DeleteSearchMutationVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<DeleteSearchMutation> {
-      return withWrapper((wrappedRequestHeaders) => client.request<DeleteSearchMutation>({ document: DeleteSearchDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'DeleteSearch', 'mutation', variables);
     }
   };
 }

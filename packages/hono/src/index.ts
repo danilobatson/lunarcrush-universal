@@ -98,11 +98,11 @@ const graphqlServer = async (c: any) => {
 			contextValue: {
 				bindings: c.env,
 				requestId: c.get('requestId') || `req_${Date.now()}`,
-				lunarcrushApiKey: c.get('apiKey'), // Use apiKey from auth middleware
+				lunarcrushApiKey: c.get('apiKey'),
 				request: c.req.raw,
 				headers: c.req.raw.headers,
 			},
-			rootValue: resolvers.Query, // Use Query resolvers directly for buildSchema
+			rootValue: resolvers.Query,
 		});
 
 		const responseTime = Date.now() - startTime;
@@ -199,7 +199,6 @@ app.use('/graphql', async (c, next) => {
 					'ping',
 					'health',
 					'hello',
-					'chartTypes',
 				];
 				if (systemQueries.some((query) => body.includes(query))) {
 					isSystemQuery = true;
@@ -265,7 +264,7 @@ app.notFound((c) => {
 				available_endpoints: {
 					api: `${new URL(c.req.url).origin}/docs`,
 					graphql: `${new URL(c.req.url).origin}/graphql`,
-					note: 'Health and monitoring now available via GraphQL queries: systemHealth, ping, systemMetrics',
+					note: 'Health and monitoring now available via GraphQL queries: systemHealth, ping',
 				},
 			},
 			404

@@ -50,7 +50,6 @@ export interface CategoryCreator {
 
 export interface CategoryDetails {
   __typename?: 'CategoryDetails';
-  category?: Maybe<Scalars['String']['output']>;
   interactions_24h?: Maybe<Scalars['Float']['output']>;
   num_contributors?: Maybe<Scalars['Int']['output']>;
   num_posts?: Maybe<Scalars['Int']['output']>;
@@ -61,6 +60,7 @@ export interface CategoryDetails {
   types_count?: Maybe<Scalars['JSON']['output']>;
   types_interactions?: Maybe<Scalars['JSON']['output']>;
   types_sentiment?: Maybe<Scalars['JSON']['output']>;
+  types_sentiment_detail?: Maybe<Scalars['JSON']['output']>;
 }
 
 export interface CategoryListItem {
@@ -131,7 +131,7 @@ export interface CategoryTopic {
   num_posts?: Maybe<Scalars['Float']['output']>;
   social_dominance?: Maybe<Scalars['Float']['output']>;
   title?: Maybe<Scalars['String']['output']>;
-  topic?: Maybe<Scalars['String']['output']>;
+  topic?: Maybe<Scalars['Int']['output']>;
   topic_rank?: Maybe<Scalars['Int']['output']>;
   topic_rank_1h_previous?: Maybe<Scalars['Int']['output']>;
   topic_rank_24h_previous?: Maybe<Scalars['Int']['output']>;
@@ -162,7 +162,7 @@ export interface CoinListItem {
   __typename?: 'CoinListItem';
   alt_rank?: Maybe<Scalars['Int']['output']>;
   alt_rank_previous?: Maybe<Scalars['Int']['output']>;
-  blockchains?: Maybe<Array<Maybe<Scalars['JSON']['output']>>>;
+  blockchains?: Maybe<Array<Maybe<Blockchain>>>;
   categories?: Maybe<Scalars['String']['output']>;
   circulating_supply?: Maybe<Scalars['Float']['output']>;
   galaxy_score?: Maybe<Scalars['Float']['output']>;
@@ -199,23 +199,20 @@ export interface CoinMeta {
   coingecko_link?: Maybe<Scalars['String']['output']>;
   coinmarketcap_link?: Maybe<Scalars['String']['output']>;
   description?: Maybe<Scalars['String']['output']>;
-  forum_link?: Maybe<Scalars['String']['output']>;
   github_link?: Maybe<Scalars['String']['output']>;
   header_image?: Maybe<Scalars['String']['output']>;
   header_text?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   market_categories?: Maybe<Scalars['String']['output']>;
   name?: Maybe<Scalars['String']['output']>;
-  overview_promotion?: Maybe<Scalars['String']['output']>;
+  reddit_link?: Maybe<Scalars['String']['output']>;
   short_summary?: Maybe<Scalars['String']['output']>;
   symbol?: Maybe<Scalars['String']['output']>;
-  telegram_link?: Maybe<Scalars['String']['output']>;
   twitter_link?: Maybe<Scalars['String']['output']>;
-  updated?: Maybe<Scalars['Int']['output']>;
+  updated?: Maybe<Scalars['Float']['output']>;
   videos?: Maybe<Scalars['String']['output']>;
   website_link?: Maybe<Scalars['String']['output']>;
   whitepaper_link?: Maybe<Scalars['String']['output']>;
-  wikipedia_link?: Maybe<Scalars['String']['output']>;
 }
 
 export interface CoinTimeSeriesItem {
@@ -254,9 +251,9 @@ export interface CreatorDetails {
   creator_followers?: Maybe<Scalars['Float']['output']>;
   creator_id?: Maybe<Scalars['String']['output']>;
   creator_name?: Maybe<Scalars['String']['output']>;
-  creator_rank?: Maybe<Scalars['Int']['output']>;
+  creator_rank?: Maybe<Scalars['String']['output']>;
   interactions_24h?: Maybe<Scalars['Float']['output']>;
-  topic_influence?: Maybe<Scalars['JSON']['output']>;
+  topic_influence?: Maybe<Array<Maybe<TopicInfluence>>>;
 }
 
 export interface CreatorListItem {
@@ -282,7 +279,7 @@ export interface CreatorPost {
   id?: Maybe<Scalars['String']['output']>;
   interactions_24h?: Maybe<Scalars['Float']['output']>;
   interactions_total?: Maybe<Scalars['Float']['output']>;
-  post_created?: Maybe<Scalars['Int']['output']>;
+  post_created?: Maybe<Scalars['Float']['output']>;
   post_image?: Maybe<Scalars['String']['output']>;
   post_link?: Maybe<Scalars['String']['output']>;
   post_sentiment?: Maybe<Scalars['Float']['output']>;
@@ -292,28 +289,16 @@ export interface CreatorPost {
 
 export interface CreatorTimeSeriesItem {
   __typename?: 'CreatorTimeSeriesItem';
-  creator_rank?: Maybe<Scalars['Int']['output']>;
+  creator_rank?: Maybe<Scalars['Float']['output']>;
   followers?: Maybe<Scalars['Float']['output']>;
   interactions?: Maybe<Scalars['Float']['output']>;
   posts_active?: Maybe<Scalars['Int']['output']>;
-  time?: Maybe<Scalars['Int']['output']>;
-}
-
-export interface HealthStatus {
-  __typename?: 'HealthStatus';
-  features: Array<Scalars['String']['output']>;
-  requestId: Scalars['String']['output'];
-  service: Scalars['String']['output'];
-  status: Scalars['String']['output'];
-  timestamp: Scalars['String']['output'];
-  uptime: Scalars['Float']['output'];
-  version: Scalars['String']['output'];
+  time?: Maybe<Scalars['Float']['output']>;
 }
 
 export interface Mutation {
   __typename?: 'Mutation';
   createTopic: Topic;
-  generateDemoToken: TokenResponse;
   updateUserPreferences: UserPreferences;
 }
 
@@ -330,7 +315,7 @@ export interface MutationUpdateUserPreferencesArgs {
 export interface NftDetails {
   __typename?: 'NftDetails';
   floor_price?: Maybe<Scalars['Float']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
   market_cap?: Maybe<Scalars['Float']['output']>;
   name?: Maybe<Scalars['String']['output']>;
   percent_change_24h?: Maybe<Scalars['Float']['output']>;
@@ -343,7 +328,7 @@ export interface NftListItem {
   base_crypto?: Maybe<Scalars['String']['output']>;
   floor_price?: Maybe<Scalars['Float']['output']>;
   galaxy_score?: Maybe<Scalars['Float']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
   interactions_24h?: Maybe<Scalars['Float']['output']>;
   logo?: Maybe<Scalars['String']['output']>;
   lunar_id?: Maybe<Scalars['String']['output']>;
@@ -437,12 +422,11 @@ export interface Query {
   getCreatorsList?: Maybe<Array<Maybe<CreatorListItem>>>;
   getNft?: Maybe<NftDetails>;
   getNftTimeSeries?: Maybe<Array<Maybe<NftTimeSeriesItem>>>;
+  getNftTimeSeriesV2?: Maybe<Array<Maybe<NftTimeSeriesItem>>>;
   getNftsList?: Maybe<Array<Maybe<NftListItem>>>;
   getNftsListV2?: Maybe<Array<Maybe<NftListItem>>>;
   getPostDetails?: Maybe<PostDetails>;
   getPostTimeSeries?: Maybe<Array<Maybe<PostTimeSeriesItem>>>;
-  getSearch?: Maybe<SearchResult>;
-  getSearchesList?: Maybe<Array<Maybe<SearchItem>>>;
   getStock?: Maybe<StockDetails>;
   getStockTimeSeries?: Maybe<Array<Maybe<StockTimeSeriesItem>>>;
   getStocksList?: Maybe<Array<Maybe<StockListItem>>>;
@@ -459,28 +443,27 @@ export interface Query {
   health?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<Scalars['String']['output']>;
   ping?: Maybe<PingResponse>;
-  searchPosts?: Maybe<Array<Maybe<SearchPost>>>;
   systemHealth?: Maybe<SystemHealthResponse>;
 }
 
 
 export interface QueryGetCategoryArgs {
-  category?: InputMaybe<Scalars['String']['input']>;
+  category: Scalars['String']['input'];
 }
 
 
 export interface QueryGetCategoryCreatorsArgs {
-  category?: InputMaybe<Scalars['String']['input']>;
+  category: Scalars['String']['input'];
 }
 
 
 export interface QueryGetCategoryNewsArgs {
-  category?: InputMaybe<Scalars['String']['input']>;
+  category: Scalars['String']['input'];
 }
 
 
 export interface QueryGetCategoryPostsArgs {
-  category?: InputMaybe<Scalars['String']['input']>;
+  category: Scalars['String']['input'];
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
@@ -488,7 +471,7 @@ export interface QueryGetCategoryPostsArgs {
 
 export interface QueryGetCategoryTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  category?: InputMaybe<Scalars['String']['input']>;
+  category: Scalars['String']['input'];
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
@@ -496,39 +479,57 @@ export interface QueryGetCategoryTimeSeriesArgs {
 
 
 export interface QueryGetCategoryTopicsArgs {
-  category?: InputMaybe<Scalars['String']['input']>;
+  category: Scalars['String']['input'];
 }
 
 
 export interface QueryGetCoinArgs {
-  symbol?: InputMaybe<Scalars['String']['input']>;
+  coin: Scalars['String']['input'];
 }
 
 
 export interface QueryGetCoinMetaArgs {
-  symbol?: InputMaybe<Scalars['String']['input']>;
+  coin: Scalars['String']['input'];
 }
 
 
 export interface QueryGetCoinTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
+  coin: Scalars['String']['input'];
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  symbol?: InputMaybe<Scalars['String']['input']>;
+}
+
+
+export interface QueryGetCoinsListArgs {
+  desc?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+}
+
+
+export interface QueryGetCoinsListV2Args {
+  desc?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
 }
 
 
 export interface QueryGetCreatorArgs {
-  id?: InputMaybe<Scalars['String']['input']>;
-  network?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  network: Scalars['String']['input'];
 }
 
 
 export interface QueryGetCreatorPostsArgs {
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  network?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  network: Scalars['String']['input'];
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
 
@@ -536,50 +537,66 @@ export interface QueryGetCreatorPostsArgs {
 export interface QueryGetCreatorTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
   interval?: InputMaybe<Scalars['String']['input']>;
-  network?: InputMaybe<Scalars['String']['input']>;
+  network: Scalars['String']['input'];
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
 
 
 export interface QueryGetNftArgs {
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
 }
 
 
 export interface QueryGetNftTimeSeriesArgs {
   bucket?: InputMaybe<Scalars['String']['input']>;
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
   interval?: InputMaybe<Scalars['String']['input']>;
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+}
+
+
+export interface QueryGetNftTimeSeriesV2Args {
+  bucket?: InputMaybe<Scalars['String']['input']>;
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+  interval?: InputMaybe<Scalars['String']['input']>;
+  nft: Scalars['String']['input'];
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+}
+
+
+export interface QueryGetNftsListArgs {
+  desc?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+}
+
+
+export interface QueryGetNftsListV2Args {
+  desc?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
 }
 
 
 export interface QueryGetPostDetailsArgs {
-  id: Scalars['String']['input'];
-  type: Scalars['String']['input'];
+  post_id: Scalars['String']['input'];
+  post_type: Scalars['String']['input'];
 }
 
 
 export interface QueryGetPostTimeSeriesArgs {
-  bucket?: InputMaybe<Scalars['String']['input']>;
-  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  id: Scalars['String']['input'];
-  interval?: InputMaybe<Scalars['String']['input']>;
-  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  type: Scalars['String']['input'];
-}
-
-
-export interface QueryGetSearchArgs {
-  id?: InputMaybe<Scalars['String']['input']>;
+  post_id: Scalars['String']['input'];
+  post_type: Scalars['String']['input'];
 }
 
 
 export interface QueryGetStockArgs {
-  symbol?: InputMaybe<Scalars['String']['input']>;
+  stock: Scalars['String']['input'];
 }
 
 
@@ -588,29 +605,43 @@ export interface QueryGetStockTimeSeriesArgs {
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  symbol?: InputMaybe<Scalars['String']['input']>;
+  stock: Scalars['String']['input'];
+}
+
+
+export interface QueryGetStocksListV2Args {
+  desc?: InputMaybe<Scalars['String']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  sort?: InputMaybe<Scalars['String']['input']>;
+}
+
+
+export interface QueryGetSystemChangesArgs {
+  end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
+  start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
 }
 
 
 export interface QueryGetTopicArgs {
-  topic?: InputMaybe<Scalars['String']['input']>;
+  topic: Scalars['String']['input'];
 }
 
 
 export interface QueryGetTopicCreatorsArgs {
-  topic?: InputMaybe<Scalars['String']['input']>;
+  topic: Scalars['String']['input'];
 }
 
 
 export interface QueryGetTopicNewsArgs {
-  topic?: InputMaybe<Scalars['String']['input']>;
+  topic: Scalars['String']['input'];
 }
 
 
 export interface QueryGetTopicPostsArgs {
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  topic?: InputMaybe<Scalars['String']['input']>;
+  topic: Scalars['String']['input'];
 }
 
 
@@ -619,46 +650,18 @@ export interface QueryGetTopicTimeSeriesArgs {
   end?: InputMaybe<Scalars['UnixTimestamp']['input']>;
   interval?: InputMaybe<Scalars['String']['input']>;
   start?: InputMaybe<Scalars['UnixTimestamp']['input']>;
-  topic?: InputMaybe<Scalars['String']['input']>;
+  topic: Scalars['String']['input'];
 }
 
 
 export interface QueryGetTopicTimeSeriesV2Args {
   bucket?: InputMaybe<Scalars['String']['input']>;
-  topic?: InputMaybe<Scalars['String']['input']>;
+  topic: Scalars['String']['input'];
 }
 
 
 export interface QueryGetTopicWhatsupArgs {
-  topic?: InputMaybe<Scalars['String']['input']>;
-}
-
-
-export interface QuerySearchPostsArgs {
-  term?: InputMaybe<Scalars['String']['input']>;
-}
-
-export interface SearchItem {
-  __typename?: 'SearchItem';
-  id?: Maybe<Scalars['String']['output']>;
-  query?: Maybe<Scalars['String']['output']>;
-}
-
-export interface SearchPost {
-  __typename?: 'SearchPost';
-  id?: Maybe<Scalars['String']['output']>;
-  post_created?: Maybe<Scalars['Int']['output']>;
-  post_link?: Maybe<Scalars['String']['output']>;
-  post_type?: Maybe<Scalars['String']['output']>;
-  text?: Maybe<Scalars['String']['output']>;
-  text_highlight?: Maybe<Scalars['String']['output']>;
-}
-
-export interface SearchResult {
-  __typename?: 'SearchResult';
-  id?: Maybe<Scalars['String']['output']>;
-  query?: Maybe<Scalars['String']['output']>;
-  results?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  topic: Scalars['String']['input'];
 }
 
 export enum SortDirection {
@@ -688,8 +691,10 @@ export interface StockListItem {
   galaxy_score_previous?: Maybe<Scalars['Float']['output']>;
   id?: Maybe<Scalars['Int']['output']>;
   interactions_24h?: Maybe<Scalars['Float']['output']>;
+  last_updated_price?: Maybe<Scalars['Int']['output']>;
+  last_updated_price_by?: Maybe<Scalars['String']['output']>;
   logo?: Maybe<Scalars['String']['output']>;
-  market_cap?: Maybe<Scalars['Float']['output']>;
+  market_cap?: Maybe<Scalars['String']['output']>;
   market_cap_rank?: Maybe<Scalars['Int']['output']>;
   market_dominance?: Maybe<Scalars['Float']['output']>;
   market_dominance_prev?: Maybe<Scalars['Float']['output']>;
@@ -751,13 +756,6 @@ export enum TimeInterval {
   OneWeek = 'ONE_WEEK'
 }
 
-export interface TokenResponse {
-  __typename?: 'TokenResponse';
-  expiresIn: Scalars['String']['output'];
-  token: Scalars['String']['output'];
-  user: User;
-}
-
 export interface Topic {
   __typename?: 'Topic';
   category: Scalars['String']['output'];
@@ -769,14 +767,11 @@ export interface Topic {
 export interface TopicCreator {
   __typename?: 'TopicCreator';
   creator_avatar?: Maybe<Scalars['String']['output']>;
-  creator_display_name?: Maybe<Scalars['String']['output']>;
   creator_followers?: Maybe<Scalars['Float']['output']>;
   creator_id?: Maybe<Scalars['String']['output']>;
   creator_name?: Maybe<Scalars['String']['output']>;
-  followers?: Maybe<Scalars['Float']['output']>;
-  id?: Maybe<Scalars['String']['output']>;
+  creator_rank?: Maybe<Scalars['Float']['output']>;
   interactions_24h?: Maybe<Scalars['Float']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
 }
 
 export interface TopicDetails {
@@ -794,6 +789,14 @@ export interface TopicDetails {
   types_interactions?: Maybe<Scalars['JSON']['output']>;
   types_sentiment?: Maybe<Scalars['JSON']['output']>;
   types_sentiment_detail?: Maybe<Scalars['JSON']['output']>;
+}
+
+export interface TopicInfluence {
+  __typename?: 'TopicInfluence';
+  count?: Maybe<Scalars['Int']['output']>;
+  percent?: Maybe<Scalars['Float']['output']>;
+  rank?: Maybe<Scalars['Int']['output']>;
+  topic?: Maybe<Scalars['String']['output']>;
 }
 
 export interface TopicListItem {
@@ -818,7 +821,7 @@ export interface TopicNews {
   id?: Maybe<Scalars['String']['output']>;
   interactions_24h?: Maybe<Scalars['Float']['output']>;
   interactions_total?: Maybe<Scalars['Float']['output']>;
-  post_created?: Maybe<Scalars['Int']['output']>;
+  post_created?: Maybe<Scalars['Float']['output']>;
   post_image?: Maybe<Scalars['String']['output']>;
   post_link?: Maybe<Scalars['String']['output']>;
   post_sentiment?: Maybe<Scalars['Float']['output']>;
@@ -870,13 +873,6 @@ export interface TopicTimeSeriesItem {
 export interface TopicWhatsup {
   __typename?: 'TopicWhatsup';
   summary?: Maybe<Scalars['String']['output']>;
-}
-
-export interface User {
-  __typename?: 'User';
-  id: Scalars['String']['output'];
-  lastSeen: Scalars['String']['output'];
-  type: Scalars['String']['output'];
 }
 
 export interface UserPreferences {
