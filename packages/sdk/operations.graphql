@@ -1,337 +1,911 @@
 # ================================================================
-# 🤖 AUTO-GENERATED FROM RESOLVERS.TS - DO NOT EDIT MANUALLY!
+# 🚀 ENHANCED OPERATIONS FOR LUNARCRUSH API - RICH DATA QUERIES
 # ================================================================
-# Generated from: packages/hono/src/graphql/resolvers.ts
-# Only includes operations that are actually implemented
-# Generated: 2025-08-07T03:52:26.827Z
+# Updated to include comprehensive field selections for building
+# compelling dashboards, sentiment analysis, and market tools
 # ================================================================
 
+# ===== SYSTEM HEALTH =====
 query SystemHealth {
-  systemHealth {
-    status
-    uptime
-    version
-    timestamp
-  }
+	systemHealth {
+		status
+		uptime
+		version
+		timestamp
+	}
 }
 
 query Ping {
-  ping {
-    status
-    timestamp
-  }
+	ping {
+		status
+		timestamp
+	}
 }
 
 query Health {
-  health
+	health
 }
 
 query Hello {
-  hello
+	hello
 }
 
+# ===== TOPICS - ENHANCED FOR SENTIMENT DASHBOARDS =====
 query GetTopicsList {
-  getTopicsList {
-    topic
-    title
-    topic_rank
-    interactions_24h
-  }
+	getTopicsList {
+		topic
+		title
+		topic_rank
+		topic_rank_1h_previous
+		topic_rank_24h_previous
+		num_contributors
+		num_posts
+		interactions_24h
+	}
 }
 
 query GetTopic($topic: String!) {
-  getTopic(topic: $topic) {
-    topic
-    title
-    topic_rank
-    interactions_24h
-    related_topics
-  }
+	getTopic(topic: $topic) {
+		topic
+		title
+		topic_rank
+		related_topics
+		types_count
+		types_interactions
+		types_sentiment
+		types_sentiment_detail
+		interactions_24h
+		num_contributors
+		num_posts
+		categories
+		trend
+	}
 }
 
 query GetTopicWhatsup($topic: String!) {
-  getTopicWhatsup(topic: $topic) {
-    summary
-  }
+	getTopicWhatsup(topic: $topic) {
+		summary
+	}
 }
 
-query GetTopicTimeSeries($topic: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getTopicTimeSeries(topic: $topic, bucket: $bucket, interval: $interval, start: $start, end: $end) {
-    time
-    interactions
-  }
+query GetTopicTimeSeries(
+	$topic: String!
+	$bucket: String
+	$interval: String
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getTopicTimeSeries(
+		topic: $topic
+		bucket: $bucket
+		interval: $interval
+		start: $start
+		end: $end
+	) {
+		time
+		contributors_active
+		contributors_created
+		interactions
+		posts_active
+		posts_created
+		sentiment
+		spam
+		alt_rank
+		circulating_supply
+		close
+		galaxy_score
+		high
+		low
+		market_cap
+		market_dominance
+		open
+		social_dominance
+		volume_24h
+	}
 }
 
 query GetTopicTimeSeriesV2($topic: String!, $bucket: String) {
-  getTopicTimeSeriesV2(topic: $topic, bucket: $bucket) {
-    time
-    interactions
-  }
+	getTopicTimeSeriesV2(topic: $topic, bucket: $bucket) {
+		time
+		contributors_active
+		contributors_created
+		interactions
+		posts_active
+		posts_created
+		sentiment
+		spam
+		alt_rank
+		circulating_supply
+		close
+		galaxy_score
+		high
+		low
+		market_cap
+		market_dominance
+		open
+		social_dominance
+		volume_24h
+	}
 }
 
-query GetTopicPosts($topic: String!, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getTopicPosts(topic: $topic, start: $start, end: $end) {
-    id
-    post_title
-    creator_name
-    interactions_24h
-  }
+query GetTopicPosts(
+	$topic: String!
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getTopicPosts(topic: $topic, start: $start, end: $end) {
+		id
+		post_type
+		post_title
+		post_link
+		post_image
+		post_created
+		post_sentiment
+		creator_id
+		creator_name
+		creator_display_name
+		creator_followers
+		creator_avatar
+		interactions_24h
+		interactions_total
+	}
 }
 
 query GetTopicNews($topic: String!) {
-  getTopicNews(topic: $topic) {
-    id
-    post_title
-    post_link
-    creator_name
-  }
+	getTopicNews(topic: $topic) {
+		id
+		post_type
+		post_title
+		post_link
+		post_image
+		post_created
+		post_sentiment
+		creator_id
+		creator_name
+		creator_display_name
+		creator_followers
+		creator_avatar
+		interactions_24h
+		interactions_total
+	}
 }
 
 query GetTopicCreators($topic: String!) {
-  getTopicCreators(topic: $topic) {
-    creator_name
-    creator_followers
-    interactions_24h
-  }
+	getTopicCreators(topic: $topic) {
+		creator_id
+		creator_name
+		creator_avatar
+		creator_followers
+		creator_rank
+		interactions_24h
+	}
 }
 
+# ===== CATEGORIES - ENHANCED FOR TREND ANALYSIS =====
 query GetCategoriesList {
-  getCategoriesList {
-    category
-    title
-    category_rank
-    interactions_24h
-  }
+	getCategoriesList {
+		category
+		title
+		category_rank
+		category_rank_1h_previous
+		category_rank_24h_previous
+		interactions_24h
+		num_contributors
+		num_posts
+		social_dominance
+	}
 }
 
 query GetCategory($category: String!) {
-  getCategory(category: $category) {
-    category
-    title
-    interactions_24h
-  }
+	getCategory(category: $category) {
+		topic
+		title
+		related_topics
+		types_count
+		types_interactions
+		types_sentiment
+		types_sentiment_detail
+		interactions_24h
+		num_contributors
+		num_posts
+		trend
+	}
 }
 
 query GetCategoryTopics($category: String!) {
-  getCategoryTopics(category: $category) {
-    topic
-    title
-    topic_rank
-    interactions_24h
-  }
+	getCategoryTopics(category: $category) {
+		topic
+		title
+		topic_rank
+		topic_rank_1h_previous
+		topic_rank_24h_previous
+		num_contributors
+		social_dominance
+		num_posts
+		interactions_24h
+	}
 }
 
-query GetCategoryTimeSeries($category: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getCategoryTimeSeries(category: $category, bucket: $bucket, interval: $interval, start: $start, end: $end) {
-    time
-    interactions
-  }
+query GetCategoryTimeSeries(
+	$category: String!
+	$bucket: String
+	$interval: String
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getCategoryTimeSeries(
+		category: $category
+		bucket: $bucket
+		interval: $interval
+		start: $start
+		end: $end
+	) {
+		time
+		contributors_active
+		contributors_created
+		interactions
+		posts_active
+		posts_created
+		sentiment
+		spam
+	}
 }
 
-query GetCategoryPosts($category: String!, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getCategoryPosts(category: $category, start: $start, end: $end) {
-    id
-    post_title
-    creator_name
-    interactions_24h
-  }
+query GetCategoryPosts(
+	$category: String!
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getCategoryPosts(category: $category, start: $start, end: $end) {
+		id
+		post_type
+		post_title
+		post_link
+		post_image
+		post_created
+		post_sentiment
+		creator_id
+		creator_name
+		creator_display_name
+		creator_followers
+		creator_avatar
+		interactions_24h
+		interactions_total
+	}
 }
 
 query GetCategoryNews($category: String!) {
-  getCategoryNews(category: $category) {
-    id
-    post_title
-    post_link
-    creator_name
-  }
+	getCategoryNews(category: $category) {
+		id
+		post_title
+		post_type
+		post_link
+		post_image
+		post_created
+		post_sentiment
+		creator_id
+		creator_name
+		creator_display_name
+		creator_followers
+		creator_avatar
+		interactions_24h
+		interactions_total
+	}
 }
 
 query GetCategoryCreators($category: String!) {
-  getCategoryCreators(category: $category) {
-    creator_name
-    creator_followers
-    interactions_24h
-  }
+	getCategoryCreators(category: $category) {
+		creator_id
+		creator_name
+		creator_avatar
+		creator_followers
+		creator_rank
+		interactions_24h
+	}
 }
 
+# ===== CREATORS - ENHANCED FOR INFLUENCER ANALYSIS =====
 query GetCreatorsList {
-  getCreatorsList {
-    creator_name
-    creator_display_name
-    creator_followers
-    interactions_24h
-  }
+	getCreatorsList {
+		creator_display_name
+		creator_id
+		creator_network
+		creator_avatar
+		creator_followers
+		creator_name
+		creator_posts
+		creator_rank
+		interactions_24h
+	}
 }
 
 query GetCreator($network: String!, $id: String!) {
-  getCreator(network: $network, id: $id) {
-    creator_name
-    creator_followers
-    interactions_24h
-  }
+	getCreator(network: $network, id: $id) {
+		creator_id
+		creator_name
+		creator_display_name
+		creator_avatar
+		creator_followers
+		creator_rank
+		interactions_24h
+		topic_influence
+	}
 }
 
-query GetCreatorTimeSeries($network: String!, $id: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getCreatorTimeSeries(network: $network, id: $id, bucket: $bucket, interval: $interval, start: $start, end: $end) {
-    time
-    interactions
-  }
+query GetCreatorTimeSeries(
+	$network: String!
+	$id: String!
+	$bucket: String
+	$interval: String
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getCreatorTimeSeries(
+		network: $network
+		id: $id
+		bucket: $bucket
+		interval: $interval
+		start: $start
+		end: $end
+	) {
+		time
+		followers
+		interactions
+		posts_active
+		creator_rank
+	}
 }
 
-query GetCreatorPosts($network: String!, $id: String!, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getCreatorPosts(network: $network, id: $id, start: $start, end: $end) {
-    id
-    post_title
-    creator_name
-    interactions_24h
-  }
+query GetCreatorPosts(
+	$network: String!
+	$id: String!
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getCreatorPosts(network: $network, id: $id, start: $start, end: $end) {
+		id
+		post_type
+		post_title
+		post_created
+		post_sentiment
+		post_link
+		post_image
+		creator_id
+		creator_name
+		creator_display_name
+		creator_followers
+		creator_avatar
+		interactions_24h
+		interactions_total
+	}
 }
 
-query GetCoinsList {
-  getCoinsList {
-    symbol
-    name
-    price
-    market_cap
-    percent_change_24h
-    galaxy_score
-  }
+# ===== COINS - ENHANCED FOR TRADING DASHBOARDS =====
+query GetCoinsList(
+	$sort: String
+	$filter: String
+	$limit: Int
+	$desc: String
+	$page: Int
+) {
+	getCoinsList(
+		sort: $sort
+		filter: $filter
+		limit: $limit
+		desc: $desc
+		page: $page
+	) {
+		id
+		symbol
+		name
+		price
+		price_btc
+		volume_24h
+		volatility
+		circulating_supply
+		max_supply
+		percent_change_1h
+		percent_change_24h
+		percent_change_7d
+		percent_change_30d
+		market_cap
+		market_cap_rank
+		interactions_24h
+		social_volume_24h
+		social_dominance
+		market_dominance
+		market_dominance_prev
+		galaxy_score
+		galaxy_score_previous
+		alt_rank
+		alt_rank_previous
+		sentiment
+		categories
+		blockchains
+		last_updated_price
+		last_updated_price_by
+		topic
+		logo
+	}
 }
 
-query GetCoinsListV2 {
-  getCoinsListV2 {
-    symbol
-    name
-    price
-    market_cap
-    percent_change_24h
-    galaxy_score
-  }
+query GetCoinsListV2(
+	$sort: String
+	$filter: String
+	$limit: Int
+	$desc: String
+	$page: Int
+) {
+	getCoinsListV2(
+		sort: $sort
+		filter: $filter
+		limit: $limit
+		desc: $desc
+		page: $page
+	) {
+		id
+		symbol
+		name
+		price
+		price_btc
+		volume_24h
+		volatility
+		circulating_supply
+		max_supply
+		percent_change_1h
+		percent_change_24h
+		percent_change_7d
+		percent_change_30d
+		market_cap
+		market_cap_rank
+		interactions_24h
+		social_volume_24h
+		social_dominance
+		market_dominance
+		market_dominance_prev
+		galaxy_score
+		galaxy_score_previous
+		alt_rank
+		alt_rank_previous
+		sentiment
+		categories
+		blockchains
+		last_updated_price
+		last_updated_price_by
+		topic
+		logo
+	}
 }
 
-query GetCoin($symbol: String!) {
-  getCoin(symbol: $symbol) {
-    symbol
-    name
-    price
-    market_cap
-    percent_change_24h
-    galaxy_score
-  }
+query GetCoin($coin: String!) {
+	getCoin(coin: $coin) {
+		id
+		name
+		symbol
+		price
+		price_btc
+		market_cap
+		percent_change_24h
+		percent_change_7d
+		percent_change_30d
+		volume_24h
+		max_supply
+		circulating_supply
+		close
+		galaxy_score
+		alt_rank
+		volatility
+		market_cap_rank
+	}
 }
 
-query GetCoinMeta($symbol: String!) {
-  getCoinMeta(symbol: $symbol) {
-    symbol
-    name
-  }
+query GetCoinMeta($coin: String!) {
+	getCoinMeta(coin: $coin) {
+		id
+		name
+		symbol
+		market_categories
+		updated
+		# blockchain
+		short_summary
+		description
+		github_link
+		website_link
+		whitepaper_link
+		twitter_link
+		reddit_link
+		header_image
+		header_text
+		videos
+		coingecko_link
+		coinmarketcap_link
+	}
 }
 
-query GetCoinTimeSeries($symbol: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getCoinTimeSeries(symbol: $symbol, bucket: $bucket, interval: $interval, start: $start, end: $end) {
-    time
-    close
-    market_cap
-    galaxy_score
-  }
+query GetCoinTimeSeries(
+	$coin: String!
+	$bucket: String
+	$interval: String
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getCoinTimeSeries(
+		coin: $coin
+		bucket: $bucket
+		interval: $interval
+		start: $start
+		end: $end
+	) {
+		time
+		contributors_active
+		contributors_created
+		interactions
+		posts_active
+		posts_created
+		sentiment
+		spam
+		alt_rank
+		circulating_supply
+		close
+		galaxy_score
+		high
+		low
+		market_cap
+		market_dominance
+		open
+		social_dominance
+		volume_24h
+	}
 }
 
+# ===== STOCKS - ENHANCED FOR SOCIAL SENTIMENT ANALYSIS =====
 query GetStocksList {
-  getStocksList {
-    symbol
-    name
-    price
-    market_cap
-    percent_change_24h
-  }
+	getStocksList {
+		id
+		symbol
+		name
+		price
+		volume_24h
+		percent_change_24h
+		market_cap
+		market_cap_rank
+		interactions_24h
+		social_volume_24h
+		social_dominance
+		market_dominance
+		market_dominance_prev
+		galaxy_score
+		galaxy_score_previous
+		alt_rank
+		alt_rank_previous
+		sentiment
+		categories
+		last_updated_price
+		last_updated_price_by
+		topic
+		logo
+	}
 }
 
-query GetStocksListV2 {
-  getStocksListV2 {
-    symbol
-    name
-    price
-    market_cap
-    percent_change_24h
-  }
+query GetStocksListV2($sort: String, $limit: Int, $desc: String, $page: Int) {
+	getStocksListV2(sort: $sort, limit: $limit, desc: $desc, page: $page) {
+		id
+		symbol
+		name
+		price
+		volume_24h
+		percent_change_24h
+		market_cap
+		market_cap_rank
+		interactions_24h
+		social_volume_24h
+		social_dominance
+		market_dominance
+		market_dominance_prev
+		galaxy_score
+		galaxy_score_previous
+		alt_rank
+		alt_rank_previous
+		sentiment
+		categories
+		last_updated_price
+		last_updated_price_by
+		topic
+		logo
+	}
 }
 
-query GetStock($symbol: String!) {
-  getStock(symbol: $symbol) {
-    symbol
-    name
-    price
-    market_cap
-    percent_change_24h
-  }
+query GetStock($stock: String!) {
+	getStock(stock: $stock) {
+		id
+		name
+		symbol
+		price
+		market_cap
+		percent_change_24h
+		volume_24h
+		close
+		market_cap_rank
+	}
 }
 
-query GetStockTimeSeries($symbol: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getStockTimeSeries(symbol: $symbol, bucket: $bucket, interval: $interval, start: $start, end: $end) {
-    time
-    close
-  }
+query GetStockTimeSeries(
+	$stock: String!
+	$bucket: String
+	$interval: String
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getStockTimeSeries(
+		stock: $stock
+		bucket: $bucket
+		interval: $interval
+		start: $start
+		end: $end
+	) {
+		time
+		close
+		alt_rank
+		contributors_active
+		contributors_created
+		galaxy_score
+		high
+		interactions
+		low
+		market_cap
+		market_dominance
+		open
+		posts_active
+		posts_created
+		sentiment
+		social_dominance
+		spam
+	}
 }
 
-query GetNftsList {
-  getNftsList {
-    id
-    name
-    floor_price
-    market_cap
-    percent_change_24h
-  }
+# ===== NFTS - ENHANCED FOR COLLECTION TRACKING =====
+query GetNftsList($sort: String, $limit: Int, $desc: String, $page: Int) {
+	getNftsList(sort: $sort, limit: $limit, desc: $desc, page: $page) {
+		id
+		name
+		logo
+		floor_price
+		alt_rank
+		base_crypto
+		galaxy_score
+		interactions_24h
+		lunar_id
+		market_cap
+		percent_change_24h
+		social_contributors
+		social_dominance
+		social_volume_24h
+		volume_24h
+	}
 }
 
-query GetNftsListV2 {
-  getNftsListV2 {
-    id
-    name
-    floor_price
-    market_cap
-    percent_change_24h
-  }
+query GetNftsListV2($sort: String, $limit: Int, $desc: String, $page: Int) {
+	getNftsListV2(sort: $sort, limit: $limit, desc: $desc, page: $page) {
+		id
+		name
+		logo
+		floor_price
+		alt_rank
+		base_crypto
+		galaxy_score
+		interactions_24h
+		lunar_id
+		market_cap
+		percent_change_24h
+		social_contributors
+		social_dominance
+		social_volume_24h
+		volume_24h
+	}
 }
 
 query GetNft($id: String!) {
-  getNft(id: $id) {
-    id
-    name
-    floor_price
-    market_cap
-    percent_change_24h
-  }
+	getNft(id: $id) {
+		id
+		name
+		floor_price
+		market_cap
+		percent_change_24h
+		volume_24h
+	}
 }
 
-query GetNftTimeSeries($id: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getNftTimeSeries(id: $id, bucket: $bucket, interval: $interval, start: $start, end: $end) {
-    time
-    market_cap
-  }
+query GetNftTimeSeries(
+	$id: String!
+	$bucket: String
+	$interval: String
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getNftTimeSeries(
+		id: $id
+		bucket: $bucket
+		interval: $interval
+		start: $start
+		end: $end
+	) {
+		time
+		alt_rank
+		contributors_active
+		contributors_created
+		interactions
+		market_cap
+		posts_active
+		posts_created
+		sentiment
+		social_dominance
+	}
 }
 
-query GetSystemChanges {
-  getSystemChanges {
-    asset_id
-    asset_name
-    change
-    description
-    time
-  }
+# ===== SYSTEM & MONITORING =====
+query GetSystemChanges($start: UnixTimestamp, $end: UnixTimestamp) {
+	getSystemChanges(start: $start, end: $end) {
+		asset_id
+		asset_name
+		asset_type
+		change
+		description
+		time
+	}
 }
 
-query GetPostDetails($type: String!, $id: String!) {
-  getPostDetails(type: $type, id: $id) {
-    type
-    id
-    title
-    description
-  }
+# ===== POSTS - ENHANCED FOR VIRAL CONTENT ANALYSIS =====
+query GetPostDetails($post_type: String!, $post_id: String!) {
+	getPostDetails(post_type: $post_type, post_id: $post_id) {
+		type
+		id
+		title
+		description
+		extraText
+		# metrics
+		# image
+		video
+		images
+		creator_id
+		creator_name
+		creator_display_name
+		creator_avatar
+		topics
+		categories
+	}
 }
 
-query GetPostTimeSeries($type: String!, $id: String!, $bucket: String, $interval: String, $start: UnixTimestamp, $end: UnixTimestamp) {
-  getPostTimeSeries(type: $type, id: $id, bucket: $bucket, interval: $interval, start: $start, end: $end) {
-    time
-    interactions
-  }
+query GetPostTimeSeries($post_type: String!, $post_id: String!) {
+	getPostTimeSeries(post_type: $post_type, post_id: $post_id) {
+		time
+		interactions
+	}
+}
+
+# ===== SEARCH OPERATIONS (NEW) =====
+query GetSearchesList {
+	getSearchesList {
+		id
+		name
+		search_json
+		priority
+		created
+	}
+}
+
+query GetSearch($slug: String!) {
+	getSearch(slug: $slug) {
+		id
+		name
+		search_json
+		priority
+		created
+		data {
+			id
+			post_type
+			post_title
+			post_link
+			post_image
+			post_created
+			post_sentiment
+			creator_id
+			creator_name
+			creator_display_name
+			creator_followers
+			creator_avatar
+			interactions_24h
+			interactions_total
+		}
+	}
+}
+
+query SearchPosts($term: String, $searchJson: String) {
+	searchPosts(term: $term, searchJson: $searchJson) {
+		id
+		post_type
+		post_title
+		post_link
+		post_image
+		post_created
+		post_sentiment
+		creator_id
+		creator_name
+		creator_display_name
+		creator_followers
+		creator_avatar
+		interactions_24h
+		interactions_total
+	}
+}
+
+# ===== MUTATIONS =====
+mutation GenerateDemoToken {
+	generateDemoToken {
+		token
+		user {
+			id
+			type
+			lastSeen
+		}
+		expiresIn
+	}
+}
+
+mutation UpdateUserPreferences($input: UserPreferencesInput!) {
+	updateUserPreferences(input: $input) {
+		theme
+		currency
+		notifications
+		favoriteTopics
+	}
+}
+
+mutation CreateTopic($input: CreateTopicInput!) {
+	createTopic(input: $input) {
+		topic
+		category
+		description
+		createdAt
+	}
+}
+
+mutation CreateSearch(
+	$name: String!
+	$searchJson: String!
+	$priority: Boolean
+) {
+	createSearch(name: $name, searchJson: $searchJson, priority: $priority) {
+		id
+		name
+		search_json
+		priority
+		error
+	}
+}
+
+mutation UpdateSearch(
+	$slug: String!
+	$name: String
+	$searchJson: String
+	$priority: Boolean
+) {
+	updateSearch(
+		slug: $slug
+		name: $name
+		searchJson: $searchJson
+		priority: $priority
+	) {
+		id
+		name
+		search_json
+		priority
+		error
+	}
+}
+
+mutation DeleteSearch($slug: String!) {
+	deleteSearch(slug: $slug) {
+		success
+		error
+	}
 }

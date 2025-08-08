@@ -1,8 +1,7 @@
 // ===================================================================
-// 🌙 LunarCrush SDK - Generated Functional API (All 39 Resolvers)
+// 🌙 LunarCrush SDK - Complete API Coverage
 // ===================================================================
-// 🤖 This file is auto-generated. Do not edit manually.
-// 🔄 Run 'npm run codegen' to regenerate.
+// 🤖 This file provides complete coverage of LunarCrush API v4
 
 import { GraphQLClient } from 'graphql-request';
 import { getSdk } from './generated/operations';
@@ -50,15 +49,26 @@ interface PostsOptions {
 	end?: UnixTimestamp;
 }
 
+interface ListOptions {
+	sort?: string;
+	filter?: string;
+	limit?: number;
+	desc?: string;
+	page?: number;
+}
+
+interface SearchOptions {
+	term?: string;
+	searchJson?: string;
+}
+
 // ===================================================================
-// 🚀 LUNARCRUSH SDK CLASS
+// 🚀 LUNARCRUSH SDK CLASS - COMPLETE API COVERAGE
 // ===================================================================
 
 /**
- * 🌙 LunarCrush SDK - Production Ready
+ * 🌙 LunarCrush SDK - Complete Production Ready SDK
  *
- * Ultra-minimal SDK with only resolver-implemented operations.
- * Auto-generated fluent API from GraphQL resolvers.
  */
 export class LunarCrush {
 	private sdk: ReturnType<typeof getSdk>;
@@ -66,7 +76,11 @@ export class LunarCrush {
 	constructor(apiKeyOrConfig?: string | LunarCrushConfig) {
 		const config = this.buildConfig(apiKeyOrConfig);
 		const client = new GraphQLClient(config.endpoint!, {
-			headers: { Authorization: `Bearer ${config.apiKey}` },
+			headers: {
+				Authorization: `Bearer ${config.apiKey}`,
+				'Content-Type': 'application/json',
+				...config.headers,
+			},
 		});
 		this.sdk = getSdk(client, this.withErrorHandling);
 	}
@@ -88,6 +102,7 @@ export class LunarCrush {
 			endpoint:
 				input?.endpoint ||
 				'https://lunarcrush.cryptoguard-api.workers.dev/graphql',
+			...input,
 		};
 	}
 
@@ -103,26 +118,23 @@ export class LunarCrush {
 	};
 
 	// ================================================================
-	// 🚀 AUTO-GENERATED FLUENT API - From Resolver Implementations
+	// 🎯 TOPICS API - Social Sentiment & AI Analysis
 	// ================================================================
-
 	topics = {
 		list: () => this.sdk.GetTopicsList().then((r) => r.getTopicsList),
 		get: (topic: string) =>
 			this.sdk.GetTopic({ topic }).then((r) => r.getTopic),
-		timeSeries: (
-			topic: string,
-			options: {
-				bucket?: string;
-				interval?: string;
-				start?: string;
-				end?: string;
-			} = {}
-		) =>
+		whatsup: (topic: string) =>
+			this.sdk.GetTopicWhatsup({ topic }).then((r) => r.getTopicWhatsup),
+		timeSeries: (topic: string, options: TimeSeriesOptions = {}) =>
 			this.sdk
 				.GetTopicTimeSeries({ topic, ...options })
 				.then((r) => r.getTopicTimeSeries),
-		posts: (topic: string, options: { start?: string; end?: string } = {}) =>
+		timeSeriesV2: (topic: string, bucket?: string) =>
+			this.sdk
+				.GetTopicTimeSeriesV2({ topic, bucket })
+				.then((r) => r.getTopicTimeSeriesV2),
+		posts: (topic: string, options: PostsOptions = {}) =>
 			this.sdk
 				.GetTopicPosts({ topic, ...options })
 				.then((r) => r.getTopicPosts),
@@ -132,235 +144,243 @@ export class LunarCrush {
 			this.sdk.GetTopicCreators({ topic }).then((r) => r.getTopicCreators),
 	};
 
-	coins = {
-		list: () => this.sdk.GetCoinsList().then((r) => r.getCoinsList),
-		get: (symbol: string) =>
-			this.sdk.GetCoin({ symbol }).then((r) => r.getCoin),
-		meta: (symbol: string) =>
-			this.sdk.GetCoinMeta({ symbol }).then((r) => r.getCoinMeta),
-		timeSeries: (
-			symbol: string,
-			options: {
-				bucket?: string;
-				interval?: string;
-				start?: string;
-				end?: string;
-			} = {}
-		) =>
-			this.sdk
-				.GetCoinTimeSeries({ symbol, ...options })
-				.then((r) => r.getCoinTimeSeries),
-	};
-
+	// ================================================================
+	// 📊 CATEGORIES API - Trend Analysis & Topic Aggregation
+	// ================================================================
 	categories = {
 		list: () => this.sdk.GetCategoriesList().then((r) => r.getCategoriesList),
 		get: (category: string) =>
 			this.sdk.GetCategory({ category }).then((r) => r.getCategory),
+		topics: (category: string) =>
+			this.sdk.GetCategoryTopics({ category }).then((r) => r.getCategoryTopics),
+		timeSeries: (category: string, options: TimeSeriesOptions = {}) =>
+			this.sdk
+				.GetCategoryTimeSeries({ category, ...options })
+				.then((r) => r.getCategoryTimeSeries),
+		posts: (category: string, options: PostsOptions = {}) =>
+			this.sdk
+				.GetCategoryPosts({ category, ...options })
+				.then((r) => r.getCategoryPosts),
+		news: (category: string) =>
+			this.sdk.GetCategoryNews({ category }).then((r) => r.getCategoryNews),
+		creators: (category: string) =>
+			this.sdk
+				.GetCategoryCreators({ category })
+				.then((r) => r.getCategoryCreators),
 	};
 
+	// ================================================================
+	// 👑 CREATORS API - Influencer Analysis & Topic Influence
+	// ================================================================
 	creators = {
 		list: () => this.sdk.GetCreatorsList().then((r) => r.getCreatorsList),
 		get: (network: string, id: string) =>
 			this.sdk.GetCreator({ network, id }).then((r) => r.getCreator),
-	};
-
-	stocks = {
-		list: () => this.sdk.GetStocksList().then((r) => r.getStocksList),
-		get: (symbol: string) =>
-			this.sdk.GetStock({ symbol }).then((r) => r.getStock),
-	};
-
-	nfts = {
-		list: () => this.sdk.GetNftsList().then((r) => r.getNftsList),
-		get: (id: string) => this.sdk.GetNft({ id }).then((r) => r.getNft),
-	};
-
-	posts = {
-		details: (type: string, id: string) =>
-			this.sdk.GetPostDetails({ type, id }).then((r) => r.getPostDetails),
 		timeSeries: (
-			type: string,
+			network: string,
 			id: string,
-			options: {
-				bucket?: string;
-				interval?: string;
-				start?: string;
-				end?: string;
-			} = {}
+			options: TimeSeriesOptions = {}
 		) =>
 			this.sdk
-				.GetPostTimeSeries({ type, id, ...options })
+				.GetCreatorTimeSeries({ network, id, ...options })
+				.then((r) => r.getCreatorTimeSeries),
+		posts: (network: string, id: string, options: PostsOptions = {}) =>
+			this.sdk
+				.GetCreatorPosts({ network, id, ...options })
+				.then((r) => r.getCreatorPosts),
+	};
+
+	// ================================================================
+	// 💰 COINS API - Crypto Social + Market Data Fusion
+	// ================================================================
+	coins = {
+		list: (options: ListOptions = {}) =>
+			this.sdk.GetCoinsList(options).then((r) => r.getCoinsList),
+		listV2: (options: ListOptions = {}) =>
+			this.sdk.GetCoinsListV2(options).then((r) => r.getCoinsListV2),
+		get: (coin: string) => this.sdk.GetCoin({ coin }).then((r) => r.getCoin),
+		meta: (coin: string) =>
+			this.sdk.GetCoinMeta({ coin }).then((r) => r.getCoinMeta),
+		timeSeries: (coin: string, options: TimeSeriesOptions = {}) =>
+			this.sdk
+				.GetCoinTimeSeries({ coin, ...options })
+				.then((r) => r.getCoinTimeSeries),
+	};
+
+	// ================================================================
+	// 📈 STOCKS API - Stock Social Sentiment Analysis
+	// ================================================================
+	stocks = {
+		list: () => this.sdk.GetStocksList().then((r) => r.getStocksList),
+		listV2: (options: Omit<ListOptions, 'filter'> = {}) =>
+			this.sdk.GetStocksListV2(options).then((r) => r.getStocksListV2),
+		get: (stock: string) =>
+			this.sdk.GetStock({ stock }).then((r) => r.getStock),
+		timeSeries: (stock: string, options: TimeSeriesOptions = {}) =>
+			this.sdk
+				.GetStockTimeSeries({ stock, ...options })
+				.then((r) => r.getStockTimeSeries),
+	};
+
+	// ================================================================
+	// 🖼️ NFTS API - NFT Collection Social Tracking
+	// ================================================================
+	nfts = {
+		list: (options: Omit<ListOptions, 'filter'> = {}) =>
+			this.sdk.getNftsList(options).then((r) => r.getNftsList),
+		listV2: (options: Omit<ListOptions, 'filter'> = {}) =>
+			this.sdk.GetNftsListV2(options).then((r) => r.getNftsListV2),
+		get: (id: string) => this.sdk.GetNft({ id }).then((r) => r.getNft),
+		timeSeries: (id: string, options: TimeSeriesOptions = {}) =>
+			this.sdk
+				.GetNftTimeSeries({ id, ...options })
+				.then((r) => r.getNftTimeSeries),
+	};
+
+	// ================================================================
+	// 📝 POSTS API - Viral Content Analysis
+	// ================================================================
+	posts = {
+		details: (post_type: string, post_id: string) =>
+			this.sdk
+				.GetPostDetails({ post_type, post_id })
+				.then((r) => r.getPostDetails),
+		timeSeries: (post_type: string, post_id: string) =>
+			this.sdk
+				.GetPostTimeSeries({ post_type, post_id })
 				.then((r) => r.getPostTimeSeries),
 	};
 
-	// System & Health
-	ping = () => this.sdk.Ping().then((r) => r.ping);
-	health = () => this.sdk.SystemHealth().then((r) => r.systemHealth);
-	hello = () => this.sdk.Hello().then((r) => r.hello);
-	systemChanges = () =>
-		this.sdk.GetSystemChanges().then((r) => r.getSystemChanges);
+	// ================================================================
+	// 🔍 SEARCH API - Custom Trend Tracking & Aggregations
+	// ================================================================
+	// search = {
+	// 	list: () => this.sdk.GetSearchesList().then((r) => r.getSearchesList),
 
-	// ===================================================================
-	// 🎯 ADDITIONAL DIRECT METHODS FOR 100% RESOLVER COVERAGE
-	// ===================================================================
+	// 	get: (slug: string) =>
+	// 		this.sdk.GetSearch({ slug }).then((r) => r.getSearch),
+	// 	posts: (options: SearchOptions = {}) =>
+	// 		this.sdk.SearchPosts(options).then((r) => r.searchPosts),
 
-	// Topic Methods
-	getTopicWhatsup = (topic: string) =>
-		this.sdk.GetTopicWhatsup({ topic }).then((r) => r.getTopicWhatsup);
+	// 	create: (name: string, searchJson: string, priority?: boolean) =>
+	// 		this.sdk
+	// 			.CreateSearch({ name, searchJson, priority })
+	// 			.then((r) => r.createSearch),
+	// 	update: (
+	// 		slug: string,
+	// 		options: {
+	// 			name?: string;
+	// 			searchJson?: string;
+	// 			priority?: boolean;
+	// 		} = {}
+	// 	) =>
+	// 		this.sdk.UpdateSearch({ slug, ...options }).then((r) => r.updateSearch),
+	// 	delete: (slug: string) =>
+	// 		this.sdk.DeleteSearch({ slug }).then((r) => r.deleteSearch),
+	// };
 
-	getTopicTimeSeriesV2 = (topic: string, bucket?: string) => {
-		const variables: { topic: string; bucket?: string } = { topic };
-		if (bucket) variables.bucket = bucket;
-		return this.sdk
-			.GetTopicTimeSeriesV2(variables)
-			.then((r) => r.getTopicTimeSeriesV2);
+	// ================================================================
+	// 🎯 SYSTEM API - Health & Monitoring
+	// ================================================================
+	system = {
+		health: () => this.sdk.SystemHealth().then((r) => r.systemHealth),
+		ping: () => this.sdk.Ping().then((r) => r.ping),
+		changes: (options: PostsOptions = {}) =>
+			this.sdk.GetSystemChanges(options).then((r) => r.getSystemChanges),
 	};
 
-	// Coins Methods
-	getCoinsListV2 = () =>
-		this.sdk.GetCoinsListV2().then((r) => r.getCoinsListV2);
-
-	// Category Methods
-	getCategoryTopics = (category: string) =>
-		this.sdk.GetCategoryTopics({ category }).then((r) => r.getCategoryTopics);
-
-	getCategoryTimeSeries = (
-		category: string,
-		options: {
-			interval?: string;
-			start?: string;
-			end?: string;
-		} = {}
-	) => {
-		const variables: {
+	// ================================================================
+	// 🔧 USER API - Preferences & Demo Features
+	// ================================================================
+	user = {
+		generateDemoToken: () =>
+			this.sdk.GenerateDemoToken().then((r) => r.generateDemoToken),
+		updatePreferences: (input: {
+			theme?: string;
+			currency?: string;
+			notifications?: boolean;
+			favoriteTopics?: string[];
+		}) =>
+			this.sdk
+				.UpdateUserPreferences({ input })
+				.then((r) => r.updateUserPreferences),
+		createTopic: (input: {
+			topic: string;
 			category: string;
-			interval?: string;
-			start?: string;
-			end?: string;
-		} = { category };
-		if (options.interval) variables.interval = options.interval;
-		if (options.start) variables.start = options.start;
-		if (options.end) variables.end = options.end;
-		return this.sdk
-			.GetCategoryTimeSeries(variables)
-			.then((r) => r.getCategoryTimeSeries);
+			description?: string;
+		}) => this.sdk.CreateTopic({ input }).then((r) => r.createTopic),
 	};
 
-	getCategoryPosts = (
-		category: string,
-		options: {
-			start?: string;
-			end?: string;
-		} = {}
-	) => {
-		const variables: { category: string; start?: string; end?: string } = {
-			category,
-		};
-		if (options.start) variables.start = options.start;
-		if (options.end) variables.end = options.end;
-		return this.sdk.GetCategoryPosts(variables).then((r) => r.getCategoryPosts);
-	};
+	// ================================================================
+	// 🚀 LEGACY COMPATIBILITY METHODS (Deprecated - Use Organized APIs Above)
+	// ================================================================
 
-	getCategoryNews = (category: string) =>
-		this.sdk.GetCategoryNews({ category }).then((r) => r.getCategoryNews);
+	// /** @deprecated Use topics.whatsup() instead */
+	// getTopicWhatsup = (topic: string) => this.topics.whatsup(topic);
 
-	getCategoryCreators = (category: string) =>
-		this.sdk
-			.GetCategoryCreators({ category })
-			.then((r) => r.getCategoryCreators);
+	// /** @deprecated Use topics.timeSeriesV2() instead */
+	// getTopicTimeSeriesV2 = (topic: string, bucket?: string) =>
+	// 	this.topics.timeSeriesV2(topic, bucket);
 
-	// Creator Methods
-	getCreatorTimeSeries = (
-		network: string,
-		id: string,
-		options: {
-			interval?: string;
-			start?: string;
-			end?: string;
-		} = {}
-	) => {
-		const variables: {
-			network: string;
-			id: string;
-			interval?: string;
-			start?: string;
-			end?: string;
-		} = { network, id };
-		if (options.interval) variables.interval = options.interval;
-		if (options.start) variables.start = options.start;
-		if (options.end) variables.end = options.end;
-		return this.sdk
-			.GetCreatorTimeSeries(variables)
-			.then((r) => r.getCreatorTimeSeries);
-	};
+	// /** @deprecated Use coins.listV2() instead */
+	// getCoinsListV2 = (options: ListOptions = {}) => this.coins.listV2(options);
 
-	getCreatorPosts = (
-		network: string,
-		id: string,
-		options: {
-			start?: string;
-			end?: string;
-		} = {}
-	) => {
-		const variables: {
-			network: string;
-			id: string;
-			start?: string;
-			end?: string;
-		} = { network, id };
-		if (options.start) variables.start = options.start;
-		if (options.end) variables.end = options.end;
-		return this.sdk.GetCreatorPosts(variables).then((r) => r.getCreatorPosts);
-	};
+	// /** @deprecated Use categories.topics() instead */
+	// getCategoryTopics = (category: string) => this.categories.topics(category);
 
-	// Stock Methods
-	getStocksListV2 = () =>
-		this.sdk.GetStocksListV2().then((r) => r.getStocksListV2);
+	// /** @deprecated Use categories.timeSeries() instead */
+	// getCategoryTimeSeries = (category: string, options: TimeSeriesOptions = {}) =>
+	// 	this.categories.timeSeries(category, options);
 
-	getStockTimeSeries = (
-		symbol: string,
-		options: {
-			interval?: string;
-			start?: string;
-			end?: string;
-		} = {}
-	) => {
-		const variables: {
-			symbol: string;
-			interval?: string;
-			start?: string;
-			end?: string;
-		} = { symbol };
-		if (options.interval) variables.interval = options.interval;
-		if (options.start) variables.start = options.start;
-		if (options.end) variables.end = options.end;
-		return this.sdk
-			.GetStockTimeSeries(variables)
-			.then((r) => r.getStockTimeSeries);
-	};
+	// /** @deprecated Use categories.posts() instead */
+	// getCategoryPosts = (category: string, options: PostsOptions = {}) =>
+	// 	this.categories.posts(category, options);
 
-	// NFT Methods
-	getNftsListV2 = () => this.sdk.GetNftsListV2().then((r) => r.getNftsListV2);
+	// /** @deprecated Use categories.news() instead */
+	// getCategoryNews = (category: string) => this.categories.news(category);
 
-	getNftTimeSeries = (
-		id: string,
-		options: {
-			interval?: string;
-			start?: string;
-			end?: string;
-		} = {}
-	) => {
-		const variables: {
-			id: string;
-			interval?: string;
-			start?: string;
-			end?: string;
-		} = { id };
-		if (options.interval) variables.interval = options.interval;
-		if (options.start) variables.start = options.start;
-		if (options.end) variables.end = options.end;
-		return this.sdk.GetNftTimeSeries(variables).then((r) => r.getNftTimeSeries);
-	};
+	// /** @deprecated Use categories.creators() instead */
+	// getCategoryCreators = (category: string) =>
+	// 	this.categories.creators(category);
+
+	// /** @deprecated Use creators.timeSeries() instead */
+	// getCreatorTimeSeries = (
+	// 	network: string,
+	// 	id: string,
+	// 	options: TimeSeriesOptions = {}
+	// ) => this.creators.timeSeries(network, id, options);
+
+	// /** @deprecated Use creators.posts() instead */
+	// getCreatorPosts = (network: string, id: string, options: PostsOptions = {}) =>
+	// 	this.creators.posts(network, id, options);
+
+	// /** @deprecated Use stocks.listV2() instead */
+	// getStocksListV2 = (options: Omit<ListOptions, 'filter'> = {}) =>
+	// 	this.stocks.listV2(options);
+
+	// /** @deprecated Use stocks.timeSeries() instead */
+	// getStockTimeSeries = (stock: string, options: TimeSeriesOptions = {}) =>
+	// 	this.stocks.timeSeries(stock, options);
+
+	// /** @deprecated Use nfts.listV2() instead */
+	// getNftsListV2 = (options: Omit<ListOptions, 'filter'> = {}) =>
+	// 	this.nfts.listV2(options);
+
+	// /** @deprecated Use nfts.timeSeries() instead */
+	// getNftTimeSeries = (id: string, options: TimeSeriesOptions = {}) =>
+	// 	this.nfts.timeSeries(id, options);
+
+	// /** @deprecated Use system.ping() instead */
+	// ping = () => this.system.ping();
+
+	// /** @deprecated Use system.health() instead */
+	// health = () => this.system.health();
+
+	// /** @deprecated Use system.health() instead */
+	// hello = () => this.sdk.Hello().then((r) => r.hello);
+
+	// /** @deprecated Use system.changes() instead */
+	// systemChanges = (options: PostsOptions = {}) => this.system.changes(options);
 }
 
 // ===================================================================
@@ -371,13 +391,49 @@ export class LunarCrush {
  * Create a new LunarCrush SDK instance
  *
  * @param apiKeyOrConfig - API key string or full configuration object
- * @returns Configured LunarCrush SDK instance
+ * @returns Configured LunarCrush SDK instance with complete API coverage
+ *
+ * @example
+ * ```typescript
+ * // Simple initialization
+ * const lc = createLunarCrush('your-api-key');
+ *
+ * // Advanced configuration
+ * const lc = createLunarCrush({
+ *   apiKey: 'your-api-key',
+ *   endpoint: 'https://your-custom-endpoint.com/graphql',
+ *   timeout: 30000,
+ *   headers: { 'Custom-Header': 'value' }
+ * });
+ *
+ * // Usage examples
+ * const topics = await lc.topics.list();
+ * const bitcoinData = await lc.coins.get('bitcoin');
+ * const sentiment = await lc.topics.whatsup('bitcoin');
+ * ```
  */
 export function createLunarCrush(
 	apiKeyOrConfig?: string | LunarCrushConfig
 ): LunarCrush {
 	return new LunarCrush(apiKeyOrConfig);
 }
+
+// ===================================================================
+// 🎁 EXPORTS
+// ===================================================================
+
+// Export types for TypeScript users
+export type {
+	UnixTimestamp,
+	LunarCrushConfig,
+	TimeSeriesOptions,
+	PostsOptions,
+	ListOptions,
+	SearchOptions,
+};
+
+// Export error class
+export { LunarCrushError };
 
 // Default export
 export default LunarCrush;
