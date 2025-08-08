@@ -11,9 +11,9 @@ import { getSdk } from './generated/operations';
 // ===================================================================
 
 /** Unix timestamp as string (e.g., "1640995200") */
-export type UnixTimestamp = string;
+type UnixTimestamp = string;
 
-export class LunarCrushError extends Error {
+class LunarCrushError extends Error {
 	constructor(
 		message: string,
 		public statusCode?: number,
@@ -93,7 +93,6 @@ export class LunarCrush {
 		if (!apiKey) throw new LunarCrushError('API key required');
 
 		return {
-			apiKey,
 			endpoint:
 				input?.endpoint ||
 				'https://lunarcrush.cryptoguard-api.workers.dev/graphql',
@@ -265,20 +264,21 @@ export class LunarCrush {
 	// 🔧 USER API - Preferences (Demo/Testing Only)
 	// ================================================================
 	user = {
-		updatePreferences: (input: {
-			theme?: string;
-			currency?: string;
-			notifications?: boolean;
-			favoriteTopics?: string[];
-		}) =>
-			this.sdk
-				.UpdateUserPreferences({ input })
-				.then((r) => r.updateUserPreferences),
-		createTopic: (input: {
-			topic: string;
-			category: string;
-			description?: string;
-		}) => this.sdk.CreateTopic({ input }).then((r) => r.createTopic),
+		// The following methods are commented out because they do not exist in the SDK
+		// updatePreferences: (input: {
+		//     theme?: string;
+		//     currency?: string;
+		//     notifications?: boolean;
+		//     favoriteTopics?: string[];
+		// }) =>
+		//     this.sdk
+		//         .UpdateUserPreferences({ input })
+		//         .then((r: any) => r.updateUserPreferences),
+		// createTopic: (input: {
+		//     topic: string;
+		//     category: string;
+		//     description?: string;
+		// }) => this.sdk.CreateTopic({ input }).then((r: any) => r.createTopic),
 	};
 }
 
@@ -324,14 +324,10 @@ export function createLunarCrush(
 // Export types for TypeScript users
 export type {
 	UnixTimestamp,
-	LunarCrushConfig,
 	TimeSeriesOptions,
 	PostsOptions,
 	ListOptions,
 };
 
-// Export error class
 export { LunarCrushError };
-
-// Default export
 export default LunarCrush;
