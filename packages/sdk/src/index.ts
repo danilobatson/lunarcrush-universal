@@ -57,11 +57,6 @@ interface ListOptions {
 	page?: number;
 }
 
-interface SearchOptions {
-	term?: string;
-	searchJson?: string;
-}
-
 // ===================================================================
 // 🚀 LUNARCRUSH SDK CLASS - COMPLETE API COVERAGE
 // ===================================================================
@@ -227,7 +222,7 @@ export class LunarCrush {
 	// ================================================================
 	nfts = {
 		list: (options: Omit<ListOptions, 'filter'> = {}) =>
-			this.sdk.getNftsList(options).then((r) => r.getNftsList),
+			this.sdk.GetNftsList(options).then((r) => r.getNftsList),
 		listV2: (options: Omit<ListOptions, 'filter'> = {}) =>
 			this.sdk.GetNftsListV2(options).then((r) => r.getNftsListV2),
 		get: (id: string) => this.sdk.GetNft({ id }).then((r) => r.getNft),
@@ -235,6 +230,10 @@ export class LunarCrush {
 			this.sdk
 				.GetNftTimeSeries({ id, ...options })
 				.then((r) => r.getNftTimeSeries),
+		timeSeriesV2: (nft: string, options: TimeSeriesOptions = {}) =>
+			this.sdk
+				.GetNftTimeSeriesV2({ nft, ...options })
+				.then((r) => r.getNftTimeSeriesV2),
 	};
 
 	// ================================================================
@@ -252,49 +251,20 @@ export class LunarCrush {
 	};
 
 	// ================================================================
-	// 🔍 SEARCH API - Custom Trend Tracking & Aggregations
-	// ================================================================
-	// search = {
-	// 	list: () => this.sdk.GetSearchesList().then((r) => r.getSearchesList),
-
-	// 	get: (slug: string) =>
-	// 		this.sdk.GetSearch({ slug }).then((r) => r.getSearch),
-	// 	posts: (options: SearchOptions = {}) =>
-	// 		this.sdk.SearchPosts(options).then((r) => r.searchPosts),
-
-	// 	create: (name: string, searchJson: string, priority?: boolean) =>
-	// 		this.sdk
-	// 			.CreateSearch({ name, searchJson, priority })
-	// 			.then((r) => r.createSearch),
-	// 	update: (
-	// 		slug: string,
-	// 		options: {
-	// 			name?: string;
-	// 			searchJson?: string;
-	// 			priority?: boolean;
-	// 		} = {}
-	// 	) =>
-	// 		this.sdk.UpdateSearch({ slug, ...options }).then((r) => r.updateSearch),
-	// 	delete: (slug: string) =>
-	// 		this.sdk.DeleteSearch({ slug }).then((r) => r.deleteSearch),
-	// };
-
-	// ================================================================
 	// 🎯 SYSTEM API - Health & Monitoring
 	// ================================================================
 	system = {
 		health: () => this.sdk.SystemHealth().then((r) => r.systemHealth),
 		ping: () => this.sdk.Ping().then((r) => r.ping),
+		hello: () => this.sdk.Hello().then((r) => r.hello),
 		changes: (options: PostsOptions = {}) =>
 			this.sdk.GetSystemChanges(options).then((r) => r.getSystemChanges),
 	};
 
 	// ================================================================
-	// 🔧 USER API - Preferences & Demo Features
+	// 🔧 USER API - Preferences (Demo/Testing Only)
 	// ================================================================
 	user = {
-		generateDemoToken: () =>
-			this.sdk.GenerateDemoToken().then((r) => r.generateDemoToken),
 		updatePreferences: (input: {
 			theme?: string;
 			currency?: string;
@@ -310,77 +280,6 @@ export class LunarCrush {
 			description?: string;
 		}) => this.sdk.CreateTopic({ input }).then((r) => r.createTopic),
 	};
-
-	// ================================================================
-	// 🚀 LEGACY COMPATIBILITY METHODS (Deprecated - Use Organized APIs Above)
-	// ================================================================
-
-	// /** @deprecated Use topics.whatsup() instead */
-	// getTopicWhatsup = (topic: string) => this.topics.whatsup(topic);
-
-	// /** @deprecated Use topics.timeSeriesV2() instead */
-	// getTopicTimeSeriesV2 = (topic: string, bucket?: string) =>
-	// 	this.topics.timeSeriesV2(topic, bucket);
-
-	// /** @deprecated Use coins.listV2() instead */
-	// getCoinsListV2 = (options: ListOptions = {}) => this.coins.listV2(options);
-
-	// /** @deprecated Use categories.topics() instead */
-	// getCategoryTopics = (category: string) => this.categories.topics(category);
-
-	// /** @deprecated Use categories.timeSeries() instead */
-	// getCategoryTimeSeries = (category: string, options: TimeSeriesOptions = {}) =>
-	// 	this.categories.timeSeries(category, options);
-
-	// /** @deprecated Use categories.posts() instead */
-	// getCategoryPosts = (category: string, options: PostsOptions = {}) =>
-	// 	this.categories.posts(category, options);
-
-	// /** @deprecated Use categories.news() instead */
-	// getCategoryNews = (category: string) => this.categories.news(category);
-
-	// /** @deprecated Use categories.creators() instead */
-	// getCategoryCreators = (category: string) =>
-	// 	this.categories.creators(category);
-
-	// /** @deprecated Use creators.timeSeries() instead */
-	// getCreatorTimeSeries = (
-	// 	network: string,
-	// 	id: string,
-	// 	options: TimeSeriesOptions = {}
-	// ) => this.creators.timeSeries(network, id, options);
-
-	// /** @deprecated Use creators.posts() instead */
-	// getCreatorPosts = (network: string, id: string, options: PostsOptions = {}) =>
-	// 	this.creators.posts(network, id, options);
-
-	// /** @deprecated Use stocks.listV2() instead */
-	// getStocksListV2 = (options: Omit<ListOptions, 'filter'> = {}) =>
-	// 	this.stocks.listV2(options);
-
-	// /** @deprecated Use stocks.timeSeries() instead */
-	// getStockTimeSeries = (stock: string, options: TimeSeriesOptions = {}) =>
-	// 	this.stocks.timeSeries(stock, options);
-
-	// /** @deprecated Use nfts.listV2() instead */
-	// getNftsListV2 = (options: Omit<ListOptions, 'filter'> = {}) =>
-	// 	this.nfts.listV2(options);
-
-	// /** @deprecated Use nfts.timeSeries() instead */
-	// getNftTimeSeries = (id: string, options: TimeSeriesOptions = {}) =>
-	// 	this.nfts.timeSeries(id, options);
-
-	// /** @deprecated Use system.ping() instead */
-	// ping = () => this.system.ping();
-
-	// /** @deprecated Use system.health() instead */
-	// health = () => this.system.health();
-
-	// /** @deprecated Use system.health() instead */
-	// hello = () => this.sdk.Hello().then((r) => r.hello);
-
-	// /** @deprecated Use system.changes() instead */
-	// systemChanges = (options: PostsOptions = {}) => this.system.changes(options);
 }
 
 // ===================================================================
@@ -429,7 +328,6 @@ export type {
 	TimeSeriesOptions,
 	PostsOptions,
 	ListOptions,
-	SearchOptions,
 };
 
 // Export error class
