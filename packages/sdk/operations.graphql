@@ -1,9 +1,6 @@
 # ================================================================
 # 🚀 ENHANCED OPERATIONS FOR LUNARCRUSH API - RICH DATA QUERIES
 # ================================================================
-# Updated to include comprehensive field selections for building
-# compelling dashboards, sentiment analysis, and market tools
-# ================================================================
 
 # ===== SYSTEM HEALTH =====
 query SystemHealth {
@@ -30,7 +27,7 @@ query Hello {
 	hello
 }
 
-# ===== TOPICS - ENHANCED FOR SENTIMENT DASHBOARDS =====
+# ===== TOPICS =====
 query GetTopicsList {
 	getTopicsList {
 		topic
@@ -181,7 +178,7 @@ query GetTopicCreators($topic: String!) {
 	}
 }
 
-# ===== CATEGORIES - ENHANCED FOR TREND ANALYSIS =====
+# ===== CATEGORIES =====
 query GetCategoriesList {
 	getCategoriesList {
 		category
@@ -304,7 +301,7 @@ query GetCategoryCreators($category: String!) {
 	}
 }
 
-# ===== CREATORS - ENHANCED FOR INFLUENCER ANALYSIS =====
+# ===== CREATORS =====
 query GetCreatorsList {
 	getCreatorsList {
 		creator_display_name
@@ -328,7 +325,12 @@ query GetCreator($network: String!, $id: String!) {
 		creator_followers
 		creator_rank
 		interactions_24h
-		topic_influence
+		topic_influence {
+			topic
+			count
+			percent
+			rank
+		}
 	}
 }
 
@@ -380,7 +382,7 @@ query GetCreatorPosts(
 	}
 }
 
-# ===== COINS - ENHANCED FOR TRADING DASHBOARDS =====
+# ===== COINS =====
 query GetCoinsList(
 	$sort: String
 	$filter: String
@@ -421,7 +423,12 @@ query GetCoinsList(
 		alt_rank_previous
 		sentiment
 		categories
-		blockchains
+		blockchains {
+			type
+			network
+			address
+			decimals
+		}
 		last_updated_price
 		last_updated_price_by
 		topic
@@ -469,7 +476,12 @@ query GetCoinsListV2(
 		alt_rank_previous
 		sentiment
 		categories
-		blockchains
+		blockchains {
+			type
+			network
+			address
+			decimals
+		}
 		last_updated_price
 		last_updated_price_by
 		topic
@@ -506,7 +518,12 @@ query GetCoinMeta($coin: String!) {
 		symbol
 		market_categories
 		updated
-		# blockchain
+		blockchain {
+			type
+			network
+			address
+			decimals
+		}
 		short_summary
 		description
 		github_link
@@ -558,7 +575,7 @@ query GetCoinTimeSeries(
 	}
 }
 
-# ===== STOCKS - ENHANCED FOR SOCIAL SENTIMENT ANALYSIS =====
+# ===== STOCKS =====
 query GetStocksList {
 	getStocksList {
 		id
@@ -663,7 +680,7 @@ query GetStockTimeSeries(
 	}
 }
 
-# ===== NFTS - ENHANCED FOR COLLECTION TRACKING =====
+# ===== NFTS =====
 query GetNftsList($sort: String, $limit: Int, $desc: String, $page: Int) {
 	getNftsList(sort: $sort, limit: $limit, desc: $desc, page: $page) {
 		id
@@ -742,6 +759,33 @@ query GetNftTimeSeries(
 	}
 }
 
+query GetNftTimeSeriesV2(
+	$nft: String!
+	$bucket: String
+	$interval: String
+	$start: UnixTimestamp
+	$end: UnixTimestamp
+) {
+	getNftTimeSeriesV2(
+		nft: $nft
+		bucket: $bucket
+		interval: $interval
+		start: $start
+		end: $end
+	) {
+		time
+		alt_rank
+		contributors_active
+		contributors_created
+		interactions
+		market_cap
+		posts_active
+		posts_created
+		sentiment
+		social_dominance
+	}
+}
+
 # ===== SYSTEM & MONITORING =====
 query GetSystemChanges($start: UnixTimestamp, $end: UnixTimestamp) {
 	getSystemChanges(start: $start, end: $end) {
@@ -754,7 +798,7 @@ query GetSystemChanges($start: UnixTimestamp, $end: UnixTimestamp) {
 	}
 }
 
-# ===== POSTS - ENHANCED FOR VIRAL CONTENT ANALYSIS =====
+# ===== POSTS =====
 query GetPostDetails($post_type: String!, $post_id: String!) {
 	getPostDetails(post_type: $post_type, post_id: $post_id) {
 		type
@@ -762,8 +806,18 @@ query GetPostDetails($post_type: String!, $post_id: String!) {
 		title
 		description
 		extraText
-		# metrics
-		# image
+		metrics {
+			bookmarks
+			favorites
+			retweets
+			replies
+			views
+		}
+		image {
+			src
+			width
+			height
+		}
 		video
 		images
 		creator_id
@@ -782,130 +836,21 @@ query GetPostTimeSeries($post_type: String!, $post_id: String!) {
 	}
 }
 
-# ===== SEARCH OPERATIONS (NEW) =====
-query GetSearchesList {
-	getSearchesList {
-		id
-		name
-		search_json
-		priority
-		created
-	}
-}
-
-query GetSearch($slug: String!) {
-	getSearch(slug: $slug) {
-		id
-		name
-		search_json
-		priority
-		created
-		data {
-			id
-			post_type
-			post_title
-			post_link
-			post_image
-			post_created
-			post_sentiment
-			creator_id
-			creator_name
-			creator_display_name
-			creator_followers
-			creator_avatar
-			interactions_24h
-			interactions_total
-		}
-	}
-}
-
-query SearchPosts($term: String, $searchJson: String) {
-	searchPosts(term: $term, searchJson: $searchJson) {
-		id
-		post_type
-		post_title
-		post_link
-		post_image
-		post_created
-		post_sentiment
-		creator_id
-		creator_name
-		creator_display_name
-		creator_followers
-		creator_avatar
-		interactions_24h
-		interactions_total
-	}
-}
-
 # ===== MUTATIONS =====
-mutation GenerateDemoToken {
-	generateDemoToken {
-		token
-		user {
-			id
-			type
-			lastSeen
-		}
-		expiresIn
-	}
-}
+# mutation UpdateUserPreferences($input: UserPreferencesInput!) {
+# 	updateUserPreferences(input: $input) {
+# 		theme
+# 		currency
+# 		notifications
+# 		favoriteTopics
+# 	}
+# }
 
-mutation UpdateUserPreferences($input: UserPreferencesInput!) {
-	updateUserPreferences(input: $input) {
-		theme
-		currency
-		notifications
-		favoriteTopics
-	}
-}
-
-mutation CreateTopic($input: CreateTopicInput!) {
-	createTopic(input: $input) {
-		topic
-		category
-		description
-		createdAt
-	}
-}
-
-mutation CreateSearch(
-	$name: String!
-	$searchJson: String!
-	$priority: Boolean
-) {
-	createSearch(name: $name, searchJson: $searchJson, priority: $priority) {
-		id
-		name
-		search_json
-		priority
-		error
-	}
-}
-
-mutation UpdateSearch(
-	$slug: String!
-	$name: String
-	$searchJson: String
-	$priority: Boolean
-) {
-	updateSearch(
-		slug: $slug
-		name: $name
-		searchJson: $searchJson
-		priority: $priority
-	) {
-		id
-		name
-		search_json
-		priority
-		error
-	}
-}
-
-mutation DeleteSearch($slug: String!) {
-	deleteSearch(slug: $slug) {
-		success
-		error
-	}
-}
+# mutation CreateTopic($input: CreateTopicInput!) {
+# 	createTopic(input: $input) {
+# 		topic
+# 		category
+# 		description
+# 		createdAt
+# 	}
+# }
