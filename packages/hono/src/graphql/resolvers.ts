@@ -38,12 +38,8 @@ import {
 	getNftsListV2,
 	getNft,
 	getNftTimeSeries,
+	getNftTimeSeriesV2,
 	getSystemChanges,
-	getSearchesList,
-	getSearch,
-	createSearch,
-	updateSearch,
-	deleteSearch,
 	getPostDetails,
 	getPostTimeSeries,
 } from '../services/lunarcrush';
@@ -141,7 +137,6 @@ export function createResolvers() {
 			// Topics
 			getTopicsList: async (args: any, context: GraphQLContext) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getTopicsList(config, args);
 			},
 
@@ -150,7 +145,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getTopic(config, topic);
 			},
 
@@ -159,7 +153,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getTopicWhatsup(config, topic);
 			},
 
@@ -174,7 +167,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getTopicTimeSeries(config, args);
 			},
 
@@ -183,7 +175,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getTopicTimeSeriesV2(config, args);
 			},
 
@@ -192,7 +183,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getTopicPosts(config, args);
 			},
 
@@ -201,7 +191,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getTopicNews(config, topic);
 			},
 
@@ -210,14 +199,12 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getTopicCreators(config, topic);
 			},
 
 			// Categories
 			getCategoriesList: async (args: any, context: GraphQLContext) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCategoriesList(config, args);
 			},
 
@@ -226,7 +213,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCategory(config, category);
 			},
 
@@ -235,7 +221,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCategoryTopics(config, category);
 			},
 
@@ -250,7 +235,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCategoryTimeSeries(config, args);
 			},
 
@@ -259,7 +243,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCategoryPosts(config, args);
 			},
 
@@ -268,7 +251,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCategoryNews(config, category);
 			},
 
@@ -277,14 +259,12 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCategoryCreators(config, category);
 			},
 
 			// Creators
 			getCreatorsList: async (args: any, context: GraphQLContext) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCreatorsList(config, args);
 			},
 
@@ -293,7 +273,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCreator(config, args);
 			},
 
@@ -309,7 +288,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCreatorTimeSeries(config, args);
 			},
 
@@ -323,17 +301,15 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCreatorPosts(config, args);
 			},
 
-			// Post functionality
+			// Posts
 			getPostDetails: async (
 				args: { post_type: string; post_id: string },
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getPostDetails(config, args);
 			},
 
@@ -345,7 +321,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getPostTimeSeries(config, args);
 			},
 
@@ -361,7 +336,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCoinsList(config, args);
 			},
 
@@ -376,13 +350,11 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCoinsListV2(config, args);
 			},
 
 			getCoin: async ({ coin }: { coin: string }, context: GraphQLContext) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCoin(config, coin);
 			},
 
@@ -391,7 +363,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCoinMeta(config, coin);
 			},
 
@@ -406,14 +377,12 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getCoinTimeSeries(config, args);
 			},
 
 			// Stocks
 			getStocksList: async (args: any, context: GraphQLContext) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getStocksList(config, args);
 			},
 
@@ -427,7 +396,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getStocksListV2(config, args);
 			},
 
@@ -436,7 +404,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getStock(config, stock);
 			},
 
@@ -451,7 +418,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getStockTimeSeries(config, args);
 			},
 
@@ -466,7 +432,6 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getNftsList(config, args);
 			},
 
@@ -480,24 +445,16 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getNftsListV2(config, args);
 			},
 
 			getNft: async ({ id }: { id: string }, context: GraphQLContext) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getNft(config, id);
 			},
 
 			getNftTimeSeries: async (
-				{
-					id,
-					bucket,
-					interval,
-					start,
-					end,
-				}: {
+				args: {
 					id: string;
 					bucket?: string;
 					interval?: string;
@@ -507,14 +464,27 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getNftTimeSeries(config, {
-					nft: id,
-					bucket,
-					interval,
-					start,
-					end,
+					nft: args.id,
+					bucket: args.bucket,
+					interval: args.interval,
+					start: args.start,
+					end: args.end,
 				});
+			},
+
+			getNftTimeSeriesV2: async (
+				args: {
+					nft: string;
+					bucket?: string;
+					interval?: string;
+					start?: UnixTimestamp;
+					end?: UnixTimestamp;
+				},
+				context: GraphQLContext
+			) => {
+				const config: LunarCrushConfig = getConfig();
+				return await getNftTimeSeriesV2(config, args);
 			},
 
 			// System
@@ -526,64 +496,28 @@ export function createResolvers() {
 				context: GraphQLContext
 			) => {
 				const config: LunarCrushConfig = getConfig();
-
 				return await getSystemChanges(config, args);
 			},
-
-			// ===== SEARCH ENDPOINTS =====
-			// getSearchesList: async (args: any, context: GraphQLContext) => {
-			// 	const config: LunarCrushConfig = getConfig();
-
-			// 	return await getSearchesList(config, args);
-			// },
-
-			// getSearch: async (
-			// 	{ slug }: { slug: string },
-			// 	context: GraphQLContext
-			// ) => {
-			// 	const config: LunarCrushConfig = getConfig();
-
-			// 	return await getSearch(config, slug);
-			// },
 		},
 
 		// Mutation: {
-		// 	// ===== SEARCH MUTATIONS =====
-		// 	createSearch: async (
-		// 		args: {
-		// 			name: string;
-		// 			searchJson: string;
-		// 			priority?: boolean;
-		// 		},
+		// 	// Basic mutations for user preferences and topics
+		// 	updateUserPreferences: async (
+		// 		args: { input: any },
 		// 		context: GraphQLContext
 		// 	) => {
-		// 		const config: LunarCrushConfig = getConfig();
-
-		// 		return await createSearch(config, args);
+		// 		// This would typically update user preferences in a database
+		// 		// For now, just return the input as if it was saved
+		// 		return args.input;
 		// 	},
 
-		// 	updateSearch: async (
-		// 		args: {
-		// 			slug: string;
-		// 			name?: string;
-		// 			searchJson?: string;
-		// 			priority?: boolean;
-		// 		},
-		// 		context: GraphQLContext
-		// 	) => {
-		// 		const config: LunarCrushConfig = getConfig();
-		// 		const { slug, ...updateArgs } = args;
-
-		// 		return await updateSearch(config, slug, updateArgs);
-		// 	},
-
-		// 	deleteSearch: async (
-		// 		{ slug }: { slug: string },
-		// 		context: GraphQLContext
-		// 	) => {
-		// 		const config: LunarCrushConfig = getConfig();
-
-		// 		return await deleteSearch(config, slug);
+		// 	createTopic: async (args: { input: any }, context: GraphQLContext) => {
+		// 		// This would typically create a topic in a database
+		// 		// For now, just return the input with a timestamp
+		// 		return {
+		// 			...args.input,
+		// 			createdAt: new Date().toISOString(),
+		// 		};
 		// 	},
 		// },
 	};
