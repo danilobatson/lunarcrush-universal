@@ -64,7 +64,10 @@ const makeRequest = async <T>(
 
 // ===== TOPICS ENDPOINTS (EXACT FROM API DOCS) =====
 
-export const getTopicsList = async (config: LunarCrushConfig): Promise<any> => {
+export const getTopicsList = async (
+	config: LunarCrushConfig,
+	args?: any
+): Promise<any> => {
 	try {
 		const response = await makeRequest<any>(config, '/topics/list/v1');
 		return response.data;
@@ -257,7 +260,8 @@ export const getTopicCreators = async (
 // ===== CATEGORIES ENDPOINTS (EXACT FROM API DOCS) =====
 
 export const getCategoriesList = async (
-	config: LunarCrushConfig
+	config: LunarCrushConfig,
+	args?: any
 ): Promise<any[]> => {
 	try {
 		const response = await makeRequest<any>(config, '/categories/list/v1');
@@ -423,7 +427,8 @@ export const getCategoryCreators = async (
 // ===== CREATORS ENDPOINTS (EXACT FROM API DOCS) =====
 
 export const getCreatorsList = async (
-	config: LunarCrushConfig
+	config: LunarCrushConfig,
+	args?: any
 ): Promise<any[]> => {
 	try {
 		const response = await makeRequest<any>(config, '/creators/list/v1');
@@ -672,22 +677,10 @@ export const getCoinMeta = async (
 
 export const getStocksList = async (
 	config: LunarCrushConfig,
-	args: {
-		sort?: string;
-		limit?: number;
-		desc?: string;
-		page?: number;
-	}
+	args?: any
 ): Promise<any[]> => {
-	const { sort, limit, desc, page } = args;
 	try {
-		const params: Record<string, any> = {};
-		if (sort) params.sort = sort;
-		if (limit) params.limit = limit;
-		if (desc) params.desc = desc;
-		if (page) params.page = page;
-
-		const response = await makeRequest<any>(config, '/stocks/list/v1', params);
+		const response = await makeRequest<any>(config, '/stocks/list/v1');
 		return response.data;
 	} catch (error) {
 		console.error('❌ getStocksList error:', error);
@@ -883,10 +876,10 @@ export const getNftTimeSeries = async (
 
 		const response = await makeRequest<any>(
 			config,
-			`/nfts/${nft}/time-series/v2`,
+			`/nfts/${nft}/time-series/v1`,
 			params
 		);
-		return response.data;
+		return response.timeSeries || response.data;
 	} catch (error) {
 		console.error('❌ getNftTimeSeries error:', error);
 		if (error instanceof LunarCrushError) {
@@ -898,18 +891,32 @@ export const getNftTimeSeries = async (
 	}
 };
 
-export const getNftTimeSeriesV1 = async (
+export const getNftTimeSeriesV2 = async (
 	config: LunarCrushConfig,
-	nft: string
-): Promise<any> => {
+	args: {
+		nft: string;
+		bucket?: string;
+		interval?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}
+): Promise<any[]> => {
+	const { nft, bucket, interval, start, end } = args;
 	try {
+		const params: Record<string, any> = {};
+		if (bucket) params.bucket = bucket;
+		if (interval) params.interval = interval;
+		if (start) params.start = start;
+		if (end) params.end = end;
+
 		const response = await makeRequest<any>(
 			config,
-			`/nfts/${nft}/time-series/v1`
+			`/nfts/${nft}/time-series/v2`,
+			params
 		);
-		return response;
+		return response.data;
 	} catch (error) {
-		console.error('❌ getNftTimeSeriesV1 error:', error);
+		console.error('❌ getNftTimeSeriesV2 error:', error);
 		if (error instanceof LunarCrushError) {
 			throw new Error(
 				`${error.statusCode} ${error.statusText}: ${error.message}`
@@ -944,117 +951,7 @@ export const getSystemChanges = async (
 	}
 };
 
-// ===== SEARCHES ENDPOINTS (EXACT FROM API DOCS) =====
-
-export const getSearchesList = async (
-	config: LunarCrushConfig,
-	args?: any
-): Promise<any> => {
-	try {
-		const response = await makeRequest<any>(config, '/searches/list');
-		return response.data || response;
-	} catch (error) {
-		console.error('❌ getSearchesList error:', error);
-		throw error;
-	}
-};
-
-// Get individual search aggregation
-export const getSearch = async (
-	config: LunarCrushConfig,
-	slug: string
-): Promise<any> => {
-	try {
-		const response = await makeRequest<any>(config, `/searches/${slug}`);
-		return response.data || response;
-	} catch (error) {
-		console.error('❌ getSearch error:', error);
-		throw error;
-	}
-};
-
-
-
-// Create custom search aggregation
-export const createSearch = async (
-	config: LunarCrushConfig,
-	args: {
-		name: string;
-		searchJson: string;
-		priority?: boolean;
-	}
-): Promise<any> => {
-	const { name, searchJson, priority } = args;
-	const params: Record<string, any> = {
-		name,
-		search_json: searchJson,
-	};
-
-	if (priority !== undefined) params.priority = priority;
-
-	try {
-		const response = await makeRequest<any>(
-			config,
-			'/searches/create',
-			params,
-			'POST'
-		);
-		return response.data || response;
-	} catch (error) {
-		console.error('❌ createSearch error:', error);
-		throw error;
-	}
-};
-
-// Update custom search aggregation
-export const updateSearch = async (
-	config: LunarCrushConfig,
-	slug: string,
-	args: {
-		name?: string;
-		searchJson?: string;
-		priority?: boolean;
-	}
-): Promise<any> => {
-	const { name, searchJson, priority } = args;
-	const params: Record<string, any> = {};
-
-	if (name !== undefined) params.name = name;
-	if (searchJson !== undefined) params.search_json = searchJson;
-	if (priority !== undefined) params.priority = priority;
-
-	try {
-		const response = await makeRequest<any>(
-			config,
-			`/searches/${slug}/update`,
-			params,
-			'POST'
-		);
-		return response.data || response;
-	} catch (error) {
-		console.error('❌ updateSearch error:', error);
-		throw error;
-	}
-};
-
-// Delete custom search aggregation
-export const deleteSearch = async (
-	config: LunarCrushConfig,
-	slug: string
-): Promise<any> => {
-	try {
-		const response = await makeRequest<any>(
-			config,
-			`/searches/${slug}/delete`,
-			{},
-			'DELETE'
-		);
-		return { success: true, ...response };
-	} catch (error) {
-		console.error('❌ deleteSearch error:', error);
-		throw error;
-	}
-};
+// ===== POSTS ENDPOINTS (EXACT FROM API DOCS) =====
 
 export const getPostDetails = async (
 	config: LunarCrushConfig,
@@ -1090,12 +987,9 @@ export const getPostTimeSeries = async (
 ): Promise<any[]> => {
 	const { post_type, post_id } = args;
 	try {
-		const params: Record<string, any> = {};
-
 		const response = await makeRequest<any>(
 			config,
-			`/posts/${post_type}/${post_id}/time-series/v1`,
-			params
+			`/posts/${post_type}/${post_id}/time-series/v1`
 		);
 		return response.data;
 	} catch (error) {
@@ -1108,23 +1002,27 @@ export const getPostTimeSeries = async (
 		throw error;
 	}
 };
-// ===== CLIENT FACTORY WITH ALL EXACT ENDPOINTS =====
+
+// ===== CLIENT FACTORY WITH ALL ENDPOINTS =====
 export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 	// TOPICS ENDPOINTS
 	getTopicsList: () => getTopicsList(config),
 	getTopic: (topic: string) => getTopic(config, topic),
 	getTopicWhatsup: (topic: string) => getTopicWhatsup(config, topic),
-	getTopicTimeSeries: (
-		topic: string,
-		bucket?: string,
-		interval?: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getTopicTimeSeries(config, topic, bucket, interval, start, end),
-	getTopicTimeSeriesV2: (topic: string, bucket?: string) =>
-		getTopicTimeSeriesV2(config, topic, bucket),
-	getTopicPosts: (topic: string, start?: UnixTimestamp, end?: UnixTimestamp) =>
-		getTopicPosts(config, topic, start, end),
+	getTopicTimeSeries: (args: {
+		topic: string;
+		bucket?: string;
+		interval?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getTopicTimeSeries(config, args),
+	getTopicTimeSeriesV2: (args: { topic: string; bucket?: string }) =>
+		getTopicTimeSeriesV2(config, args),
+	getTopicPosts: (args: {
+		topic: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getTopicPosts(config, args),
 	getTopicNews: (topic: string) => getTopicNews(config, topic),
 	getTopicCreators: (topic: string) => getTopicCreators(config, topic),
 
@@ -1132,118 +1030,121 @@ export const createLunarCrushClient = (config: LunarCrushConfig) => ({
 	getCategoriesList: () => getCategoriesList(config),
 	getCategory: (category: string) => getCategory(config, category),
 	getCategoryTopics: (category: string) => getCategoryTopics(config, category),
-	getCategoryTimeSeries: (
-		category: string,
-		bucket?: string,
-		interval?: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getCategoryTimeSeries(config, category, bucket, interval, start, end),
-	getCategoryPosts: (
-		category: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getCategoryPosts(config, category, start, end),
+	getCategoryTimeSeries: (args: {
+		category: string;
+		bucket?: string;
+		interval?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getCategoryTimeSeries(config, args),
+	getCategoryPosts: (args: {
+		category: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getCategoryPosts(config, args),
 	getCategoryNews: (category: string) => getCategoryNews(config, category),
 	getCategoryCreators: (category: string) =>
 		getCategoryCreators(config, category),
 
 	// CREATORS ENDPOINTS
 	getCreatorsList: () => getCreatorsList(config),
-	getCreator: (network: string, id: string) => getCreator(config, network, id),
-	getCreatorTimeSeries: (
-		network: string,
-		id: string,
-		bucket?: string,
-		interval?: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getCreatorTimeSeries(config, network, id, bucket, interval, start, end),
-	getCreatorPosts: (
-		network: string,
-		id: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getCreatorPosts(config, network, id, start, end),
+	getCreator: (args: { network: string; id: string }) =>
+		getCreator(config, args),
+	getCreatorTimeSeries: (args: {
+		network: string;
+		id: string;
+		bucket?: string;
+		interval?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getCreatorTimeSeries(config, args),
+	getCreatorPosts: (args: {
+		network: string;
+		id: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getCreatorPosts(config, args),
 
 	// COINS ENDPOINTS
-	getCoinsList: (
-		sort?: string,
-		filter?: string,
-		limit?: number,
-		desc?: string,
-		page?: number
-	) => getCoinsList(config, sort, filter, limit, desc, page),
-	getCoinsListV2: (
-		sort?: string,
-		filter?: string,
-		limit?: number,
-		desc?: string,
-		page?: number
-	) => getCoinsListV2(config, sort, filter, limit, desc, page),
+	getCoinsList: (args: {
+		sort?: string;
+		filter?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}) => getCoinsList(config, args),
+	getCoinsListV2: (args: {
+		sort?: string;
+		filter?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}) => getCoinsListV2(config, args),
 	getCoin: (coin: string) => getCoin(config, coin),
-	getCoinTimeSeries: (
-		coin: string,
-		bucket?: string,
-		interval?: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getCoinTimeSeries(config, coin, bucket, interval, start, end),
+	getCoinTimeSeries: (args: {
+		coin: string;
+		bucket?: string;
+		interval?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getCoinTimeSeries(config, args),
 	getCoinMeta: (coin: string) => getCoinMeta(config, coin),
 
 	// STOCKS ENDPOINTS
 	getStocksList: () => getStocksList(config),
-	getStocksListV2: (
-		sort?: string,
-		limit?: number,
-		desc?: string,
-		page?: number
-	) => getStocksListV2(config, sort, limit, desc, page),
+	getStocksListV2: (args: {
+		sort?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}) => getStocksListV2(config, args),
 	getStock: (stock: string) => getStock(config, stock),
-	getStockTimeSeries: (
-		stock: string,
-		bucket?: string,
-		interval?: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getStockTimeSeries(config, stock, bucket, interval, start, end),
+	getStockTimeSeries: (args: {
+		stock: string;
+		bucket?: string;
+		interval?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getStockTimeSeries(config, args),
 
 	// NFTS ENDPOINTS
-	getNftsList: (sort?: string, limit?: number, desc?: string, page?: number) =>
-		getNftsList(config, sort, limit, desc, page),
-	getNftsListV2: (
-		sort?: string,
-		limit?: number,
-		desc?: string,
-		page?: number
-	) => getNftsListV2(config, sort, limit, desc, page),
+	getNftsList: (args: {
+		sort?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}) => getNftsList(config, args),
+	getNftsListV2: (args: {
+		sort?: string;
+		limit?: number;
+		desc?: string;
+		page?: number;
+	}) => getNftsListV2(config, args),
 	getNft: (nft: string) => getNft(config, nft),
-	getNftTimeSeries: (
-		nft: string,
-		bucket?: string,
-		interval?: string,
-		start?: UnixTimestamp,
-		end?: UnixTimestamp
-	) => getNftTimeSeries(config, nft, bucket, interval, start, end),
-	getNftTimeSeriesV1: (nft: string) => getNftTimeSeriesV1(config, nft),
+	getNftTimeSeries: (args: {
+		nft: string;
+		bucket?: string;
+		interval?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getNftTimeSeries(config, args),
+	getNftTimeSeriesV2: (args: {
+		nft: string;
+		bucket?: string;
+		interval?: string;
+		start?: UnixTimestamp;
+		end?: UnixTimestamp;
+	}) => getNftTimeSeriesV2(config, args),
 
 	// SYSTEM ENDPOINTS
-	getSystemChanges: (start?: UnixTimestamp, end?: UnixTimestamp) =>
-		getSystemChanges(config, start, end),
+	getSystemChanges: (args: { start?: UnixTimestamp; end?: UnixTimestamp }) =>
+		getSystemChanges(config, args),
 
-	// SEARCHES ENDPOINTS
-	getSearchesList,
-	getSearch,
-	createSearch,
-	updateSearch,
-	deleteSearch,
-
-
-	//POSTS ENDPOINTS
-	getPostDetails: (post_type: string, post_id: string) =>
-		getPostDetails(config, { post_type, post_id }),
-	getPostTimeSeries: (post_type: string, post_id: string) =>
-		getPostTimeSeries(config, { post_type, post_id }),
+	// POSTS ENDPOINTS
+	getPostDetails: (args: { post_type: string; post_id: string }) =>
+		getPostDetails(config, args),
+	getPostTimeSeries: (args: { post_type: string; post_id: string }) =>
+		getPostTimeSeries(config, args),
 });
 
 export type LunarCrushClient = ReturnType<typeof createLunarCrushClient>;

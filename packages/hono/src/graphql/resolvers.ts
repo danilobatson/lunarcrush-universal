@@ -501,21 +501,27 @@ export function createResolvers() {
 		},
 
 		// Mutation: {
-		// 	// Basic mutations for user preferences and topics
+		// 	// User preferences (keeping for backward compatibility)
 		// 	updateUserPreferences: async (
 		// 		args: { input: any },
 		// 		context: GraphQLContext
 		// 	) => {
-		// 		// This would typically update user preferences in a database
-		// 		// For now, just return the input as if it was saved
-		// 		return args.input;
+		// 		// Mock implementation - replace with real user preferences logic
+		// 		return {
+		// 			theme: args.input.theme || 'dark',
+		// 			currency: args.input.currency || 'USD',
+		// 			notifications: args.input.notifications || true,
+		// 			favoriteTopics: args.input.favoriteTopics || [],
+		// 		};
 		// 	},
 
+		// 	// Create topic (keeping for backward compatibility)
 		// 	createTopic: async (args: { input: any }, context: GraphQLContext) => {
-		// 		// This would typically create a topic in a database
-		// 		// For now, just return the input with a timestamp
+		// 		// Mock implementation - replace with real topic creation logic
 		// 		return {
-		// 			...args.input,
+		// 			topic: args.input.topic,
+		// 			category: args.input.category,
+		// 			description: args.input.description || '',
 		// 			createdAt: new Date().toISOString(),
 		// 		};
 		// 	},
