@@ -1,61 +1,71 @@
 {
   "name": "lunarcrush-sdk",
-  "version": "3.1.0",
-  "description": "Simple, lightweight TypeScript SDK for LunarCrush GraphQL API",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "version": "3.1.1",
+  "description": "TypeScript/JavaScript SDK for LunarCrush API v4 with GraphQL support",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
     }
   },
   "files": [
-    "dist",
-    "README.md"
+    "dist/**/*",
+    "README.md",
+    "package.json"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup",
+    "dev": "tsup --watch",
     "lint": "tsc --noEmit",
-    "prepublishOnly": "npm run lint && npm run build"
+    "test": "vitest",
+    "prepublishOnly": "npm run lint && npm run build",
+    "clean": "rm -rf dist"
   },
   "keywords": [
     "lunarcrush",
     "crypto",
+    "social",
+    "sentiment",
+    "api",
     "graphql",
-    "sdk",
     "typescript",
-    "simple",
-    "lightweight"
+    "sdk"
   ],
-  "author": "dbatson09",
+  "author": "LunarCrush",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danilobatson/lunarcrush-universal.git",
-    "directory": "packages/sdk"
+    "url": "git+https://github.com/your-repo/lunarcrush-sdk.git"
   },
-  "homepage": "https://github.com/danilobatson/lunarcrush-universal#readme",
   "bugs": {
-    "url": "https://github.com/danilobatson/lunarcrush-universal/issues"
+    "url": "https://github.com/your-repo/lunarcrush-sdk/issues"
   },
+  "homepage": "https://lunarcrush.com",
   "dependencies": {
-    "graphql-request": "^6.1.0"
+    "graphql": "^16.8.1",
+    "graphql-request": "^6.1.0",
+    "lunarcrush-sdk": "file:lunarcrush-sdk-3.1.1.tgz"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.7",
-    "@graphql-codegen/typescript": "^4.1.6",
-    "@graphql-codegen/typescript-graphql-request": "^6.3.0",
-    "@graphql-codegen/typescript-operations": "^4.6.1",
-    "@types/node": "^20.0.0",
-    "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "@types/node": "^20.10.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.0",
+    "vitest": "^1.0.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=16.0.0"
+  },
+  "directories": {
+    "example": "examples"
   }
 }

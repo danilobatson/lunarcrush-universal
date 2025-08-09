@@ -263,7 +263,7 @@ export class LunarCrush {
 	// ================================================================
 	// 🔧 USER API - Preferences (Demo/Testing Only)
 	// ================================================================
-	user = {
+	// user = {
 		// The following methods are commented out because they do not exist in the SDK
 		// updatePreferences: (input: {
 		//     theme?: string;
@@ -279,7 +279,7 @@ export class LunarCrush {
 		//     category: string;
 		//     description?: string;
 		// }) => this.sdk.CreateTopic({ input }).then((r: any) => r.createTopic),
-	};
+	// };
 }
 
 // ===================================================================
