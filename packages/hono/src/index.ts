@@ -113,7 +113,7 @@ const graphqlServer = async (c: any) => {
 		} else {
 			result.extensions = {
 				timing: { responseTime },
-				hono: { native: true, requestId: c.get('requestId') },
+				request: { requestID: c.get('requestId') },
 			};
 		}
 
@@ -194,12 +194,7 @@ app.use('/graphql', async (c, next) => {
 				}
 
 				// Check for system health queries that don't need auth
-				const systemQueries = [
-					'systemHealth',
-					'ping',
-					'health',
-					'hello',
-				];
+				const systemQueries = ['systemHealth', 'ping', 'health', 'hello'];
 				if (systemQueries.some((query) => body.includes(query))) {
 					isSystemQuery = true;
 					c.set('apiKey', 'introspection-placeholder');
