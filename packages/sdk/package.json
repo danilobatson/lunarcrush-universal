@@ -53,8 +53,7 @@
   "homepage": "https://lunarcrush.com",
   "dependencies": {
     "graphql": "^16.8.1",
-    "graphql-request": "^6.1.0",
-    "lunarcrush-sdk": "file:lunarcrush-sdk-3.1.1.tgz"
+    "graphql-request": "^6.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

@@ -295,22 +295,6 @@ export type CreatorTimeSeriesItem = {
   time?: Maybe<Scalars['Float']['output']>;
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  createTopic: Topic;
-  updateUserPreferences: UserPreferences;
-};
-
-
-export type MutationCreateTopicArgs = {
-  input: CreateTopicInput;
-};
-
-
-export type MutationUpdateUserPreferencesArgs = {
-  input: UserPreferencesInput;
-};
-
 export type NftDetails = {
   __typename?: 'NftDetails';
   floor_price?: Maybe<Scalars['Float']['output']>;
@@ -982,7 +966,6 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   JSON: ResolverTypeWrapper<Scalars['JSON']['output']>;
-  Mutation: ResolverTypeWrapper<{}>;
   NftDetails: ResolverTypeWrapper<NftDetails>;
   NftListItem: ResolverTypeWrapper<NftListItem>;
   NftTimeSeriesItem: ResolverTypeWrapper<NftTimeSeriesItem>;
@@ -1038,7 +1021,6 @@ export type ResolversParentTypes = {
   Float: Scalars['Float']['output'];
   Int: Scalars['Int']['output'];
   JSON: Scalars['JSON']['output'];
-  Mutation: {};
   NftDetails: NftDetails;
   NftListItem: NftListItem;
   NftTimeSeriesItem: NftTimeSeriesItem;
@@ -1335,11 +1317,6 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
 export interface JsonScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['JSON'], any> {
   name: 'JSON';
 }
-
-export type MutationResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createTopic?: Resolver<ResolversTypes['Topic'], ParentType, ContextType, RequireFields<MutationCreateTopicArgs, 'input'>>;
-  updateUserPreferences?: Resolver<ResolversTypes['UserPreferences'], ParentType, ContextType, RequireFields<MutationUpdateUserPreferencesArgs, 'input'>>;
-};
 
 export type NftDetailsResolvers<ContextType = AppContext, ParentType extends ResolversParentTypes['NftDetails'] = ResolversParentTypes['NftDetails']> = {
   floor_price?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -1703,7 +1680,6 @@ export type Resolvers<ContextType = AppContext> = {
   CreatorTimeSeriesItem?: CreatorTimeSeriesItemResolvers<ContextType>;
   Date?: GraphQLScalarType;
   JSON?: GraphQLScalarType;
-  Mutation?: MutationResolvers<ContextType>;
   NftDetails?: NftDetailsResolvers<ContextType>;
   NftListItem?: NftListItemResolvers<ContextType>;
   NftTimeSeriesItem?: NftTimeSeriesItemResolvers<ContextType>;

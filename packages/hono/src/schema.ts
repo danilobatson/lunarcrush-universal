@@ -14,7 +14,7 @@
 /**
  * LunarCrush GraphQL Schema - Auto-Generated from Single Source of Truth
  * Source: schema/schema.graphql
- * Generated: 2025-08-08T18:33:39.796Z
+ * Generated: 2025-08-10T17:01:43.543Z
  */
 
 export const typeDefs = `# LunarCrush Universal Backend - CORRECTED API Schema
@@ -183,10 +183,10 @@ type Query {
 	getPostTimeSeries(post_type: String!, post_id: String!): [PostTimeSeriesItem]
 }
 
-type Mutation {
-	updateUserPreferences(input: UserPreferencesInput!): UserPreferences!
-	createTopic(input: CreateTopicInput!): Topic!
-}
+# type Mutation {
+# 	updateUserPreferences(input: UserPreferencesInput!): UserPreferences!
+# 	createTopic(input: CreateTopicInput!): Topic!
+# }
 
 # ===== SYSTEM MONITORING TYPES =====
 

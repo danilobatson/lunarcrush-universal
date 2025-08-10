@@ -296,22 +296,6 @@ export interface CreatorTimeSeriesItem {
   time?: Maybe<Scalars['Float']['output']>;
 }
 
-export interface Mutation {
-  __typename?: 'Mutation';
-  createTopic: Topic;
-  updateUserPreferences: UserPreferences;
-}
-
-
-export interface MutationCreateTopicArgs {
-  input: CreateTopicInput;
-}
-
-
-export interface MutationUpdateUserPreferencesArgs {
-  input: UserPreferencesInput;
-}
-
 export interface NftDetails {
   __typename?: 'NftDetails';
   floor_price?: Maybe<Scalars['Float']['output']>;

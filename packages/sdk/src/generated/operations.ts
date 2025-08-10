@@ -9,7 +9,8 @@
 // No manual queries - all generated from actual implementations
 // ================================================================
 
-import { GraphQLClient, RequestOptions } from 'graphql-request';
+import { GraphQLClient } from 'graphql-request';
+import * as Dom from 'graphql-request/dist/types.dom';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -17,7 +18,6 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-type GraphQLClientRequestHeaders = RequestOptions['requestHeaders'];
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string; }
@@ -294,22 +294,6 @@ export type CreatorTimeSeriesItem = {
   interactions?: Maybe<Scalars['Float']['output']>;
   posts_active?: Maybe<Scalars['Int']['output']>;
   time?: Maybe<Scalars['Float']['output']>;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  createTopic: Topic;
-  updateUserPreferences: UserPreferences;
-};
-
-
-export type MutationCreateTopicArgs = {
-  input: CreateTopicInput;
-};
-
-
-export type MutationUpdateUserPreferencesArgs = {
-  input: UserPreferencesInput;
 };
 
 export type NftDetails = {
@@ -2009,132 +1993,132 @@ export const GetPostTimeSeriesDocument = `
 }
     `;
 
-export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string, variables?: any) => Promise<T>;
+export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
 
-const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType, _variables) => action();
+const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
-    SystemHealth(variables?: SystemHealthQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<SystemHealthQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<SystemHealthQuery>({ document: SystemHealthDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'SystemHealth', 'query', variables);
+    SystemHealth(variables?: SystemHealthQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SystemHealthQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<SystemHealthQuery>(SystemHealthDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'SystemHealth', 'query');
     },
-    Ping(variables?: PingQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<PingQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<PingQuery>({ document: PingDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'Ping', 'query', variables);
+    Ping(variables?: PingQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<PingQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<PingQuery>(PingDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Ping', 'query');
     },
-    Health(variables?: HealthQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<HealthQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<HealthQuery>({ document: HealthDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'Health', 'query', variables);
+    Health(variables?: HealthQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<HealthQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<HealthQuery>(HealthDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Health', 'query');
     },
-    Hello(variables?: HelloQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<HelloQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<HelloQuery>({ document: HelloDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'Hello', 'query', variables);
+    Hello(variables?: HelloQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<HelloQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<HelloQuery>(HelloDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'Hello', 'query');
     },
-    GetTopicsList(variables?: GetTopicsListQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetTopicsListQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicsListQuery>({ document: GetTopicsListDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetTopicsList', 'query', variables);
+    GetTopicsList(variables?: GetTopicsListQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTopicsListQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicsListQuery>(GetTopicsListDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTopicsList', 'query');
     },
-    GetTopic(variables: GetTopicQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetTopicQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicQuery>({ document: GetTopicDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetTopic', 'query', variables);
+    GetTopic(variables: GetTopicQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTopicQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicQuery>(GetTopicDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTopic', 'query');
     },
-    GetTopicWhatsup(variables: GetTopicWhatsupQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetTopicWhatsupQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicWhatsupQuery>({ document: GetTopicWhatsupDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetTopicWhatsup', 'query', variables);
+    GetTopicWhatsup(variables: GetTopicWhatsupQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTopicWhatsupQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicWhatsupQuery>(GetTopicWhatsupDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTopicWhatsup', 'query');
     },
-    GetTopicTimeSeries(variables: GetTopicTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetTopicTimeSeriesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicTimeSeriesQuery>({ document: GetTopicTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetTopicTimeSeries', 'query', variables);
+    GetTopicTimeSeries(variables: GetTopicTimeSeriesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTopicTimeSeriesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicTimeSeriesQuery>(GetTopicTimeSeriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTopicTimeSeries', 'query');
     },
-    GetTopicTimeSeriesV2(variables: GetTopicTimeSeriesV2QueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetTopicTimeSeriesV2Query> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicTimeSeriesV2Query>({ document: GetTopicTimeSeriesV2Document, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetTopicTimeSeriesV2', 'query', variables);
+    GetTopicTimeSeriesV2(variables: GetTopicTimeSeriesV2QueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTopicTimeSeriesV2Query> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicTimeSeriesV2Query>(GetTopicTimeSeriesV2Document, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTopicTimeSeriesV2', 'query');
     },
-    GetTopicPosts(variables: GetTopicPostsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetTopicPostsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicPostsQuery>({ document: GetTopicPostsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetTopicPosts', 'query', variables);
+    GetTopicPosts(variables: GetTopicPostsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTopicPostsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicPostsQuery>(GetTopicPostsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTopicPosts', 'query');
     },
-    GetTopicNews(variables: GetTopicNewsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetTopicNewsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicNewsQuery>({ document: GetTopicNewsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetTopicNews', 'query', variables);
+    GetTopicNews(variables: GetTopicNewsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTopicNewsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicNewsQuery>(GetTopicNewsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTopicNews', 'query');
     },
-    GetTopicCreators(variables: GetTopicCreatorsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetTopicCreatorsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicCreatorsQuery>({ document: GetTopicCreatorsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetTopicCreators', 'query', variables);
+    GetTopicCreators(variables: GetTopicCreatorsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTopicCreatorsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetTopicCreatorsQuery>(GetTopicCreatorsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetTopicCreators', 'query');
     },
-    GetCategoriesList(variables?: GetCategoriesListQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCategoriesListQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoriesListQuery>({ document: GetCategoriesListDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCategoriesList', 'query', variables);
+    GetCategoriesList(variables?: GetCategoriesListQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCategoriesListQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoriesListQuery>(GetCategoriesListDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCategoriesList', 'query');
     },
-    GetCategory(variables: GetCategoryQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCategoryQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryQuery>({ document: GetCategoryDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCategory', 'query', variables);
+    GetCategory(variables: GetCategoryQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCategoryQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryQuery>(GetCategoryDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCategory', 'query');
     },
-    GetCategoryTopics(variables: GetCategoryTopicsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCategoryTopicsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryTopicsQuery>({ document: GetCategoryTopicsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCategoryTopics', 'query', variables);
+    GetCategoryTopics(variables: GetCategoryTopicsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCategoryTopicsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryTopicsQuery>(GetCategoryTopicsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCategoryTopics', 'query');
     },
-    GetCategoryTimeSeries(variables: GetCategoryTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCategoryTimeSeriesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryTimeSeriesQuery>({ document: GetCategoryTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCategoryTimeSeries', 'query', variables);
+    GetCategoryTimeSeries(variables: GetCategoryTimeSeriesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCategoryTimeSeriesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryTimeSeriesQuery>(GetCategoryTimeSeriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCategoryTimeSeries', 'query');
     },
-    GetCategoryPosts(variables: GetCategoryPostsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCategoryPostsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryPostsQuery>({ document: GetCategoryPostsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCategoryPosts', 'query', variables);
+    GetCategoryPosts(variables: GetCategoryPostsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCategoryPostsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryPostsQuery>(GetCategoryPostsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCategoryPosts', 'query');
     },
-    GetCategoryNews(variables: GetCategoryNewsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCategoryNewsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryNewsQuery>({ document: GetCategoryNewsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCategoryNews', 'query', variables);
+    GetCategoryNews(variables: GetCategoryNewsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCategoryNewsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryNewsQuery>(GetCategoryNewsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCategoryNews', 'query');
     },
-    GetCategoryCreators(variables: GetCategoryCreatorsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCategoryCreatorsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryCreatorsQuery>({ document: GetCategoryCreatorsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCategoryCreators', 'query', variables);
+    GetCategoryCreators(variables: GetCategoryCreatorsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCategoryCreatorsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCategoryCreatorsQuery>(GetCategoryCreatorsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCategoryCreators', 'query');
     },
-    GetCreatorsList(variables?: GetCreatorsListQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCreatorsListQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCreatorsListQuery>({ document: GetCreatorsListDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCreatorsList', 'query', variables);
+    GetCreatorsList(variables?: GetCreatorsListQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCreatorsListQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCreatorsListQuery>(GetCreatorsListDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCreatorsList', 'query');
     },
-    GetCreator(variables: GetCreatorQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCreatorQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCreatorQuery>({ document: GetCreatorDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCreator', 'query', variables);
+    GetCreator(variables: GetCreatorQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCreatorQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCreatorQuery>(GetCreatorDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCreator', 'query');
     },
-    GetCreatorTimeSeries(variables: GetCreatorTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCreatorTimeSeriesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCreatorTimeSeriesQuery>({ document: GetCreatorTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCreatorTimeSeries', 'query', variables);
+    GetCreatorTimeSeries(variables: GetCreatorTimeSeriesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCreatorTimeSeriesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCreatorTimeSeriesQuery>(GetCreatorTimeSeriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCreatorTimeSeries', 'query');
     },
-    GetCreatorPosts(variables: GetCreatorPostsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCreatorPostsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCreatorPostsQuery>({ document: GetCreatorPostsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCreatorPosts', 'query', variables);
+    GetCreatorPosts(variables: GetCreatorPostsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCreatorPostsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCreatorPostsQuery>(GetCreatorPostsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCreatorPosts', 'query');
     },
-    GetCoinsList(variables?: GetCoinsListQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCoinsListQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinsListQuery>({ document: GetCoinsListDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCoinsList', 'query', variables);
+    GetCoinsList(variables?: GetCoinsListQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinsListQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinsListQuery>(GetCoinsListDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCoinsList', 'query');
     },
-    GetCoinsListV2(variables?: GetCoinsListV2QueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCoinsListV2Query> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinsListV2Query>({ document: GetCoinsListV2Document, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCoinsListV2', 'query', variables);
+    GetCoinsListV2(variables?: GetCoinsListV2QueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinsListV2Query> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinsListV2Query>(GetCoinsListV2Document, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCoinsListV2', 'query');
     },
-    GetCoin(variables: GetCoinQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCoinQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinQuery>({ document: GetCoinDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCoin', 'query', variables);
+    GetCoin(variables: GetCoinQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinQuery>(GetCoinDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCoin', 'query');
     },
-    GetCoinMeta(variables: GetCoinMetaQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCoinMetaQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinMetaQuery>({ document: GetCoinMetaDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCoinMeta', 'query', variables);
+    GetCoinMeta(variables: GetCoinMetaQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinMetaQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinMetaQuery>(GetCoinMetaDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCoinMeta', 'query');
     },
-    GetCoinTimeSeries(variables: GetCoinTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetCoinTimeSeriesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinTimeSeriesQuery>({ document: GetCoinTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetCoinTimeSeries', 'query', variables);
+    GetCoinTimeSeries(variables: GetCoinTimeSeriesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetCoinTimeSeriesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetCoinTimeSeriesQuery>(GetCoinTimeSeriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetCoinTimeSeries', 'query');
     },
-    GetStocksList(variables?: GetStocksListQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetStocksListQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetStocksListQuery>({ document: GetStocksListDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetStocksList', 'query', variables);
+    GetStocksList(variables?: GetStocksListQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetStocksListQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetStocksListQuery>(GetStocksListDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetStocksList', 'query');
     },
-    GetStocksListV2(variables?: GetStocksListV2QueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetStocksListV2Query> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetStocksListV2Query>({ document: GetStocksListV2Document, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetStocksListV2', 'query', variables);
+    GetStocksListV2(variables?: GetStocksListV2QueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetStocksListV2Query> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetStocksListV2Query>(GetStocksListV2Document, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetStocksListV2', 'query');
     },
-    GetStock(variables: GetStockQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetStockQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetStockQuery>({ document: GetStockDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetStock', 'query', variables);
+    GetStock(variables: GetStockQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetStockQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetStockQuery>(GetStockDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetStock', 'query');
     },
-    GetStockTimeSeries(variables: GetStockTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetStockTimeSeriesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetStockTimeSeriesQuery>({ document: GetStockTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetStockTimeSeries', 'query', variables);
+    GetStockTimeSeries(variables: GetStockTimeSeriesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetStockTimeSeriesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetStockTimeSeriesQuery>(GetStockTimeSeriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetStockTimeSeries', 'query');
     },
-    GetNftsList(variables?: GetNftsListQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetNftsListQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetNftsListQuery>({ document: GetNftsListDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetNftsList', 'query', variables);
+    GetNftsList(variables?: GetNftsListQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetNftsListQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetNftsListQuery>(GetNftsListDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetNftsList', 'query');
     },
-    GetNftsListV2(variables?: GetNftsListV2QueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetNftsListV2Query> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetNftsListV2Query>({ document: GetNftsListV2Document, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetNftsListV2', 'query', variables);
+    GetNftsListV2(variables?: GetNftsListV2QueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetNftsListV2Query> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetNftsListV2Query>(GetNftsListV2Document, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetNftsListV2', 'query');
     },
-    GetNft(variables: GetNftQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetNftQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetNftQuery>({ document: GetNftDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetNft', 'query', variables);
+    GetNft(variables: GetNftQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetNftQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetNftQuery>(GetNftDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetNft', 'query');
     },
-    GetNftTimeSeries(variables: GetNftTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetNftTimeSeriesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetNftTimeSeriesQuery>({ document: GetNftTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetNftTimeSeries', 'query', variables);
+    GetNftTimeSeries(variables: GetNftTimeSeriesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetNftTimeSeriesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetNftTimeSeriesQuery>(GetNftTimeSeriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetNftTimeSeries', 'query');
     },
-    GetNftTimeSeriesV2(variables: GetNftTimeSeriesV2QueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetNftTimeSeriesV2Query> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetNftTimeSeriesV2Query>({ document: GetNftTimeSeriesV2Document, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetNftTimeSeriesV2', 'query', variables);
+    GetNftTimeSeriesV2(variables: GetNftTimeSeriesV2QueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetNftTimeSeriesV2Query> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetNftTimeSeriesV2Query>(GetNftTimeSeriesV2Document, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetNftTimeSeriesV2', 'query');
     },
-    GetSystemChanges(variables?: GetSystemChangesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetSystemChangesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetSystemChangesQuery>({ document: GetSystemChangesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetSystemChanges', 'query', variables);
+    GetSystemChanges(variables?: GetSystemChangesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetSystemChangesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetSystemChangesQuery>(GetSystemChangesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetSystemChanges', 'query');
     },
-    GetPostDetails(variables: GetPostDetailsQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetPostDetailsQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetPostDetailsQuery>({ document: GetPostDetailsDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetPostDetails', 'query', variables);
+    GetPostDetails(variables: GetPostDetailsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPostDetailsQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetPostDetailsQuery>(GetPostDetailsDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetPostDetails', 'query');
     },
-    GetPostTimeSeries(variables: GetPostTimeSeriesQueryVariables, requestHeaders?: GraphQLClientRequestHeaders, signal?: RequestInit['signal']): Promise<GetPostTimeSeriesQuery> {
-      return withWrapper((wrappedRequestHeaders) => client.request<GetPostTimeSeriesQuery>({ document: GetPostTimeSeriesDocument, variables, requestHeaders: { ...requestHeaders, ...wrappedRequestHeaders }, signal }), 'GetPostTimeSeries', 'query', variables);
+    GetPostTimeSeries(variables: GetPostTimeSeriesQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPostTimeSeriesQuery> {
+      return withWrapper((wrappedRequestHeaders) => client.request<GetPostTimeSeriesQuery>(GetPostTimeSeriesDocument, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'GetPostTimeSeries', 'query');
     }
   };
 }
