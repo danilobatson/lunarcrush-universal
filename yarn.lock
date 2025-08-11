@@ -1004,8 +1004,6 @@
 
 "@graphql-tools/utils@^9.0.0", "@graphql-tools/utils@^9.2.1":
   version "9.2.1"
-  resolved "https://registry.npmjs.org/@graphql-tools/utils/-/utils-9.2.1.tgz"
-  integrity sha512-WUw506Ql6xzmOORlriNrD6Ugx+HjVgYxt9KCXD9mHAak+eaXSwuGGPyE60hy9xaDEoXKBsG7SkG69ybitaVl6A==
   dependencies:
     "@graphql-typed-document-node/core" "^3.1.1"
     tslib "^2.4.0"
@@ -1272,8 +1270,6 @@
 
 "@types/node@^12.7.1":
   version "12.20.55"
-  resolved "https://registry.npmjs.org/@types/node/-/node-12.20.55.tgz"
-  integrity sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==
 
 "@types/node@^22.10.2":
   version "22.17.0"
@@ -2673,7 +2669,7 @@ lru-cache@^5.1.1:
     yallist "^3.0.2"
 
 "lunarcrush-sdk@file:/Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages/sdk":
-  version "3.3.1"
+  version "3.3.3"
   resolved "file:packages/sdk"
   dependencies:
     "@modelcontextprotocol/sdk" "^1.17.2"
