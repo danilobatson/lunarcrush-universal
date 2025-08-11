@@ -219,6 +219,93 @@ await mcp.search('AI crypto')         // Universal social search
 await mcp.fetch('/topic/bitcoin')     // Direct API path access
 ```
 
+### 📋 Complete Parameter Reference
+
+#### 🪙 **Cryptocurrency Filters** (`mcp.cryptocurrencies({ filter: "..." })`)
+
+**Popular Categories:**
+- `'ai'` - AI & Machine Learning tokens
+- `'defi'` - Decentralized Finance
+- `'meme'` - Meme coins (DOGE, SHIB, etc.)
+- `'gaming'` - Gaming & Metaverse tokens
+- `'layer-1'` - Layer 1 blockchains (ETH, SOL, etc.)
+- `'layer-2'` - Layer 2 scaling solutions
+
+**All 40+ Available Filters:**
+`'stablecoin'`, `'nft'`, `'dot'`, `'bsc'`, `'algorand'`, `'dao'`, `'wallets'`, `'lending-borrowing'`, `'liquid-staking-tokens'`, `'brc20'`, `'exchange-tokens'`, `'real-world-assets'`, `'depin'`, `'fan'`, `'gambling'`, `'runes'`, `'desci'`, `'sports'`, `'socialfi'`, `'analytics'`, `'events'`, `'real-estate'`, `'bitcoin-ecosystem'`, `'stacks-ecosystem'`, `'base-ecosystem'`, `'solana-ecosystem'`, `'ai-agents'`, `'defai'`, `'zk'`, `'oracle'`, `'storage'`, `'made-in-usa'`, `'sui'`, `'inj'`, `'cardano'`, `'pow'`, `'pos'`, `'music'`, `'insurance'`, `'privacy'`, `'energy'`, `'pump-fun'`, `'prediction'`, `'entertainment'`, `'healthcare'`, `'btcfi'`, `'interoperability'`, `'move-to-earn'`
+
+#### 📈 **Stock Sectors** (`mcp.stocks({ sector: "..." })`)
+
+**Popular Sectors:**
+- `'technology'` - Tech companies (AAPL, MSFT, etc.)
+- `'healthcare'` - Healthcare & biotech
+- `'energy'` - Energy companies
+- `'financial-services'` - Banks & financial services
+
+**All Available Sectors:**
+`'basic-materials'`, `'communication-services'`, `'consumer-cyclical'`, `'consumer-defensive'`, `'industrials'`, `'real-estate'`, `'utilities'`, `'banks'`, `'etf'`, `'bitcoin-spot-etf'`, `'bitcoin-futures-etf'`, `'ethereum-spot-etf'`, `'bitcoin-treasuries'`, `'crypto-etfs'`
+
+#### 📊 **Sort Options** (for both crypto & stocks)
+
+**Popular Sorts:**
+- `'galaxy_score'` - LunarCrush's proprietary social score
+- `'market_cap'` - Market capitalization
+- `'sentiment'` - Social sentiment (0-100)
+- `'interactions'` - Total social engagements
+
+**All Sort Options:**
+`'alt_rank'` (AltRank™), `'close'` (Price), `'percent_change_1h'`, `'percent_change_24h'`, `'percent_change_7d'`, `'posts_active'` (Mentions), `'contributors_active'` (Creators), `'social_dominance'`, `'market_dominance'`, `'volume_24h'` (Trading Volume), `'circulating_supply'`, `'topic_rank'` (TopicRank™)
+
+#### ⏰ **Time Intervals** (`mcp.timeSeries('bitcoin', { interval: "..." })`)
+
+- `'1d'` - Last 24 hours (hourly data)
+- `'1w'` - Last week (hourly data)
+- `'1m'` - Last month (daily data)
+- `'3m'` - Last 3 months (daily data)
+- `'6m'` - Last 6 months (daily data)
+- `'1y'` - Last year (daily data)
+- `'all'` - All available history
+
+#### 📊 **Time Series Metrics** (`mcp.timeSeries('topic', { metrics: [...] })`)
+
+**Popular Metrics:**
+- `'sentiment'` - Social sentiment score
+- `'interactions'` - Total social engagements
+- `'social_dominance'` - Share of total crypto discussion
+- `'galaxy_score'` - LunarCrush proprietary score
+
+**All Available Metrics:**
+`'alt_rank'`, `'close'`, `'percent_change_1h'`, `'percent_change_24h'`, `'percent_change_7d'`, `'interactions_24h'`, `'posts_active'`, `'contributors_active'`, `'market_cap'`, `'market_dominance'`, `'volume'`, `'volume_24h'`, `'circulating_supply'`, `'topic_rank'`
+
+### 💡 **Practical Examples**
+
+```javascript
+// Get top 10 AI cryptocurrencies by social sentiment
+const aiCryptos = await mcp.cryptocurrencies({
+  filter: 'ai',
+  sort: 'galaxy_score',
+  limit: 10
+});
+
+// Get Tesla stock data with technology sector context
+const techStocks = await mcp.stocks({
+  sector: 'technology',
+  sort: 'market_cap',
+  limit: 5
+});
+
+// Get Bitcoin sentiment over the last week
+const btcSentiment = await mcp.timeSeries('bitcoin', {
+  metrics: ['sentiment', 'interactions', 'social_dominance'],
+  interval: '1w'
+});
+
+// Get popular Bitcoin posts from the last day
+const recentPosts = await mcp.topicPosts('bitcoin', {
+  interval: '1d'
+});
+```
+
 **All responses include:**
 - `raw` - Complete markdown content for AI processing
 - `tables` - Parsed table data as structured objects
