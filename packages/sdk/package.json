@@ -1,6 +1,6 @@
 {
   "name": "lunarcrush-sdk",
-  "version": "3.3.3",
+  "version": "3.4.0",
   "description": "TypeScript/JavaScript SDK for LunarCrush API v4 with GraphQL and MCP support for AI workflows",
   "type": "module",
   "main": "./dist/index.cjs",

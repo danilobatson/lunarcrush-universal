@@ -2668,8 +2668,8 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
-"lunarcrush-sdk@file:/Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages/sdk":
-  version "3.3.3"
+lunarcrush-sdk@3.4.0, "lunarcrush-sdk@file:/Users/batson/Desktop/ForTheNerds/lunarcrush-universal/packages/sdk":
+  version "3.4.0"
   resolved "file:packages/sdk"
   dependencies:
     "@modelcontextprotocol/sdk" "^1.17.2"
