@@ -1,8 +1,14 @@
 # LunarCrush Universal API Schema
 
 > 🚨 **AUTO-GENERATED** - Do not edit manually!
+>
+> **Single Source of Truth:** `schema/schema.graphql`
+>
 > Generated from: `schema/schema.graphql`
 > Command: `yarn codegen`
+>
+> All code generation, type definitions, and schema references
+> should use `schema/schema.graphql` as the canonical source.
 
 ## GraphQL Schema
 
@@ -23,7 +29,6 @@ type CategoryCreator {
 }
 
 type CategoryDetails {
-  category: String
   interactions_24h: Float
   num_contributors: Int
   num_posts: Int
@@ -34,6 +39,7 @@ type CategoryDetails {
   types_count: JSON
   types_interactions: JSON
   types_sentiment: JSON
+  types_sentiment_detail: JSON
 }
 
 type CategoryListItem {
@@ -99,7 +105,7 @@ type CategoryTopic {
   num_posts: Float
   social_dominance: Float
   title: String
-  topic: String
+  topic: Int
   topic_rank: Int
   topic_rank_1h_previous: Int
   topic_rank_24h_previous: Int
@@ -128,8 +134,8 @@ type CoinDetails {
 type CoinListItem {
   alt_rank: Int
   alt_rank_previous: Int
-  blockchains: [JSON]
-  categories: [String]
+  blockchains: [Blockchain]
+  categories: String
   circulating_supply: Float
   galaxy_score: Float
   galaxy_score_previous: Float
@@ -164,23 +170,20 @@ type CoinMeta {
   coingecko_link: String
   coinmarketcap_link: String
   description: String
-  forum_link: String
   github_link: String
   header_image: String
   header_text: String
   id: Int
   market_categories: String
   name: String
-  overview_promotion: String
+  reddit_link: String
   short_summary: String
   symbol: String
-  telegram_link: String
   twitter_link: String
-  updated: Int
+  updated: Float
   videos: String
   website_link: String
   whitepaper_link: String
-  wikipedia_link: String
 }
 
 type CoinTimeSeriesItem {
@@ -217,9 +220,9 @@ type CreatorDetails {
   creator_followers: Float
   creator_id: String
   creator_name: String
-  creator_rank: Int
+  creator_rank: String
   interactions_24h: Float
-  topic_influence: JSON
+  topic_influence: [TopicInfluence]
 }
 
 type CreatorListItem {
@@ -243,7 +246,7 @@ type CreatorPost {
   id: String
   interactions_24h: Float
   interactions_total: Float
-  post_created: Int
+  post_created: Float
   post_image: String
   post_link: String
   post_sentiment: Float
@@ -252,36 +255,20 @@ type CreatorPost {
 }
 
 type CreatorTimeSeriesItem {
-  creator_rank: Int
+  creator_rank: Float
   followers: Float
   interactions: Float
   posts_active: Int
-  time: Int
+  time: Float
 }
 
 scalar Date
 
-type HealthStatus {
-  features: [String!]!
-  requestId: String!
-  service: String!
-  status: String!
-  timestamp: String!
-  uptime: Float!
-  version: String!
-}
-
 scalar JSON
-
-type Mutation {
-  createTopic(input: CreateTopicInput!): Topic!
-  generateDemoToken: TokenResponse!
-  updateUserPreferences(input: UserPreferencesInput!): UserPreferences!
-}
 
 type NftDetails {
   floor_price: Float
-  id: String
+  id: Int
   market_cap: Float
   name: String
   percent_change_24h: Float
@@ -293,7 +280,7 @@ type NftListItem {
   base_crypto: String
   floor_price: Float
   galaxy_score: Float
-  id: String
+  id: Int
   interactions_24h: Float
   logo: String
   lunar_id: String
@@ -319,78 +306,89 @@ type NftTimeSeriesItem {
   time: Int
 }
 
+type PingResponse {
+  status: String!
+  timestamp: String!
+}
+
 type PostDetails {
-  content: String
+  categories: [String]
+  creator_avatar: String
+  creator_display_name: String
+  creator_id: String
+  creator_name: String
+  description: String
+  extraText: String
   id: String
-  post_title: String
+  image: PostImage
+  images: [String]
+  metrics: PostMetrics
+  title: String
+  topics: [String]
+  type: String
+  video: String
+}
+
+type PostImage {
+  height: Int
+  src: String
+  width: Int
+}
+
+type PostMetrics {
+  bookmarks: Int
+  favorites: Int
+  replies: Int
+  retweets: Int
+  views: Int
 }
 
 type PostTimeSeriesItem {
   interactions: Float
-  time: Int
+  time: String
 }
 
 type Query {
   getCategoriesList: [CategoryListItem]
-  getCategory(category: String): CategoryDetails
-  getCategoryCreators(category: String): [CategoryCreator]
-  getCategoryNews(category: String): [CategoryNews]
-  getCategoryPosts(category: String, end: String, start: String): [CategoryPost]
-  getCategoryTimeSeries(bucket: String, category: String, end: String, interval: String, start: String): [CategoryTimeSeriesItem]
-  getCategoryTopics(category: String): [CategoryTopic]
-  getCoin(symbol: String): CoinDetails
-  getCoinMeta(symbol: String): CoinMeta
-  getCoinTimeSeries(bucket: String, end: String, interval: String, start: String, symbol: String): [CoinTimeSeriesItem]
-  getCoinsList: [CoinListItem]
-  getCoinsListV2: [CoinListItem]
-  getCreator(id: String, network: String): CreatorDetails
-  getCreatorPosts(end: String, id: String, network: String, start: String): [CreatorPost]
-  getCreatorTimeSeries(bucket: String, end: String, id: String, interval: String, network: String, start: String): [CreatorTimeSeriesItem]
+  getCategory(category: String!): CategoryDetails
+  getCategoryCreators(category: String!): [CategoryCreator]
+  getCategoryNews(category: String!): [CategoryNews]
+  getCategoryPosts(category: String!, end: UnixTimestamp, start: UnixTimestamp): [CategoryPost]
+  getCategoryTimeSeries(bucket: String, category: String!, end: UnixTimestamp, interval: String, start: UnixTimestamp): [CategoryTimeSeriesItem]
+  getCategoryTopics(category: String!): [CategoryTopic]
+  getCoin(coin: String!): CoinDetails
+  getCoinMeta(coin: String!): CoinMeta
+  getCoinTimeSeries(bucket: String, coin: String!, end: UnixTimestamp, interval: String, start: UnixTimestamp): [CoinTimeSeriesItem]
+  getCoinsList(desc: String, filter: String, limit: Int, page: Int, sort: String): [CoinListItem]
+  getCoinsListV2(desc: String, filter: String, limit: Int, page: Int, sort: String): [CoinListItem]
+  getCreator(id: String!, network: String!): CreatorDetails
+  getCreatorPosts(end: UnixTimestamp, id: String!, network: String!, start: UnixTimestamp): [CreatorPost]
+  getCreatorTimeSeries(bucket: String, end: UnixTimestamp, id: String!, interval: String, network: String!, start: UnixTimestamp): [CreatorTimeSeriesItem]
   getCreatorsList: [CreatorListItem]
-  getNft(id: String): NftDetails
-  getNftTimeSeries(bucket: String, end: String, id: String, interval: String, start: String): [NftTimeSeriesItem]
-  getNftsList: [NftListItem]
-  getNftsListV2: [NftListItem]
-  getPostDetails(id: String): PostDetails
-  getPostTimeSeries(bucket: String, end: String, id: String, interval: String, start: String): [PostTimeSeriesItem]
-  getSearch(id: String): SearchResult
-  getSearchesList: [SearchItem]
-  getStock(symbol: String): StockDetails
-  getStockTimeSeries(bucket: String, end: String, interval: String, start: String, symbol: String): [StockTimeSeriesItem]
+  getNft(id: String!): NftDetails
+  getNftTimeSeries(bucket: String, end: UnixTimestamp, id: String!, interval: String, start: UnixTimestamp): [NftTimeSeriesItem]
+  getNftTimeSeriesV2(bucket: String, end: UnixTimestamp, interval: String, nft: String!, start: UnixTimestamp): [NftTimeSeriesItem]
+  getNftsList(desc: String, limit: Int, page: Int, sort: String): [NftListItem]
+  getNftsListV2(desc: String, limit: Int, page: Int, sort: String): [NftListItem]
+  getPostDetails(post_id: String!, post_type: String!): PostDetails
+  getPostTimeSeries(post_id: String!, post_type: String!): [PostTimeSeriesItem]
+  getStock(stock: String!): StockDetails
+  getStockTimeSeries(bucket: String, end: UnixTimestamp, interval: String, start: UnixTimestamp, stock: String!): [StockTimeSeriesItem]
   getStocksList: [StockListItem]
-  getStocksListV2: [StockListItem]
-  getSystemChanges: [SystemChange]
-  getTopic(topic: String): TopicDetails
-  getTopicCreators(topic: String): [TopicCreator]
-  getTopicNews(topic: String): [TopicNews]
-  getTopicPosts(end: String, start: String, topic: String): [TopicPost]
-  getTopicTimeSeries(bucket: String, end: String, interval: String, start: String, topic: String): [TopicTimeSeriesItem]
-  getTopicTimeSeriesV2(bucket: String, topic: String): [TopicTimeSeriesItem]
-  getTopicWhatsup(topic: String): TopicWhatsup
+  getStocksListV2(desc: String, limit: Int, page: Int, sort: String): [StockListItem]
+  getSystemChanges(end: UnixTimestamp, start: UnixTimestamp): [SystemChange]
+  getTopic(topic: String!): TopicDetails
+  getTopicCreators(topic: String!): [TopicCreator]
+  getTopicNews(topic: String!): [TopicNews]
+  getTopicPosts(end: UnixTimestamp, start: UnixTimestamp, topic: String!): [TopicPost]
+  getTopicTimeSeries(bucket: String, end: UnixTimestamp, interval: String, start: UnixTimestamp, topic: String!): [TopicTimeSeriesItem]
+  getTopicTimeSeriesV2(bucket: String, topic: String!): [TopicTimeSeriesItem]
+  getTopicWhatsup(topic: String!): TopicWhatsup
   getTopicsList: [TopicListItem]
   health: String
   hello: String
-  searchPosts(term: String): [SearchPost]
-}
-
-type SearchItem {
-  id: String
-  query: String
-}
-
-type SearchPost {
-  id: String
-  post_created: Int
-  post_link: String
-  post_type: String
-  text: String
-  text_highlight: String
-}
-
-type SearchResult {
-  id: String
-  query: String
-  results: [String]
+  ping: PingResponse
+  systemHealth: SystemHealthResponse
 }
 
 enum SortDirection {
@@ -413,13 +411,15 @@ type StockDetails {
 type StockListItem {
   alt_rank: Int
   alt_rank_previous: Int
-  categories: [String]
+  categories: String
   galaxy_score: Float
   galaxy_score_previous: Float
   id: Int
   interactions_24h: Float
+  last_updated_price: Int
+  last_updated_price_by: String
   logo: String
-  market_cap: Float
+  market_cap: String
   market_cap_rank: Int
   market_dominance: Float
   market_dominance_prev: Float
@@ -463,18 +463,19 @@ type SystemChange {
   time: Int
 }
 
+type SystemHealthResponse {
+  status: String!
+  timestamp: String!
+  uptime: Int!
+  version: String!
+}
+
 enum TimeInterval {
   FOUR_HOURS
   ONE_DAY
   ONE_HOUR
   ONE_MONTH
   ONE_WEEK
-}
-
-type TokenResponse {
-  expiresIn: String!
-  token: String!
-  user: User!
 }
 
 type Topic {
@@ -486,14 +487,11 @@ type Topic {
 
 type TopicCreator {
   creator_avatar: String
-  creator_display_name: String
   creator_followers: Float
   creator_id: String
   creator_name: String
-  followers: Float
-  id: String
+  creator_rank: Float
   interactions_24h: Float
-  name: String
 }
 
 type TopicDetails {
@@ -510,6 +508,13 @@ type TopicDetails {
   types_interactions: JSON
   types_sentiment: JSON
   types_sentiment_detail: JSON
+}
+
+type TopicInfluence {
+  count: Int
+  percent: Float
+  rank: Int
+  topic: String
 }
 
 type TopicListItem {
@@ -532,7 +537,7 @@ type TopicNews {
   id: String
   interactions_24h: Float
   interactions_total: Float
-  post_created: Int
+  post_created: Float
   post_image: String
   post_link: String
   post_sentiment: Float
@@ -583,11 +588,7 @@ type TopicWhatsup {
   summary: String
 }
 
-type User {
-  id: String!
-  lastSeen: String!
-  type: String!
-}
+scalar UnixTimestamp
 
 type UserPreferences {
   currency: String

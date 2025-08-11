@@ -3,8 +3,18 @@
 // ===================================================================
 // 🤖 This file provides complete coverage of LunarCrush API v4
 
+
+// MCP Integration
+
+// ===================================================================
+// 🌙 LunarCrush SDK - Complete API Coverage
+// ===================================================================
+// 🤖 This file provides complete coverage of LunarCrush API v4
+
 import { GraphQLClient } from 'graphql-request';
 import { getSdk } from './generated/operations';
+import { MCPConfig, ParsedMCPData } from './mcp-types';
+import { LunarCrushMCP, MCPError } from './mcp-client';
 
 // ===================================================================
 // 🔧 TYPES & INTERFACES
@@ -321,13 +331,52 @@ export function createLunarCrush(
 // 🎁 EXPORTS
 // ===================================================================
 
+
+// ===================================================================
+// 🤖 MCP FACTORY FUNCTION - AI Integration
+// ===================================================================
+
+/**
+ * Create a LunarCrush MCP client for AI workflows
+ *
+ * @param apiKeyOrConfig - API key string or full configuration
+ * @returns MCP client for real-time AI data integration
+ *
+ * @example
+ * ```typescript
+ * // Simple usage
+ * const mcpClient = await createLunarCrushMCP('your-api-key');
+ * const bitcoinData = await mcpClient.topics.get('bitcoin');
+ *
+ * // Access parsed data
+ * console.log(bitcoinData.raw); // Full markdown
+ * console.log(bitcoinData.metadata.title); // "Bitcoin (BTC)"
+ * console.log(bitcoinData.tables); // Parsed tables if any
+ *
+ * // AI Assistant integration
+ * const sentiment = await mcpClient.topics.timeSeries('bitcoin', {
+ *   metrics: ['sentiment', 'interactions'],
+ *   interval: '1d'
+ * });
+ * ```
+ */
+export async function createLunarCrushMCP(
+  apiKeyOrConfig: string | MCPConfig
+): Promise<LunarCrushMCP> {
+  const client = new LunarCrushMCP(apiKeyOrConfig);
+  await client.connect();
+  return client;
+}
+
 // Export types for TypeScript users
 export type {
 	UnixTimestamp,
 	TimeSeriesOptions,
 	PostsOptions,
 	ListOptions,
+	MCPConfig,
+	ParsedMCPData,
 };
 
-export { LunarCrushError };
+export { LunarCrushError, MCPError, LunarCrushMCP };
 export default LunarCrush;

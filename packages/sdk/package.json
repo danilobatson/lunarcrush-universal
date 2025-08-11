@@ -1,7 +1,7 @@
 {
   "name": "lunarcrush-sdk",
-  "version": "3.1.1",
-  "description": "TypeScript/JavaScript SDK for LunarCrush API v4 with GraphQL support",
+  "version": "3.3.0",
+  "description": "TypeScript/JavaScript SDK for LunarCrush API v4 with GraphQL and MCP support for AI workflows",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -39,19 +39,24 @@
     "api",
     "graphql",
     "typescript",
-    "sdk"
+    "sdk",
+    "mcp",
+    "model-context-protocol",
+    "ai-integration",
+    "ai-workflows"
   ],
   "author": "LunarCrush",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-repo/lunarcrush-sdk.git"
+    "url": "git+https://github.com/danilobatson/lunarcrush-universal.git"
   },
   "bugs": {
-    "url": "https://github.com/your-repo/lunarcrush-sdk/issues"
+    "url": "https://github.com/danilobatson/lunarcrush-universal/issues"
   },
   "homepage": "https://lunarcrush.com",
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.2",
     "graphql": "^16.8.1",
     "graphql-request": "^6.1.0"
   },
